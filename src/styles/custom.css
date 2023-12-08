@@ -1,0 +1,166 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+
+/* TopBar  */
+.topbar {
+    top: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    background-color: #3D63EA;
+    color: #fff;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobileSection {
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    align-items: center;
+}
+
+.socialIcons {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Header  */
+
+.header {
+    top: 35px;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background: #FFF !important;
+    box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.20);
+}
+
+.navbar-brand {
+    padding: 0px;
+}
+
+nav .nav-link {
+    color: rgba(0, 0, 0, 0.85);
+    font-family: Montserrat;
+    font-size: 15px;
+    font-style: normal;
+    padding-right: 20px !important;
+    font-weight: 600;
+    line-height: normal;
+}
+
+nav .nav-link Link {
+    color: rgba(0, 0, 0, 0.85) !important;
+}
+
+.donateBtn {
+    border-radius: 5px;
+    background: #3D63EA;
+    width: 90px;
+    color: #fff;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: Montserrat;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    line-height: normal;
+}
+
+.donateBtn:hover {
+    background: #0037ff;
+    color: #fff;
+}
+
+.volunteerBtn {
+    border-radius: 5px;
+    background: #FF3E54;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: Montserrat;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 5px;
+    width: 100px;
+}
+
+.volunteerBtn:hover {
+    background: #ff001e;
+    color: #fff;
+}
+
+/* Footer  */
+.footerSection {
+    background: #F1F6FE;
+    color: rgba(0, 0, 0, 0.80);
+}
+
+.footerText {
+    color: rgba(0, 0, 0, 0.80);
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 130%;
+}
+
+.footerIcon {
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 40px;
+    margin: 0px 10px;
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.footerRow {
+    padding: 48px 49px;
+    margin: 5px;
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.footerHeading {
+
+    font-feature-settings: 'clig' off, 'liga' off;
+
+    /* Subtitle 1_18 */
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 26px;
+    /* 144.444% */
+}
+
+.footerContent {
+    margin-bottom: 15px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.footerCopyrights {
+    color: #e1e1e1;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300 !important;
+    line-height: 130%;
+}
