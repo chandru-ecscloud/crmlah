@@ -41,7 +41,7 @@
 /* Header  */
 
 .header {
-    top: 35px;
+    top: 33px;
     position: fixed;
     z-index: 1000;
     width: 100%;
@@ -168,7 +168,7 @@ nav .nav-link Link {
 
 .contactCard {
     border-radius: 10px;
-    padding: 5px;
+    padding: 10px;
     background: #FFF;
     box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
 }
@@ -176,7 +176,6 @@ nav .nav-link Link {
 .contactColumn {
     background-color: #3D63EACC;
     color: #fff;
-    padding: 20px;
     background-image: url("../assets/contact_background.png");
     background-repeat: no-repeat;
     background-position: bottom right;
@@ -184,7 +183,7 @@ nav .nav-link Link {
 
 .contactInformation {
     font-family: 'Poppins';
-    font-size: 24px;
+    font-size: 28px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -194,8 +193,52 @@ nav .nav-link Link {
 .contactContent {
     color: #C9C9C9;
     font-family: 'Poppins';
-    font-size: 14px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.contactText {
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.contactIcon {
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 40px;
+    margin: 0px 10px;
+    background: rgba(255, 0, 0, 0.8);
+}
+
+.contactIcon:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.contactFields {
+    color: #000;
+    font-family: 'Poppins';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    /* 166.667% */
+}
+
+.contactInput {
+    border: none;
+    border-bottom: 2px solid #959595;
+    border-radius: 0px;
+}
+
+.contactButton {
+    border-radius: 5px;
+    background: #FF3E54;
+    width: 200px;
+    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.12);
+    padding: 10px 38px;
 }

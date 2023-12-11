@@ -12,10 +12,10 @@ import { IoIosMailUnread } from "react-icons/io";
 function Footer() {
   return (
     <section>
-      <div className="d-flex flex-column align-items-center py-5 footerSection">
+      <div className="d-flex flex-column align-items-center py-2 footerSection">
         <div className="container">
           <div className="row">
-            <div className="col-lg-4 col-md-4 col-12 mb-3 d-flex flex-column justify-content-center">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex flex-column justify-content-center">
               <p className="footerHeading mt-3">ECS Cloud Infotech</p>
               <span className="d-flex flex-column">
                 <span className="footerContent">
@@ -37,7 +37,7 @@ function Footer() {
               </span>
             </div>
 
-            <div className="col-lg-4 col-md-4 col-12 mb-3 d-flex flex-column justify-content-center">
+            {/* <div className="col-lg-4 col-md-4 col-12 mb-3 d-flex flex-column justify-content-center">
               <p className="footerHeading mt-3">CloudECS Infotech</p>
               <span className="d-flex flex-column">
                 <span className="footerContent">
@@ -57,9 +57,9 @@ function Footer() {
                 <FaXTwitter className="footerIcon" />
                 <FaWhatsapp className="footerIcon" />
               </span>
-            </div>
+            </div> */}
 
-            <div className="col-lg-2 col-md-2 col-12">
+            <div className="col-lg-3 col-md-3 col-12">
               <p className="footerHeading mt-3">Get Involved</p>
               <span className="d-flex flex-column">
                 <span className="footerContent">Product</span>
@@ -67,7 +67,7 @@ function Footer() {
               </span>
             </div>
 
-            <div className="col-lg-2 col-md-2 col-12">
+            <div className="col-lg-3 col-md-3 col-12">
               <p className="footerHeading mt-3">Utility</p>
               <span className="d-flex flex-column">
                 <span className="footerContent">Style Guide</span>
