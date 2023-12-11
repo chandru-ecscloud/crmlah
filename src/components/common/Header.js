@@ -1,26 +1,18 @@
-import {
-  Navbar,
-  Container,
-  Nav,
-  Offcanvas,
-} from "react-bootstrap";
+import React from "react";
+import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
+import { NavLink, useLocation } from "react-router-dom";
 import "../../styles/custom.css";
 import Logo from "../../assets/Logo.png";
-import { Link } from "react-router-dom";
 
 function Header() {
   const expand = "lg";
+  useLocation();
   return (
     <>
       <Navbar expand={expand} className="bg-body-tertiary header">
         <Container fluid>
           <Navbar.Brand href="#">
-            <img
-              src={Logo}
-              alt="WWG"
-              className="img-fluid"
-
-            />
+            <img src={Logo} alt="WWG" className="img-fluid" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
           <Navbar.Offcanvas
@@ -35,17 +27,18 @@ function Header() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-center flex-grow-1 pe-3">
-                <Nav.Link>
-                <Link
-                    to="/"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
-                  >
-                    Home
-                  </Link>
-                </Nav.Link>
+                <NavLink
+                  to="/"
+                  exact
+                  activeClassName="active"
+                  className="custom-nav-link"
+                  style={{
+                    color: "rgba(0, 0, 0, 0.85)",
+                    textDecoration: "none",
+                  }}
+                >
+                  Home
+                </NavLink>
 
                 {/* <NavDropdown
                   title="Service"
@@ -61,29 +54,29 @@ function Header() {
                   </NavDropdown.Item>
                 </NavDropdown> */}
 
-                <Nav.Link>
-                  <Link
-                    to="/about"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
-                  >
-                    Products
-                  </Link>
-                </Nav.Link>
+                <NavLink
+                  to="/product"
+                  activeClassName="active"
+                  className="custom-nav-link"
+                  style={{
+                    color: "rgba(0, 0, 0, 0.85)",
+                    textDecoration: "none",
+                  }}
+                >
+                  Products
+                </NavLink>
 
-                <Nav.Link>
-                  <Link
+                <NavLink
                     to="/contact"
+                    activeClassName="active"
+                    className="custom-nav-link"
                     style={{
                       color: "rgba(0, 0, 0, 0.85)",
                       textDecoration: "none",
                     }}
                   >
                     Contact Us
-                  </Link>
-                </Nav.Link>
+                </NavLink>
               </Nav>
               <Nav className="d-flex">
                 <button className="btn donateBtn">Sign In</button>
