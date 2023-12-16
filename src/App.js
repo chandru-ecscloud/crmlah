@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
 import Topbar from "./components/common/Topbar";
 import Home from "./pages/Home";
 import Header from "./components/common/Header";
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Topbar />
         <Header />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
