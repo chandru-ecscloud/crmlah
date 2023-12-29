@@ -86,7 +86,7 @@ nav .nav-link Link {
     border-radius: 5px;
     background: #3D63EA;
     width: 90px;
-    color: #fff;
+    color: #3D63EA;
     font-family: Montserrat;
     font-size: 15px;
     font-style: normal;
@@ -94,6 +94,8 @@ nav .nav-link Link {
     margin-right: 10px;
     margin-bottom: 5px;
     line-height: normal;
+    background-color: transparent;
+    border: 2px solid #3D63EA;
 }
 
 .donateBtn:hover {
@@ -104,7 +106,7 @@ nav .nav-link Link {
 .volunteerBtn {
     border-radius: 5px;
     background: #FF3E54;
-    color: #fff;
+    color: #FF3E54;
     font-family: Montserrat;
     font-size: 15px;
     font-style: normal;
@@ -112,6 +114,8 @@ nav .nav-link Link {
     line-height: normal;
     margin-bottom: 5px;
     width: 100px;
+    background-color: transparent;
+    border: 2px solid #FF3E54;
 }
 
 .volunteerBtn:hover {

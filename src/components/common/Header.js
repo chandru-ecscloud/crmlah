@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "../../styles/custom.css";
 import Logo from "../../assets/Logo.png";
 
@@ -67,20 +67,24 @@ function Header() {
                 </NavLink>
 
                 <NavLink
-                    to="/contact"
-                    activeClassName="active"
-                    className="custom-nav-link"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
-                  >
-                    Contact Us
+                  to="/contact"
+                  activeClassName="active"
+                  className="custom-nav-link"
+                  style={{
+                    color: "rgba(0, 0, 0, 0.85)",
+                    textDecoration: "none",
+                  }}
+                >
+                  Contact Us
                 </NavLink>
               </Nav>
               <Nav className="d-flex">
-                <button className="btn donateBtn">Sign In</button>
-                <button className="btn volunteerBtn">Sign Up</button>
+                <Link to="/signin">
+                  <button className="btn donateBtn">Sign In</button>
+                </Link>
+                <Link to="/signin">
+                  <button className="btn volunteerBtn">Sign Up</button>
+                </Link>
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
