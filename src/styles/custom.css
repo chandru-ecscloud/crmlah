@@ -309,3 +309,49 @@ nav .nav-link Link {
     background-size: contain;
     background-position: center center;
 }
+
+
+/* SignIn  */
+
+.registerWord{
+    color: #3D63EA;
+    font-family: 'Nunito Sans', sans-serif;
+    
+}
+
+.contactsubmitBtn{
+    width: 100%;
+    background-color: #3D63EA;
+    border: none;
+}
+
+.contactsubmitBtn:hover{
+    width: 100%;
+    background-color: #1a44da;
+    border: none;
+}
+
+.forgotWord{
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.password-link{
+    color: blue;
+    text-decoration: none;
+}
+
+/* LeadsTab.css */
+
+.table-container {
+    max-height: 500px; /* Set the desired max height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Set the background color for the header */
+    z-index: 1; /* Ensure the header stays above other elements */
+}

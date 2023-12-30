@@ -82,7 +82,7 @@ function Header() {
                 <Link to="/signin">
                   <button className="btn donateBtn">Sign In</button>
                 </Link>
-                <Link to="/signin">
+                <Link to="/login">
                   <button className="btn volunteerBtn">Sign Up</button>
                 </Link>
               </Nav>
