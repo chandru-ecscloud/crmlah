@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.custom-nav-links {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.adminNavbar {
+    background-color: #0077ff;
+}
+
+.actives {
+    border-bottom: 2px solid #fff;
+    color: #fff !important;
+    padding: 10px;
+}
+
+nav .nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 30px;
+    font-weight: 500;
+    padding: 0;
+    padding-right: 10px !important;
+}
+
+.dropdown-toggle::after{
+    display: none;
+}
+
+.navDropdowns{
+    padding-left: 0 !important;
+}
+
+.dropdown-item {
+    font-size: 13px;
+}
