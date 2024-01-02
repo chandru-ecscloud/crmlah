@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import Topbar from "./components/common/Topbar";
@@ -10,27 +10,43 @@ import Product from "./pages/Product";
 import SignIn from "./components/common/Signin";
 import LogIn from "./components/common/LogIn";
 import Forgot from "./components/common/Forgot";
-// import Header_1 from "./components/common/Header_1";
 import LeadsTab from "./components/Leads/LeadsTab";
-
+import AdminHeader from "./components/common/AdminHeader";
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(
+    JSON.parse(localStorage.getItem("isAdmin")) || false
+  );
+
+  useEffect(() => {
+    localStorage.setItem("isAdmin", JSON.stringify(isAdmin));
+  }, [isAdmin]);
+
+  const handleLogin = (admin) => {
+    setIsAdmin(admin);
+  };
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem("isAdmin");
+  };
+
   return (
     <>
       <BrowserRouter>
-        <Topbar />
-        <Header />
+        {isAdmin ? "" : <Topbar />}
+        {isAdmin ? <AdminHeader handleLogout={handleLogout}/> : <Header />}
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/signin" element={<SignIn />} /> 
-          <Route path="/login" element={<LogIn />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/login" element={<LogIn handleLogin={handleLogin}  />} />
           <Route path="/forgot" element={<Forgot />} />
           <Route path="/lead" element={<LeadsTab />} />
         </Routes>
-        <Footer />
+        {isAdmin ? "" : <Footer />}
       </BrowserRouter>
     </>
   );

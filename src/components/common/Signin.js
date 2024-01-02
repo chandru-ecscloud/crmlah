@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import HeroImage from "../../assets/heroImage.png"
 
-const Form1 = () => (
+const Form1 = ( ) => (
   <div>
     <form>
       <div className="form-group mt-3">
