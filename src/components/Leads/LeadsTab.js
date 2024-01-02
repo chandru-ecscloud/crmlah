@@ -25,6 +25,7 @@ const data = [
 const ITEMS_PER_PAGE = 7;
 
 const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckboxChange, filteredData, sortColumn, sortDirection, handleSort, currentPage, setCurrentPage }) => {
+    const [pageSize, setPageSize] = useState(ITEMS_PER_PAGE);
     const sortedData = [...filteredData].sort((a, b) => {
         const aValue = a[sortColumn];
         const bValue = b[sortColumn];
@@ -40,9 +41,14 @@ const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckb
         return 0;
     });
 
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
     const currentData = sortedData.slice(startIndex, endIndex);
+
+    const handlePageSizeChange = (newPageSize) => {
+        setPageSize(newPageSize);
+        setCurrentPage(1);
+    };
 
     return (
         <>
@@ -82,7 +88,23 @@ const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckb
                     ))}
                 </tbody>
             </Table>
-            <div className="pagination d-flex justify-content-end">
+            <div className='row'>
+                <div className='col-lg-10 col-md-10 col-12 d-flex align-items-end justify-content-end'>
+                    <div className="page-size-dropdown">
+                        <span>Page Size: &nbsp;</span>
+                        <select
+                            value={pageSize}
+                            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            {/* Add more options as needed */}
+                        </select>
+                    </div>
+                </div>
+                <div className='col-lg-2 col-md-2 col-12 d-flex align-items-start justify-content-start'>
+                <div className='pagination d-flex justify-content-end'>
                 <button
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -97,6 +119,10 @@ const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckb
                     <IoIosArrowForward />
                 </button>
             </div>
+                </div>
+            </div>
+
+
         </>
     );
 };

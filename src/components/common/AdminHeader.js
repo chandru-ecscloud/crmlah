@@ -68,7 +68,7 @@ function AdminHeader({ handleLogout }) {
               </NavLink>
 
               <NavLink
-                to="/"
+                to="/contacttab"
                 activeClassName="actives"
                 className="custom-nav-links"
               >
