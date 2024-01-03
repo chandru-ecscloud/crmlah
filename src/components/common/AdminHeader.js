@@ -24,6 +24,17 @@ const menuItems = [
   { to: "/vendor", label: "vendor" },
 ];
 
+const mainMenu = [
+  { to: "/dashboard", label: "Home" },
+  { to: "/lead", label: "Leads" },
+  { to: "/contact", label: "Contact" },
+  { to: "/account", label: "Account" },
+  { to: "/deal", label: "Deals" },
+  { to: "/quote", label: "Quotes" },
+  { to: "/product", label: "Product" },
+  { to: "/invoice", label: "Invoices" },
+];
+
 function AdminHeader({ handleLogout }) {
   const expand = "lg";
   const [show, setShow] = useState(false);
@@ -50,69 +61,17 @@ function AdminHeader({ handleLogout }) {
           <Navbar.Toggle aria-controls={`navbar-expand-${expand}`} />
           <Navbar.Collapse id={`navbar-expand-${expand}`}>
             <Nav className=" flex-grow-1 pe-3">
-              <NavLink
-                to="/home"
-                exact
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Home
-              </NavLink>
-
-              <NavLink
-                to="/lead"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Leads
-              </NavLink>
-
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Contact
-              </NavLink>
-
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Accounts
-              </NavLink>
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Deals
-              </NavLink>
-
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Quotes
-              </NavLink>
-
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Products
-              </NavLink>
-
-              <NavLink
-                to="/"
-                activeClassName="actives"
-                className="custom-nav-links"
-              >
-                Invoices
-              </NavLink>
+              {mainMenu.map((menuItem) => (
+                <NavLink
+                  key={menuItem.to}
+                  to={menuItem.to}
+                  exact
+                  activeClassName="actives"
+                  className="custom-nav-links"
+                >
+                  {menuItem.label}
+                </NavLink>
+              ))}
 
               <NavDropdown
                 title="..."

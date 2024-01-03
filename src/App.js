@@ -12,6 +12,7 @@ import LogIn from "./components/common/LogIn";
 import Forgot from "./components/common/Forgot";
 import LeadsTab from "./components/Leads/LeadsTab";
 import AdminHeader from "./components/common/AdminHeader";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(
@@ -45,6 +46,7 @@ function App() {
           <Route path="/login" element={<LogIn handleLogin={handleLogin}  />} />
           <Route path="/forgot" element={<Forgot />} />
           <Route path="/lead" element={<LeadsTab />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         {isAdmin ? "" : <Footer />}
       </BrowserRouter>
