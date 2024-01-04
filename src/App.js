@@ -10,9 +10,9 @@ import Product from "./pages/Product";
 import SignIn from "./components/common/Signin";
 import LogIn from "./components/common/LogIn";
 import Forgot from "./components/common/Forgot";
-import LeadsTab from "./components/Leads/LeadsTab";
 import AdminHeader from "./components/common/AdminHeader";
-import ContactTab from "./components/Contact/ContactTab";
+import Leads from "./pages/Leads/Leads";
+import LeadCreate from "./pages/Leads/Lead_Create";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(
@@ -45,8 +45,8 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/login" element={<LogIn handleLogin={handleLogin}  />} />
           <Route path="/forgot" element={<Forgot />} />
-          <Route path="/lead" element={<LeadsTab />} />
-          <Route path="/contacttab" element={<ContactTab />} />
+          <Route path="leads" element={<Leads />} />
+          <Route path="createlead" element={<LeadCreate />} />
         </Routes>
         {isAdmin ? "" : <Footer />}
       </BrowserRouter>

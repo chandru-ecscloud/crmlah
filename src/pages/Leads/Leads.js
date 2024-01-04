@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { Table, Form } from 'react-bootstrap';
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+// import { Link } from 'react-router-dom';
 
 const data = [
     { id: 1, name: 'Suriya', company: 'CloudECS', email: 'suriya@example.com', phone: 9632587410, lead: 'stark' },
@@ -99,26 +100,25 @@ const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckb
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="20">20</option>
-                            {/* Add more options as needed */}
                         </select>
                     </div>
                 </div>
                 <div className='col-lg-2 col-md-2 col-12 d-flex align-items-start justify-content-start'>
-                <div className='pagination d-flex justify-content-end'>
-                <button
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    <IoIosArrowBack />
-                </button>
-                <span>{`Page ${currentPage}`}</span>
-                <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={endIndex >= filteredData.length}
-                >
-                    <IoIosArrowForward />
-                </button>
-            </div>
+                    <div className='pagination d-flex justify-content-end'>
+                        <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <IoIosArrowBack />
+                        </button>
+                        <span>{`Page ${currentPage}`}</span>
+                        <button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={endIndex >= filteredData.length}
+                        >
+                            <IoIosArrowForward />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@ const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckb
     );
 };
 
-function LeadsTab() {
+function Leads() {
     const [isSelectedAll, setIsSelectedAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -164,13 +164,13 @@ function LeadsTab() {
     const handleSearch = (value) => {
         const result = data.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
         setFilteredData(result);
-        setCurrentPage(1); // Reset to the first page when searching
+        setCurrentPage(1);
     };
 
     const handleSort = (column) => {
         setSortColumn(column);
         setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
-        setCurrentPage(1); // Reset to the first page when sorting
+        setCurrentPage(1);
     };
 
     return (
@@ -191,11 +191,11 @@ function LeadsTab() {
                     </div>
                     <div className="col-lg-6 col-md-6 col-12">
                         <div className="dropdown d-flex flex-column align-items-end">
-                            <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Create Lead
-                            </button>
+                                <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Create Lead
+                                </button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <a className="dropdown-item" href="/lead">Action</a>
+                                <a className="dropdown-item" href="/createlead">Create Lead</a>
                                 <a className="dropdown-item" href="/lead">Another action</a>
                                 <a className="dropdown-item" href="/lead">Something else here</a>
                             </div>
@@ -238,4 +238,4 @@ function LeadsTab() {
     );
 }
 
-export default LeadsTab;
+export default Leads;

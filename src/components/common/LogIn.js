@@ -25,7 +25,7 @@ function LogIn({ handleLogin }) {
                 <label htmlFor="Password">Password:</label>
                 <input type="text" className="form-control" id="Password" />
               </div>
-              <Link to="/lead">
+              <Link to="/leads">
                 <button
                   className="contactsubmitBtn btn btn-danger mt-3"
                   type="button"

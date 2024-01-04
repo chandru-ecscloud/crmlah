@@ -60,7 +60,7 @@ function AdminHeader({ handleLogout }) {
               </NavLink>
 
               <NavLink
-                to="/lead"
+                to="/leads"
                 activeClassName="actives"
                 className="custom-nav-links"
               >
