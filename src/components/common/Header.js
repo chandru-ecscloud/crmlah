@@ -55,7 +55,7 @@ function Header() {
                 </NavDropdown> */}
 
                 <NavLink
-                  to="/product"
+                  to="/products"
                   activeClassName="active"
                   className="custom-nav-link"
                   style={{
@@ -67,7 +67,7 @@ function Header() {
                 </NavLink>
 
                 <NavLink
-                  to="/contact"
+                  to="/contacts"
                   activeClassName="active"
                   className="custom-nav-link"
                   style={{
@@ -79,10 +79,10 @@ function Header() {
                 </NavLink>
               </Nav>
               <Nav className="d-flex">
-                <Link to="/signin">
+                <Link to="/login">
                   <button className="btn donateBtn">Sign In</button>
                 </Link>
-                <Link to="/login">
+                <Link to="/register">
                   <button className="btn volunteerBtn">Sign Up</button>
                 </Link>
               </Nav>

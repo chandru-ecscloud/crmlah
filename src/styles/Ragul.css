@@ -1,0 +1,192 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+/* ************************** Leads Details Page *********************************** */
+
+/* header Section1 */
+#buttons-container
+{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+/* section2 */
+.section2
+{
+    background-color: #e1e1e1;
+    width: 100%;
+    height: 77%;
+    margin: 20px;
+}
+
+#ulList-container
+{
+    background-color: #ffffff;
+    border-radius: 5px;
+    overflow-y: scroll;
+    height: 70vh;
+    cursor: pointer;
+}
+/* width */
+#ulList-container::-webkit-scrollbar {
+    width: 10px;
+    height: 2px;
+    overflow-y: scroll;
+    color: #c8c8c8c7 !important;
+    background-color: white  !important;
+    border-radius: 5px;
+}
+/* Track */
+#ulList-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #ebebeb; 
+    border-radius: 5px;
+}
+/* Handle */
+#ulList-container::-webkit-scrollbar-thumb {
+    background: #c8c8c8; 
+    border-radius: 5px;
+}
+/* Handle on hover */
+#ulList-container::-webkit-scrollbar-thumb:hover {
+    background: #929292; 
+   border-radius: 5px;
+}
+
+
+/* Left Side */
+#ulList-container ul li
+{
+    list-style: none;
+    font-weight: 500;
+}
+#ulList-container ul li a
+{
+    text-decoration: none;
+    color: black;
+}
+
+.Label
+{
+    width: 142px;
+    display: inline-block;
+    text-align: end;
+    margin-bottom: 30px;
+}
+
+
+/* Right Side */
+#userDetails-container
+{
+    background-color: #e1e1e1;
+    border-radius: 10px;
+    overflow-y: scroll;
+    height: 70vh;
+}
+/* width */
+#userDetails-container::-webkit-scrollbar {
+    width: 10px;
+    height: 2px;
+    overflow-y: scroll;
+    color: #c8c8c8c7 !important;
+    background-color: white  !important;
+    border-radius: 5px;
+}
+/* Track */
+#userDetails-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #ebebeb; 
+    border-radius: 5px;
+}
+/* Handle */
+#userDetails-container::-webkit-scrollbar-thumb {
+    background: #c8c8c8; 
+    border-radius: 5px;
+}
+/* Handle on hover */
+#userDetails-container::-webkit-scrollbar-thumb:hover {
+    background:  #929292; 
+   border-radius: 5px;
+}
+
+@media (max-width: 769px) {
+    #userDetails-container 
+   {
+        margin-top: 10px !important;
+    }
+  }
+  
+#Details
+{
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.textarea
+{
+    width: 80%;
+    border-radius: 4px;
+}
+
+
+/* Image Row */
+.image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .camera-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Allow mouse events to go through to the image */
+  }
+  
+  .camera-icon i {
+    font-size: 30px;
+    /* color:grayscale(color: #f7f7f7ec);  */
+  }
+  
+  .image-container:hover .camera-icon {
+    display: flex;
+    background-color: #222121d7;
+    border-radius: 60%;
+    width: 24px;
+    height: 80px;
+    margin-top: 7px;
+    margin-left: 10px; 
+  }
+
+  
+  .back_arrow
+  {
+    background-color: #2182f1ef;
+    color: #ffffff;
+    padding: 5px;
+    transition: 0.3s;
+    border-radius: 50%;
+    font-size: 25px;
+    font-weight: 500;
+  }
+
+  .back_arrow:hover
+  {
+    background-color: #2182f1ef;
+    color: #ffffff;
+    padding: 5px;
+    transition: 0.3s;
+    border-radius: 50%;
+    font-size: 25px;
+    font-weight: 500;
+    
+  }

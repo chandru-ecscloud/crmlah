@@ -1,241 +1,453 @@
-import React, { useState } from 'react';
-import { FaEdit } from 'react-icons/fa';
-import { Table, Form } from 'react-bootstrap';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-// import { Link } from 'react-router-dom';
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import { Box, LinearProgress, ThemeProvider, createTheme } from "@mui/material";
+import { mkConfig, generateCsv, download } from "export-to-csv";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { FaSortDown } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { BsFiletypeCsv } from "react-icons/bs";
+import { FaRegFilePdf } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
 
-const data = [
-    { id: 1, name: 'Suriya', company: 'CloudECS', email: 'suriya@example.com', phone: 9632587410, lead: 'stark' },
-    { id: 2, name: 'Chandru', company: 'ECSCloud', email: 'Chandru@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 3, name: 'John Doe', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 4, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 5, name: 'Gayathri', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 6, name: 'Saravanan', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 7, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 8, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 9, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 10, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 11, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 12, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 13, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 14, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 15, name: 'Jane Smith', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-    { id: 16, name: 'Poongodi', company: 'ECSCloud', email: 'jane.smith@example.com', phone: 9658741235, lead: 'stark' },
-];
+const Lead = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const role = sessionStorage.getItem("role");
+  // console.log(role);
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  const userId = sessionStorage.getItem("userId");
 
-const ITEMS_PER_PAGE = 7;
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "first_name",
+        enableHiding: false,
+        header: "Lead Name",
+        Cell: ({ row }) => (
+          <Link to={`/leads/show/${row.original.id}`} className="rowName">
+            {row.original.first_name}
+          </Link>
+        ),
+      },
+      {
+        accessorKey: "company",
+        enableHiding: false,
+        header: "Company",
+      },
+      {
+        accessorKey: "email",
+        enableHiding: false,
+        header: "Email-Address",
+      },
+      {
+        accessorKey: "phone",
+        enableHiding: false,
+        header: "Phone Number",
+        Cell: ({ row }) => (
+          <span>
+            {row.original.countryCode}&nbsp;{row.original.phone}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "land_line",
+        header: "Land Line",
+      },
+      {
+        accessorKey: "lead_owner",
+        header: "Lead Owner",
+      },
+      {
+        accessorKey: "lead_source",
+        header: "Lead Source",
+      },
+      {
+        accessorKey: "lead_status",
+        header: "Lead Status",
+      },
+      {
+        accessorKey: "street",
+        header: "Street",
+      },
+      {
+        accessorKey: "city",
+        header: "City",
+      },
+      {
+        accessorKey: "zipCode",
+        header: "Zip Code",
+      },
+      {
+        accessorKey: "state",
+        header: "State",
+      },
+      {
+        accessorKey: "country",
+        header: "Country",
+      },
+      {
+        accessorKey: "created_by",
+        header: "Created By",
+      },
+      {
+        accessorKey: "updated_by",
+        header: "Updated By",
+      },
+      {
+        accessorKey: "description_info",
+        header: "Description",
+      },
+      {
+        accessorKey: "skype_id",
+        header: "Skype ID",
+      },
+      {
+        accessorKey: "twitter",
+        header: "Twitter",
+      },
+    ],
+    []
+  );
 
-const DataTable = ({ isSelectedAll, selectedItems, handleSelectAll, handleCheckboxChange, filteredData, sortColumn, sortDirection, handleSort, currentPage, setCurrentPage }) => {
-    const [pageSize, setPageSize] = useState(ITEMS_PER_PAGE);
-    const sortedData = [...filteredData].sort((a, b) => {
-        const aValue = a[sortColumn];
-        const bValue = b[sortColumn];
-
-        if (sortDirection === 'asc') {
-            if (aValue < bValue) return -1;
-            if (aValue > bValue) return 1;
-        } else {
-            if (aValue > bValue) return -1;
-            if (aValue < bValue) return 1;
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${API_URL}allClientsByCompanyId/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        return 0;
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleExportRows = (rows) => {
+    const rowData = rows.map((row) => row.original);
+    const csv = generateCsv(csvConfig)(rowData);
+    download(csvConfig)(csv);
+  };
+
+  const handleExportData = () => {
+    const csv = generateCsv(csvConfig)(data);
+    download(csvConfig)(csv);
+  };
+
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    const tableData = rows.map((row) => Object.values(row.original));
+    const tableHeaders = columns.map((c) => c.header);
+
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
     });
 
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const currentData = sortedData.slice(startIndex, endIndex);
+    doc.save("ECS.pdf");
+  };
 
-    const handlePageSizeChange = (newPageSize) => {
-        setPageSize(newPageSize);
-        setCurrentPage(1);
-    };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "white",
+            backgroundColor: "#0066fffb !important",
+          },
+        },
+      },
+    },
+  });
 
-    return (
+  const handleBulkConvert = async (rows) => {
+    rows.forEach((row) => {
+      row.original.company_id = userId;
+    });
+
+    console.log(rows);
+    const rowData = rows.map((row) => row.original);
+    try {
+      const response = await axios.post(`${API_URL}transferBulkData`, rowData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/leads");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+    fetchData();
+  };
+
+  const handelNavigateClick = () => {
+    navigate("/leads/create");
+  };
+
+  const handleBulkDelete = async (rows) => {
+    const rowData = rows.map((row) => row.original);
+    try {
+      const response = await axios.post(
+        `${API_URL}deleteMultipleClientData`,
+        rowData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/leads");
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+    fetchData();
+  };
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    initialState: {
+      columnVisibility: {
+        city: false,
+        lead_source: false,
+        lead_status: false,
+        land_line: false,
+        street: false,
+        country: false,
+        zipCode: false,
+        state: false,
+        created_by: false,
+        updated_by: false,
+        description_info: false,
+        skype_id: false,
+        twitter: false,
+      },
+    },
+    enableRowSelection: true,
+    paginationDisplayMode: "pages",
+    positionToolbarAlertBanner: "bottom",
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
+        }}
+      >
+        <button className="btn btn-success" onClick={handleExportData}>
+          <BsFiletypeCsv />
+        </button>
+        <button
+          className="btn btn-success"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+        >
+          <BsFiletypeCsv /> selected row
+        </button>
+        <button
+          className="btn btn-danger"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <FaRegFilePdf />
+        </button>
+        <button
+          className="btn btn-danger"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+        >
+          <FaRegFilePdf /> selected row
+        </button>
+      </Box>
+    ),
+  });
+
+  return (
+    <section>
+      {loading && <LinearProgress />}
+      {!loading && (
         <>
-            <Table>
-                <thead className="table-header">
-                    <tr>
-                        <th>
-                            <Form.Check
-                                type="checkbox"
-                                checked={isSelectedAll}
-                                onChange={() => handleCheckboxChange('all')}
-                            />
-                        </th>
-                        <th onClick={() => handleSort('name')}>Lead Name {sortColumn === 'name' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('company')}>Company {sortColumn === 'company' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('email')}>Email {sortColumn === 'email' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('phone')}>Phone Number {sortColumn === 'phone' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('lead')}>Lead Owner {sortColumn === 'lead' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentData.map((item) => (
-                        <tr key={item.id}>
-                            <td>
-                                <Form.Check
-                                    type="checkbox"
-                                    checked={isSelectedAll || selectedItems.includes(item.id)}
-                                    onChange={() => handleCheckboxChange(item.id)}
-                                />
-                            </td>
-                            <td>{item.name}</td>
-                            <td>{item.company}</td>
-                            <td>{item.email}</td>
-                            <td>{item.phone}</td>
-                            <td>{item.lead}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <div className='row'>
-                <div className='col-lg-10 col-md-10 col-12 d-flex align-items-end justify-content-end'>
-                    <div className="page-size-dropdown">
-                        <span>Page Size: &nbsp;</span>
-                        <select
-                            value={pageSize}
-                            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                        >
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                        </select>
-                    </div>
-                </div>
-                <div className='col-lg-2 col-md-2 col-12 d-flex align-items-start justify-content-start'>
-                    <div className='pagination d-flex justify-content-end'>
-                        <button
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                            disabled={currentPage === 1}
-                        >
-                            <IoIosArrowBack />
-                        </button>
-                        <span>{`Page ${currentPage}`}</span>
-                        <button
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                            disabled={endIndex >= filteredData.length}
-                        >
-                            <IoIosArrowForward />
-                        </button>
-                    </div>
-                </div>
+          <div className="d-flex align-items-center justify-content-end py-4 px-3">
+            <div style={{ paddingRight: "10px" }}>
+              <button
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
+                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                onClick={handelNavigateClick}
+              >
+                Create Lead
+              </button>
             </div>
-
-
+            <div class="dropdown-center">
+              <button
+                class="btn btn-danger dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Action <FaSortDown style={{ marginTop: "-6px" }} />
+              </button>
+              <ul class="dropdown-menu">
+                {role === "CRM_SUPERADMIN" ? (
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !(
+                            table.getIsSomeRowsSelected() ||
+                            table.getIsAllRowsSelected()
+                          ) || table.getSelectedRowModel().rows.length !== 1
+                        }
+                        onClick={() =>
+                          handleBulkConvert(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Convert Contact
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !table.getIsSomeRowsSelected() &&
+                          !table.getIsAllRowsSelected()
+                        }
+                        onClick={() =>
+                          handleBulkConvert(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Mass Convert
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !(
+                            table.getIsSomeRowsSelected() ||
+                            table.getIsAllRowsSelected()
+                          ) || table.getSelectedRowModel().rows.length !== 1
+                        }
+                        onClick={() =>
+                          handleBulkDelete(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !table.getIsSomeRowsSelected() &&
+                          !table.getIsAllRowsSelected()
+                        }
+                        onClick={() =>
+                          handleBulkDelete(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Mass Delete
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  // Render disabled buttons for CMP_USER
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Convert
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Mass Convert
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Mass Delete
+                      </button>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+          </div>
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable table={table} />
+          </ThemeProvider>
         </>
-    );
+      )}
+    </section>
+  );
 };
 
-function Leads() {
-    const [isSelectedAll, setIsSelectedAll] = useState(false);
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredData, setFilteredData] = useState(data);
-    const [sortColumn, setSortColumn] = useState('name');
-    const [sortDirection, setSortDirection] = useState('asc');
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const handleSelectAll = () => {
-        setIsSelectedAll(!isSelectedAll);
-        setSelectedItems(isSelectedAll ? [] : data.map((item) => item.id));
-    };
-
-    const handleCheckboxChange = (itemId) => {
-        if (itemId === 'all') {
-            const updatedSelectedItems = isSelectedAll ? [] : data.map((item) => item.id);
-            setIsSelectedAll(!isSelectedAll);
-            setSelectedItems(updatedSelectedItems);
-        } else {
-            const updatedSelectedItems = isSelectedAll
-                ? selectedItems.filter((item) => item !== itemId)
-                : selectedItems.includes(itemId)
-                    ? selectedItems.filter((item) => item !== itemId)
-                    : [...selectedItems, itemId];
-
-            setIsSelectedAll(updatedSelectedItems.length === data.length);
-            setSelectedItems(updatedSelectedItems);
-        }
-    };
-
-
-
-
-    const handleSearch = (value) => {
-        const result = data.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
-        setFilteredData(result);
-        setCurrentPage(1);
-    };
-
-    const handleSort = (column) => {
-        setSortColumn(column);
-        setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
-        setCurrentPage(1);
-    };
-
-    return (
-        <section className="leadsTab" style={{ marginTop: '20px' }}>
-            <div className="container-fluid py-3">
-                <div className="row">
-                    <div className="col-lg-6 col-md-6 col-12">
-                        <input
-                            type="text"
-                            placeholder="Search.."
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                handleSearch(e.target.value);
-                            }}
-                        />
-                        <p className="mt-3"><b>Total Records: {filteredData.length}</b></p>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12">
-                        <div className="dropdown d-flex flex-column align-items-end">
-                                <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Create Lead
-                                </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <a className="dropdown-item" href="/createlead">Create Lead</a>
-                                <a className="dropdown-item" href="/lead">Another action</a>
-                                <a className="dropdown-item" href="/lead">Something else here</a>
-                            </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-lg-10 col-md-10 col-12 d-flex flex-column align-items-end">
-                                <FaEdit className="editIcon" size={38} />
-                            </div>
-                            <div className="col-lg-2 col-md-2 col-12 d-flex flex-column align-items-end">
-                                <div className="dropdown">
-                                    <button className="actionBtn btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <a className="dropdown-item" href="/lead">Action</a>
-                                        <a className="dropdown-item" href="/lead">Another action</a>
-                                        <a className="dropdown-item" href="/lead">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="mt-3">
-                    <DataTable
-                        isSelectedAll={isSelectedAll}
-                        selectedItems={selectedItems}
-                        handleSelectAll={handleSelectAll}
-                        handleCheckboxChange={handleCheckboxChange}
-                        filteredData={filteredData}
-                        sortColumn={sortColumn}
-                        sortDirection={sortDirection}
-                        handleSort={handleSort}
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                    />
-                </div>
-            </div>
-        </section>
-    );
-}
-
-export default Leads;
+export default Lead;

@@ -42,9 +42,7 @@
 
 .active {
 
-    border-bottom: 2px solid #0037ff;
-    color: #0037ff !important;
-    font-weight: bold !important;
+    border-bottom: 2px solid #ffffff;
     padding: 10px;
 }
 
@@ -154,7 +152,7 @@ nav .nav-link Link {
 
 .footerHeading {
 
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings: 'clig'off, 'liga'off;
 
     /* Subtitle 1_18 */
     font-family: Poppins;
@@ -313,69 +311,203 @@ nav .nav-link Link {
 
 /* SignIn  */
 
-.registerWord {
+.signIn .registerWord {
     color: #3D63EA;
     font-family: 'Nunito Sans', sans-serif;
-
 }
 
-.contactsubmitBtn {
+.signIn .contactsubmitBtn {
     width: 100%;
     background-color: #3D63EA;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.contactsubmitBtn:hover {
-    width: 100%;
+.signIn .contactsubmitBtn:hover {
     background-color: #1a44da;
     border: none;
 }
 
-.forgotWord {
+.signIn .forgotWord {
     font-family: 'Nunito Sans', sans-serif;
     font-size: 15px;
     font-weight: 500;
 }
 
-.password-link {
+/* .signIn .password-link {
     color: blue;
     text-decoration: none;
-}
+} */
 
 
-/* Leads.css */
-
-
-.leadsTab .editIcon {
-    background-color: #ffc01a;
-    color: black;
-    padding: 10px;
+.signIn .form-control {
+    /* width: calc(100% - 40px);  */
     border-radius: 5px;
 }
 
-.leadsTab .actionBtn{
-    background-color: #63b7cc;
+.signIn #inputStreet {
+    width: 100%;
+}
+
+.signIn #inputCity {
+    width: 100%;
+}
+
+.signIn #inputState {
+    width: "260px"
+}
+
+.signIn #inputZip {
+    width: "260px"
+}
+
+
+@media (max-width: 991px) {
+    .signIn #inputState {
+        width: 100%;
+    }
+
+    .signIn #inputZip {
+        width: 100%;
+    }
+}
+
+/* @media (max-width: 991px) {
+    .signIn .form-control {
+        width: 100%;
+    }
+} */
+
+
+.signIn #inputCountry {
+    width: 100%;
+}
+
+.signIn .phoneSelect {
+    width: 5px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.signIn .eye-icon {
+    border: none;
+    color: #959595;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.signIn .input-group {
+    position: relative;
+}
+
+.signIn .input-group-text.eye-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* transform: translateX(150%); */
+    /* background-color: transparent; */
+    /* border: none; */
+    padding: 0;
+    z-index: 3;
+}
+
+.signIn #company_password,
+.signIn #confirm_password {
+    width: calc(100% - 40px);
+    /* Adjust the width as needed */
+}
+
+.signIn #company_password {
+    border-radius: 5px;
+}
+
+.signIn #confirm_password {
+    border-radius: 5px;
+}
+
+.signIn .input-group .form-control {
+    z-index: 0;
+}
+
+.signIn .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+
+
+
+
+
+/* Login Page  */
+
+
+.logIn .registerWord {
+    color: #3D63EA;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+
+
+.logIn .contactsubmitBtn {
+    width: 100%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.logIn .contactsubmitBtn:hover {
+    width: 100%;
     border: none;
 }
 
-.table-header {
-    background-color: #007BFF;
-    color: red;
-  }
+/* Create Leads  */
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .pagination span {
-    padding: 5px 10px;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-  
-  .pagination span.active {
-    background-color: #007bff;
-    color: #fff;
-  }
+.createLead .form-size {
+    width: 60%;
+}
+
+
+/* Edit Leads  */
+
+
+.editLead .form-size {
+    width: 60%;
+}
+
+
+/* Create Contact  */
+
+.createContacts .form-size {
+    width: 60%;
+}
+
+.createContacts .copyAddress {
+    background-color: #d8d8d8;
+    border: none;
+    color: #000;
+}
+
+
+/* Appointment  */
+
+.bookAppointment button.btn-close{
+    bs-btn-close-color: #fff;
+}
+
+.intl-tel-input,
+.iti{
+  width: 100%;
+}

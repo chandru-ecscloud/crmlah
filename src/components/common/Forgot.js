@@ -1,98 +1,102 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import CRM from "../../assets/heroImage.png";
+import { useState } from "react";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from 'react-hook-form'
 
-const Form1 = () => (
-    <div className='container'>
-        <div className='row d-flex align-items-center justify-content-center'>
-            <div className="card my-3" style={{ width: '25rem' }}>
-                <div className="card-body">
-                    <form>
-                        <div className="form-group mt-3">
-                            <label htmlFor="companyId">Company User Email:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="companyId"
-                                placeholder='Enter User Email'
-                            />
-                        </div>
-                        <button className="contactsubmitBtn btn btn-danger mt-3" type="button">Submit</button>
-                        <p className='forgotWord text-center mt-2'>
-                            Return to <Link to='/login' className='password-link'>Login</Link>?
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-);
 
-const Form2 = () => (
-    <div className='container'>
-        <div className='row d-flex align-items-center justify-content-center'>
-            <div className="card my-3" style={{ width: '25rem' }}>
-                <div className="card-body">
-                    <form>
-                        <div className="form-group mt-3">
-                            <label htmlFor="companyId">User Email:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="companyId"
-                                placeholder='Enter User Email'
-                            />
-                        </div>
-                        <button className="contactsubmitBtn btn btn-danger mt-3" type="button">Submit</button>
-                        <p className='forgotWord text-center mt-2'>
-                            Return to <Link to='/forgot' className='password-link'>Login</Link>?
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-);
+const schema = yup.object().shape({
+  email: yup.string().email("!Please Enter valid email").required("!Enter the Email"),
+});
 
 const RadioFormSelector = () => {
-    const [selectedForm, setSelectedForm] = useState('form1');
+  const [Email, setEmail] = useState("");
+  const navigate = useNavigate();
 
-    return (
-        <div style={{ marginTop: "105px", backgroundColor: '#fff' }}>
-            <div className='container'>
-                <div className='row py-5'>
-                    <h3 className='registerWord text-center'>FORGOT PASSWORD</h3>
-                    <div className='col-lg-6 col-md-6 col-12 d-flex align-items-end justify-content-end mt-3'>
-                        <label>
-                            <input
-                                type="radio"
-                                value="form1"
-                                checked={selectedForm === 'form1'}
-                                onChange={() => setSelectedForm('form1')}
-                            />
-                            &nbsp;Company
-                        </label>
-                    </div>
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
 
-                    <div className='col-lg-6 col-md-6 col-12 d-flex align-items-start justify-content-start mt-3'>
-                        <label>
-                            <input
-                                type="radio"
-                                value="form2"
-                                checked={selectedForm === 'form2'}
-                                onChange={() => setSelectedForm('form2')}
-                            />
-                            &nbsp;Individuals
-                        </label>
-                    </div>
+  const handelForgot = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}userForgotPassword`,
+        { params: { email: Email } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 201) {
+        toast.success("Password send to mail");
+        navigate('/login')
+      } else {
+        toast.error("Unsuccess");
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+    console.log("Api Data:",Email);
+  };
 
-                    {selectedForm === 'form1' && <Form1 />}
-                    {selectedForm === 'form2' && <Form2 />}
-
-
-                </div>
+  return (
+    <div style={{ marginTop: "105px" }}>
+      <div className="container">
+        <div className="row py-5">
+          <div className="col-md-6 col-12 heroImageBackground">
+            <img className="img-fluid" src={CRM} alt="CRMLAH" />
+          </div>
+          <div className="col-md-6 col-12 d-flex flex-column align-items-center justify-content-center">
+            <h3 className="registerWord">FORGOT PASSWORD</h3>
+            <div className="card my-3" style={{ width: "25rem" }}>
+              <div className="card-body">
+                <form>
+                  <div className="form-group my-2">
+                    <label htmlFor="companyId" className="mb-1">
+                      User Email:
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="companyId"
+                      {...register('email')}
+                      value={Email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter User Email"
+                    />
+                    <p className='text-danger'>{errors.email?.message}</p>
+                  </div>
+                  <button
+                    className="contactsubmitBtn btn btn-primary mt-3"
+                    type="button"
+                    // onClick={handelForgot}
+                    onClick={handleSubmit(()=> {
+                      handelForgot()
+                    })}
+                    style={{ width: "100%" }}
+                  >
+                    Submit
+                  </button>
+                  <p className="forgotWord text-center mt-2">
+                    Return to{" "}
+                    <Link to="/forgot" className="password-link">
+                      Login
+                    </Link>
+                    ?
+                  </p>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default RadioFormSelector;
