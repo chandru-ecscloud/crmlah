@@ -12,6 +12,7 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import ProductModel from "./ProductModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -173,7 +174,8 @@ const Quotes = () => {
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
     sessionStorage.setItem("quote_id", rowData);
-    navigate("/products");
+    // openModal();
+    // navigate("/products");
   };
 
   const theme = createTheme({
@@ -395,7 +397,6 @@ const Quotes = () => {
                   <>
                     <li>
                       <button
-                        className="btn"
                         style={{ width: "100%", border: "none" }}
                         disabled={
                           !(
@@ -407,7 +408,7 @@ const Quotes = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        Assign Products
+                        <ProductModel />
                       </button>
                     </li>
                     <li>
