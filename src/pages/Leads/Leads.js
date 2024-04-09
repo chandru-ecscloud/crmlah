@@ -102,7 +102,7 @@ const Lead = () => {
         header: "Created By",
       },
       {
-        accessorKey: "updated_by",
+        accessorKey: "updatedBy",
         header: "Updated By",
       },
       {
@@ -251,7 +251,7 @@ const Lead = () => {
         zipCode: false,
         state: false,
         created_by: false,
-        updated_by: false,
+        updatedBy: false,
         description_info: false,
         skype_id: false,
         twitter: false,

@@ -36,8 +36,8 @@ const mainMenu = [
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },
   { to: "/invoices", label: "Invoices" },
-  // { to: "/appointments", label: "Appointments" },
-  // { to: "/services", label: "Services" },
+  { to: "/appointments", label: "Appointments" },
+  { to: "/services", label: "Services" },
 ];
 
 function AdminHeader({ handleLogout }) {
