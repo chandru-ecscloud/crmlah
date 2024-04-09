@@ -86,8 +86,10 @@ function App() {
 
     const interceptor = axios.interceptors.response.use(
       (response) => response,
+
       (error) => {
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        // console.log("Error is", error.response);
+        if (error.response?.status === 401) {
           toast.warning("Session Experied!! Please Login");
           handleLogout();
         }
@@ -98,6 +100,7 @@ function App() {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
