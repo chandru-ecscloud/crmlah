@@ -19,7 +19,7 @@ const csvConfig = mkConfig({
   useKeysAsHeaders: true,
 });
 
-const Example = () => {
+const Products = () => {
   const [data, setData] = useState([]);
   // console.log("Api Product Data",data);
   const [loading, setLoading] = useState(true);
@@ -58,6 +58,7 @@ const Example = () => {
       {
         accessorKey: "productActive",
         header: "Product Active",
+        Cell: ({ value }) => (value ? "Active" : "Inactive"),
       },
       {
         accessorKey: "productCategory",
@@ -458,4 +459,4 @@ const Example = () => {
   );
 };
 
-export default Example;
+export default Products;

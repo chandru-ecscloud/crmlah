@@ -494,11 +494,6 @@ nav .nav-link Link {
     width: 60%;
 }
 
-.createContacts .copyAddress {
-    background-color: #d8d8d8;
-    border: none;
-    color: #000;
-}
 
 
 /* Appointment  */
@@ -510,4 +505,11 @@ nav .nav-link Link {
 .intl-tel-input,
 .iti{
   width: 100%;
+}
+
+@media (max-width: 500px) {
+    .sm-device , .form-size{
+       display: block !important;
+       width: 100% !important;
+    }
 }

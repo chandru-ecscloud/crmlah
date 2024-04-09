@@ -2,20 +2,34 @@ import React, { useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import { useFormik } from "formik";
 
-const schema = yup.object().shape({
-  vendor_name: yup.string().required("!Enter Vendor Name"),
-  product_name: yup.string().required("!Enter Product Name"),
-  product_code: yup.string().required("!Enter Product Code"),
-  product_owner: yup.string().required("!Select Product Owner"),
+const validationSchema = yup.object().shape({
+
+  product_owner: yup.string().required('*Product Owner is required.'),
+  product_name: yup.string().required('*Product name is required.'),
+  product_code: yup.string().required('*Product code is required.'),
+  vendor_name: yup.string().required('*Vendor name is required.'),
+  product_category: yup.string().required('*Product category is required.'),
+  sales_start_date: yup.date().required('*Date is required'),
+  sales_end_date: yup.date().required('*Date is required'),
+  support_start_date: yup.date().required('*Date is required'),
+  support_end_date: yup.date().required('*Date is required'),
+  unit_price: yup.number().required('*Unit price is required.'),
+  commission_rate: yup.number().required('*Commission rate is required.'),
+  tax: yup.number().required('*Tax is required.'),
+  usage_unit: yup.string().required('*Usage unit is required.'),
+  quantity_ordered: yup.number().required('*Quantity ordered is required.'),
+  quantity_in_stock: yup.number().required('*Quantity in stock is required.'),
+  handler: yup.string().required('*Handler demand is required.'),
+  description_info: yup.string().required('*Description is required')
 });
+
 function ProductCreate() {
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
@@ -23,20 +37,58 @@ function ProductCreate() {
   const [userImage, setUserImage] = useState(User);
   const userId = sessionStorage.getItem("userId");
   const [checked,setChecked] = useState(false);
-
+  
   const navigate = useNavigate();
+  const formik = useFormik({
+    initialValues: {
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+      product_owner: owner,
+      company_id: userId,
+      product_name: '',
+      product_code: '',
+      vendor_name: '',
+      product_active: false,
+      manufacturer: '',
+      product_category: '',
+      sales_start_date: '',
+      sales_end_date: '',
+      support_start_date: '',
+      support_end_date: '',
+      usage_unit: '',
+      quantity_ordered: '',
+      quantity_in_stock: '',
+      reorder_level: '',
+      handler: '',
+      quantity_in_demand: '',
+      description_info: '',
+      commission_rate: '',
+      tax: '',
+      taxable: false,
+      unit_price: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      console.log("Api Product Data:",data);
+      data.product_active = !!data.product_active;
+      data.taxable = !!data.taxable;
+      try {
+        const response = await axios.post(`${API_URL}newProduct`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/products");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      };
+    },
   });
-
-  const handelCancel = () => {
-    navigate("/products");
-  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -50,396 +102,551 @@ function ProductCreate() {
     }
   };
 
-  const handleApiSubmit = async (data) => {
-    try {
-      const response = await axios.post(`${API_URL}newProduct`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        navigate("/products");
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    };
-  };
-
   return (
     <section className="createLead">
-      <div className="container-fluid">
-        <div className="row mt-3">
-          <div className="col-lg-6 col-md-6 col-12">
-            <h4>
-              <b>Create Product</b>
-              <br></br>
-              <img
-                src={userImage}
-                className="img-fluid mt-3"
-                style={{
-                  width: "70px",
-                  height: "70px",
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                }}
-                alt="user"
-                onClick={() => document.getElementById("imageInput").click()}
-              />
-              {/* Input for image upload */}
-              <input
-                type="file"
-                id="imageInput"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageUpload}
-              />
-              <FaCamera className="cameraIcon" />
-            </h4>
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-            <span>
-              <button className="btn btn-danger" onClick={handelCancel}>
-                Cancel
-              </button>
-            </span>
-            &nbsp;
-            <span>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleSubmit((data) => {
-                  handleApiSubmit(data);
-                })}
-              >
-                Save
-              </button>
-            </span>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="container-fluid">
+          <div className="row mt-3">
+            <div className="col-lg-6 col-md-6 col-12">
+              <h4>
+                <b>Create Product</b>
+                <br></br>
+                <img
+                  src={userImage}
+                  className="img-fluid mt-3"
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                  }}
+                  alt="user"
+                  onClick={() => document.getElementById("imageInput").click()}
+                />
+                {/* Input for image upload */}
+                <input
+                  type="file"
+                  id="imageInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageUpload}
+                />
+                <FaCamera className="cameraIcon" />
+              </h4>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex justify-content-lg-end justify-content-md-end">
+              <Link to={'/products'}>
+                <button className="btn btn-danger">
+                  Cancel
+                </button>
+              </Link>
+              &nbsp;
+              <span>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                >
+                  Save
+                </button>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="container-fluid my-5">
-        <h4>
-          <b>Product Information</b>
-        </h4>
-      </div>
-      <div className="container">
-        <div className="row">
-        <input type="hidden" {...register("company_id")} value={userId} name="company_id" />
+        <div className="container-fluid my-5">
+          <h4>
+            <b>Product Information</b>
+          </h4>
+        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Product Owner</lable> &nbsp;&nbsp;
+                <select
+                  type="text"
+                  className={`form-size form-select  ${formik.touched.product_owner && formik.errors.product_owner
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("product_owner")}
+                  id="product_owner"
+                >
+                  <option value={owner}>{owner}</option>
+                  <option value="Vignesh Devan">Vignesh Devan</option>
+                  <option value="Chandru R">Chandru R</option>
+                  <option value="Gayathri M">Gayathri M</option>
+                  <option value="Poongodi K">Poongodi K</option>
+                  <option value="Suriya G">Suriya G</option>
+                  <option value="Leela Prasanna D">Leela Prasanna D</option>
+                  <option value="Saravanan M">Saravanan M</option>
+                  <option value="Nagaraj VR">Nagaraj VR</option>
+                  <option value="Yalini A">Yalini A</option>
+                  <option value="Vishnu Priya">Vishnu Priya</option>
+                  <option value="Kavitha">Kavitha</option>
+                </select>
+              </div>
 
-          <div className="col-lg-6 col-md-6 col-12">
-            <div className="d-flex align-items-center justify-content-end mb-3">
-              <lable>Product Owner</lable> &nbsp;&nbsp;
-              <select
-                {...register("product_owner")}
-                type="text"
-                className="form-size form-control"
-                id="product_owner"
-              >
-                <option value={owner}>{owner}</option>
-                <option value="Suriya">Suriya</option>
-                <option value="Vignesh Devan">Vignesh Devan</option>
-                <option value="Chandru R">Chandru R</option>
-                <option value="Gayathri M">Gayathri M</option>
-                <option value="Poongodi K">Poongodi K</option>
-                <option value="Suriya G">Suriya G</option>
-                <option value="Leela Prasanna D">Leela Prasanna D</option>
-                <option value="Saravanan M">Saravanan M</option>
-                <option value="Nagaraj VR">Nagaraj VR</option>
-                <option value="Yalini A">Yalini A</option>
-                <option value="Vishnu Priya">Vishnu Priya</option>
-                <option value="Kavitha">Kavitha</option>
-              </select>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.product_owner && formik.errors.product_owner && (
+                    <p className="text-danger">{formik.errors.product_owner}</p>
+                  )}
+                </div>
+              </div>
             </div>
 
-            <div className="row">
-              <div className="col-5"></div>
-              <div className="col-6">
-                <p className="text-danger">{errors.product_owner?.message}</p>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Product Name</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.product_name && formik.errors.product_name ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('product_name')}
+                  name="product_name"
+                  id="product_name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.product_name && formik.errors.product_name && (
+                    <p className="text-danger">{formik.errors.product_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Product Code</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.product_code && formik.errors.product_code ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('product_code')}
+                  name="product_code"
+                  id="product_code"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.product_code && formik.errors.product_code && (
+                    <p className="text-danger">{formik.errors.product_code}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Vendor Name</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.vendor_name && formik.errors.vendor_name ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('vendor_name')}
+                  name="vendor_name"
+                  id="vendor_name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.vendor_name && formik.errors.vendor_name && (
+                    <p className="text-danger">{formik.errors.vendor_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-center sm-device  "style={{marginRight:"38%"}}>
+                <lable>Product Active</lable> &nbsp;&nbsp;
+                <input
+                  type="checkbox"
+                  value={checked}
+                  className={`form-check-input  p-1 ms-3 ${formik.touched.product_active && formik.errors.product_active ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('product_active')}
+                  name="product_active"
+                  id="product_active"
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Manufacturer</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control `}
+                  name="manufacturer"
+                  id="manufacturer"
+                  placeholder="--"
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Product Category</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.product_category && formik.errors.product_category ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('product_category')}
+                  name="product_category"
+                  id="product_category"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.product_category && formik.errors.product_category && (
+                    <p className="text-danger">{formik.errors.product_category}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Sales Start Date</lable> &nbsp;&nbsp;
+                <input
+                  type="date"
+                  className={`form-size form-control  ${formik.touched.sales_start_date && formik.errors.sales_start_date ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('sales_start_date')}
+                  name="sales_start_date"
+                  id="sales_start_date"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.sales_start_date && formik.errors.sales_start_date && (
+                    <p className="text-danger">{formik.errors.sales_start_date}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Sales End Date</lable> &nbsp;&nbsp;
+                <input
+                  type="date"
+                  className={`form-size form-control  ${formik.touched.sales_end_date && formik.errors.sales_end_date ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('sales_end_date')}
+                  name="sales_end_date"
+                  id="sales_end_date"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.sales_end_date && formik.errors.sales_end_date && (
+                    <p className="text-danger">{formik.errors.sales_end_date}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Support Start Date</lable> &nbsp;&nbsp;
+                <input
+                  type="date"
+                  className={`form-size form-control  ${formik.touched.support_start_date && formik.errors.support_start_date ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('support_start_date')}
+                  name="support_start_date"
+                  id="support_start_date"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.support_start_date && formik.errors.support_start_date && (
+                    <p className="text-danger">{formik.errors.support_start_date}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Support End Date</lable> &nbsp;&nbsp;
+                <input
+                  type="date"
+                  className={`form-size form-control  ${formik.touched.support_end_date && formik.errors.support_end_date ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('support_end_date')}
+                  name="support_end_date"
+                  id="support_end_date"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.support_end_date && formik.errors.support_end_date && (
+                    <p className="text-danger">{formik.errors.support_end_date}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="container-fluid my-5">
+          <h4>
+            <b>Stock  Information</b>
+          </h4>
+        </div>
+        <div className="container">
+          <div className="row">
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Unit Price</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.unit_price && formik.errors.unit_price ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('unit_price')}
+                  name="unit_price"
+                  id="unit_price"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.unit_price && formik.errors.unit_price && (
+                    <p className="text-danger">{formik.errors.unit_price}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Commission Rate</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.commission_rate && formik.errors.commission_rate ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('commission_rate')}
+                  name="commission_rate"
+                  id="commission_rate"
+                />
+              </div>
+              <div className="row">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.commission_rate && formik.errors.commission_rate && (
+                    <p className="text-danger">{formik.errors.commission_rate}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Tax</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  value={checked}
+                  className={`form-size form-control  ${formik.touched.tax && formik.errors.tax ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('tax')}
+                  name="tax"
+                  id="tax"
+                />
+              </div>
+              <div className="row">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.tax && formik.errors.tax && (
+                    <p className="text-danger">{formik.errors.tax}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-center  "style={{marginRight:"28%"}}>
+                <lable>Taxable</lable> &nbsp;&nbsp;
+                <input
+                  type="checkbox"
+                  value={checked}
+                  className={`form-check-input p-1 ms-3 ${formik.touched.taxable && formik.errors.taxable ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('taxable')}
+                  name="taxable"
+                  id="taxable"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="container-fluid my-5">
+          <h4>
+            <b>Price Information</b>
+          </h4>
+        </div>
+        <div className="container">
+          <div className="row">
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Usage Unit</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.usage_unit && formik.errors.usage_unit ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('usage_unit')}
+                  name="usage_unit"
+                  id="usage_unit"
+                />
+              </div>
+              <div className="row">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.usage_unit && formik.errors.usage_unit && (
+                    <p className="text-danger">{formik.errors.usage_unit}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Quantity Ordered</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.quantity_ordered && formik.errors.quantity_ordered ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('quantity_ordered')}
+                  name="quantity_ordered"
+                  id="quantity_ordered"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.quantity_ordered && formik.errors.quantity_ordered && (
+                    <p className="text-danger">{formik.errors.quantity_ordered}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Quantity in Stock</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.quantity_in_stock && formik.errors.quantity_in_stock ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('quantity_in_stock')}
+                  name="quantity_in_stock"
+                  id="quantity_in_stock"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.quantity_in_stock && formik.errors.quantity_in_stock && (
+                    <p className="text-danger">{formik.errors.quantity_in_stock}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Reorder Level</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control `}
+                  {...formik.getFieldProps('reorder_level')}
+                  name="reorder_level"
+                  id="reorder_level"
+                  placeholder="--"
+                />
+              </div>
+              {/* <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.reorder_level && formik.errors.reorder_level && (
+                    <p className="text-danger">{formik.errors.reorder_level}</p>
+                  )}
+                </div>
+              </div> */}
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Handler</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.handler && formik.errors.handler ? 'is-invalid' : ''}`}
+                  {...formik.getFieldProps('handler')}
+                  name="handler"
+                  id="handler"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.handler && formik.errors.handler && (
+                    <p className="text-danger">{formik.errors.handler}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Quantity in Demand</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control`}
+                  {...formik.getFieldProps('quantity_in_demand')}
+                  name="quantity_in_demand"
+                  id="quantity_in_demand"
+                  placeholder="--"
+                />
+              </div>
+              {/* <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.quantity_in_demand && formi k.errors.quantity_in_demand && (
+                    <p className="text-danger">{formik.errors.quantity_in_demand}</p>
+                  )}
+                </div>
+              </div> */}
+            </div>
+
+          </div>
+        </div>
+
+
+        <div className="container-fluid my-5">
+          <h4>
+            <b>Description Information</b>
+          </h4>
+        </div>
+        <div className="container">
+        <div className="row">
+            <div className="col-12">
+              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+                <lable>Description</lable> &nbsp;&nbsp;
+                <textarea
+                  rows="5"
+                  type="text"
+                  className="form-size form-control"
+                  {...formik.getFieldProps("description_info")}
+                  name="description_info"
+                  id="description_info"
+                />
               </div>
             </div>
           </div>
-
-          <div className="col-lg-6 col-md-6 col-12">
-            <div className="d-flex align-items-center justify-content-end mb-3">
-              <lable>Product Name</lable> &nbsp;&nbsp;
-              <input
-                {...register("product_name")}
-                type="text"
-                className="form-size form-control"
-                id="product_name"
-              />
-            </div>
-            <div className="row">
-              <div className="col-5"></div>
-              <div className="col-6">
-                <p className="text-danger">{errors.product_name?.message}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12">
-            <div className="d-flex align-items-center justify-content-end mb-3">
-              <lable>Product Code</lable> &nbsp;&nbsp;
-              <input
-                {...register("product_code")}
-                type="text"
-                className="form-size form-control"
-                id="product_code"
-              />
-            </div>
-            <div className="row">
-              <div className="col-5"></div>
-              <div className="col-6">
-                <p className="text-danger">{errors.product_code?.message}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12">
-            <div className="d-flex align-items-center justify-content-end mb-3">
-              <lable>Vendor Name</lable> &nbsp;&nbsp;
-              <input
-                {...register("vendor_name")}
-                type="text"
-                className="form-size form-control"
-                id="vendor_name"
-              />
-            </div>
-            <div className="row">
-              <div className="col-5"></div>
-              <div className="col-6">
-                <p className="text-danger">{errors.vendor_name?.message}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-start mb-3" >
-            <lable id="productActive">Product Active</lable> &nbsp;&nbsp;
-            <input
-            {...register("product_active")}
-              type="checkbox"
-              value={checked}
-              onChange={() =>{setChecked(!checked)}}
-              className="p-1 ms-3"
-              name="product_active"
-              id="product_active"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Manufacturer</lable> &nbsp;&nbsp;
-            <input
-              type="text"
-              className="form-size form-control"
-              name="manufacturer"
-              id="manufacturer"
-              placeholder="--"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Product Category</lable> &nbsp;&nbsp;
-            <input
-            {...register("product_category")}
-              type="text"
-              className="form-size form-control"
-              name="product_category"
-              id="product_category"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Sales Start Date</lable> &nbsp;&nbsp;
-            <input
-            {...register("sales_start_date")}
-              type="date"
-              className="form-size form-control"
-              name="sales_start_date"
-              id="sales_start_date"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Sales End Date</lable> &nbsp;&nbsp;
-            <input
-            {...register("sales_end_date")}
-              type="date"
-              className="form-size form-control"
-              name="sales_end_date"
-              id="sales_end_date"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Support Start Date</lable> &nbsp;&nbsp;
-            <input
-            {...register("support_start_date")}
-              type="date"
-              className="form-size form-control"
-              name="support_start_date"
-              id="support_start_date"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Support End Date</lable> &nbsp;&nbsp;
-            <input
-            {...register("support_end_date")}
-              type="date"
-              className="form-size form-control"
-              name="support_end_date"
-              id="support_end_date"
-            />
-          </div>
         </div>
-      </div>
 
-      <div className="container-fluid my-5">
-        <h4>
-          <b>Price Information</b>
-        </h4>
-      </div>
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Unit Price</lable> &nbsp;&nbsp;
-            <input
-            {...register("unit_price")}
-              type="text"
-              className="form-size form-control"
-              name="unit_price"
-              id="unit_price"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Commission Rate</lable> &nbsp;&nbsp;
-            <input
-            {...register("commission_rate")}
-              type="text"
-              className="form-size form-control"
-              name="commission_rate"
-              id="commission_rate"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Tax</lable> &nbsp;&nbsp;
-            <input
-            {...register("tax")}
-              type="text"
-              className="form-size form-control"
-              name="tax"
-              id="tax"
-            />
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-start mb-3">
-            <lable id="productActive">Taxable</lable> &nbsp;&nbsp;
-            <input
-            {...register("taxable")}
-              type="checkbox"
-              className="p-1 ms-3"
-              name="taxable"
-              id="taxable"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="container-fluid my-5">
-        <h4>
-          <b>Stock Information</b>
-        </h4>
-      </div>
-
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Usage Unit</lable> &nbsp;&nbsp;
-            <input
-            {...register("usage_unit")}
-              type="text"
-              className="form-size form-control"
-              name="usage_unit"
-              id="usage_unit"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Quantity Ordered</lable> &nbsp;&nbsp;
-            <input
-             {...register("quantity_ordered")}
-              type="text"
-              className="form-size form-control"
-              name="quantity_ordered"
-              id="quantity_ordered"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Quantity in Stock</lable> &nbsp;&nbsp;
-            <input
-             {...register("quantity_in_stock")}
-              type="text"
-              className="form-size form-control"
-              name="quantity_in_stock"
-              id="quantity_in_stock"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Reorder Level</lable> &nbsp;&nbsp;
-            <input
-              type="text"
-              className="form-size form-control"
-              name="reorder_level"
-              id="reorder_level"
-              placeholder="--"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Handler</lable> &nbsp;&nbsp;
-            <input
-            {...register("handler")}
-              type="text"
-              className="form-size form-control"
-              name="handler"
-              id="handler"
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
-            <lable>Quantity in Demand</lable> &nbsp;&nbsp;
-            <input
-              type="text"
-              className="form-size form-control"
-              name="qty_demand"
-              id="qty_demand"
-              placeholder="--"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="container-fluid my-5">
-        <h4>
-          <b>Description Information</b>
-        </h4>
-      </div>
-      <div className="container">
-        <div className="row">
-          <div className="col-8 d-flex align-items-center justify-content-end mb-3">
-            <lable>Description</lable> &nbsp;&nbsp;
-            <input
-            {...register("description_info")}
-              type="text"
-              style={{ width: "70%" }}
-              className="form-control"
-              name="description_info"
-              id="description_info"
-            />
-          </div>
-        </div>
-      </div>
+      </form>
     </section>
   );
 }

@@ -54,6 +54,7 @@ function ProductsShow() {
           {}
         );
         setProductData(transformedData);
+        console.log("Product Data:",transformedData);
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -68,7 +69,7 @@ function ProductsShow() {
 
   return (
     <>
-      {/* header section */}
+      {/* {/ header section /} */}
       <section className="container-fluid row section1 m-0 p-0">
         <div className="col-sm-6 py-1">
           <div className="container">
@@ -110,9 +111,9 @@ function ProductsShow() {
         </div>
       </section>
 
-      {/* Products Information Section */}
+      {/* {/ Products Information Section /} */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content */}
+        {/* {/ left Side Content /} */}
         <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
@@ -158,12 +159,12 @@ function ProductsShow() {
           </ul>
         </div>
 
-        {/* Right Side Content */}
+        {/* {/ Right Side Content /} */}
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
         >
-          {/* Details */}
+          {/* {/ Details /} */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
@@ -220,7 +221,7 @@ function ProductsShow() {
             <div className="container-fluid col-md-6"></div>
           </div>
 
-          {/* Hide Details */}
+          {/* {/ Hide Details /} */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3">Hide Details</span>
@@ -241,7 +242,7 @@ function ProductsShow() {
               <div>
                 <label className="text-dark Label">Product Active</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.productActive || "--"}
+                  &nbsp; : &nbsp;{productData.productActive ? "Active" : "Inactive"}
                 </span>
               </div>
 
@@ -318,7 +319,7 @@ function ProductsShow() {
               </div>
             </div>
 
-            {/* Price  Information */}
+            {/* {/ Price  Information /} */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
@@ -336,7 +337,7 @@ function ProductsShow() {
                 <div>
                   <label className="text-dark Label">Taxable</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{productData.taxable || "--"}
+                    &nbsp; : &nbsp;{productData.taxable ? "Yes" : "No"}
                   </span>
                 </div>
                 <div>
@@ -357,7 +358,7 @@ function ProductsShow() {
               </div>
             </div>
 
-            {/* Stock   Information */}
+            {/* {/ Stock   Information /} */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
@@ -408,7 +409,7 @@ function ProductsShow() {
               </div>
             </div>
 
-            {/* Description Information */}
+            {/* {/ Description Information /} */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
                 <span className="my-3 fs-6 fw-bold my-3">
@@ -425,7 +426,7 @@ function ProductsShow() {
             </div>
           </div>
 
-          {/* Notes */}
+          {/* {/ Notes /} */}
           <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
