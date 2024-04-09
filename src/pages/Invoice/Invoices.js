@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
 import DealsModel from "./DealsModel";
-import ProductsModel from "./ProductsModel";
+import ProductsModel from "../Quotes/ProductModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -148,7 +148,7 @@ const Example = () => {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
-      
+
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -157,7 +157,7 @@ const Example = () => {
         accessorKey: "createdBy",
         header: "Created By",
       },
-    
+
       {
         accessorKey: "updatedAt",
         header: "Updated At",
@@ -386,7 +386,6 @@ const Example = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        
                         <ProductsModel />
                       </button>
                     </li>
@@ -404,7 +403,7 @@ const Example = () => {
                           handleAssignDeals(table.getSelectedRowModel().rows)
                         }
                       >
-                        < DealsModel />
+                        <DealsModel />
                       </button>
                     </li>
                     <li>
