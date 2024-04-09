@@ -12,6 +12,8 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import DealsModel from "./DealsModel";
+import ProductsModel from "./ProductsModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -146,42 +148,7 @@ const Example = () => {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
-      {
-        accessorKey: "productName",
-        header: "Product Name",
-      },
-      {
-        accessorKey: "quantity",
-        header: "Quantity",
-      },
-      {
-        accessorKey: "listPrice",
-        header: "List Price",
-      },
-      {
-        accessorKey: "amount",
-        header: "Amount",
-      },
-      {
-        accessorKey: "discount",
-        header: "Discount",
-      },
-      {
-        accessorKey: "tax",
-        header: "Tax",
-      },
-      {
-        accessorKey: "total",
-        header: "Total",
-      },
-      {
-        accessorKey: "adjustment",
-        header: "Adjustment",
-      },
-      {
-        accessorKey: "grandTotal",
-        header: "Grand Total",
-      },
+      
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -190,11 +157,7 @@ const Example = () => {
         accessorKey: "createdBy",
         header: "Created By",
       },
-
-      {
-        accessorKey: "companyId",
-        header: "Company Id",
-      },
+    
       {
         accessorKey: "updatedAt",
         header: "Updated At",
@@ -262,13 +225,13 @@ const Example = () => {
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
     sessionStorage.setItem("invoice_id", rowData);
-    navigate("/products");
+    // navigate("/products");
   };
 
   const handleAssignDeals = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
     sessionStorage.setItem("invoice_id", rowData);
-    navigate("/deals");
+    // navigate("/deals");
   };
 
   const handleBulkDelete = async (rows) => {
@@ -411,7 +374,7 @@ const Example = () => {
                   <>
                     <li>
                       <button
-                        className="btn"
+                        // className="btn"
                         style={{ width: "100%", border: "none" }}
                         disabled={
                           !(
@@ -423,7 +386,8 @@ const Example = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        Assign Products
+                        
+                        <ProductsModel />
                       </button>
                     </li>
                     <li>
@@ -440,7 +404,7 @@ const Example = () => {
                           handleAssignDeals(table.getSelectedRowModel().rows)
                         }
                       >
-                        Assign Deal
+                        < DealsModel />
                       </button>
                     </li>
                     <li>
