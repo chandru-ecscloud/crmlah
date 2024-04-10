@@ -2,30 +2,40 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 
-const ProductModel = () => {
+const ProductModel = ({ path }) => {
+  console.log(path);
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const [productsData, setProdcutsData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const userId = sessionStorage.getItem("userId");
 
   const openModal = () => {
     setIsOpen(true);
   };
+
   const closeModal = () => {
     setIsOpen(false);
+    setSelectAll(false);
+    setSelectedRows([]);
   };
+
   const fetchProductsData = async () => {
     try {
       //   setLoading(true);
-      const response = await axios(`${API_URL}allProducts`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}allProductsByCompanyId/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setProdcutsData(response.data);
       console.log("ProductsData", response.data);
     } catch (error) {
@@ -39,34 +49,84 @@ const ProductModel = () => {
     fetchProductsData();
   }, []);
 
+  const handleSendProductsToQuoteAndInvoice = async () => {
+    try {
+      const response = await axios.post(`${API_URL}${path}`, selectedRows, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  };
+
+  // const handleSendProductsToInvoice = async (rows) => {
+  //   const rowData = rows.map((row) => row.original.id);
+  //   const invoiceId = sessionStorage.getItem("invoice_id");
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_URL}associateProductsWithInvoice/${invoiceId}`,
+  //       rowData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       sessionStorage.removeItem("invoice_id");
+  //       navigate("/invoices");
+  //       table.setRowSelection(false);
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed: " + error.message);
+  //   }
+  // };
+
+  // const handleHeaderCheckboxChange = () => {
+  //   const newSelectAll = !selectAll;
+  //   setSelectAll(newSelectAll);
+  //   const allIds = productsData.map((item) => item.id);
+  //   setSelectedRows(
+  //     newSelectAll
+  //       ? allIds.map((id) => productsData.find((item) => item.id === id))
+  //       : []
+  //   );
+  // };
+
   const handleHeaderCheckboxChange = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    const allIds = productsData.map((item) => item.id);
-    setSelectedRows(
-      newSelectAll
-        ? allIds.map((id) => productsData.find((item) => item.id === id))
-        : []
-    );
+    setSelectedRows(newSelectAll ? productsData.map((item) => item.id) : []);
   };
-
-  const handleCheckboxChange = (id, rowData) => {
-    const isChecked = selectedRows.some((row) => row.id === id);
+  
+  const handleCheckboxChange = (id) => {
+    const isChecked = selectedRows.includes(id);
     if (isChecked) {
-      setSelectedRows(selectedRows.filter((row) => row.id !== id));
+      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
     } else {
-      setSelectedRows([...selectedRows, rowData]);
+      setSelectedRows([...selectedRows, id]);
     }
   };
+
   console.log("selected", selectedRows);
-  const quatesDataSubmit = () => {
-    console.log("selectedRows", selectedRows);
-  };
+
   return (
     <div>
       <button
-        className="btn"
-        style={{ width: "100%", border: "none" }}
+        style={{ width: "100%", border: "none", background:"transparent" }}
         onClick={openModal}
       >
         Assign Product
@@ -98,6 +158,7 @@ const ProductModel = () => {
                       <th scope="col">
                         <input
                           type="checkbox"
+                          className="form-check-input "
                           checked={selectAll}
                           onChange={handleHeaderCheckboxChange}
                         />
@@ -114,10 +175,13 @@ const ProductModel = () => {
                         <td>
                           <input
                             type="checkbox"
-                            checked={selectedRows.some(
-                              (row) => row.id === item.id
-                            )}
-                            onChange={() => handleCheckboxChange(item.id, item)}
+                            // checked={selectedRows.some(
+                            //   (row) => row.id === item.id
+                            // )}
+                            // onChange={() => handleCheckboxChange(item.id, item)}
+                            className="form-check-input "
+                            checked={selectedRows.includes(item.id)}
+                            onChange={() => handleCheckboxChange(item.id)}
                           />
                         </td>
                         <td>{item.productName}</td>
@@ -140,9 +204,9 @@ const ProductModel = () => {
                   <button
                     className="btn btn-primary"
                     type="button"
-                    onClick={quatesDataSubmit}
+                    onClick={() => handleSendProductsToQuoteAndInvoice(selectedRows)}
                   >
-                    Save
+                    Assign
                   </button>
                 </span>
               </div>

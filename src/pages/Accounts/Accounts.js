@@ -12,7 +12,6 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
-import Modal from "react-bootstrap/Modal";
 import { ImQuotesRight } from "react-icons/im";
 import QuotesModel from "./QuotesModel";
 
@@ -24,22 +23,16 @@ const csvConfig = mkConfig({
 
 const Accounts = () => {
   const [data, setData] = useState([]);
-  const [quatesdata, setQuatesData] = useState([]);
+  const [rowId, setRowId] = useState("");
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const userId = sessionStorage.getItem("userId");
-  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const openModal = () => {
-    setIsOpen(true);
-  };
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  const [selectedIds, setSelectedIds] = useState();
 
+ // console.log("rowId",rowId)
+ console.log("rowId",rowId)
   const columns = useMemo(
     () => [
       {
@@ -179,6 +172,7 @@ const Accounts = () => {
     }
   };
 
+ 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
     const csv = generateCsv(csvConfig)(rowData);
@@ -205,10 +199,9 @@ const Accounts = () => {
 
   const handleAssignQuote = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    sessionStorage.setItem("account_id", rowData);
-    // openModal();
-    // navigate("/quotes");
-  };
+    // sessionStorage.setItem("account_id", rowData);
+    setRowId(rowData)
+  };  
 
   const handelNavigateClick = () => {
     navigate("/accounts/create");
@@ -245,6 +238,7 @@ const Accounts = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
+    
     const keyMapping = {
       accountOwner: "account_owner",
       accountName: "account_name",
@@ -352,129 +346,16 @@ const Accounts = () => {
       </Box>
     ),
   });
-  const fetchQuatesData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios(`${API_URL}allQuotes`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setQuatesData(response.data);
-      console.log("QuatesData", response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
   
-    // model table
-  const handleHeaderCheckboxChange = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    const allIds = quatesdata.map((item) => item.id);
-    setSelectedRows(
-      newSelectAll
-        ? allIds.map((id) => quatesdata.find((item) => item.id === id))
-        : []
-    );
-  };
-
-  const handleCheckboxChange = (id, rowData) => {
-    const isChecked = selectedRows.some((row) => row.id === id);
-    if (isChecked) {
-      setSelectedRows(selectedRows.filter((row) => row.id !== id));
-    } else {
-      setSelectedRows([...selectedRows, rowData]);
-    }
-  };
-  console.log("selected",selectedRows);
-  const quatesDataSubmit =()=>{
-    console.log("selectedRows",selectedRows);
-  }
   return (
     <section>
       {loading && <LinearProgress />}
       {!loading && (
         <>
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            {/* <Modal
-              size="lg"
-              show={isOpen}
-              onHide={closeModal}
-              aria-labelledby="example-modal-sizes-title-lg"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title id="example-modal-sizes-title-lg">
-                  Create Appointment
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <section className="Quotesmodel">
-                  <div className="container-fluid">
-                    <div className="table-responsive mt-5">
-                      <table class="table shadow p-3 mb-5 bg-body rounded">
-                        <thead>
-                          <tr>
-                            <th scope="col">
-                              <input
-                                type="checkbox"
-                                checked={selectAll}
-                                onChange={handleHeaderCheckboxChange}
-                              />
-                            </th>
-                            <th scope="col">Deals Name</th>
-                            <th scope="col">Subject</th>
-                            <th scope="col">Quote Stages</th>
-                            <th scope="col">Quotes Owner</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {quatesdata.map((item, index) => (
-                            <tr key={item.id}>
-                              <td>
-                                <input
-                                  type="checkbox"
-                                  checked={selectedRows.some(
-                                    (row) => row.id === item.id
-                                  )}
-                                  onChange={() =>
-                                    handleCheckboxChange(item.id, item)
-                                  }
-                                />
-                              </td>
-                              <td>{item.dealName}</td>
-                              <td>{item.subject}</td>
-                              <td>{item.quoteStage}</td>
-                              <td>{item.quoteOwner}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="col-12 d-flex justify-content-end justify-content-end">
-                      <span>
-                        <button className="btn btn-danger" onClick={closeModal}>
-                          Cancel
-                        </button>
-                      </span>
-                      &nbsp;
-                      <span>
-                        <button className="btn btn-primary" type="button" onClick={quatesDataSubmit}>
-                          Save
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </section>
-              </Modal.Body>
-            </Modal> */}
             <div style={{ paddingRight: "10px" }}>
               <button
                 className={`btn btn-primary ${
@@ -512,7 +393,9 @@ const Accounts = () => {
                           handleAssignQuote(table.getSelectedRowModel().rows)
                         }
                       >
-                        <QuotesModel />
+                        <QuotesModel 
+                        // onSuccess={refreshData}
+                        path={`associateQuotesWithAccount/${rowId}`} />
                       </button>
                     </li>
                     <li>

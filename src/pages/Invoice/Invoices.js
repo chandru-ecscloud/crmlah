@@ -22,12 +22,14 @@ const csvConfig = mkConfig({
 });
 
 const Example = () => {
+  const [rowId, setRowId] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const userId = sessionStorage.getItem("userId");
+  // console.log("rowId",rowId)
 
   const columns = useMemo(
     () => [
@@ -183,6 +185,7 @@ const Example = () => {
         }
       );
       setData(response.data);
+      console.log("responsedata", response.data);
     } catch (error) {
       toast.error("Error fetching data:", error);
     } finally {
@@ -224,13 +227,15 @@ const Example = () => {
 
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    sessionStorage.setItem("invoice_id", rowData);
+    setRowId(rowData);
+    // sessionStorage.setItem("invoice_id", rowData);
     // navigate("/products");
   };
 
   const handleAssignDeals = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    sessionStorage.setItem("invoice_id", rowData);
+    setRowId(rowData);
+    // sessionStorage.setItem("invoice_id", rowData);
     // navigate("/deals");
   };
 
@@ -386,7 +391,10 @@ const Example = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        <ProductsModel />
+                        <ProductsModel 
+                         // onSuccess={refreshData}
+                         path={`associateProductsWithInvoice/${rowId}`}
+                         />
                       </button>
                     </li>
                     <li>
@@ -403,7 +411,9 @@ const Example = () => {
                           handleAssignDeals(table.getSelectedRowModel().rows)
                         }
                       >
-                        <DealsModel />
+                        <DealsModel
+                          path={`associateDealsWithInvoice/${rowId}`}
+                        />
                       </button>
                     </li>
                     <li>

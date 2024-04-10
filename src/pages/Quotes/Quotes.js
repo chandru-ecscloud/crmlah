@@ -22,11 +22,32 @@ const csvConfig = mkConfig({
 
 const Quotes = () => {
   const [data, setData] = useState([]);
+  const [rowId, setRowId] = useState("");
+  // console.log("rowId",rowId)
+  // console.log(data)
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
+
+  // const refreshData = async () => {
+  //   // destroyDataTable();
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios(`${API_URL}allQuotesByCompanyId/${userId}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     setData(response.data);
+  //     // initializeDataTable();
+  //   } catch (error) {
+  //     console.error("Error refreshing data:", error);
+  //   }
+  //   setLoading(false);
+  // };
 
   const columns = useMemo(
     () => [
@@ -173,7 +194,8 @@ const Quotes = () => {
 
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    sessionStorage.setItem("quote_id", rowData);
+    setRowId(rowData)
+    // sessionStorage.setItem("quote_id", rowData);
     // openModal();
     // navigate("/products");
   };
@@ -397,7 +419,8 @@ const Quotes = () => {
                   <>
                     <li>
                       <button
-                        style={{ width: "100%", border: "none" }}
+                        className="btn"
+                        style={{ width: "100%", border: "none"}}
                         disabled={
                           !(
                             table.getIsSomeRowsSelected() ||
@@ -408,7 +431,10 @@ const Quotes = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        <ProductModel />
+                        <ProductModel 
+                          // onSuccess={refreshData}
+                          path={`associateProductsWithQuote/${rowId}`}
+                        />
                       </button>
                     </li>
                     <li>

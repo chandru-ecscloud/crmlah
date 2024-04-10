@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 
-const DealsModel = () => {
+const DealsModel = ({ path }) => {
+  console.log(path);
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const [dealsdata, setDealsData] = useState([]);
@@ -14,9 +16,13 @@ const DealsModel = () => {
   const openModal = () => {
     setIsOpen(true);
   };
+
   const closeModal = () => {
     setIsOpen(false);
+    setSelectAll(false);
+    setSelectedRows([]);
   };
+
   const fetchDealsData = async () => {
     try {
       //   setLoading(true);
@@ -38,29 +44,58 @@ const DealsModel = () => {
   useEffect(() => {
     fetchDealsData();
   }, []);
+
+  const handleSendDealsToInvoice = async () => {
+    try {
+      const response = await axios.post(`${API_URL}${path}`, selectedRows, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  };
+
+  // const handleHeaderCheckboxChange = () => {
+  //   const newSelectAll = !selectAll;
+  //   setSelectAll(newSelectAll);
+  //   const allIds = dealsdata.map((item) => item.id);
+  //   setSelectedRows(
+  //     newSelectAll
+  //       ? allIds.map((id) => dealsdata.find((item) => item.id === id))
+  //       : []
+  //   );
+  // };
+
   const handleHeaderCheckboxChange = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    const allIds = dealsdata.map((item) => item.id);
-    setSelectedRows(
-      newSelectAll
-        ? allIds.map((id) => dealsdata.find((item) => item.id === id))
-        : []
-    );
+    setSelectedRows(newSelectAll ? dealsdata.map((item) => item.id) : []);
   };
 
-  const handleCheckboxChange = (id, rowData) => {
-    const isChecked = selectedRows.some((row) => row.id === id);
+  const handleCheckboxChange = (id) => {
+    const isChecked = selectedRows.includes(id);
     if (isChecked) {
-      setSelectedRows(selectedRows.filter((row) => row.id !== id));
+      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
     } else {
-      setSelectedRows([...selectedRows, rowData]);
+      setSelectedRows([...selectedRows, id]);
     }
   };
+
   console.log("selected", selectedRows);
-  const dealsDataSubmit = () => {
-    console.log("selectedRows", selectedRows);
-  };
+
+  // const dealsDataSubmit = () => {
+  //   console.log("selectedRows", selectedRows);
+  // };
+
   return (
     <div>
       <button
@@ -97,6 +132,7 @@ const DealsModel = () => {
                       <th scope="col">
                         <input
                           type="checkbox"
+                          className="form-check-input "
                           checked={selectAll}
                           onChange={handleHeaderCheckboxChange}
                         />
@@ -113,10 +149,9 @@ const DealsModel = () => {
                         <td>
                           <input
                             type="checkbox"
-                            checked={selectedRows.some(
-                              (row) => row.id === item.id
-                            )}
-                            onChange={() => handleCheckboxChange(item.id, item)}
+                            className="form-check-input "
+                            checked={selectedRows.includes(item.id)}
+                            onChange={() => handleCheckboxChange(item.id)}
                           />
                         </td>
                         <td>{item.dealName}</td>
@@ -135,9 +170,9 @@ const DealsModel = () => {
                 <button
                   className="btn btn-primary "
                   type="button"
-                  onClick={dealsDataSubmit}
+                  onClick={() => handleSendDealsToInvoice(selectedRows)}
                 >
-                  Save
+                  Assign
                 </button>
               </div>
             </div>
