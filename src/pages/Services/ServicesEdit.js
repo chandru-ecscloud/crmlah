@@ -4,71 +4,106 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+const validationSchema = yup.object().shape({
+ service_name: yup.string().required("*Service name is required"),
+ service_owner: yup.string().required("*Service owner is required"),
+ duration: yup.string().required("*Duration is required"),
+ location: yup.string().required("*Location is required"),
+ members: yup.string().required("*Members is required"),
+ available_days: yup.string().required("*Available days is required"),
+ available_time: yup.string().required("*Available time is required"),
+ price: yup.string().required("*Price is required"),
+ tax: yup.string().required("*Tax is required"),
+});
 
 function ServicesEdit() {
-  const { id } = useParams();
-  const [formData, setFormData] = useState({
-    service_name: "",
-    duration: "",
-    price: "",
-    location: "",
-    service_owner: "",
-    members: "",
-    available_days: "",
-    available_time: "",
-    tax: "",
-    description_info: "",
-  });
+  const userId = sessionStorage.getItem("userId");
+
+  const formik = useFormik({
+    initialValues: {
+      service_owner: "",
+      company_id: userId,
+      service_name: "",
+      duration: "",
+      location: "",
+      members: "",
+      available_days: "",
+      available_time: "",
+      price: "",
+      tax: "",
+      description_info: ""
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      console.log("Service Datas:", data);
+    }});
+
+  // const { id } = useParams();
+  // const [formData, setFormData] = useState({
+  //   service_name: "",
+  //   duration: "",
+  //   price: "",
+  //   location: "",
+  //   service_owner: "",
+  //   members: "",
+  //   available_days: "",
+  //   available_time: "",
+  //   tax: "",
+  //   description_info: "",
+  // });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handelCancel = () => {
     navigate(`/services`);
   };
 
-  useEffect(() => {
-    const userData = async () => {
-      try {
-        const response = await axios(`${API_URL}allService/${id}`);
-        setFormData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const userData = async () => {
+  //     try {
+  //       const response = await axios(`${API_URL}allService/${id}`);
+  //       setFormData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
 
-    userData();
-  }, [id]);
+  //   userData();
+  // }, [id]);
 
-  const updateClient = async () => {
-    try {
-      const response = await axios.put(
-        `${API_URL}updateService/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 201) {
-        toast.success("Service Updated Successfully.");
-        navigate("/services");
-      } else {
-        toast.error("Service Updated Unsuccessful.");
-      }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
-  };
+  // const updateClient = async () => {
+  //   try {
+  //     const response = await axios.put(
+  //       `${API_URL}updateService/${id}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response.status === 201) {
+  //       toast.success("Service Updated Successfully.");
+  //       navigate("/services");
+  //     } else {
+  //       toast.error("Service Updated Unsuccessful.");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed: " + error.message);
+  //   }
+  // };
 
   return (
-    <section className="editLead">
+    <section className="createLead">
+       <form onSubmit={formik.handleSubmit}>
       <div className="container-fluid">
         <div className="row mt-3">
           <div className="col-lg-6 col-md-6 col-12">
@@ -93,8 +128,7 @@ function ServicesEdit() {
             <span>
               <button
                 className="btn btn-primary"
-                type="button"
-                onClick={updateClient}
+                type="submit"
               >
                 Save
               </button>
@@ -109,166 +143,132 @@ function ServicesEdit() {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+        <input
+              type="hidden"
+              {...formik.getFieldProps("companyId")}
+              value={userId}
+              name="companyId"
+            />
+        <div className="col-lg-6 col-md-6 col-12">
+        <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <label htmlFor="service_owner">Service Owner</label>&nbsp;&nbsp;
             <select
               id="service_owner"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("service_owner")}
               name="service_owner"
-              onChange={handleChange}
             >
               <option value=""></option>
-              <option
-                value="Suriya"
-                selected={formData.service_owner === "Suriya"}
-              >
-                Suriya
-              </option>
-              <option
-                value="Vignesh Devan"
-                selected={formData.service_owner === "Vignesh Devan"}
-              >
-                Vignesh Devan
-              </option>
-              <option
-                value="Chandru R"
-                selected={formData.service_owner === "Chandru R"}
-              >
-                Chandru R
-              </option>
-              <option
-                value="Gayathri M"
-                selected={formData.service_owner === "Gayathri M"}
-              >
-                Gayathri M
-              </option>
-              <option
-                value="Poongodi K"
-                selected={formData.service_owner === "Poongodi K"}
-              >
-                Poongodi K
-              </option>
-              <option
-                value="Suriya G"
-                selected={formData.service_owner === "Suriya G"}
-              >
-                Suriya G
-              </option>
-              <option
-                value="Leela Prasanna D"
-                selected={formData.service_owner === "Leela Prasanna D"}
-              >
-                Leela Prasanna D
-              </option>
-              <option
-                value="Saravanan M"
-                selected={formData.service_owner === "Saravanan M"}
-              >
-                Saravanan M
-              </option>
-              <option
-                value="Nagaraj VR"
-                selected={formData.service_owner === "Nagaraj VR"}
-              >
-                Nagaraj VR
-              </option>
-              <option
-                value="Yalini A"
-                selected={formData.service_owner === "Yalini A"}
-              >
-                Yalini A
-              </option>
-              <option
-                value="Vishnu Priya"
-                selected={formData.service_owner === "Vishnu Priya"}
-              >
-                Vishnu Priya
-              </option>
-              <option
-                value="Kavitha"
-                selected={formData.service_owner === "Kavitha"}
-              >
-                Kavitha
-              </option>
+              <option value="Suriya">Suriya</option>
+              <option value="Vignesh Devan">Vignesh Devan</option>
+              <option value="Chandru R">Chandru R</option>
+              <option value="Gayathri M">Gayathri M</option>
+              <option value="Poongodi K">Poongodi K</option>
+              <option value="Suriya G">Suriya G</option>
+              <option value="Leela Prasanna D">Leela Prasanna D</option>
+              <option value="Saravanan M">Saravanan M</option>
+              <option value="Nagaraj VR">Nagaraj VR</option>
+              <option value="Yalini A">Yalini A</option>
+              <option value="Vishnu Priya">Vishnu Priya</option>
+              <option value="Kavitha">Kavitha</option>
             </select>
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.service_owner && formik.errors.service_owner && (
+                    <p className="text-danger">{formik.errors.service_owner}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Service Name</lable> &nbsp;&nbsp;
             <input
               type="text"
-              className="form-size form-control"
+              className=" form-control form-size"
+              {...formik.getFieldProps("service_name")}
               name="service_name"
               id="service_name"
-              value={formData.service_name || ""}
-              onChange={handleChange}
             />
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.service_name && formik.errors.service_name && (
+                    <p className="text-danger">{formik.errors.service_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Duration</lable> &nbsp;&nbsp;
             <select
               id="duration"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("duration")}
               name="duration"
-              onChange={handleChange}
             >
-              <option value="None" selected={formData.duration === "None"}>
-                None
-              </option>
-              <option
-                value="2 Hours"
-                selected={formData.duration === "2 Hours"}
-              >
-                2 Hours
-              </option>
-              <option
-                value="4 Hours"
-                selected={formData.duration === "4 Hours"}
-              >
-                4 Hours
-              </option>
+              <option value=""></option>
+              <option value="2 Hours">2 Hours</option>
+              <option value="4 Hours">4 Hours</option>
             </select>
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.duration && formik.errors.duration && (
+                    <p className="text-danger">{formik.errors.duration}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Location</lable> &nbsp;&nbsp;
             <select
               id="location"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("location")}
               name="location"
-              onChange={handleChange}
             >
-              <option
-                value="Business Address"
-                selected={formData.location === "Business Address"}
-              >
-                Business Address
-              </option>
-              <option
-                value="Client Address"
-                selected={formData.location === "Client Address"}
-              >
-                Client Address
-              </option>
-              <option
-                value="Business Address and Client Address"
-                selected={
-                  formData.location === "Business Address and Client Address"
-                }
-              >
-                Business Address and Client Address
-              </option>
+              <option value=""></option>
+              <option value="Business Address">Business Address</option>
+              <option value="Client Address">Client Address</option>
+              <option value="Business Address and Client Address">Business Address and Client Address</option>
             </select>
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.location && formik.errors.location && (
+                    <p className="text-danger">{formik.errors.location}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Member(s)</lable> &nbsp;&nbsp;
             <input
               type="tel"
-              className="form-size form-control"
+              className=" form-control form-size"
+              {...formik.getFieldProps("members")}
               name="members"
               id="members"
-              value={formData.members || ""}
-              onChange={handleChange}
             />
           </div>
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.members && formik.errors.members && (
+                    <p className="text-danger">{formik.errors.members}</p>
+                  )}
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div className="container-fluid my-5">
@@ -278,74 +278,56 @@ function ServicesEdit() {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+        <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Available Day(s)</lable> &nbsp;&nbsp;
             <select
               id="available_days"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("available_days")}
               name="available_days"
-              onChange={handleChange}
             >
-              <option
-                value="Every Business Days"
-                selected={formData.available_days === "Every Business Days"}
-              >
-                Every Business Days
-              </option>
-              <option
-                value="Specific Date Range"
-                selected={formData.available_days === "Specific Date Range"}
-              >
-                Specific Date Range
-              </option>
-              <option
-                value="Specific Date(s)"
-                selected={formData.available_days === "Specific Date(s)"}
-              >
-                Specific Date(s)
-              </option>
-              <option
-                value="Specific Day(s)"
-                selected={formData.available_days === "Specific Day(s)"}
-              >
-                Specific Day(s)
-              </option>
+              <option value=""></option>
+              <option value="Every Business Days">Every Business Days</option>
+              <option value="Specific Date Range">Specific Date Range</option>
+              <option value="Specific Date(s)">Specific Date(s)</option>
+              <option value="Specific Day(s)">Specific Day(s)</option>
             </select>
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.available_days && formik.errors.available_days && (
+                    <p className="text-danger">{formik.errors.available_days}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Available Time</lable> &nbsp;&nbsp;
             <select
               id="available_time"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("available_time")}
               name="available_time"
-              onChange={handleChange}
             >
-              <option
-                value="Same as Business Time"
-                selected={formData.available_time === "Same as Business Time"}
-              >
-                Same as Business Time
-              </option>
-              <option
-                value="Option 1"
-                selected={formData.available_time === "Option 1"}
-              >
-                Option 1
-              </option>
-              <option
-                value="Option 2"
-                selected={formData.available_time === "Option 2"}
-              >
-                Option 2
-              </option>
-              <option
-                value="Option 3"
-                selected={formData.available_time === "Option 3"}
-              >
-                Option 3
-              </option>
+              <option value=""></option>
+              <option value="Same as Business Time">Same as Business Time</option>
+              <option value="Option 1">Option 1</option>
+              <option value="Option 2">Option 2</option>
+              <option value="Option 3">Option 3</option>
             </select>
           </div>
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.available_time && formik.errors.available_time && (
+                    <p className="text-danger">{formik.errors.available_time}</p>
+                  )}
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div className="container-fluid my-5">
@@ -355,42 +337,50 @@ function ServicesEdit() {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+        <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Price</lable> &nbsp;&nbsp;
             <input
               type="text"
-              className="form-size form-control"
+              className=" form-control form-size"
+              {...formik.getFieldProps("price")}
               name="price"
               id="price"
-              value={formData.price || ""}
-              onChange={handleChange}
             />
           </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3">
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.price && formik.errors.price && (
+                    <p className="text-danger">{formik.errors.price}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
             <lable>Tax</lable> &nbsp;&nbsp;
             <select
               id="tax"
-              className="form-size form-select"
+              className=" form-select form-size"
+              {...formik.getFieldProps("tax")}
               name="tax"
-              onChange={handleChange}
             >
-              <option value="None" selected={formData.tax === "None"}>
-                None
-              </option>
-              <option
-                value="Option 1"
-                selected={formData.tax === "Option 1"}
-              >
-                Option 1
-              </option>
-              <option
-                value="Option 2"
-                selected={formData.tax === "Option 2"}
-              >
-                Option 2
-              </option>
+              <option value=""></option>
+              <option value="Option 1">Option 1</option>
+              <option value="Option 2">Option 2</option>
+              <option value="Option 3">Option 3</option>
             </select>
           </div>
+          <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.tax && formik.errors.tax && (
+                    <p className="text-danger">{formik.errors.tax}</p>
+                  )}
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div className="container-fluid my-5">
@@ -405,15 +395,15 @@ function ServicesEdit() {
             <input
               type="text"
               style={{ width: "70%" }}
-              className="form-control"
+              className=" form-control form-size"
+              {...formik.getFieldProps("description_info")}
               name="description_info"
               id="description_info"
-              value={formData.description_info || ""}
-              onChange={handleChange}
             />
           </div>
         </div>
       </div>
+      </form>
     </section>
   );
 }
