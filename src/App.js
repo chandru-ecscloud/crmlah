@@ -58,6 +58,7 @@ import Invoice from "./components/common/Invoice";
 import ChangeRole from "./pages/Change_Role/ChangeRole";
 import ChangeRoleShow from "./pages/Change_Role/ChangeRoleShow";
 import ChangeRoleEdit from "./pages/Change_Role/ChangeRoleEdit";
+import Dragable from "./pages/Dragable";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -120,6 +121,7 @@ function App() {
 
         {isAdmin && (
           <>
+            <Route path="/dragable" element={<Dragable />} />
             {/* Lead   */}
             <Route path="/leads" element={<Leads />} />
             <Route path="/leads/create" element={<LeadsCreate />} />

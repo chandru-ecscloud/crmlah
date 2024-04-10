@@ -175,11 +175,11 @@ function AdminHeader({ handleLogout }) {
           >
             Logout
           </button>
-          {/* <Link to="/changepass" style={{ width: "100%" }}>
+          <Link to="/changepass" style={{ width: "100%" }}>
             <button className="btn btn-primary" style={{ width: "100%" }}>
               Change Password
             </button>
-          </Link> */}
+          </Link>
 
           {role === "CRM_SUPERADMIN" ? (
             <div className="d-flex align-items-end align-self-end h-100">

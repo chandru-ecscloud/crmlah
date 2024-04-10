@@ -6,28 +6,34 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useFormik } from "formik";
 
-const schema = yup.object().shape({
-  company_id: yup.string().required("!please enter the UserId"),
-  username: yup.string().required("!please enter the UserName"),
-  // password: yup.string().required("!Enter the valid Password").min(4, "!min length of 4 chars").matches(
+const validationSchema = yup.object().shape({
+  company_id: yup.string().required("*please enter the UserId"),
+  username: yup.string().required('*UserName is required.'),
+  password: yup.string().required("*Enter the valid Password"),
+  // min(4, "*min length of 4 chars").matches(
   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
   //   'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character'
-  // ).max(10, "!Enter upto 15 chars only"),
+  // ).max(10, "*Enter upto 15 chars only"),
 });
 
 function LogIn({ handleLogin }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
+  const formik = useFormik({
+    initialValues: {
+
+      company_id: '',
+      username: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      console.log("Api login Data:", data);
+      handelLoginClick(data)
+    },
   });
 
   const togglePasswordVisibility = () => {
@@ -137,86 +143,94 @@ function LogIn({ handleLogin }) {
     // </section>
 
     <section className="signIn">
-      <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
-        <div className="container">
-          <div className="row py-5">
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
-              <img className="img-fluid" src={CRM} alt="CRMLAH" />
-            </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <h3 className="registerWord text-center">LOGIN</h3>
-              <form>
-                <div className="form-group mt-3">
-                  <label htmlFor="companyId">Company ID:</label>
-                  <input
-                    {...register("company_id")}
-                    type="text"
-                    class="form-control"
-                    id="companyid"
-                  />
-                  <p className="text-danger">{errors.company_id?.message}</p>
-                </div>
-                <div className="form-group mt-3">
-                  <label htmlFor="username">User Name:</label>
-                  <input
-                    {...register("username")}
-                    type="email"
-                    class="form-control"
-                    id="Email"
-                  />
-                  <p className="text-danger">{errors.username?.message}</p>
-                </div>
-
-                <div className="form-group mb-3">
-                  <label htmlfor="password" className="form-label">
-                    Password
-                  </label>
-                  <div className="input-group">
+      
+        <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
+          <div className="container">
+            <div className="row py-5">
+              <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
+                <img className="img-fluid" src={CRM} alt="CRMLAH" />
+              </div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <h3 className="registerWord text-center">LOGIN</h3>
+                <form onSubmit={formik.handleSubmit}>
+                  
+                  <div className="form-group mt-3">
+                    <label htmlFor="companyId">Company ID:</label>
                     <input
-                      {...register("password")}
-                      type={showPassword ? "text" : "password"}
-                      className="form-control"
-                      id="InputPassword1"
-                      style={{ margin: "0px" }}
+                      type="text"
+                      className={`form-size form-control  ${formik.touched.company_id && formik.errors.company_id ? 'is-invalid' : ''}`}
+                      {...formik.getFieldProps('company_id')}
+                      name="company_id"
+                      id="company_id"
                     />
-                    <span
-                      className="input-group-append eye-icon"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </span>
+                    {formik.touched.company_id && formik.errors.company_id && (
+                      <p className="text-danger">{formik.errors.company_id}</p>
+                    )}
                   </div>
-                  <p className="text-danger">{errors.password?.message}</p>
-                </div>
 
-                <button
-                  className="contactsubmitBtn btn btn-primary mx-auto"
-                  onClick={handleSubmit((data) => {
-                    handelLoginClick(data);
-                  })}
-                  type="button"
-                >
-                  Login
-                </button>
+                  <div className="form-group mt-3">
+                    <label htmlFor="username">User Name:</label>
+                    <input
+                      type="text"
+                      className={`form-size form-control  ${formik.touched.username && formik.errors.username ? 'is-invalid' : ''}`}
+                      {...formik.getFieldProps('username')}
+                      name="username"
+                      id="username"
+                    />
+                    {formik.touched.username && formik.errors.username && (
+                      <p className="text-danger">{formik.errors.username}</p>
+                    )}
+                  </div>
 
-                <p className="forgotWord text-center mt-5">
-                  Forgot{" "}
-                  <Link to="/forgot" className="password-link">
-                    Password
-                  </Link>
-                  ?
-                </p>
-                <p className="forgotWord text-center">
-                  Don't have an account?{" "}
-                  <Link to="/signin" className="password-link">
-                    Sign up
-                  </Link>
-                </p>
-              </form>
+                  <div className="form-group mb-3">
+                    <label htmlfor="password" className="form-label">
+                      Password
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        className={`form-size form-control  ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
+                      {...formik.getFieldProps('password')}
+                      name="password"
+                      id="password"
+                        style={{ margin: "0px" }}
+                      />
+                      <span
+                        className="input-group-append eye-icon"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
+                    {formik.touched.password && formik.errors.password && (
+                      <p className="text-danger">{formik.errors.password}</p>
+                    )}
+                  </div>
+
+                  <button
+                    className="contactsubmitBtn btn btn-primary mx-auto"
+                    type="submit"
+                  >
+                    Login
+                  </button>
+                  <p className="forgotWord text-center mt-5">
+                    Forgot{" "}
+                    <Link to="/forgot" className="password-link">
+                      Password
+                    </Link>
+                    ?
+                  </p>
+                  <p className="forgotWord text-center">
+                    Don't have an account?{" "}
+                    <Link to="/signin" className="password-link">
+                      Sign up
+                    </Link>
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
