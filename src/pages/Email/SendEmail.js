@@ -46,7 +46,7 @@ function SendEmail(toEmail) {
         {
           headers: {
             "Content-Type": "multipart/form-data", // Set the content type
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -79,7 +79,7 @@ function DealsCreate() {
         const response = await axios.post(`${API_URL}newDeal`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -111,7 +111,7 @@ function DealsCreate() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -125,7 +125,7 @@ function DealsCreate() {
       const response = await axios(`${API_URL}dealNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealOption(response.data);
@@ -139,7 +139,7 @@ function DealsCreate() {
       const response = await axios(`${API_URL}contactNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setContactOption(response.data);

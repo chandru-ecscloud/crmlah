@@ -31,8 +31,8 @@ const Accounts = () => {
   const navigate = useNavigate();
   const [selectedIds, setSelectedIds] = useState();
 
- // console.log("rowId",rowId)
- console.log("rowId",rowId)
+  // console.log("rowId",rowId)
+  console.log("rowId", rowId);
   const columns = useMemo(
     () => [
       {
@@ -160,7 +160,7 @@ const Accounts = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -172,7 +172,6 @@ const Accounts = () => {
     }
   };
 
- 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
     const csv = generateCsv(csvConfig)(rowData);
@@ -200,8 +199,8 @@ const Accounts = () => {
   const handleAssignQuote = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
     // sessionStorage.setItem("account_id", rowData);
-    setRowId(rowData)
-  };  
+    setRowId(rowData);
+  };
 
   const handelNavigateClick = () => {
     navigate("/accounts/create");
@@ -219,7 +218,7 @@ const Accounts = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -238,7 +237,7 @@ const Accounts = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
-    
+
     const keyMapping = {
       accountOwner: "account_owner",
       accountName: "account_name",
@@ -273,7 +272,7 @@ const Accounts = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -349,7 +348,7 @@ const Accounts = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   return (
     <section>
       {loading && <LinearProgress />}
@@ -393,9 +392,10 @@ const Accounts = () => {
                           handleAssignQuote(table.getSelectedRowModel().rows)
                         }
                       >
-                        <QuotesModel 
-                        // onSuccess={refreshData}
-                        path={`associateQuotesWithAccount/${rowId}`} />
+                        <QuotesModel
+                          // onSuccess={refreshData}
+                          path={`associateQuotesWithAccount/${rowId}`}
+                        />
                       </button>
                     </li>
                     <li>

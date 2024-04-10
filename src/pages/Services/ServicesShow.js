@@ -21,7 +21,7 @@ function ServicesShow() {
         const response = await axios.get(`${API_URL}allServices/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setClientData(response.data);

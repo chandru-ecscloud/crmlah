@@ -87,7 +87,7 @@ const Appointments = () => {
       const response = await axios(`${API_URL}allClients`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setData(response.data);
@@ -146,7 +146,7 @@ const Appointments = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );

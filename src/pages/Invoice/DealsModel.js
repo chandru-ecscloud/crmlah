@@ -29,7 +29,7 @@ const DealsModel = ({ path }) => {
       const response = await axios(`${API_URL}allDeals`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealsData(response.data);
@@ -50,7 +50,7 @@ const DealsModel = ({ path }) => {
       const response = await axios.post(`${API_URL}${path}`, selectedRows, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {

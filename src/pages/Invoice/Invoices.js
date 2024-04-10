@@ -180,7 +180,7 @@ const Example = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -248,7 +248,7 @@ const Example = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -391,10 +391,10 @@ const Example = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        <ProductsModel 
-                         // onSuccess={refreshData}
-                         path={`associateProductsWithInvoice/${rowId}`}
-                         />
+                        <ProductsModel
+                          // onSuccess={refreshData}
+                          path={`associateProductsWithInvoice/${rowId}`}
+                        />
                       </button>
                     </li>
                     <li>

@@ -34,7 +34,7 @@ function AccountsShow() {
         const response = await axios(`${API_URL}allAccounts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setAccountData(response.data);

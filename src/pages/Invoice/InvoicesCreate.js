@@ -80,7 +80,7 @@ function InvoicesCreate() {
         const response = await axios.post(`${API_URL}newInvoice`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -112,7 +112,7 @@ function InvoicesCreate() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -126,7 +126,7 @@ function InvoicesCreate() {
       const response = await axios(`${API_URL}dealNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealOption(response.data);
@@ -140,7 +140,7 @@ function InvoicesCreate() {
       const response = await axios(`${API_URL}contactNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setContactOption(response.data);

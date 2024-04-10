@@ -24,7 +24,7 @@ function ProductsShow() {
         const response = await axios(`${API_URL}allProducts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const transformedData = Object.keys(response.data).reduce(
@@ -54,7 +54,7 @@ function ProductsShow() {
           {}
         );
         setProductData(transformedData);
-        console.log("Product Data:",transformedData);
+        console.log("Product Data:", transformedData);
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -242,7 +242,8 @@ function ProductsShow() {
               <div>
                 <label className="text-dark Label">Product Active</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.productActive ? "Active" : "Inactive"}
+                  &nbsp; : &nbsp;
+                  {productData.productActive ? "Active" : "Inactive"}
                 </span>
               </div>
 

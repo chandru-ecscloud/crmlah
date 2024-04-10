@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate ,useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { FaCamera } from "react-icons/fa6";
@@ -77,16 +77,12 @@ function DealsEdit() {
     onSubmit: async (data) => {
       console.log("Deals Datas:", data);
       try {
-        const response = await axios.put(
-          `${API_URL}updateDeal/${id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.put(`${API_URL}updateDeal/${id}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/deals");
@@ -116,7 +112,7 @@ function DealsEdit() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -130,7 +126,7 @@ function DealsEdit() {
       const response = await axios(`${API_URL}dealNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealOption(response.data);
@@ -144,7 +140,7 @@ function DealsEdit() {
       const response = await axios(`${API_URL}contactNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setContactOption(response.data);
@@ -159,7 +155,7 @@ function DealsEdit() {
         const response = await axios(`${API_URL}allDeals/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;

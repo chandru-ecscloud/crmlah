@@ -35,7 +35,7 @@ function InvoiceShow() {
         const response = await axios(`${API_URL}allInvoices/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const transformedData = Object.keys(response.data).reduce(

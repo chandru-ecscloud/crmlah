@@ -21,7 +21,7 @@ function ContactShow() {
         const response = await axios(`${API_URL}allContacts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setContactData(response.data);

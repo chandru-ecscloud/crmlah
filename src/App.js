@@ -69,9 +69,10 @@ function App() {
   };
 
   const handleLogout = () => {
-    sessionStorage.setItem("isAdmin", false);
+    sessionStorage.removeItem("isAdmin");
     sessionStorage.removeItem("company_id");
     sessionStorage.removeItem("user_name");
+    sessionStorage.removeItem("userId");
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("token");

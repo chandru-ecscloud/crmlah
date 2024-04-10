@@ -15,7 +15,8 @@ const validationSchema = yup.object().shape({
   last_name: yup.string().required("*Last Name is required"),
   email: yup.string().required("*Email is required"),
   country_code: yup.string().required("*Country Code is required"),
-  phone: yup.string()
+  phone: yup
+    .string()
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
     .max(10)
@@ -39,9 +40,9 @@ const validationSchema = yup.object().shape({
 });
 
 function ContactsLead() {
-  const owner = sessionStorage.getItem('user_name');
+  const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem('role');
+  const role = sessionStorage.getItem("role");
   const userId = sessionStorage.getItem("userId");
   const [account_name, setaccount_name] = useState([]);
   console.log(account_name);
@@ -58,7 +59,7 @@ function ContactsLead() {
       first_name: "",
       last_name: "",
       email: "",
-      country_code:"",
+      country_code: "",
       phone: "",
       account_name: "",
       vendor_name: "",
@@ -79,12 +80,12 @@ function ContactsLead() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Api Contact Data:",data);
+      console.log("Api Contact Data:", data);
       try {
         const response = await axios.post(`${API_URL}newContact`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -105,7 +106,7 @@ function ContactsLead() {
         const response = await axios(`${API_URL}accountNamesList`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setaccount_name(response.data);
@@ -141,7 +142,12 @@ function ContactsLead() {
                 <img
                   src={userImage}
                   className="img-fluid mt-3"
-                  style={{ width: "70px", height: "70px", cursor: "pointer", borderRadius: '50%' }}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                  }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
                 />
@@ -157,17 +163,12 @@ function ContactsLead() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={'/contacts'}>
-                <button className="btn btn-danger">
-                  Cancel
-                </button>
-                </Link>
+              <Link to={"/contacts"}>
+                <button className="btn btn-danger">Cancel</button>
+              </Link>
               &nbsp;
               <span>
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                >
+                <button className="btn btn-primary" type="submit">
                   Save
                 </button>
               </span>
@@ -216,10 +217,11 @@ function ContactsLead() {
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.lead_source && formik.errors.lead_source
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.lead_source && formik.errors.lead_source
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("lead_source")}
                   name="lead_source"
                   id="lead_source"
@@ -239,10 +241,11 @@ function ContactsLead() {
                 <lable>Firs Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("first_name")}
                   id="first_name"
                 />
@@ -261,10 +264,11 @@ function ContactsLead() {
                 <lable>Last Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("last_name")}
                   id="last_name"
                 />
@@ -283,10 +287,11 @@ function ContactsLead() {
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -353,12 +358,15 @@ function ContactsLead() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
-                <select style={{ width: '60%' }}
-                  className={`form-size form-select  ${formik.touched.account_name && formik.errors.account_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
-                  {...formik.getFieldProps("account_name")}>
+                <select
+                  style={{ width: "60%" }}
+                  className={`form-size form-select  ${
+                    formik.touched.account_name && formik.errors.account_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("account_name")}
+                >
                   <option value="" disabled></option>
                   <option value="1">1</option>
                   {Array.isArray(account_name) &&
@@ -372,9 +380,12 @@ function ContactsLead() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.account_name && formik.errors.account_name && (
-                    <p className="text-danger">{formik.errors.account_name}</p>
-                  )}
+                  {formik.touched.account_name &&
+                    formik.errors.account_name && (
+                      <p className="text-danger">
+                        {formik.errors.account_name}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -383,10 +394,11 @@ function ContactsLead() {
                 <lable>Vendor Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.vendor_name && formik.errors.vendor_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.vendor_name && formik.errors.vendor_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("vendor_name")}
                   name="vendor_name"
                   id="vendor_name"
@@ -429,7 +441,6 @@ function ContactsLead() {
                 name="home_phone"
                 id="home_phone"
                 placeholder="--"
-
               />
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -437,10 +448,11 @@ function ContactsLead() {
                 <label>Land Line</label>&nbsp;&nbsp;
                 <input
                   type="tel"
-                  className={`form-size form-control  ${formik.touched.land_line && formik.errors.land_line
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.land_line && formik.errors.land_line
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("land_line")}
                   name="land_line"
                   id="land_line"
@@ -510,10 +522,11 @@ function ContactsLead() {
                 <lable>Skype ID</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.skype_id && formik.errors.skype_id
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.skype_id && formik.errors.skype_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("skype_id")}
                   name="skype_id"
                   id="skype_id"
@@ -543,10 +556,11 @@ function ContactsLead() {
                 <lable>Twitter</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.twitter && formik.errors.twitter
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.twitter && formik.errors.twitter
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("twitter")}
                   name="twitter"
                   id="twitter"
@@ -581,8 +595,10 @@ function ContactsLead() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device">
-              <Link to={'#'}>
-                <button type="button" className="btn btn-light">Copy Address</button>
+              <Link to={"#"}>
+                <button type="button" className="btn btn-light">
+                  Copy Address
+                </button>
               </Link>
             </div>
           </div>
@@ -594,10 +610,12 @@ function ContactsLead() {
                 <lable>Mailing Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_street && formik.errors.mailing_street
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_street &&
+                    formik.errors.mailing_street
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("mailing_street")}
                   name="mailing_street"
                   id="mailing_street"
@@ -606,9 +624,12 @@ function ContactsLead() {
               <div className="row">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.mailing_street && formik.errors.mailing_street && (
-                    <p className="text-danger">{formik.errors.mailing_street}</p>
-                  )}
+                  {formik.touched.mailing_street &&
+                    formik.errors.mailing_street && (
+                      <p className="text-danger">
+                        {formik.errors.mailing_street}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -617,22 +638,25 @@ function ContactsLead() {
                 <lable>Other Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_street && formik.errors.other_street
+                  className={`form-size form-control  ${
+                    formik.touched.other_street && formik.errors.other_street
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("other_street")}
                   name="other_street"
                   id="other_street"
-
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.other_street && formik.errors.other_street && (
-                    <p className="text-danger">{formik.errors.other_street}</p>
-                  )}
+                  {formik.touched.other_street &&
+                    formik.errors.other_street && (
+                      <p className="text-danger">
+                        {formik.errors.other_street}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -641,10 +665,11 @@ function ContactsLead() {
                 <lable>Mailing City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_city && formik.errors.mailing_city
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_city && formik.errors.mailing_city
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("mailing_city")}
                   name="mailing_city"
                   id="mailing_city"
@@ -653,9 +678,12 @@ function ContactsLead() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.mailing_city && formik.errors.mailing_city && (
-                    <p className="text-danger">{formik.errors.mailing_city}</p>
-                  )}
+                  {formik.touched.mailing_city &&
+                    formik.errors.mailing_city && (
+                      <p className="text-danger">
+                        {formik.errors.mailing_city}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -664,10 +692,11 @@ function ContactsLead() {
                 <lable>Other City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_city && formik.errors.other_city
+                  className={`form-size form-control  ${
+                    formik.touched.other_city && formik.errors.other_city
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("other_city")}
                   name="other_city"
                   id="other_city"
@@ -687,10 +716,11 @@ function ContactsLead() {
                 <lable>Mailing State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_state && formik.errors.mailing_state
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_state && formik.errors.mailing_state
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("mailing_state")}
                   name="mailing_state"
                   id="mailing_state"
@@ -699,9 +729,12 @@ function ContactsLead() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.mailing_state && formik.errors.mailing_state && (
-                    <p className="text-danger">{formik.errors.mailing_state}</p>
-                  )}
+                  {formik.touched.mailing_state &&
+                    formik.errors.mailing_state && (
+                      <p className="text-danger">
+                        {formik.errors.mailing_state}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -710,10 +743,11 @@ function ContactsLead() {
                 <lable>Other State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_state && formik.errors.other_state
+                  className={`form-size form-control  ${
+                    formik.touched.other_state && formik.errors.other_state
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("other_state")}
                   name="other_state"
                   id="other_state"
@@ -733,10 +767,11 @@ function ContactsLead() {
                 <lable>Mailing Zip</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_zip && formik.errors.mailing_zip
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_zip && formik.errors.mailing_zip
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("mailing_zip")}
                   name="mailing_zip"
                   id="mailing_zip"
@@ -756,10 +791,11 @@ function ContactsLead() {
                 <lable>Other Zip</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_zip && formik.errors.other_zip
+                  className={`form-size form-control  ${
+                    formik.touched.other_zip && formik.errors.other_zip
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("other_zip")}
                   name="other_zip"
                   id="other_zip"
@@ -779,22 +815,26 @@ function ContactsLead() {
                 <lable>Mailing Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_country && formik.errors.mailing_country
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_country &&
+                    formik.errors.mailing_country
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("mailing_country")}
                   name="mailing_country"
                   id="mailing_country"
-
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.mailing_country && formik.errors.mailing_country && (
-                    <p className="text-danger">{formik.errors.mailing_country}</p>
-                  )}
+                  {formik.touched.mailing_country &&
+                    formik.errors.mailing_country && (
+                      <p className="text-danger">
+                        {formik.errors.mailing_country}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -803,10 +843,11 @@ function ContactsLead() {
                 <lable>Other Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_country && formik.errors.other_country
+                  className={`form-size form-control  ${
+                    formik.touched.other_country && formik.errors.other_country
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("other_country")}
                   name="other_country"
                   id="other_country"
@@ -815,9 +856,12 @@ function ContactsLead() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.other_country && formik.errors.other_country && (
-                    <p className="text-danger">{formik.errors.other_country}</p>
-                  )}
+                  {formik.touched.other_country &&
+                    formik.errors.other_country && (
+                      <p className="text-danger">
+                        {formik.errors.other_country}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>

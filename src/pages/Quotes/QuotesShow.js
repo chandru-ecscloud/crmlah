@@ -75,7 +75,7 @@ function QuotesShow() {
         const response = await axios.get(`${API_URL}allQuotes/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
 

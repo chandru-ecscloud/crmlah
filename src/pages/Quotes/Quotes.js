@@ -38,7 +38,7 @@ const Quotes = () => {
   //     const response = await axios(`${API_URL}allQuotesByCompanyId/${userId}`, {
   //       headers: {
   //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
+  //         //Authorization: `Bearer ${token}`,
   //       },
   //     });
   //     setData(response.data);
@@ -162,7 +162,7 @@ const Quotes = () => {
       const response = await axios(`${API_URL}allQuotesByCompanyId/${userId}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setData(response.data);
@@ -194,7 +194,7 @@ const Quotes = () => {
 
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    setRowId(rowData)
+    setRowId(rowData);
     // sessionStorage.setItem("quote_id", rowData);
     // openModal();
     // navigate("/products");
@@ -223,7 +223,7 @@ const Quotes = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -293,7 +293,7 @@ const Quotes = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -420,7 +420,7 @@ const Quotes = () => {
                     <li>
                       <button
                         className="btn"
-                        style={{ width: "100%", border: "none"}}
+                        style={{ width: "100%", border: "none" }}
                         disabled={
                           !(
                             table.getIsSomeRowsSelected() ||
@@ -431,7 +431,7 @@ const Quotes = () => {
                           handleAssignProducts(table.getSelectedRowModel().rows)
                         }
                       >
-                        <ProductModel 
+                        <ProductModel
                           // onSuccess={refreshData}
                           path={`associateProductsWithQuote/${rowId}`}
                         />

@@ -67,7 +67,7 @@ function LeadsCreate() {
         const response = await axios.post(`${API_URL}newClient`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {

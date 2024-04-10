@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate ,useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
@@ -15,7 +15,8 @@ const validationSchema = yup.object().shape({
   last_name: yup.string().required("*Last Name is required"),
   email: yup.string().required("*Email is required"),
   country_code: yup.string().required("*Country Code is required"),
-  phone: yup.string()
+  phone: yup
+    .string()
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
     .max(10)
@@ -61,7 +62,7 @@ function ContactEdit() {
       first_name: "",
       last_name: "",
       email: "",
-      country_code:"",
+      country_code: "",
       phone: "",
       account_name: "",
       vendor_name: "",
@@ -90,7 +91,7 @@ function ContactEdit() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              //Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -112,7 +113,7 @@ function ContactEdit() {
         const response = await axios(`${API_URL}allContacts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;
@@ -123,7 +124,7 @@ function ContactEdit() {
           first_name: getData.firstName,
           last_name: getData.lastName,
           email: getData.email,
-          country_code:getData.countryCode,
+          country_code: getData.countryCode,
           phone: getData.phone,
           account_name: getData.accountName,
           vendor_name: getData.vendorName,
@@ -158,7 +159,7 @@ function ContactEdit() {
         const response = await axios(`${API_URL}accountNamesList`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setaccount_name(response.data);

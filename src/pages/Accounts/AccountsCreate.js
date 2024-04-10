@@ -74,7 +74,7 @@ function AccountsCreate() {
         const response = await axios.post(`${API_URL}newAccount`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -106,7 +106,7 @@ function AccountsCreate() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -761,7 +761,7 @@ function AccountsCreate() {
         </div>
         <div className="container">
           <div className="row">
-          <div className="col-12">
+            <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea

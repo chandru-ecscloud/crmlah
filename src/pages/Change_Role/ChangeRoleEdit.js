@@ -30,7 +30,7 @@ function ChangeRoleEdit() {
         const response = await axios(`${API_URL}allUserRegistrations/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setFormData(response.data);
@@ -58,7 +58,7 @@ function ChangeRoleEdit() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );

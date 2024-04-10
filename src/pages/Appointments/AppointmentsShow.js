@@ -13,7 +13,7 @@ function AppointmentsShow() {
   const { id } = useParams();
   const [clientData, setClientData] = useState({});
   const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem('role');
+  const role = sessionStorage.getItem("role");
 
   useEffect(() => {
     const userData = async () => {
@@ -21,7 +21,7 @@ function AppointmentsShow() {
         const response = await axios.get(`${API_URL}allAppointments/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         setClientData(response.data);

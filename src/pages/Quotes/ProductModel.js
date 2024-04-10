@@ -32,7 +32,7 @@ const ProductModel = ({ path }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -54,7 +54,7 @@ const ProductModel = ({ path }) => {
       const response = await axios.post(`${API_URL}${path}`, selectedRows, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
@@ -78,7 +78,7 @@ const ProductModel = ({ path }) => {
   //       {
   //         headers: {
   //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
+  //           //Authorization: `Bearer ${token}`,
   //         },
   //       }
   //     );
@@ -111,7 +111,7 @@ const ProductModel = ({ path }) => {
     setSelectAll(newSelectAll);
     setSelectedRows(newSelectAll ? productsData.map((item) => item.id) : []);
   };
-  
+
   const handleCheckboxChange = (id) => {
     const isChecked = selectedRows.includes(id);
     if (isChecked) {
@@ -126,7 +126,7 @@ const ProductModel = ({ path }) => {
   return (
     <div>
       <button
-        style={{ width: "100%", border: "none", background:"transparent" }}
+        style={{ width: "100%", border: "none", background: "transparent" }}
         onClick={openModal}
       >
         Assign Product
@@ -204,7 +204,9 @@ const ProductModel = ({ path }) => {
                   <button
                     className="btn btn-primary"
                     type="button"
-                    onClick={() => handleSendProductsToQuoteAndInvoice(selectedRows)}
+                    onClick={() =>
+                      handleSendProductsToQuoteAndInvoice(selectedRows)
+                    }
                   >
                     Assign
                   </button>

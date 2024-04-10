@@ -36,8 +36,8 @@ function ProductsEdit() {
   const role = sessionStorage.getItem("role");
   const [userImage, setUserImage] = useState(User);
   const userId = sessionStorage.getItem("userId");
-  const [checked,setChecked] = useState(false);
-  
+  const [checked, setChecked] = useState(false);
+
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -75,7 +75,7 @@ function ProductsEdit() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              //Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -97,7 +97,7 @@ function ProductsEdit() {
         const response = await axios(`${API_URL}allProducts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;
@@ -653,10 +653,7 @@ function ProductsEdit() {
                       : ""
                   }`}
                   onChange={() =>
-                    formik.setFieldValue(
-                      "taxable",
-                      !formik.values.taxable
-                    )
+                    formik.setFieldValue("taxable", !formik.values.taxable)
                   }
                   {...formik.getFieldProps("taxable")}
                   name="taxable"

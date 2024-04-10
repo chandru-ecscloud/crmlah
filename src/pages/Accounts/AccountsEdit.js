@@ -78,7 +78,7 @@ function AccountsEdit() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              //Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -111,7 +111,7 @@ function AccountsEdit() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -126,7 +126,7 @@ function AccountsEdit() {
         const response = await axios(`${API_URL}allAccounts/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;
@@ -162,7 +162,6 @@ function AccountsEdit() {
     AccountList();
     userData();
   }, [id]);
-  
 
   return (
     <section className="createLead">

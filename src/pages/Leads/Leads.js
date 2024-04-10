@@ -127,9 +127,9 @@ const Lead = () => {
       const response = await axios.get(
         `${API_URL}allClientsByCompanyId/${userId}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   //Authorization: `Bearer ${token}`,
+          // },
         }
       );
       setData(response.data);
@@ -192,7 +192,7 @@ const Lead = () => {
       const response = await axios.post(`${API_URL}transferBulkData`, rowData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
@@ -220,7 +220,7 @@ const Lead = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            // //Authorization: `Bearer ${token}`,
           },
         }
       );

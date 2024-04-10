@@ -103,7 +103,7 @@ function QuotesEdit() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              //Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -136,7 +136,7 @@ function QuotesEdit() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -150,7 +150,7 @@ function QuotesEdit() {
       const response = await axios(`${API_URL}dealNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealOption(response.data);
@@ -164,7 +164,7 @@ function QuotesEdit() {
       const response = await axios(`${API_URL}contactNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setContactOption(response.data);
@@ -179,7 +179,7 @@ function QuotesEdit() {
         const response = await axios(`${API_URL}allQuotes/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;
@@ -309,7 +309,7 @@ function QuotesEdit() {
                   name="quote_owner"
                   className="form-select form-size"
                   {...formik.getFieldProps("quote_owner")}
-                  id="quote_owner"  
+                  id="quote_owner"
                 >
                   <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>

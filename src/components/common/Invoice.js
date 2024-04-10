@@ -12,7 +12,8 @@ const Invoice = () => {
   const token = sessionStorage.getItem("token");
 
   const generateInvoice = (data) => {
-    const tableRows = data.map((row, index) => `
+    const tableRows = data.map(
+      (row, index) => `
       <tr class="item">
         <td>${index + 1}</td>
         <td>${row.dealName}</td>
@@ -20,7 +21,8 @@ const Invoice = () => {
         <td>${row.quotesStage}</td>
         <td>${row.quotesOwner}</td>
       </tr>
-    `);
+    `
+    );
 
     const invoiceHTML = `
       <!DOCTYPE html>
@@ -123,7 +125,7 @@ const Invoice = () => {
                   <td style="white-space: nowrap;">Quotes Stage</td>
                   <td style="white-space: nowrap;">Quotes Owner</td>
                 </tr>
-                ${tableRows.join('')}
+                ${tableRows.join("")}
               </table>
             </div>
           </div>
@@ -147,7 +149,7 @@ const Invoice = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         }
       );

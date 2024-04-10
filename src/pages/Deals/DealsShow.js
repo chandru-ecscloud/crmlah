@@ -23,7 +23,7 @@ function DealsShow() {
         const response = await axios(`${API_URL}allDeals/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const transformedData = Object.keys(response.data).reduce(

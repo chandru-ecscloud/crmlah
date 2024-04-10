@@ -44,7 +44,7 @@ function QuotesCreate() {
   const [contactOption, setContactOption] = useState([]);
   console.log(contactOption);
   const [userImage, setUserImage] = useState(User);
- 
+
   const [rows, setRows] = useState([
     {
       product: "",
@@ -56,7 +56,6 @@ function QuotesCreate() {
       total_amount: "",
     },
   ]);
-  
 
   const navigate = useNavigate();
   const formik = useFormik({
@@ -95,7 +94,7 @@ function QuotesCreate() {
         const response = await axios.post(`${API_URL}newQuote`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -127,7 +126,7 @@ function QuotesCreate() {
       const response = await axios(`${API_URL}accountNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setAccountOption(response.data);
@@ -141,7 +140,7 @@ function QuotesCreate() {
       const response = await axios(`${API_URL}dealNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setDealOption(response.data);
@@ -155,7 +154,7 @@ function QuotesCreate() {
       const response = await axios(`${API_URL}contactNamesList`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setContactOption(response.data);
@@ -172,54 +171,50 @@ function QuotesCreate() {
 
   return (
     <section className="createLead">
-       <form onSubmit={formik.handleSubmit}>
-      <div className="container-fluid">
-        <div className="row mt-3">
-          <div className="col-lg-6 col-md-6 col-12">
-            <h4>
-              <b>Create Quote</b>
-              <br></br>
-              <img
-                src={userImage}
-                className="img-fluid mt-3"
-                style={{
-                  width: "70px",
-                  height: "70px",
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                }}
-                alt="user"
-                onClick={() => document.getElementById("imageInput").click()}
-              />
-              {/* Input for image upload */}
-              <input
-                type="file"
-                id="imageInput"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageUpload}
-              />
-              <FaCamera className="cameraIcon" />
-            </h4>
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-            <Link to={'/quotes'}>
-              <button className="btn btn-danger">
-                Cancel
-              </button>
-            </Link>
-            &nbsp;
-            <span>
-              <button
-                className="btn btn-primary"
-                type="submit">
-                Save
-              </button>
-            </span>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="container-fluid">
+          <div className="row mt-3">
+            <div className="col-lg-6 col-md-6 col-12">
+              <h4>
+                <b>Create Quote</b>
+                <br></br>
+                <img
+                  src={userImage}
+                  className="img-fluid mt-3"
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                  }}
+                  alt="user"
+                  onClick={() => document.getElementById("imageInput").click()}
+                />
+                {/* Input for image upload */}
+                <input
+                  type="file"
+                  id="imageInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageUpload}
+                />
+                <FaCamera className="cameraIcon" />
+              </h4>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
+              <Link to={"/quotes"}>
+                <button className="btn btn-danger">Cancel</button>
+              </Link>
+              &nbsp;
+              <span>
+                <button className="btn btn-primary" type="submit">
+                  Save
+                </button>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-     
+
         <div className="container-fluid my-5">
           <h4>
             <b>Quotes Information</b>
@@ -805,9 +800,9 @@ function QuotesCreate() {
                         <option value="mobiles">mobiles</option>
                       </select>
                       <p className="text-danger m-0">
-                      {formik.errors.quotes_items &&
-                        formik.errors.quotes_items[index] &&
-                        formik.errors.quotes_items[index].product}
+                        {formik.errors.quotes_items &&
+                          formik.errors.quotes_items[index] &&
+                          formik.errors.quotes_items[index].product}
                       </p>
                     </td>
                     <td>
@@ -897,7 +892,7 @@ function QuotesCreate() {
                         }`}
                       />
                     </td>
-                    <td> 
+                    <td>
                       {rows.length > 1 && (
                         <Button
                           className="px-2 py-0 mx-1 my-0"
@@ -905,13 +900,12 @@ function QuotesCreate() {
                           style={{ borderRadius: "50%" }}
                           onClick={
                             (e) => {
-                            e.preventDefault();
-                            // handleRemoveRow(index)
-                             const updatedRows = [...rows]; // Create a copy of the rows array
+                              e.preventDefault();
+                              // handleRemoveRow(index)
+                              const updatedRows = [...rows]; // Create a copy of the rows array
                               updatedRows.splice(index, 1);
-                               console.log("updatedRows",updatedRows)
+                              console.log("updatedRows", updatedRows);
                               setRows(updatedRows);
-                                
                             }
                             // removeRow(index);
                           }
@@ -919,7 +913,6 @@ function QuotesCreate() {
                           x
                         </Button>
                       )}
-                      
                     </td>
                   </tr>
                 ))}
@@ -930,11 +923,9 @@ function QuotesCreate() {
           <div className="container my-4">
             <Button
               variant="primary"
-              onClick={
-                () => {
+              onClick={() => {
                 setRows((prevRows) => [...prevRows, {}]);
-              }
-            }
+              }}
             >
               <FaPlus /> Add Row
             </Button>
@@ -1036,7 +1027,7 @@ function QuotesCreate() {
           </h4>
         </div>
         <div className="container">
-        <div className="row">
+          <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;

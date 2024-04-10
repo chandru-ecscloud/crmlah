@@ -11,7 +11,7 @@ import { API_URL } from "../../Config/URL";
 
 const ChangeRole = () => {
   const [data, setData] = useState([]);
-//   console.log("Api data:",data);
+  //   console.log("Api data:",data);
   const [loading, setLoading] = useState(true);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
@@ -77,17 +77,14 @@ const ChangeRole = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${API_URL}allUserRegistrations`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }
-      );
+      const response = await axios.get(`${API_URL}allUserRegistrations`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
       setData(response.data);
-      console.log("Api response data:",response.data);
+      console.log("Api response data:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -115,15 +112,15 @@ const ChangeRole = () => {
   const table = useMaterialReactTable({
     columns,
     data,
-      initialState: {
-        columnVisibility: {
-          city: false,
-          address: false,
-          country: false,
-          zipCode: false,
-          state: false,
-        },
+    initialState: {
+      columnVisibility: {
+        city: false,
+        address: false,
+        country: false,
+        zipCode: false,
+        state: false,
       },
+    },
     enableRowSelection: true,
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",

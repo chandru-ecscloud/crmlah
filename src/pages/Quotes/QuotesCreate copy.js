@@ -33,7 +33,7 @@ function QuotesCreate() {
       const response = await axios(`${API_URL}allProducts`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       setProductOptions(response.data);
@@ -85,15 +85,12 @@ function QuotesCreate() {
     const updatedRows = [...rows];
     updatedRows[index].selectedOption = value;
     try {
-      const response = await axios.get(
-        `${API_URL}allProducts/${value}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}allProducts/${value}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
       const listPrices = response.data.unitPrice;
       updatedRows[index].listPrice = listPrices;
       updatedRows[index].quantity = 1;
@@ -131,7 +128,7 @@ function QuotesCreate() {
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
     updatedRows[index].quantity = value;
-    console.log(updatedRows)
+    console.log(updatedRows);
 
     // Calculate the amount based on listPrice and quantity
     const listPrice = updatedRows[index].listPrice || 0;
@@ -211,7 +208,7 @@ function QuotesCreate() {
       const response = await axios.post(`${API_URL}newQuote`, data, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 201) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate ,useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -64,16 +64,12 @@ function LeadsEdit() {
     onSubmit: async (data) => {
       // console.log(newData);
       try {
-        const response = await axios.put(
-          `${API_URL}updateClient/${id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.put(`${API_URL}updateClient/${id}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/leads");
@@ -92,7 +88,7 @@ function LeadsEdit() {
         const response = await axios(`${API_URL}allClients/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            //Authorization: `Bearer ${token}`,
           },
         });
         const getData = response.data;
@@ -114,7 +110,7 @@ function LeadsEdit() {
           zipCode: getData.zipCode,
           country: getData.country,
           description_info: getData.description_info,
-        }
+        };
         // console.log("Converted Data", payload)
         formik.setValues(payload);
       } catch (error) {
@@ -170,10 +166,8 @@ function LeadsEdit() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={'/leads'}>
-                <button className="btn btn-danger">
-                  Cancel
-                </button>
+              <Link to={"/leads"}>
+                <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
               <span>
