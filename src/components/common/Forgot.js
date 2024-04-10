@@ -7,19 +7,30 @@ import { toast } from "react-toastify";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form'
+import { useFormik } from "formik";
 
 
-const schema = yup.object().shape({
-  email: yup.string().email("!Please Enter valid email").required("!Enter the Email"),
+const validationSchema = yup.object().shape({
+  email: yup.string().email("*Please Enter valid email").required("*Enter the Email"),
 });
 
 const RadioFormSelector = () => {
   const [Email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const { register, handleSubmit, control, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
-  });
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+     
+
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      console.log("User Datas:", data);
+      handelForgot()
+    },
+    });
+ 
 
   const handelForgot = async () => {
     try {
@@ -55,29 +66,32 @@ const RadioFormSelector = () => {
             <h3 className="registerWord">FORGOT PASSWORD</h3>
             <div className="card my-3" style={{ width: "25rem" }}>
               <div className="card-body">
-                <form>
+                <form onSubmit={formik.handleSubmit}>
                   <div className="form-group my-2">
                     <label htmlFor="companyId" className="mb-1">
                       User Email:
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                     // className="form-control"
                       id="companyId"
-                      {...register('email')}
-                      value={Email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      {...formik.getFieldProps("email")}
+                      className={`form-control ${formik.touched.email && formik.errors.email
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       placeholder="Enter User Email"
                     />
-                    <p className='text-danger'>{errors.email?.message}</p>
+                    {formik.touched.email && formik.errors.email && (
+          <p className="text-danger text-start">
+            {formik.errors.email}
+          </p>
+        )}
+
                   </div>
                   <button
                     className="contactsubmitBtn btn btn-primary mt-3"
-                    type="button"
-                    // onClick={handelForgot}
-                    onClick={handleSubmit(()=> {
-                      handelForgot()
-                    })}
+                    type="submit"
                     style={{ width: "100%" }}
                   >
                     Submit
