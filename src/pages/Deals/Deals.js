@@ -12,6 +12,12 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -166,6 +172,144 @@ const Deals = () => {
   const handelNavigateClick = () => {
     navigate("/deals/create");
   };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Deals", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Deal Name",
+      "Account Name",
+      "Contact Name",
+      "Deal Owner",
+      "Amount",
+      
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.dealName,
+        row.original.accountName,
+        row.original.contactName,
+        row.original.dealOwner,
+        row.original.amount,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Closing Date",
+      "Lead Source",
+      "Stage",
+      "Probability",
+      "Campaign Source",
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.closingDate,
+        row.original.leadSource,
+        row.original.stage,
+        row.original.probability,
+        row.original.campaignSource,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Shipping Street",
+      "Shipping City",
+      "Shipping State",
+      "Shipping Code",
+      "Shipping Country",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.shippingStreet,
+        row.original.shippingCity,
+        row.original.shippingState,
+        row.original.shippingCode,
+        row.original.shippingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders4 = [
+      "Billing Street",
+      "Billing City",
+      "Billing State",
+      "Billing Code",
+      "Billing Country",
+      
+    ];
+    const tableData4 = rows.map((row) => {
+      return [
+        row.original.billingStreet,
+        row.original.billingCity,
+        row.original.billingState,
+        row.original.billingCode,
+        row.original.billingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders4],
+      body: tableData4,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders5 = [
+      "Description",
+    ];
+    const tableData5 = rows.map((row) => {
+      return [
+        row.original.descriptionInfo,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders5],
+      body: tableData5,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    
+    doc.save("ECS.pdf");
+  };
 
   const handleSendDealToInvoice = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
@@ -308,30 +452,40 @@ const Deals = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+        <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });
@@ -365,7 +519,7 @@ const Deals = () => {
               <ul class="dropdown-menu">
                 {role === "CRM_SUPERADMIN" ? (
                   <>
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -381,7 +535,7 @@ const Deals = () => {
                       >
                         Send to Invoice
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"

@@ -276,8 +276,7 @@ const Accounts = () => {
         cellHeight: "auto",
       },
     });
-    // console.log("tableData",tableData1)
-    // console.log("tableHeaders",tableHeaders1 )
+   
     doc.save("ECS.pdf");
   };
   
@@ -433,7 +432,12 @@ const Accounts = () => {
     </button>
     </Tooltip>
 
-    <button className="btn text-secondary" onClick={handleExportData}>
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
     <MdPictureAsPdf size={23}/>
     </button>
     <Tooltip TransitionComponent={Zoom} title="Selected Row">

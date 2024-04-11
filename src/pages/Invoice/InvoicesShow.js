@@ -220,34 +220,67 @@ function InvoiceShow() {
         {
           table: {
             headerRows: 1,
-            widths: ["*", "*", "*", "*","*","*",],
+            widths: ["*", "*", "*", "*", "*", "*","*",],
             body: [
               [
                 "Product Name",
                 "Price",
                 "Quantity",
                 "Amount",
-                // "Discount",
+                "Discount",
                 "Tax",
                 "Total Amount",
               ],
               ...invoiceData.productsWithInvoice.map((product) => {
-                const amount = product.unitPrice*product.quantityInStock;
-                const total = (amount+(product.tax*amount)/100).toFixed(2);
-                return[
-                product.productName || "--",
-                product.quantityInStock || "--",
-                product.unitPrice || "--",
-                // product.amount || "--",
-                amount,
-                // `${product.discount} %` || "--",
-                `${product.tax} %` || "--",
-                // product.total || "--",
-                total,
-              ]
-          }),
+                const amount = product.unitPrice * product.quantityInStock;
+                const totalAmount = (amount + (product.tax * amount) / 100).toFixed(2);
+                const discount = product.discount || 0;
+                return [
+                  product.productName || "--",
+                  product.quantityInStock || "--",
+                  product.unitPrice || "--",
+                  // product.amount || "--",
+                  amount,
+                  // `${product.discount} %` || "--",
+                  discount|| "--",
+                  `${product.tax} %` || "--",
+                  // product.total || "--",
+                  totalAmount,
+                ]
+              }),
             ],
           },
+        },
+
+        {
+          columns: [
+            [
+              { text: `sub total ` },
+              { text: `tax total ` },
+              { text: `grand total ` }, // Correcting spelling to "grand total"
+            ],
+            [
+              {
+                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
+                  return acc + parseFloat(product.unitPrice * product.quantityInStock);
+                }, 0).toFixed(2)}`,
+              },
+
+              {
+                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
+                  return acc + ((product.tax || 0) * (product.unitPrice * product.quantityInStock)) / 100;
+                }, 0).toFixed(2)}`, // Corrected tax total calculation
+              },
+
+              {
+                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
+                  const amount = product.unitPrice * product.quantityInStock;
+                  const taxAmount = (product.tax * amount) / 100;
+                  return acc + amount + taxAmount;
+                }, 0).toFixed(2)}`, // Corrected grand total calculation
+              },
+            ],
+          ],
         },
 
         // 4 ,Terms and Conditions

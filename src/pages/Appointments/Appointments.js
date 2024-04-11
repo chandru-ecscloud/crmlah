@@ -14,6 +14,10 @@ import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 import AppointmentsCreate from "./AppointmentsCreate";
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -113,14 +117,67 @@ const Appointments = () => {
 
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
-    const tableData = rows.map((row) => Object.values(row.original));
-    const tableHeaders = columns.map((c) => c.header);
+    doc.setFontSize(20);
+    doc.text("Appointments", 15, 15);
 
-    autoTable(doc, {
-      head: [tableHeaders],
-      body: tableData,
+    const tableHeaders1 = [
+      "S.no",
+      "Appointment For",
+      "Service Name",
+      "Duration",
+      "Appointment Name",
+      
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.appointment_for,
+        row.original.service,
+        row.original.duration,
+        row.original.appointment_name,
+      ];
     });
 
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Appointment Start Date",
+      "Location",
+      "Address",
+      "Member",
+      "Remainder",
+     ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.appointment_start_date,
+        row.original.location,
+        row.original.address,
+        row.original.member,
+        row.original.remainder,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    console.log(tableData1)
     doc.save("ECS.pdf");
   };
 
@@ -186,36 +243,40 @@ const Appointments = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          }
-        >
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+         <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });

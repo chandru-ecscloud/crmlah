@@ -13,6 +13,12 @@ import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
 import ProductModel from "./ProductModel";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -194,10 +200,133 @@ const Quotes = () => {
 
   const handleAssignProducts = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    setRowId(rowData);
-    // sessionStorage.setItem("quote_id", rowData);
-    // openModal();
-    // navigate("/products");
+    
+  };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Quotes", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Deals Name",
+      "Subject",
+      "Quote Stages",
+      "Quotes Owner",
+      "Product",
+      
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.dealName,
+        row.original.subject,
+        row.original.quoteStage,
+        row.original.quoteOwner,
+        row.original.product,
+        
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Quantity",
+      "Price",
+      "Total Amount",
+      "Contact Name",
+      "Account Name",
+      "Adjustment",
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.quantity,
+        row.original.price,
+        row.original.totalAmount,
+        row.original.contactName,
+        row.original.accountName,
+        row.original.adjustment,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Valid Until",
+      "Shipping Street",
+      "Shipping City",
+      "Shipping State",
+      "Shipping Code",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+         row.original.validUntil,
+        row.original.shippingStreet,
+        row.original.shippingCity,
+        row.original.shippingState,
+        row.original.shippingCode,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders4 = [
+      "Shipping Country",
+      "Billing Street",
+      "Billing City",
+      "Billing State",
+      "Billing Code",
+      "Billing Country",
+    ];
+    const tableData4 = rows.map((row) => {
+      return [
+         row.original.shippingCountry,
+        row.original.billingStreet,
+        row.original.billingCity,
+        row.original.billingState,
+        row.original.billingCode,
+        row.original.billingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders4],
+      body: tableData4,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+   
+    // console.log("tableData",tableData1)
+    // console.log("tableHeaders",tableHeaders1 )
+    doc.save("ECS.pdf");
   };
 
   const theme = createTheme({
@@ -360,30 +489,40 @@ const Quotes = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+     <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });
@@ -437,7 +576,7 @@ const Quotes = () => {
                         />
                       </button>
                     </li>
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -451,7 +590,7 @@ const Quotes = () => {
                       >
                         Send Account
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"

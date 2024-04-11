@@ -131,7 +131,11 @@ const Section = ({
       <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
       <div
         className={` pt-3`}
-        style={{ minHeight: "80vh", backgroundColor: bgContainer }}
+        style={{
+          minHeight: "80vh",
+          backgroundColor: isOver ? "#cfefff" : bgContainer,
+          border: isOver ? "2px solid #34a6ba" : "none",
+        }}
       >
         {tasksToMap.length > 0 &&
           tasksToMap.map((task) => (

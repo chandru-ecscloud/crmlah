@@ -14,7 +14,6 @@ const validationSchema = yup.object().shape({
   first_name: yup.string().required("*First Name is required"),
   last_name: yup.string().required("*Last Name is required"),
   email: yup.string().required("*Email is required"),
-  country_code: yup.string().required("*Country Code is required"),
   phone: yup
     .string()
     .matches(/^\d+$/, "Must be only digits")
@@ -59,7 +58,6 @@ function ContactsLead() {
       first_name: "",
       last_name: "",
       email: "",
-      country_code: "",
       phone: "",
       account_name: "",
       vendor_name: "",
