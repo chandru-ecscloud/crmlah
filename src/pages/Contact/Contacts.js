@@ -231,6 +231,7 @@ const Contacts = () => {
       "Vendor Name",
       "Land Line",
       "Skype Id",
+      "Twitter",
     ];
     const tableData2 = rows.map((row) => {
       return [
@@ -239,6 +240,7 @@ const Contacts = () => {
         row.original.vendorName,
         row.original.landLine,
         row.original.skypeId,
+        row.original.twitter,
       ];
     });
     autoTable(doc, {
@@ -253,19 +255,19 @@ const Contacts = () => {
     });
 
     const tableHeaders3 = [
-      "Twitter",
       "Mailing Street",
       "Mailing City",
       "Mailing State",
       "Mailing Zip",
+      "Mailing Country",
     ];
     const tableData3 = rows.map((row) => {
       return [
-        row.original.twitter,
-        row.original.mailingStreet,
+         row.original.mailingStreet,
         row.original.mailingCity,
         row.original.mailingState,
         row.original.mailingZip,
+        row.original.mailingCountry,
       ];
     });
     autoTable(doc, {
@@ -279,19 +281,19 @@ const Contacts = () => {
       },
     });
     const tableHeaders4 = [
-      "Mailing Country",
       "Other Street",
       "Other City",
       "other State",
       "Other Zip",
+      "Other Country",
     ];
     const tableData4 = rows.map((row) => {
       return [
-        row.original.mailingCountry,
-        row.original.otherStreet,
+         row.original.otherStreet,
         row.original.otherCity,
         row.original.otherState,
         row.original.otherZip,
+        row.original.otherCountry,
       ];
     });
     autoTable(doc, {
@@ -305,7 +307,6 @@ const Contacts = () => {
       },
     });
     const tableHeaders5 = [
-      "Other Country",
       "Description",
       "Created At",
       "Created By",
@@ -314,7 +315,6 @@ const Contacts = () => {
     ];
     const tableData5 = rows.map((row) => {
       return [
-        row.original.otherCountry,
         row.original.descriptionInfo,
         row.original.createdAt,
         row.original.createdBy,
@@ -332,8 +332,7 @@ const Contacts = () => {
         cellHeight: "auto",
       },
     });
-    // console.log("tableData",tableData1)
-    // console.log("tableHeaders",tableHeaders1 )
+    
     doc.save("ECS.pdf");
   };
 
@@ -475,7 +474,12 @@ const Contacts = () => {
     </button>
     </Tooltip>
 
-    <button className="btn text-secondary" onClick={handleExportData}>
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
     <MdPictureAsPdf size={23}/>
     </button>
     <Tooltip TransitionComponent={Zoom} title="Selected Row">
@@ -484,7 +488,7 @@ const Contacts = () => {
       disabled={
         !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
       }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
     >
       <MdOutlinePictureAsPdf size={23} /> 
     </button></Tooltip>
