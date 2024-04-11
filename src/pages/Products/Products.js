@@ -12,6 +12,12 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -126,6 +132,94 @@ const Products = () => {
 
   const handelNavigateClick = () => {
     navigate("/products/create");
+  };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Product", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Product Name",
+      "Product Code",
+      "Vendor Name",
+      "Product Owner",
+      "Product Active",
+      
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.productName,
+        row.original.productCode,
+        row.original.vendorName,
+        row.original.productOwner,
+        row.original.productActive,
+        
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Product Category",
+      "Sales Start Date",
+      "Sales End Date",
+      
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.productCategory,
+        row.original.salesStartDate,
+        row.original.salesEndDate,
+        
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Support Start Date",
+      "Support End Date",
+      "Description",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.supportStartDate,
+        row.original.supportEndDate,
+        row.original.description_info,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+   
+    doc.save("ECS.pdf");
   };
 
   const handleSendProductsToInvoice = async (rows) => {
@@ -245,30 +339,40 @@ const Products = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+        <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });
@@ -302,7 +406,7 @@ const Products = () => {
               <ul class="dropdown-menu">
                 {role === "CRM_SUPERADMIN" ? (
                   <>
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -318,8 +422,8 @@ const Products = () => {
                       >
                         Send to Invoice
                       </button>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -335,7 +439,7 @@ const Products = () => {
                       >
                         Send to Quote
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"

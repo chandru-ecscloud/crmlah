@@ -163,7 +163,7 @@ const Lead = () => {
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
-    doc.text("LEADS", 15, 15);
+    doc.text("Leads", 15, 15);
 
     const tableHeaders1 = [
       "S.no",
@@ -268,8 +268,7 @@ const Lead = () => {
         cellHeight: "auto",
       },
     });
-    // console.log("tableData",tableData)
-    // console.log("tableHeaders",tableHeaders1 )
+    
     doc.save("ECS.pdf");
   };
 
@@ -390,7 +389,12 @@ const Lead = () => {
     </button>
     </Tooltip>
 
-    <button className="btn text-secondary" onClick={handleExportData}>
+    <button className="btn text-secondary" 
+    disabled={table.getPrePaginationRowModel().rows.length === 0}
+    onClick={() =>
+      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+    }
+    >
     <MdPictureAsPdf size={23}/>
     </button>
     <Tooltip TransitionComponent={Zoom} title="Selected Row">
@@ -399,7 +403,7 @@ const Lead = () => {
       disabled={
         !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
       }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
     >
       <MdOutlinePictureAsPdf size={23} /> 
     </button></Tooltip>
