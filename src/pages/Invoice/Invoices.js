@@ -14,6 +14,8 @@ import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
 import DealsModel from "./DealsModel";
 import ProductsModel from "../Quotes/ProductModel";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -211,6 +213,140 @@ const Example = () => {
   const handelNavigateClick = () => {
     navigate("/invoices/create");
   };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("LEADS", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Subject",
+      "Status",
+      "Invoice Date",
+      "Invoice Owner",
+      "Sales Order",
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.subject,
+        row.original.status,
+        row.original.invoiceDate,
+        row.original.invoiceOwner,
+        row.original.salesOrder,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Purchase Order",
+      "Due Date",
+      "Sales Commission",
+      "Account Name",
+      "Contact Name",
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.purchaseOrder,
+        row.original.dueDate,
+        row.original.salesCommission,
+        row.original.accountName,
+        row.original.contactName,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Deal Name",
+      "Shipping Street",
+      "Shipping City",
+      "Shipping State",
+      "Shipping Code",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.dealName,
+        row.original.shippingStreet,
+        row.original.shippingCity,
+        row.original.shippingState,
+        row.original.shippingCode,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders4 = ["Shipping Country", "Billing Street", "Billing City","Billing State","Billing Code",];
+    const tableData4 = rows.map((row) => {
+      return [
+        row.original.shippingCountry,
+        row.original.billingStreet,
+        row.original.billingCity,
+        row.original.billingState,
+        row.original.billingCode,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders4],
+      body: tableData4,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders5 = ["Billing Country", "Created At", "Created By","Updated At","Updated By",];
+    const tableData5 = rows.map((row) => {
+      return [
+        row.original.billingCountry,
+        row.original.createdAt,
+        row.original.createdBy,
+        row.original.updatedAt,
+        row.original.updatedBy,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders5],
+      body: tableData5,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    // console.log("tableData",tableData)
+    // console.log("tableHeaders",tableHeaders1 )
+    doc.save("ECS.pdf");
+  };
 
   const theme = createTheme({
     components: {
@@ -332,7 +468,12 @@ const Example = () => {
         >
           <BsFiletypeCsv /> selected row
         </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
+        <button className="btn btn-danger" 
+        disabled={table.getPrePaginationRowModel().rows.length === 0}
+        onClick={() =>
+          handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+        }
+        >
           <FaRegFilePdf />
         </button>
         <button
@@ -340,7 +481,7 @@ const Example = () => {
           disabled={
             !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
           }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
         >
           <FaRegFilePdf /> selected row
         </button>

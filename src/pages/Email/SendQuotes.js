@@ -31,7 +31,7 @@ function SendQuotes({ accountData }) {
   }, []);
 
   const generateInvoice = (data) => {
-    if (data && data.quotes) {
+    if (data && data.quotes && data.quotes.length > 0) {
       const tableRows = data.quotes.map(
         (row, index) => `
       <tr class="item">
@@ -152,18 +152,17 @@ function SendQuotes({ accountData }) {
         </body>
       </html>
     `;
-
       setHtmlContent(invoiceHTML);
     } else {
-      setHtmlContent("");
+      setHtmlContent("Not Send");
     }
   };
 
   const sendInvoice = async () => {
-    // console.log("from is", userEmail);
-    // console.log("to address is", accountData.email);
-    // console.log("quotes is", htmlContent);
-    // console.log("subject is", subject);
+    console.log("from is", userEmail);
+    console.log("to address is", accountData.email);
+    console.log("quotes is", htmlContent);
+    console.log("subject is", subject);
 
     try {
       const response = await axios.post(

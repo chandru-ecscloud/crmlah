@@ -11,7 +11,8 @@ import user from "../../assets/user.png";
 import { API_URL } from "../../Config/URL";
 
 function SendInvoice({ invoiceData }) {
-  console.log(invoiceData);
+  // console.log(invoiceData);
+  // console.log("to address is", invoiceData.dealsWithInvoice[0].email);
   const [htmlContent, setHtmlContent] = useState("");
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
@@ -19,6 +20,7 @@ function SendInvoice({ invoiceData }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
+
   const [subject, setSubject] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [taxTotal, setTaxTotal] = useState(0);
@@ -30,28 +32,6 @@ function SendInvoice({ invoiceData }) {
   useEffect(() => {
     calculateTotals();
   }, [invoiceData]);
-
-  // const calculateTotals = () => {
-  //   if (invoiceData && invoiceData.productsWithInvoice) {
-  //     const totalUnitPrice = invoiceData.productsWithInvoice.reduce(
-  //       (total, product) => total + (product.unitPrice || 0),
-  //       0
-  //     );
-
-  //     const totalTax = invoiceData.productsWithInvoice.reduce(
-  //       (total, product) => total + (product.tax || 0),
-  //       0
-  //     );
-
-  //     setSubtotal(totalUnitPrice);
-  //     setTaxTotal(totalTax);
-  //     setGrandTotal(totalUnitPrice + totalTax);
-  //   } else {
-  //     setSubtotal(0);
-  //     setTaxTotal(0);
-  //     setGrandTotal(0);
-  //   }
-  // };
 
   const calculateTotals = () => {
     if (invoiceData && invoiceData.productsWithInvoice) {
@@ -77,6 +57,7 @@ function SendInvoice({ invoiceData }) {
   };
 
   const handleShow = () => setShow(true);
+
   const handleHide = () => {
     setSelectedFiles([]);
     setShow(false);
@@ -87,7 +68,7 @@ function SendInvoice({ invoiceData }) {
   }, []);
 
   const generateInvoice = (data) => {
-    if (data && data.productsWithInvoice && data.dealsWithInvoice) {
+    if (data && data.productsWithInvoice && data.productsWithInvoice) {
       const tableRows = data.productsWithInvoice.map(
         (row, index) => `
           <tr class="item">
@@ -154,7 +135,6 @@ function SendInvoice({ invoiceData }) {
         `
       );
 
-      // New One
       const invoiceHTML = `
       <!DOCTYPE html>
       <html lang="en">
@@ -344,148 +324,27 @@ function SendInvoice({ invoiceData }) {
 
     
     `;
-
-      // OLD One
-      //   const invoiceHTML = `
-      //   <!DOCTYPE html>
-      //   <html lang="en">
-      //     <head>
-      //       <meta charset="UTF-8">
-      //       <title>Invoice</title>
-      //       <style>
-      //         .invoice-box {
-      //           font-size: 12px;
-      //           max-width: 600px;
-      //           margin: auto;
-      //           padding: 30px;
-      //           border: 1px solid #eee;
-      //           line-height: 24px;
-      //           font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-      //           color: #555;
-      //         }
-
-      //         .invoice-box table {
-      //           width: 100%;
-      //           line-height: inherit;
-      //           text-align: left;
-      //         }
-
-      //         .invoice-box table td {
-      //           padding: 5px;
-      //           vertical-align: top;
-      //         }
-
-      //         .invoice-box table td.third {
-      //           text-align: right;
-      //         }
-
-      //         .invoice-box table tr.heading td {
-      //           background: #eee;
-      //           border-bottom: 1px solid #ddd;
-      //           font-weight: bold;
-      //         }
-
-      //         .invoice-box table tr.item td {
-      //           border-bottom: 1px solid #eee;
-      //         }
-
-      //         .invoice-box table tr.item.last td {
-      //           border-bottom: none;
-      //         }
-
-      //         .invoice-box table tr.total td:nth-child(2) {
-      //           border-top: 2px solid #eee;
-      //           font-weight: bold;
-      //         }
-
-      //         #scan {
-      //           float: right;
-      //         }
-
-      //         #scan img {
-      //           max-width: 100%;
-      //           height: auto;
-      //         }
-
-      //         @media print {
-      //           .invoice-box {
-      //             border: 0;
-      //           }
-      //         }
-      //       </style>
-      //     </head>
-      //     <body>
-      //       <div class="invoice-box">
-      //         <table>
-      //           <tr class="top">
-      //             <td colspan="2">
-      //               <table>
-      //                 <tr>
-      //                   <td class="title">
-      //                     <img src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
-      //                       style="width: 75%; max-width: 180px;" alt="Logo">
-      //                   </td>
-      //                   <td class="third">
-      //                     <b>Date:</b> 24-01-2024<br>
-      //                     The Alexcier,
-      //                     237 Alexandra Road,<br>
-      //                     #04-10,
-      //                     Singapore-159929.
-      //                   </td>
-      //                 </tr>
-      //               </table>
-      //             </td>
-      //           </tr>
-      //         </table>
-
-      //         <div style="max-width: 590px; overflow: auto;">
-      //           <table>
-      //             <tr class="heading">
-      //               <td style="white-space: nowrap;">S No</td>
-      //               <td style="white-space: nowrap;">Product Name</td>
-      //               <td style="white-space: nowrap;">Subject</td>
-      //               <td style="white-space: nowrap;">Quotes Stage</td>
-      //               <td style="white-space: nowrap;">Quotes Owner</td>
-      //             </tr>
-      //             ${tableRows.join("")}
-      //           </table>
-      //         </div>
-      //         <div class="totals">
-      //         <div>
-      //           <p>Sub Total:</p>
-      //           <p>${subtotal.toFixed(2)}</p>
-      //         </div>
-      //         <div>
-      //           <p>Tax Total:</p>
-      //           <p>${taxTotal.toFixed(2)}</p>
-      //         </div>
-      //         <div>
-      //           <p>Grand Total:</p>
-      //           <p>${grandTotal.toFixed(2)}</p>
-      //         </div>
-      //       </div>
-      //       </div>
-      //     </body>
-      //   </html>
-      // `;
-
       setHtmlContent(invoiceHTML);
-    } else {
+    }else{
       setHtmlContent("");
     }
   };
 
-  const sendInvoice = async (data) => {
-    // console.log("from is", userEmail);
-    // console.log("to address is", invoiceData.dealsWithInvoice.email);
-    // console.log("quotes is", htmlContent);
-    // console.log("subject is", subject);
+  const sendInvoice = async () => {
+    console.log("from is", userEmail);
+    console.log("to address is", invoiceData.dealsWithInvoice[0].email);
+    console.log("quotes is", htmlContent);
+    console.log("subject is", subject);
 
     try {
+      generateInvoice(invoiceData); // Wait for generateInvoice to finish
+      console.log("quotes is", htmlContent);
+      console.log("subject is", subject);
+
       const response = await axios.post(
         `${API_URL}sendMail`,
         {
-          toMail: invoiceData.dealsWithInvoice.email,
+          toMail: invoiceData.dealsWithInvoice[0].email,
           fromMail: userEmail,
           subject: subject,
           htmlContent: htmlContent,
@@ -512,8 +371,6 @@ function SendInvoice({ invoiceData }) {
 
   return (
     <div>
-      {/* <div dangerouslySetInnerHTML={{ __html: htmlContent }} /> */}
-
       <Button
         className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
         onClick={handleShow}
@@ -548,7 +405,11 @@ function SendInvoice({ invoiceData }) {
             <p className="m-0">
               <b style={{ color: "#424242" }}>To :</b>
             </p>
-            <p className="m-0">{invoiceData.email || "--"}</p>
+            {/* <p className="m-0">{invoiceData.dealsWithInvoice.email || "--"}</p> */}
+            {invoiceData.dealsWithInvoice &&
+              invoiceData.dealsWithInvoice.map((mails) => (
+                <p className="m-0">{mails.email || "--"}</p>
+              ))}
           </div>
           <div className="d-flex align-items-center py-3">
             <input
