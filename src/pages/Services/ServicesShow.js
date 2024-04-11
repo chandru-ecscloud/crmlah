@@ -12,7 +12,7 @@ function ServicesShow() {
   const { id } = useParams();
   const [clientData, setClientData] = useState({});
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
 
   useEffect(() => {

@@ -1,341 +1,335 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
-
 
 /* TopBar  */
 .topbar {
-    top: 0;
-    position: fixed;
-    width: 100%;
-    z-index: 999;
-    background-color: #3D63EA;
-    color: #fff;
-    padding: 5px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  background-color: #3d63ea;
+  color: #fff;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .mobileSection {
-    display: flex;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    align-items: center;
+  display: flex;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  align-items: center;
 }
 
 .socialIcons {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .icon {
-    margin-left: 10px;
-    font-size: 20px;
-    cursor: pointer;
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* Header  */
 
 .active {
-
-    border-bottom: 2px solid #ffffff;
-    padding: 10px;
+  border-bottom: 2px solid #ffffff;
+  padding: 10px;
 }
 
-
 .header {
-    top: 33px;
-    position: fixed;
-    z-index: 1000;
-    width: 100%;
-    background: #FFF !important;
-    box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.20);
+  top: 33px;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  background: #fff !important;
+  box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.2);
 }
 
 .custom-nav-link {
-    color: rgba(0, 0, 0, 0.85);
-    font-weight: bold;
-    padding: 10px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: bold;
+  padding: 10px;
 }
 
 .navbar-brand {
-    padding: 0px;
+  padding: 0px;
 }
 
 nav .nav-link {
-    color: rgba(0, 0, 0, 0.85);
-    font-family: Montserrat;
-    font-size: 15px;
-    font-style: normal;
-    padding-right: 20px !important;
-    font-weight: 600;
-    line-height: normal;
+  color: rgba(0, 0, 0, 0.85);
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  padding-right: 20px !important;
+  font-weight: 600;
+  line-height: normal;
 }
 
 nav .nav-link Link {
-    color: rgba(0, 0, 0, 0.85) !important;
+  color: rgba(0, 0, 0, 0.85) !important;
 }
 
 .donateBtn {
-    border-radius: 5px;
-    background: #3D63EA;
-    width: 90px;
-    color: #3D63EA;
-    font-family: Montserrat;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    margin-right: 10px;
-    margin-bottom: 5px;
-    line-height: normal;
-    background-color: transparent;
-    border: 2px solid #3D63EA;
+  border-radius: 5px;
+  background: #3d63ea;
+  width: 90px;
+  color: #3d63ea;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  line-height: normal;
+  background-color: transparent;
+  border: 2px solid #3d63ea;
 }
 
 .donateBtn:hover {
-    background: #0037ff;
-    color: #fff;
+  background: #0037ff;
+  color: #fff;
 }
 
 .volunteerBtn {
-    border-radius: 5px;
-    background: #FF3E54;
-    color: #FF3E54;
-    font-family: Montserrat;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-bottom: 5px;
-    width: 100px;
-    background-color: transparent;
-    border: 2px solid #FF3E54;
+  border-radius: 5px;
+  background: #ff3e54;
+  color: #ff3e54;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 5px;
+  width: 100px;
+  background-color: transparent;
+  border: 2px solid #ff3e54;
 }
 
 .volunteerBtn:hover {
-    background: #ff001e;
-    color: #fff;
+  background: #ff001e;
+  color: #fff;
 }
 
 /* Footer  */
 .footerSection {
-    background: #F1F6FE;
-    color: rgba(0, 0, 0, 0.80);
+  background: #f1f6fe;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .footerText {
-    color: rgba(0, 0, 0, 0.80);
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 200;
-    line-height: 130%;
+  color: rgba(0, 0, 0, 0.8);
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: 130%;
 }
 
 .footerIcon {
-    border-radius: 50%;
-    padding: 10px;
-    font-size: 40px;
-    margin: 0px 10px;
-    background: rgba(255, 255, 255, 0.20);
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 40px;
+  margin: 0px 10px;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .footerRow {
-    padding: 48px 49px;
-    margin: 5px;
-    background: rgba(255, 255, 255, 0.10);
+  padding: 48px 49px;
+  margin: 5px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .footerHeading {
+  font-feature-settings: "clig" off, "liga" off;
 
-    font-feature-settings: 'clig'off, 'liga'off;
-
-    /* Subtitle 1_18 */
-    font-family: Poppins;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 26px;
-    /* 144.444% */
+  /* Subtitle 1_18 */
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 26px;
+  /* 144.444% */
 }
 
 .footerContent {
-    margin-bottom: 15px;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
+  margin-bottom: 15px;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
 }
 
 .footerCopyrights {
-    color: #e1e1e1;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 300 !important;
-    line-height: 130%;
+  color: #e1e1e1;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300 !important;
+  line-height: 130%;
 }
-
 
 /* Contact Us  */
 
 .contactCard {
-    border-radius: 10px;
-    padding: 10px;
-    background: #FFF;
-    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
 }
 
 .contactColumn {
-    background-color: #3D63EACC;
-    color: #fff;
-    background-image: url("../assets/contact_background.png");
-    background-repeat: no-repeat;
-    background-position: bottom right;
+  background-color: #3d63eacc;
+  color: #fff;
+  background-image: url("../assets/contact_background.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
 }
 
 .contactInformation {
-    font-family: 'Poppins';
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    margin-bottom: 0px;
+  font-family: "Poppins";
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0px;
 }
 
 .contactContent {
-    color: #C9C9C9;
-    font-family: 'Poppins';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  color: #c9c9c9;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .contactText {
-    font-family: 'Poppins';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  font-family: "Poppins";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .contactIcon {
-    border-radius: 50%;
-    padding: 10px;
-    font-size: 40px;
-    margin: 0px 10px;
-    background: rgba(255, 0, 0, 0.8);
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 40px;
+  margin: 0px 10px;
+  background: rgba(255, 0, 0, 0.8);
 }
 
 .contactIcon:hover {
-    background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .contactFields {
-    color: #000;
-    font-family: 'Poppins';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 20px;
-    /* 166.667% */
+  color: #000;
+  font-family: "Poppins";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  /* 166.667% */
 }
 
 .contactInput {
-    border: none;
-    border-bottom: 2px solid #959595;
-    border-radius: 0px;
+  border: none;
+  border-bottom: 2px solid #959595;
+  border-radius: 0px;
 }
 
 .contactButton {
-    border-radius: 5px;
-    background: #FF3E54;
-    width: 200px;
-    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.12);
-    padding: 10px 38px;
+  border-radius: 5px;
+  background: #ff3e54;
+  width: 200px;
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.12);
+  padding: 10px 38px;
 }
 
 /* Hero Section */
 
 .Hero {
-    background-image: url("../assets/heroBackground.png");
-    background-repeat: no-repeat;
-    background-size: auto;
+  background-image: url("../assets/heroBackground.png");
+  background-repeat: no-repeat;
+  background-size: auto;
 }
 
 .heroHeading {
-    color: #0E1F51;
-    font-family: 'Raleway';
-    font-size: 43px;
-    font-style: normal;
-    font-weight: bolder;
-    line-height: 58px;
+  color: #0e1f51;
+  font-family: "Raleway";
+  font-size: 43px;
+  font-style: normal;
+  font-weight: bolder;
+  line-height: 58px;
 }
 
 .heroCRM {
-    color: #FF3E54;
-    font-family: 'Raleway';
-    font-size: 43px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 58px;
+  color: #ff3e54;
+  font-family: "Raleway";
+  font-size: 43px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 58px;
 }
 
 .heroSubHeading {
-    color: #41424C;
-    font-family: 'Raleway';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 30px;
-    letter-spacing: 2.4px;
+  color: #41424c;
+  font-family: "Raleway";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: 2.4px;
 }
 
 .heroBtn {
-    border-radius: 5px;
-    background: #3D63EA;
+  border-radius: 5px;
+  background: #3d63ea;
 }
 
 .heroImageBackground {
-    background-image: url("../assets/heroImageBackground.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
+  background-image: url("../assets/heroImageBackground.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
 }
-
 
 /* SignIn  */
 
 .signIn .registerWord {
-    color: #3D63EA;
-    font-family: 'Nunito Sans', sans-serif;
+  color: #3d63ea;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .signIn .contactsubmitBtn {
-    width: 100%;
-    background-color: #3D63EA;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  width: 100%;
+  background-color: #3d63ea;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .signIn .contactsubmitBtn:hover {
-    background-color: #1a44da;
-    border: none;
+  background-color: #1a44da;
+  border: none;
 }
 
 .signIn .forgotWord {
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 /* .signIn .password-link {
@@ -343,37 +337,35 @@ nav .nav-link Link {
     text-decoration: none;
 } */
 
-
 .signIn .form-control {
-    /* width: calc(100% - 40px);  */
-    border-radius: 5px;
+  /* width: calc(100% - 40px);  */
+  border-radius: 5px;
 }
 
 .signIn #inputStreet {
-    width: 100%;
+  width: 100%;
 }
 
 .signIn #inputCity {
-    width: 100%;
+  width: 100%;
 }
 
 .signIn #inputState {
-    width: "260px"
+  width: "260px";
 }
 
 .signIn #inputZip {
-    width: "260px"
+  width: "260px";
 }
 
-
 @media (max-width: 991px) {
-    .signIn #inputState {
-        width: 100%;
-    }
+  .signIn #inputState {
+    width: 100%;
+  }
 
-    .signIn #inputZip {
-        width: 100%;
-    }
+  .signIn #inputZip {
+    width: 100%;
+  }
 }
 
 /* @media (max-width: 991px) {
@@ -382,134 +374,160 @@ nav .nav-link Link {
     }
 } */
 
-
 .signIn #inputCountry {
-    width: 100%;
+  width: 100%;
 }
 
 .signIn .phoneSelect {
-    width: 5px;
-    padding: 5px;
-    font-size: 14px;
+  width: 5px;
+  padding: 5px;
+  font-size: 14px;
 }
 
 .signIn .eye-icon {
-    border: none;
-    color: #959595;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+  border: none;
+  color: #959595;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .signIn .input-group {
-    position: relative;
+  position: relative;
 }
 
 .signIn .input-group-text.eye-icon {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    /* transform: translateX(150%); */
-    /* background-color: transparent; */
-    /* border: none; */
-    padding: 0;
-    z-index: 3;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  /* transform: translateX(150%); */
+  /* background-color: transparent; */
+  /* border: none; */
+  padding: 0;
+  z-index: 3;
 }
 
 .signIn #company_password,
 .signIn #confirm_password {
-    width: calc(100% - 40px);
-    /* Adjust the width as needed */
+  width: calc(100% - 40px);
+  /* Adjust the width as needed */
 }
 
 .signIn #company_password {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
 .signIn #confirm_password {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
 .signIn .input-group .form-control {
-    z-index: 0;
+  z-index: 0;
 }
 
 .signIn .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
 }
-
-
-
-
-
 
 /* Login Page  */
 
-
 .logIn .registerWord {
-    color: #3D63EA;
-    font-family: 'Nunito Sans', sans-serif;
+  color: #3d63ea;
+  font-family: "Nunito Sans", sans-serif;
 }
 
-
-
 .logIn .contactsubmitBtn {
-    width: 100%;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .logIn .contactsubmitBtn:hover {
-    width: 100%;
-    border: none;
+  width: 100%;
+  border: none;
 }
 
 /* Create Leads  */
 
 .createLead .form-size {
-    width: 60%;
+  width: 60%;
 }
-
 
 /* Edit Leads  */
 
-
 .editLead .form-size {
-    width: 60%;
+  width: 60%;
 }
-
 
 /* Create Contact  */
 
 .createContacts .form-size {
-    width: 60%;
+  width: 60%;
 }
-
-
 
 /* Appointment  */
 
-.bookAppointment button.btn-close{
-    bs-btn-close-color: #fff;
+.bookAppointment button.btn-close {
+  bs-btn-close-color: #fff;
 }
 
 .intl-tel-input,
-.iti{
+.iti {
   width: 100%;
 }
 
 @media (max-width: 500px) {
-    .sm-device , .form-size{
-       display: block !important;
-       width: 100% !important;
-    }
+  .sm-device,
+  .form-size {
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+.row-container > * {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.dragable-heading-text {
+  font-family: "Source Sans 3", sans-serif;
+  margin-bottom: 0px;
+  font-size: smaller;
+  font-weight: 700;
+}
+
+.dragable-content-text {
+  font-family: "Source Sans 3", sans-serif;
+  margin-bottom: 0px;
+  font-size: medium;
+  font-weight: 650;
+}
+
+.dragable-heading-count {
+  display: flex;
+  font-weight: 700 !important;
+}
+.dragable-content-amount {
+  font-family: "Source Sans 3", sans-serif;
+  margin-bottom: 0px;
+  font-size: medium !important;
+  font-weight: 350 !important;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 2px;
+}
+
+.phone-icons {
+  font-size: small;
 }

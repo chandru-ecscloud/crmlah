@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { IoIosRemoveCircleOutline } from "react-icons/io";
+import { IoMdTrash } from "react-icons/io";
+import { FaPhoneAlt } from "react-icons/fa";
+import {
+  MdOutlineLeaderboard,
+  MdOutlineAccountBalanceWallet,
+} from "react-icons/md";
+import { GiChampions } from "react-icons/gi";
+import { BsCurrencyDollar } from "react-icons/bs";
+import { IoMdMailOpen } from "react-icons/io";
+
+// import Women from "../../assets/women 1.jpg";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
+import { FaPlus } from "react-icons/fa6";
 
 const ListTasks = ({ tasks, setTasks }) => {
   const [newTasks, setNewTasks] = useState([]);
@@ -31,8 +42,8 @@ const ListTasks = ({ tasks, setTasks }) => {
   const statuses = ["New", "Qualified", "Proposition", "Won"];
 
   return (
-    <div className="container">
-      <div className="row">
+    <div className="container-fluid">
+      <div className="row row-container">
         {statuses.map((status, index) => (
           <Section
             key={index}
@@ -77,21 +88,27 @@ const Section = ({
     },
   }));
 
-  let text = "New";
+  let text = "New Lead";
+  let icons = <MdOutlineLeaderboard />;
   let bg = "bg-danger";
+  let bgContainer = "#ffcfcf";
   let tasksToMap = newTasks;
 
   if (status === "Qualified") {
-    text = "Qualified";
+    text = "Qualified Contacts";
     bg = "bg-warning";
+    bgContainer = "#fdffed";
     tasksToMap = qualifiedTasks;
   } else if (status === "Proposition") {
-    text = "Proposition";
-    bg = "bg-success";
+    text = "Proposition(accounts)";
+    bg = "bg-primary";
+    bgContainer = "#dee7ff";
     tasksToMap = propositionTasks;
   } else if (status === "Won") {
-    text = "Won";
-    bg = "bg-primary";
+    text = "Won Deals";
+
+    bg = "bg-success";
+    bgContainer = "#deffe3";
     tasksToMap = wonTasks;
   }
 
@@ -110,12 +127,12 @@ const Section = ({
   };
 
   return (
-    <div
-      className={`col-md-3 p-3 ${isHovered ? "bg-slate-200" : ""}`}
-      ref={drop}
-    >
-      <Header text={text} bg={bg} count={tasksToMap.length} />
-      <div className="bg-light mt-3 " style={{ minHeight: "80vh" }}>
+    <div className={`col-md-3 ${isHovered ? "bg-slate-200" : ""}`} ref={drop}>
+      <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
+      <div
+        className={` pt-3`}
+        style={{ minHeight: "80vh", backgroundColor: bgContainer }}
+      >
         {tasksToMap.length > 0 &&
           tasksToMap.map((task) => (
             <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} />
@@ -125,11 +142,48 @@ const Section = ({
   );
 };
 
-const Header = ({ text, count, bg }) => {
+const Header = ({ text, count, bgContainer }) => {
+  let icons;
+  switch (text) {
+    case "New Lead":
+      icons = <FaPlus />;
+      break;
+    case "Qualified Contacts":
+      icons = <MdOutlineLeaderboard />;
+      break;
+    case "Won Deals":
+      icons = <GiChampions />;
+      break;
+    case "Proposition(accounts)":
+      icons = <MdOutlineAccountBalanceWallet />;
+      break;
+    default:
+      icons = null;
+  }
+
   return (
-    <div className={`p-3 rounded-md text-uppercase text-sm text-white ${bg}`}>
-      {text}
-      <span className="badge bg-light text-dark ms-2">{count}</span>
+    <div
+      className={`p-3 d-flex align-items-center justify-content-between rounded-md text-sm text-dark `}
+      style={{ backgroundColor: bgContainer }}
+    >
+      <p className="dragable-heading-text" style={{ width: "60%" }}>
+        {icons} {text}
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Success example"
+          aria-valuenow="25"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div class={`progress-bar bg-success`} style={{ width: "50%" }}></div>
+        </div>
+      </p>
+      <span className={`badge text-dark ms-2 dragable-heading-count`}>
+        <FaPlus />
+        &nbsp;
+        {count}
+      </span>
     </div>
   );
 };
@@ -150,20 +204,66 @@ const Task = ({ task, tasks, setTasks }) => {
     toast("Task removed", { icon: <CiCircleRemove color="red" size={20} /> });
   };
 
+  let badgeColor;
+  let badgeText;
+
+  switch (task.status) {
+    case "New":
+      badgeColor = "text-bg-info";
+      badgeText = "New";
+      break;
+    case "Qualified":
+      badgeColor = "text-bg-warning";
+      badgeText = "Qualified";
+      break;
+    case "Proposition":
+      badgeColor = "text-bg-primary";
+      badgeText = "Proposition";
+      break;
+    case "Won":
+      badgeColor = "text-bg-success";
+      badgeText = "Won";
+      break;
+    default:
+      badgeColor = "";
+      badgeText = "";
+  }
+
   return (
     <div
       ref={drag}
-      className={`p-3 mt-3 shadow ${
+      style={{ border: "1px solid #dcdcdc", backgroundColor: "#fff" }}
+      className={`color p-3 d-flex align-items-center justify-content-between mx-1 ${
         isDragging ? "opacity-25" : ""
       } cursor-grab`}
     >
-      <p>{task.name}</p>
-      <button
-        className="btn btn-sm btn-danger"
-        onClick={() => handleRemove(task.id)}
-      >
-        <IoIosRemoveCircleOutline />
-      </button>
+      <span>
+        <p className="dragable-content-text" style={{ marginBottom: "0px" }}>
+          {task.name}
+        </p>
+        <p className="dragable-content-amount">
+          <BsCurrencyDollar className="phone-icons" /> &nbsp; 2000
+        </p>
+        <p className="dragable-content-amount">
+          <FaPhoneAlt className="phone-icons" /> &nbsp; 9941286931
+        </p>
+        <p className="dragable-content-amount">
+          <IoMdMailOpen className="phone-icons" /> &nbsp; chandru@gmail.com
+        </p>
+      </span>
+      <span className="d-flex flex-column align-items-center">
+        <span className={`badge rounded-pill ${badgeColor} mb-2`}>
+          {badgeText}
+        </span>
+        <br />
+        <button
+          className="btn btn-outline-danger px-2 py-1"
+          onClick={() => handleRemove(task.id)}
+          style={{ border: "none" }}
+        >
+          <IoMdTrash />
+        </button>
+      </span>
     </div>
   );
 };
