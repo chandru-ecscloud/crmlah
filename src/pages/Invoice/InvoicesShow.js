@@ -16,9 +16,9 @@ import { Tooltip, Zoom } from "@mui/material";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function InvoiceShow() {
-  const tableData = [
-    { id: 1, productName: "", quantity: "", price: "", discount: "", tax: "" },
-  ];
+  // const tableData = [
+  //   { id: 1, productName: "", quantity: "", price: "", discount: "", tax: "" },
+  // ];
 
   const { id } = useParams();
   const [invoiceData, setInvoiceData] = useState({});
@@ -220,26 +220,32 @@ function InvoiceShow() {
         {
           table: {
             headerRows: 1,
-            widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
+            widths: ["*", "*", "*", "*","*","*",],
             body: [
               [
                 "Product Name",
                 "Price",
                 "Quantity",
                 "Amount",
-                "Discount",
+                // "Discount",
                 "Tax",
                 "Total Amount",
               ],
-              ...tableData.map(() => [
-                invoiceData.productName,
-                invoiceData.quantity,
-                invoiceData.listPrice,
-                invoiceData.amount,
-                `${invoiceData.discount} %`,
-                `${invoiceData.tax} %`,
-                invoiceData.total,
-              ]),
+              ...invoiceData.productsWithInvoice.map((product) => {
+                const amount = product.unitPrice*product.quantityInStock;
+                const total = (amount+(product.tax*amount)/100).toFixed(2);
+                return[
+                product.productName || "--",
+                product.quantityInStock || "--",
+                product.unitPrice || "--",
+                // product.amount || "--",
+                amount,
+                // `${product.discount} %` || "--",
+                `${product.tax} %` || "--",
+                // product.total || "--",
+                total,
+              ]
+          }),
             ],
           },
         },

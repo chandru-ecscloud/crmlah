@@ -169,7 +169,6 @@ function ProductsEdit() {
           commission_rate: getData.commissionRate,
           tax: getData.tax,
           taxable: getData.taxable,
-          unit_price: getData.unitPrice,
         };
         console.log("Converted Data", getData.quantityOrdered);
         formik.setValues(payload);
