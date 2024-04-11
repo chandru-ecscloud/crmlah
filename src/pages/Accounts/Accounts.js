@@ -14,6 +14,12 @@ import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
 import { ImQuotesRight } from "react-icons/im";
 import QuotesModel from "./QuotesModel";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -29,10 +35,8 @@ const Accounts = () => {
   const role = sessionStorage.getItem("role");
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
-  const [selectedIds, setSelectedIds] = useState();
+ 
 
-  // console.log("rowId",rowId)
-  console.log("rowId", rowId);
   const columns = useMemo(
     () => [
       {
@@ -67,6 +71,7 @@ const Accounts = () => {
       },
       {
         accessorKey: "parentAccount",
+        enableHiding: false,
         header: "Parent Account",
       },
 
@@ -116,38 +121,38 @@ const Accounts = () => {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
-      {
-        accessorKey: "id",
-        enableHiding: false,
-        header: "Create Quote",
-        Cell: ({ row }) => (
-          <Link to="/quotes" className="d-flex">
-            <div
-              className="d-flex align-items-center justify-content-center"
-              style={{
-                padding: "5px",
-                backgroundColor: "rgba(165, 255, 140, 0.5)",
-                borderRadius: "50%",
-                width: "40px",
-                height: "40px",
-              }}
-            >
-              <input
-                type="radio"
-                onChange={() =>
-                  sessionStorage.setItem("account_id", row.original.id)
-                }
-                name="account"
-                id="account"
-                className="form-check-input"
-              />
-            </div>
-            <span style={{ fontSize: "20px" }} className="px-1">
-              <ImQuotesRight />
-            </span>
-          </Link>
-        ),
-      },
+      // {
+      //   accessorKey: "id",
+      //   enableHiding: false,
+      //   header: "Create Quote",
+      //   Cell: ({ row }) => (
+      //     <Link to="/quotes" className="d-flex">
+      //       <div
+      //         className="d-flex align-items-center justify-content-center"
+      //         style={{
+      //           padding: "5px",
+      //           backgroundColor: "rgba(165, 255, 140, 0.5)",
+      //           borderRadius: "50%",
+      //           width: "40px",
+      //           height: "40px",
+      //         }}
+      //       >
+      //         <input
+      //           type="radio"
+      //           onChange={() =>
+      //             sessionStorage.setItem("account_id", row.original.id)
+      //           }
+      //           name="account"
+      //           id="account"
+      //           className="form-check-input"
+      //         />
+      //       </div>
+      //       <span style={{ fontSize: "20px" }} className="px-1">
+      //         <ImQuotesRight />
+      //       </span>
+      //     </Link>
+      //   ),
+      // },
     ],
     []
   );
@@ -182,7 +187,100 @@ const Accounts = () => {
     const csv = generateCsv(csvConfig)(data);
     download(csvConfig)(csv);
   };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Accounts", 15, 15);
 
+    const tableHeaders1 = [
+      "S.no",
+      "Account Name",
+      "Account Number",
+      "Email",
+      "Phone Number",
+      "Parent Account",
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.accountName,
+        row.original.accountNumber,
+        row.original.email,
+        row.original.phone,
+        row.original.parentAccount,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Shipping Street",
+      "Shipping City",
+      "Shipping State",
+      "Shipping Code",
+      "Shipping Country",
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.shippingStreet,
+        row.original.shippingCity,
+        row.original.shippingState,
+        row.original.shippingCode,
+        row.original.shippingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Billing Street",
+      "Billing City",
+      "Billing State",
+      "Billing Code",
+      "Billing Country",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.billingStreet,
+        row.original.billingCity,
+        row.original.billingState,
+        row.original.billingCode,
+        row.original.billingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    // console.log("tableData",tableData1)
+    // console.log("tableHeaders",tableHeaders1 )
+    doc.save("ECS.pdf");
+  };
+  
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -200,6 +298,7 @@ const Accounts = () => {
     const rowData = rows.map((row) => row.original.id);
     // sessionStorage.setItem("account_id", rowData);
     setRowId(rowData);
+    table.setRowSelection(false);
   };
 
   const handelNavigateClick = () => {
@@ -279,6 +378,7 @@ const Accounts = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/accounts");
+        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }
@@ -293,7 +393,6 @@ const Accounts = () => {
     data,
     initialState: {
       columnVisibility: {
-        parentAccount: false,
         shippingStreet: false,
         shippingCity: false,
         shippingState: false,
@@ -318,30 +417,35 @@ const Accounts = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+         <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" onClick={handleExportData}>
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });

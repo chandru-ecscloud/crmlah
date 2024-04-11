@@ -12,6 +12,12 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Line } from "react-icons/ri";
+import { Tooltip, Zoom } from "@mui/material";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -82,7 +88,7 @@ const Contacts = () => {
       },
       {
         accessorKey: "twitter",
-        header: "twitter",
+        header: "Twitter",
       },
       {
         accessorKey: "mailingStreet",
@@ -181,6 +187,154 @@ const Contacts = () => {
   const handleExportData = () => {
     const csv = generateCsv(csvConfig)(data);
     download(csvConfig)(csv);
+  };
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Contacts", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Contact Name",
+      "Email-Address",
+      "Phone Number",
+      "Contact Owner",
+      "Last Name",
+      
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.firstName,
+        row.original.email,
+        row.original.phone,
+        row.original.contactOwner,
+        row.original.lastName,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders2 = [
+      "Lead Source",
+      "Account Name",
+      "Vendor Name",
+      "Land Line",
+      "Skype Id",
+    ];
+    const tableData2 = rows.map((row) => {
+      return [
+        row.original.leadSource,
+        row.original.accountName,
+        row.original.vendorName,
+        row.original.landLine,
+        row.original.skypeId,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders2],
+      body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    const tableHeaders3 = [
+      "Twitter",
+      "Mailing Street",
+      "Mailing City",
+      "Mailing State",
+      "Mailing Zip",
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.twitter,
+        row.original.mailingStreet,
+        row.original.mailingCity,
+        row.original.mailingState,
+        row.original.mailingZip,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders4 = [
+      "Mailing Country",
+      "Other Street",
+      "Other City",
+      "other State",
+      "Other Zip",
+    ];
+    const tableData4 = rows.map((row) => {
+      return [
+        row.original.mailingCountry,
+        row.original.otherStreet,
+        row.original.otherCity,
+        row.original.otherState,
+        row.original.otherZip,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders4],
+      body: tableData4,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders5 = [
+      "Other Country",
+      "Description",
+      "Created At",
+      "Created By",
+      "Updated At",
+      "Updated By",
+    ];
+    const tableData5 = rows.map((row) => {
+      return [
+        row.original.otherCountry,
+        row.original.descriptionInfo,
+        row.original.createdAt,
+        row.original.createdBy,
+        row.original.updatedAt,
+        row.original.updatedBy,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders5],
+      body: tableData5,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    // console.log("tableData",tableData1)
+    // console.log("tableHeaders",tableHeaders1 )
+    doc.save("ECS.pdf");
   };
 
   const theme = createTheme({
@@ -305,30 +459,35 @@ const Contacts = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-success" onClick={handleExportData}>
-          <BsFiletypeCsv />
-        </button>
-        <button
-          className="btn btn-success"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <BsFiletypeCsv /> selected row
-        </button>
-        <button className="btn btn-danger" onClick={handleExportData}>
-          <FaRegFilePdf />
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-        >
-          <FaRegFilePdf /> selected row
-        </button>
+         <button className="btn text-secondary" onClick={handleExportData}>
+    <RiFileExcel2Fill size={23}/>
+    </button>
+    
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <RiFileExcel2Line size={23}/> 
+    </button>
+    </Tooltip>
+
+    <button className="btn text-secondary" onClick={handleExportData}>
+    <MdPictureAsPdf size={23}/>
+    </button>
+    <Tooltip TransitionComponent={Zoom} title="Selected Row">
+    <button
+      className="btn text-secondary border-0"
+      disabled={
+        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+      }
+      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+    >
+      <MdOutlinePictureAsPdf size={23} /> 
+    </button></Tooltip>
       </Box>
     ),
   });
