@@ -70,7 +70,7 @@ function DealsCreate() {
       billing_street: "",
       billing_code: "",
       billing_country: "",
-      description_info: "",
+      
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -212,8 +212,8 @@ function DealsCreate() {
               value={userId}
               name="companyId"
             />
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Deal Owner</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -240,8 +240,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -265,8 +265,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="email"
@@ -289,8 +289,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Deal Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -316,8 +316,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Contact Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -346,8 +346,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -376,8 +376,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Closing Date</lable> &nbsp;&nbsp;
                 <input
                   type="date"
@@ -437,8 +437,8 @@ function DealsCreate() {
               />
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>stage</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -477,8 +477,8 @@ function DealsCreate() {
               />
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>probability(%)</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -533,8 +533,8 @@ function DealsCreate() {
                 placeholder="--"
               />
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Campaign Source</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -562,8 +562,8 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <select
                   className={`form-size form-select  ${
@@ -600,8 +600,8 @@ function DealsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Shipping Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -628,8 +628,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -656,8 +656,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -683,8 +683,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -710,8 +710,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Shipping State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -738,8 +738,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Billing State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -765,8 +765,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -792,8 +792,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -819,8 +819,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -847,8 +847,8 @@ function DealsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -884,14 +884,14 @@ function DealsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+            <div className="col-12 mb-3 ">
+              <div className="d-flex align-items-start justify-content-center sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
                   className="form-size form-control"
-                  {...formik.getFieldProps("description_info")}
+                  // {...formik.getFieldProps("description_info")}
                   name="description_info"
                   id="description_info"
                 />
