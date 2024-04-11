@@ -33,6 +33,7 @@ const mainMenu = [
   { to: "/contacts", label: "Contacts" },
   { to: "/accounts", label: "Accounts" },
   { to: "/deals", label: "Deals" },
+  { to: "/dragable", label: "Sales" },
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },
   { to: "/invoices", label: "Invoices" },
