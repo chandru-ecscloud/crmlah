@@ -18,21 +18,23 @@ function AppointmentsShow() {
   useEffect(() => {
     const userData = async () => {
       try {
-        const response = await axios.get(`${API_URL}allAppointments/${id}`, {
+        const response = await axios.get(`${API_URL}allAppointments/${11}`, {
           headers: {
             "Content-Type": "application/json",
             //Authorization: `Bearer ${token}`,
           },
         });
         setClientData(response.data);
+        console.log("clientData",clientData)
       } catch (error) {
         toast.error("Error fetching data:", error);
+        
       }
     };
 
     userData();
   }, [id]);
-
+  
   return (
     <>
       {/* header section */}
@@ -130,14 +132,14 @@ function AppointmentsShow() {
               <div>
                 <label className="text-dark Label">Appointment For</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointment_for || "--"}
+                  &nbsp; : &nbsp;{clientData.appointmentFor || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Service Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.service || "--"}
+                  &nbsp; : &nbsp;{clientData.serviceName || "--"}
                 </span>
               </div>
 
@@ -187,23 +189,23 @@ function AppointmentsShow() {
               <div>
                 <label className="text-dark Label">Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointment_name || "--"}
+                  &nbsp; : &nbsp;{clientData.appointmentName || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Location</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointment_start_date || "--"}
+                  &nbsp; : &nbsp;{clientData.location || "--"}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Remainder</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.location || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Member</label>
@@ -224,15 +226,14 @@ function AppointmentsShow() {
               <div>
                 <label className="text-dark Label">Start Date</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.company || "--"}
+                  &nbsp; : &nbsp;{clientData.appointmentStartDate || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Member</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.first_name || "--"}{" "}
-                  {clientData.last_name}
+                  &nbsp; : &nbsp;{clientData.member || "--"}
                 </span>
               </div>
 
