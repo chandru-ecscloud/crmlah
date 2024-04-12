@@ -10,8 +10,8 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { BsFiletypeCsv } from "react-icons/bs";
-import { FaRegFilePdf } from "react-icons/fa";
+// import { BsFiletypeCsv } from "react-icons/bs";
+// import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
@@ -28,18 +28,18 @@ const csvConfig = mkConfig({
 const Services = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "service_name",
+        accessorKey: "serviceName",
         enableHiding: false,
         header: "Service Name",
         Cell: ({ row }) => (
           <Link to={`/services/show/${row.original.id}`} className="rowName">
-            {row.original.first_name}
+            {row.original.serviceName}
           </Link>
         ),
       },
@@ -59,7 +59,7 @@ const Services = () => {
         header: "Location",
       },
       {
-        accessorKey: "service_owner",
+        accessorKey: "serviceOwner",
         enableHiding: false,
         header: "Service Owner",
       },
@@ -68,11 +68,11 @@ const Services = () => {
         header: "Members",
       },
       {
-        accessorKey: "available_day",
+        accessorKey: "availableDays",
         header: "Available Day",
       },
       {
-        accessorKey: "available_time",
+        accessorKey: "availableTime",
         header: "Available Time",
       },
       {
@@ -80,7 +80,7 @@ const Services = () => {
         header: "Tax",
       },
       {
-        accessorKey: "description_info",
+        accessorKey: "description",
         header: "Description",
       },
     ],
@@ -89,7 +89,7 @@ const Services = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios(`${API_URL}allClients`, {
+      const response = await axios(`${API_URL}allServices`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
@@ -137,11 +137,11 @@ const Services = () => {
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.service_name,
+        row.original.serviceName,
         row.original.duration,
         row.original.price,
         row.original.location,
-        row.original.service_owner,
+        row.original.serviceOwner,
         
       ];
     });
@@ -168,10 +168,10 @@ const Services = () => {
     const tableData2 = rows.map((row) => {
       return [
         row.original.members,
-        row.original.available_day,
-        row.original.available_time,
+        row.original.availableDays,
+        row.original.availableTime,
         row.original.tax,
-        row.original.description_info,
+        row.original.description,
       ];
     });
     autoTable(doc, {
@@ -205,10 +205,12 @@ const Services = () => {
   });
 
   const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
+    const rowData = rows.map((row) => row.original.id);
+    console.log("rowData",rowData[0])
+    // console.log("rowData",rowData.id)
     try {
-      const response = await axios.post(
-        `${API_URL}deleteMultipleCServiceData`,
+      const response = await axios.delete(
+        `${API_URL}deleteServices/${rowData[0]}`,
         rowData,
         {
           headers: {
@@ -217,7 +219,7 @@ const Services = () => {
           },
         }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success(response.data.message);
         navigate("/services");
       } else {
@@ -235,10 +237,10 @@ const Services = () => {
     initialState: {
       columnVisibility: {
         members: false,
-        available_day: false,
-        available_time: false,
+        availableDays: false,
+        availableTime: false,
         tax: false,
-        description_info: false,
+        description: false,
       },
     },
     enableRowSelection: true,
@@ -332,7 +334,7 @@ const Services = () => {
                     Delete
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -346,7 +348,7 @@ const Services = () => {
                   >
                     Mass Delete
                   </button>
-                </li>
+                </li> */}
               </>
             ) : (
               // Render disabled buttons for CMP_USER

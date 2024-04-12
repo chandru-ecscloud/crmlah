@@ -10,9 +10,11 @@ import { toast } from "react-toastify";
 
 function ServicesShow() {
   const { id } = useParams();
+  // const owner = sessionStorage.getItem("user_name");
+  // const token = sessionStorage.getItem("token");
   const [clientData, setClientData] = useState({});
   const navigate = useNavigate();
-  // const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getIte  m("token");
   const role = sessionStorage.getItem("role");
 
   useEffect(() => {
@@ -37,43 +39,32 @@ function ServicesShow() {
     navigate(`/services/edit/${id}`);
   };
 
-  const quotedItems = [
-    {
-      productName: "Product Name",
-      itemDescription: "Item Description",
-      quantity: "2",
-      price: "1000",
-      discount: "5%",
-      tax: "5%",
-      totalAmount: "850",
-    },
-  ];
 
-  const renderQuotedItems = () => {
-    return quotedItems.map((item, index) => (
-      <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
-        <td className="px-5 py-2">
-          <span>
-            {item.appointmentName || "--"} <br />
-          </span>
-        </td>
-        <td className="px-5 py-2">
-          <span className="text-primary">
-            {item.appointmentFor || "--"} <br />
-          </span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.serviceName || "--"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.appointmentStartTime || "--"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.location || "--"}</span>
-        </td>
-      </tr>
-    ));
-  };
+  // const renderQuotedItems = () => {
+  //   return quotedItems.map((item, index) => (
+  //     <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
+  //       <td className="px-5 py-2">
+  //         <span>
+  //           {item.appointmentName || "--"} <br />
+  //         </span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span className="text-primary">
+  //           {item.appointmentFor || "--"} <br />
+  //         </span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.serviceName || "--"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.appointmentStartTime || "--"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.location || "--"}</span>
+  //       </td>
+  //     </tr>
+  //   ));
+  // };
 
   return (
     <>
@@ -101,7 +92,7 @@ function ServicesShow() {
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
-            disabled={role === "CMP_USER"}
+            disabled={role === "CMP_USER"|| role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
             Edit
@@ -146,14 +137,14 @@ function ServicesShow() {
               <div>
                 <label className="text-dark Label pt-3">Service Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.service_owner || "--"}
+                  &nbsp; : &nbsp;{clientData.serviceOwner || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Service Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.service_name || "--"}
+                  &nbsp; : &nbsp;{clientData.serviceName || "--"}
                 </span>
               </div>
 
@@ -222,7 +213,7 @@ function ServicesShow() {
             <div>
               <label className="text-dark Label">Description</label>
               <span className="text-dark">
-                &nbsp; : &nbsp;{clientData.description_info || "--"}
+                &nbsp; : &nbsp;{clientData.description || "--"}
               </span>
             </div>
           </div>
@@ -286,7 +277,7 @@ function ServicesShow() {
                     <td className="p-2">Location</td>
                   </tr>
                 </thead>
-                <tbody>{renderQuotedItems()}</tbody>
+                {/* <tbody>{renderQuotedItems()}</tbody> */}
               </table>
             </div>
 
