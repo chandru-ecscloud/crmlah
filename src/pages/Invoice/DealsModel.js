@@ -64,37 +64,19 @@ const DealsModel = ({ path }) => {
     }
   };
 
-  // const handleHeaderCheckboxChange = () => {
-  //   const newSelectAll = !selectAll;
-  //   setSelectAll(newSelectAll);
-  //   const allIds = dealsdata.map((item) => item.id);
-  //   setSelectedRows(
-  //     newSelectAll
-  //       ? allIds.map((id) => dealsdata.find((item) => item.id === id))
-  //       : []
-  //   );
+  // const handleCheckboxChange = (id) => {
+  //   const isChecked = selectedRows.includes(id);
+  //   if (isChecked) {
+  //     setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+  //   } else {
+  //     setSelectedRows([...selectedRows, id]);
+  //   }
   // };
-
-  const handleHeaderCheckboxChange = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    setSelectedRows(newSelectAll ? dealsdata.map((item) => item.id) : []);
-  };
 
   const handleCheckboxChange = (id) => {
-    const isChecked = selectedRows.includes(id);
-    if (isChecked) {
-      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
-    } else {
-      setSelectedRows([...selectedRows, id]);
-    }
+    setSelectedRows([id]);
   };
-
   console.log("selected", selectedRows);
-
-  // const dealsDataSubmit = () => {
-  //   console.log("selectedRows", selectedRows);
-  // };
 
   return (
     <div>
@@ -129,15 +111,7 @@ const DealsModel = ({ path }) => {
                       style={{ position: "sticky", top: 0, zIndex: 1 }}
                       className=" table-dark "
                     >
-                      <th scope="col">
-                        <input
-                          type="checkbox"
-                          className="form-check-input "
-                          checked={selectAll}
-                          onChange={handleHeaderCheckboxChange}
-                        />
-                      </th>
-                      {/* <th scope="col">Select</th> */}
+                      <th scope="col">Select</th>
                       <th scope="col">Deal Name</th>
                       <th scope="col">Account Name</th>
                       <th scope="col">Contact Name</th>
@@ -147,22 +121,14 @@ const DealsModel = ({ path }) => {
                   <tbody>
                     {dealsdata.map((item, index) => (
                       <tr className="" key={item.id}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            className="form-check-input "
-                            checked={selectedRows.includes(item.id)}
-                            onChange={() => handleCheckboxChange(item.id)}
-                          />
-                        </td>
-                         {/* <td>
+                         <td>
                           <input
                             type="radio"
                             className="form-check-input"
-                            checked={selectedRows === item.id}
-                            onChange={() => setSelectedRows(item.id)}
+                            checked={selectedRows[0] === item.id}
+                            onChange={() => handleCheckboxChange(item.id)}
                           />
-                        </td> */}
+                        </td>
                         <td>{item.dealName}</td>
                         <td>{item.accountName}</td>
                         <td>{item.contactName}</td>
