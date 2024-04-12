@@ -4,36 +4,96 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import { Button, Offcanvas } from "react-bootstrap";
-import { GrAttachment } from "react-icons/gr";
 import { IoMdSend, IoMdTime } from "react-icons/io";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import user from "../../assets/user.png";
 import { API_URL } from "../../Config/URL";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
+const validationSchema = yup.object({
+  subject: yup.string().required("*Subject is required"),
+});
 function SendQuotes({ accountData }) {
-  const [htmlContent, setHtmlContent] = useState("");
-  const role = sessionStorage.getItem("role");
-  const token = sessionStorage.getItem("token");
-
   const [show, setShow] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
   const [subject, setSubject] = useState("");
+  // const [htmlContent, setHtmlContent] = useState("");
+  // const [isSendingEmail, setIsSendingEmail] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      subject: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(`${API_URL}sendMail`, {
+          toMail: accountData.email,
+          fromMail: userEmail,
+          subject: values.subject,
+          htmlContent: generateInvoice(accountData.quotes),
+        });
+
+        if (response.status === 200) {
+          toast.success("Mail sent successfully");
+          handleHide();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+        toast.error("Failed to send email");
+      }
+    },
+  });
+    // onSubmit: async (data) => {
+    //   console.log("Invoice:", subject);
+    //   setSubject(data.subject)
+    //   try {
+    //     const response = await axios.post(`${API_URL}sendMail`, {
+    //       toMail: accountData.email,
+    //       fromMail: userEmail,
+    //       subject: subject,
+    //       // htmlContent: generateInvoice(accountData.quotes),
+    //       htmlContent: htmlContent,
+    //       // contentType: "text/html",
+    //     });
+
+    //     if (response.status === 200) {
+    //       toast.success(response.data.message);
+    //       toast.success("Mail Send Successfully");
+    //       handleHide();
+    //       setIsSendingEmail(false);
+    //     } else {
+    //       toast.error(response.data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // },
+  // });
+
   const handleShow = () => setShow(true);
+
   const handleHide = () => {
-    setSelectedFiles([]);
     setShow(false);
   };
 
   useEffect(() => {
-    generateInvoice(accountData);
-  }, []);
+    if (formik.values.subject && accountData.quotes) {
+      const htmlContent = generateInvoice(accountData.quotes);
+      formik.setFieldValue("htmlContent", htmlContent);
+      formik.setFieldValue("isSendingEmail", true);
+    }
+  }, [formik.values.subject, accountData.quotes]);
 
-  const generateInvoice = (data) => {
-    if (data && data.quotes && data.quotes.length > 0) {
-      const tableRows = data.quotes.map(
-        (row, index) => `
+  const generateInvoice = (quotes) => {
+    if (!quotes || quotes.length === 0) {
+      return "No quotes available";
+    }
+    const tableRows = quotes.map(
+      (row, index) => `
       <tr class="item">
         <td>${index + 1}</td>
         <td>${row.dealName}</td>
@@ -44,7 +104,7 @@ function SendQuotes({ accountData }) {
     `
       );
 
-      const invoiceHTML = `
+      return `
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -152,150 +212,128 @@ function SendQuotes({ accountData }) {
         </body>
       </html>
     `;
-      setHtmlContent(invoiceHTML);
-    } else {
-      setHtmlContent("Not Send");
-    }
-  };
-
-  const sendInvoice = async () => {
-    console.log("from is", userEmail);
-    console.log("to address is", accountData.email);
-    console.log("quotes is", htmlContent);
-    console.log("subject is", subject);
-
-    try {
-      const response = await axios.post(
-        `${API_URL}sendMail`,
-        {
-          toMail: accountData.email,
-          fromMail: userEmail,
-          subject: subject,
-          htmlContent: htmlContent,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        toast.success("Mail Send Successfully");
-        handleHide();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      // setHtmlContent(invoiceHTML);
+      // setIsSendingEmail(true);
+    } ;
 
   return (
     <div>
-      <Button
-        className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
-        onClick={handleShow}
-      >
-        Send Quotes
-      </Button>
+      <form onSubmit={formik.handleSubmit}>
+        <Button
+          className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
+          onClick={handleShow}
+        >
+          Send Quotes
+        </Button>
 
-      <Offcanvas
-        show={show}
-        onHide={handleHide}
-        className="emailHeader"
-        placement="end"
-      >
-        <Offcanvas.Header>
-          New Message &nbsp;&nbsp;&nbsp;&nbsp;
-          <button
-            onClick={handleHide}
-            className="btn border-dark fw-bold"
-            style={{ color: "#fff", fontSize: "20px" }}
-          >
-            x
-          </button>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <div className="d-flex align-items-center pb-3">
-            <img className="img-fluid" src={user} width={40} alt="user" />
-            <p style={{ marginBottom: "0px" }}>
-              {userName || "--"}( {userEmail || "--"} )
-            </p>
-          </div>
-          <div className="d-flex align-items-center py-3">
-            <p className="m-0">
-              <b style={{ color: "#424242" }}>To :</b>
-            </p>
-            <p className="m-0">{accountData.email || "--"}</p>
-          </div>
-          <div className="d-flex align-items-center py-3">
-            <input
-              type="text"
-              className="form-control"
-              name="subject"
-              onChange={(e) => setSubject(e.target.value)}
-              placeholder="Subject"
-              style={{ border: "none" }}
-            />
-          </div>
-
-          <div className="d-flex align-items-center py-3">
-            <div className="container col-12">
-              {accountData && accountData.quotes ? (
-                <div className="table-responsive">
-                  <table className="table table-bordered">
-                    <thead className="text-center bg-secondary text-white">
-                      <tr>
-                        <th scope="col" className="bg-secondary text-white">
-                          S.No
-                        </th>
-                        <th scope="col" className="bg-secondary text-white">
-                          Deal Name
-                        </th>
-                        <th scope="col" className="bg-secondary text-white">
-                          Subject
-                        </th>
-                        <th scope="col" className="bg-secondary text-white">
-                          Quote Stage
-                        </th>
-                        <th scope="col" className="bg-secondary text-white">
-                          Quote Owner
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-center">
-                      {accountData.quotes &&
-                        accountData.quotes.map((quote, index) => (
-                          <tr key={quote.id}>
-                            <td>{index + 1}</td>
-                            <td>{quote.dealName || "--"}</td>
-                            <td>{quote.subject || "--"}</td>
-                            <td>{quote.quoteStage || "--"}</td>
-                            <td>{quote.quoteOwner || "--"}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p>No quotes available.</p>
+        <Offcanvas
+          show={show}
+          onHide={handleHide}
+          className="emailHeader"
+          placement="end"
+        >
+          <Offcanvas.Header>
+            New Message &nbsp;&nbsp;&nbsp;&nbsp;
+            <button
+              onClick={handleHide}
+              className="btn border-dark fw-bold"
+              style={{ color: "#fff", fontSize: "20px" }}
+            >
+              x
+            </button>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <div className="d-flex align-items-center pb-3">
+              <img className="img-fluid" src={user} width={40} alt="user" />
+              <p style={{ marginBottom: "0px" }}>
+                {userName || "--"}( {userEmail || "--"} )
+              </p>
+            </div>
+            <div className="d-flex align-items-center py-3">
+              <p className="m-0">
+                <b style={{ color: "#424242" }}>To :</b>
+              </p>
+              <p className="m-0">{accountData.email || "--"}</p>
+            </div>
+            <div className="d-flex align-items-center py-3">
+              <input
+                type="text"
+                name="subject"
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Subject"
+                style={{ border: "none" }}
+                className={`form-control form-size  ${
+                  formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("subject")}
+              />
+            </div>
+            <div className="col-6  sm-device">
+              {formik.touched.subject && formik.errors.subject && (
+                <div className="text-danger">{formik.errors.subject}</div>
               )}
             </div>
-          </div>
 
-          <div className="d-flex align-items-end justify-content-end">
-            <span className="d-flex" style={{ gap: "10px" }}>
-              <button className="btn btn-primary mt-4" onClick={sendInvoice}>
-                Send
-                <IoMdSend className="ms-2 mb-1" />
-              </button>
-            </span>
-          </div>
-        </Offcanvas.Body>
-      </Offcanvas>
+            <div className="d-flex align-items-center py-3">
+              <div className="container col-12">
+                {accountData && accountData.quotes ? (
+                  <div className="table-responsive">
+                    <table className="table table-bordered">
+                      <thead className="text-center bg-secondary text-white">
+                        <tr>
+                          <th scope="col" className="bg-secondary text-white">
+                            S.No
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Deal Name
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Subject
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Quote Stage
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Quote Owner
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-center">
+                        {accountData.quotes &&
+                          accountData.quotes.map((quote, index) => (
+                            <tr key={quote.id}>
+                              <td>{index + 1}</td>
+                              <td>{quote.dealName || "--"}</td>
+                              <td>{quote.subject || "--"}</td>
+                              <td>{quote.quoteStage || "--"}</td>
+                              <td>{quote.quoteOwner || "--"}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p>No quotes available.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="d-flex align-items-end justify-content-end">
+              <span className="d-flex" style={{ gap: "10px" }}>
+                <button
+                  className="btn btn-primary mt-4"
+                  onClick={formik.handleSubmit}
+                >
+                  Send
+                  <IoMdSend className="ms-2 mb-1" />
+                </button>
+              </span>
+            </div>
+          </Offcanvas.Body>
+        </Offcanvas>
+      </form>
     </div>
   );
 }

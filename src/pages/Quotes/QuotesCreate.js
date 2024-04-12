@@ -749,7 +749,7 @@ function QuotesCreate() {
           </div>
         </div>
 
-        <div className="container-fluid my-5">
+        {/* <div className="container-fluid my-5">
           <h4>
             <b>Quotes Items</b>
           </h4>
@@ -980,7 +980,7 @@ function QuotesCreate() {
             </div>
             <div className="container-fluid p-3 col-md-8"></div>
           </div>
-        </div>
+        </div> */}
 
         <div className="container-fluid my-5">
           <h4>
