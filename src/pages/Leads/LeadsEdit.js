@@ -183,11 +183,6 @@ function LeadsEdit() {
             <b>Lead Information</b>
           </h4>
         </div>
-        <div className="container-fluid my-5">
-          <h4>
-            <b>Lead Information</b>
-          </h4>
-        </div>
         <div className="container">
           <div className="row">
             {/* <input
