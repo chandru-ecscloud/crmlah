@@ -89,25 +89,19 @@ const Section = ({
   }));
 
   let text = "New Lead";
-  let icons = <MdOutlineLeaderboard />;
-  let bg = "bg-danger";
   let bgContainer = "#ffcfcf";
   let tasksToMap = newTasks;
 
   if (status === "Qualified") {
     text = "Qualified Contacts";
-    bg = "bg-warning";
     bgContainer = "#fdffed";
     tasksToMap = qualifiedTasks;
   } else if (status === "Proposition") {
     text = "Proposition(accounts)";
-    bg = "bg-primary";
     bgContainer = "#dee7ff";
     tasksToMap = propositionTasks;
   } else if (status === "Won") {
     text = "Won Deals";
-
-    bg = "bg-success";
     bgContainer = "#deffe3";
     tasksToMap = wonTasks;
   }
@@ -127,12 +121,13 @@ const Section = ({
   };
 
   return (
-    <div className={`col-md-3 ${isHovered ? "bg-slate-200" : ""}`} ref={drop}>
+    <div className={`col-md-3`} ref={drop}>
       <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
       <div
         className={` pt-3`}
         style={{
-          minHeight: "80vh",
+          height: "85vh",
+          overflow: "auto",
           backgroundColor: isOver ? "#cfefff" : bgContainer,
           border: isOver ? "2px solid #34a6ba" : "none",
         }}
@@ -236,10 +231,12 @@ const Task = ({ task, tasks, setTasks }) => {
   return (
     <div
       ref={drag}
-      style={{ border: "1px solid #dcdcdc", backgroundColor: "#fff" }}
-      className={`color p-3 d-flex align-items-center justify-content-between mx-1 ${
-        isDragging ? "opacity-25" : ""
-      } cursor-grab`}
+      style={{
+        border: "1px solid #dcdcdc",
+        backgroundColor: "#fff",
+        opacity: isDragging ? 0.5 : 1,
+      }}
+      className={`color p-3 d-flex align-items-center justify-content-between mx-1 cursor-grab`}
     >
       <span>
         <p className="dragable-content-text" style={{ marginBottom: "0px" }}>
@@ -261,9 +258,11 @@ const Task = ({ task, tasks, setTasks }) => {
         </span>
         <br />
         <button
-          className="btn btn-outline-danger px-2 py-1"
+          className="btn btn-outline-danger px-2 py-1 "
           onClick={() => handleRemove(task.id)}
-          style={{ border: "none" }}
+          style={{
+            border: "none",
+          }}
         >
           <IoMdTrash />
         </button>
