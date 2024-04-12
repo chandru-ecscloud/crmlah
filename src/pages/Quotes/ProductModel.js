@@ -128,6 +128,7 @@ const ProductModel = ({ path }) => {
       <button
         style={{ width: "100%", border: "none", background: "transparent" }}
         onClick={openModal}
+        className="btn"
       >
         Assign Product
       </button>
