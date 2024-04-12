@@ -137,6 +137,7 @@ const DealsModel = ({ path }) => {
                           onChange={handleHeaderCheckboxChange}
                         />
                       </th>
+                      {/* <th scope="col">Select</th> */}
                       <th scope="col">Deal Name</th>
                       <th scope="col">Account Name</th>
                       <th scope="col">Contact Name</th>
@@ -154,6 +155,14 @@ const DealsModel = ({ path }) => {
                             onChange={() => handleCheckboxChange(item.id)}
                           />
                         </td>
+                         {/* <td>
+                          <input
+                            type="radio"
+                            className="form-check-input"
+                            checked={selectedRows === item.id}
+                            onChange={() => setSelectedRows(item.id)}
+                          />
+                        </td> */}
                         <td>{item.dealName}</td>
                         <td>{item.accountName}</td>
                         <td>{item.contactName}</td>

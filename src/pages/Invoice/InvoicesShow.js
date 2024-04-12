@@ -487,12 +487,12 @@ function InvoiceShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.email || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Invoice Number</label>
