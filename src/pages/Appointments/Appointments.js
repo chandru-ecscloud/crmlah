@@ -12,6 +12,7 @@ import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { FaRegFilePdf } from "react-icons/fa";
+import { LinearProgress } from "@mui/material";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
@@ -27,6 +28,7 @@ const csvConfig = mkConfig({
 
 const Appointments = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -35,7 +37,7 @@ const Appointments = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "appointment_for",
+        accessorKey: "appointmentFor",
         enableHiding: false,
         header: "Appointment For",
         Cell: ({ row }) => (
@@ -43,44 +45,75 @@ const Appointments = () => {
             to={`/appointments/show/${row.original.id}`}
             className="rowName"
           >
-            {row.original.first_name}
+            {row.original.appointmentFor}
           </Link>
         ),
       },
       {
-        accessorKey: "service",
+        accessorKey: "serviceName",
         enableHiding: false,
         header: "Service Name",
       },
+      
       {
-        accessorKey: "duration",
-        enableHiding: false,
-        header: "Duration",
-      },
-      {
-        accessorKey: "appointment_name",
+        accessorKey: "appointmentName",
         enableHiding: false,
         header: "Appointment Name",
       },
       {
-        accessorKey: "appointment_start_date",
+        accessorKey: "email",
+        enableHiding: false,
+        header: "Email",
+      },
+      {
+        accessorKey: "appointmentStartDate",
+        enableHiding: false,
         header: "Appointment Start Date",
+      },
+      {
+        accessorKey: "duration",
+        // enableHiding: false,
+        header: "Duration",
+      },
+      {
+        accessorKey: "appointmentStartTime",
+        header: "Appointment Start Time",
       },
       {
         accessorKey: "location",
         header: "Location",
       },
       {
-        accessorKey: "address",
-        header: "Address",
-      },
-      {
         accessorKey: "member",
         header: "Member",
       },
       {
-        accessorKey: "remainder",
+        accessorKey: "reminder",
         header: "Remainder",
+      },
+      {
+        accessorKey: "street",
+        header: "Street",
+      },
+      {
+        accessorKey: "city",
+        header: "City",
+      },
+      {
+        accessorKey: "state",
+        header: "State",
+      },
+      {
+        accessorKey: "zipCode",
+        header: "ZipCode",
+      },
+      {
+        accessorKey: "zipCode",
+        header: "Country",
+      },
+      {
+        accessorKey: "additionalInformation",
+        header: "Description",
       },
     ],
     []
@@ -88,15 +121,20 @@ const Appointments = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios(`${API_URL}allClients`, {
+      setLoading(true);
+      const response = await axios(`${API_URL}allAppointments`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
         },
       });
       setData(response.data);
+      console.log("data",data)
     } catch (error) {
       toast.error("Error fetching data:", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -195,11 +233,10 @@ const Appointments = () => {
   });
 
   const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
+    const rowId = rows.map((row) => row.original.id);
     try {
-      const response = await axios.post(
-        `${API_URL}deleteMultipleAppointmentData`,
-        rowData,
+      const response = await axios.delete(
+        `${API_URL}cancelAppointment/${rowId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -224,11 +261,16 @@ const Appointments = () => {
     data,
     initialState: {
       columnVisibility: {
-        appointment_start_date: false,
+        duration:false,
+        appointmentStartTime: false,
         location: false,
-        address: false,
         member: false,
-        remainder: false,
+        reminder: false,
+        street:false,
+        city:false,
+        state:false,
+        zipCode:false,
+        additionalInformation:false,
       },
     },
     enableRowSelection: true,
@@ -283,9 +325,12 @@ const Appointments = () => {
 
   return (
     <section>
+      {loading && <LinearProgress />}
+      {!loading && (
+        <>
       <div className="d-flex align-items-center justify-content-end py-4 px-3">
         <div style={{ paddingRight: "10px" }}>
-          <AppointmentsCreate />
+          <AppointmentsCreate  name="Create Appointment"/>
         </div>
         <div class="dropdown-center">
           <button
@@ -316,7 +361,7 @@ const Appointments = () => {
                     Delete
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -330,7 +375,7 @@ const Appointments = () => {
                   >
                     Mass Delete
                   </button>
-                </li>
+                </li> */}
               </>
             ) : (
               // Render disabled buttons for CMP_USER
@@ -344,7 +389,7 @@ const Appointments = () => {
                     Delete
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -352,7 +397,7 @@ const Appointments = () => {
                   >
                     Mass Delete
                   </button>
-                </li>
+                </li> */}
               </>
             )}
           </ul>
@@ -361,6 +406,8 @@ const Appointments = () => {
       <ThemeProvider theme={theme}>
         <MaterialReactTable table={table} />
       </ThemeProvider>
+      </>
+      )}
     </section>
   );
 };
