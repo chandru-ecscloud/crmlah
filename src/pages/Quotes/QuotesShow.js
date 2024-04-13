@@ -334,7 +334,7 @@ function QuotesShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -346,19 +346,19 @@ function QuotesShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
-          <SendEmail />
+        <div className="col-9 mt-1" id="buttons-container">
+          {/* <SendEmail /> */}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -402,7 +402,7 @@ function QuotesShow() {
       {/* Quotes Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -448,7 +448,7 @@ function QuotesShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div
@@ -465,32 +465,32 @@ function QuotesShow() {
               <div>
                 <label className="text-dark Label">Quote Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteOwner || "--"}
+                  &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Quote Number</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.quoteNumber || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Quote Stage</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteStage || "--"}
+                  &nbsp; : &nbsp;{quoteData.quoteStage || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Valid Until</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.validUntil || "--"}
+                  &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Team</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.team || "--"}
@@ -502,7 +502,7 @@ function QuotesShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.carrier || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6"></div>
@@ -522,34 +522,34 @@ function QuotesShow() {
               <div>
                 <label className="text-dark Label">Quotes Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteOwner || "--"}
+                  &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Subject</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.subject || "--"}
+                  &nbsp; : &nbsp;{quoteData.subject || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Quotes Stage</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteStage || "--"}
+                  &nbsp; : &nbsp;{quoteData.quoteStage || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Carrier</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.carrier || "--"}
                 </span>
-              </div>
+              </div> */}
               <div>
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.createdBy || "--"}
+                  &nbsp; : &nbsp;{quoteData.createdBy || ""}
                 </span>
               </div>
             </div>
@@ -558,44 +558,44 @@ function QuotesShow() {
               <div>
                 <label className="text-dark Label">Quote Number</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteNumber || "--"}
+                  &nbsp; : &nbsp;{quoteData.quoteNumber || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Deal Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.dealName || "--"}
+                  &nbsp; : &nbsp;{quoteData.dealName || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Valied Until</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.validUntil || "--"}
+                  &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.leadName || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Account Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.accountName || "--"}
+                  &nbsp; : &nbsp;{quoteData.accountName || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Modified By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.updatedBy || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Address Information */}
@@ -763,7 +763,7 @@ function QuotesShow() {
               <div>
                 <label className="text-dark Label">Description</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.description || "--"}
+                  &nbsp; : &nbsp;{quoteData.description || " "}
                 </span>
               </div>
             </div>

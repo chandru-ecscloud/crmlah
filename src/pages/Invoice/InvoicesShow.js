@@ -344,7 +344,7 @@ function InvoiceShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -356,21 +356,21 @@ function InvoiceShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
+        <div className="col-9 mt-1" id="buttons-container">
           <SendInvoice invoiceData={invoiceData} />
 
-          <SendEmail />
+          {/* <SendEmail /> */}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -414,7 +414,7 @@ function InvoiceShow() {
       {/* Invoice Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -466,7 +466,7 @@ function InvoiceShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div

@@ -128,7 +128,7 @@ function AccountsCreate() {
               <h4>
                 <b>Create Account</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -139,16 +139,16 @@ function AccountsCreate() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* Input for image upload */}
-                <input
+                {/* <input
                   type="file"
                   id="imageInput"
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -206,7 +206,7 @@ function AccountsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <label>Rating</label>&nbsp;&nbsp;
                 <select
@@ -227,7 +227,7 @@ function AccountsCreate() {
                   <option value="10">10</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -301,7 +301,7 @@ function AccountsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Account Site</lable> &nbsp;&nbsp;
                 <input
@@ -312,7 +312,7 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -359,7 +359,7 @@ function AccountsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Fax</lable> &nbsp;&nbsp;
                 <input
@@ -370,9 +370,9 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Website</lable> &nbsp;&nbsp;
                 <input
@@ -383,7 +383,7 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 ">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -409,7 +409,7 @@ function AccountsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Ticker Symbol</lable> &nbsp;&nbsp;
                 <input
@@ -420,7 +420,7 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 ">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -446,7 +446,7 @@ function AccountsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Ownership</lable> &nbsp;&nbsp;
                 <input
@@ -457,9 +457,9 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <label htmlFor="accountOwner">Industry</label>&nbsp;&nbsp;
                 <select
@@ -472,9 +472,9 @@ function AccountsCreate() {
                   <option value="option1">Option 2</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Employees</lable> &nbsp;&nbsp;
                 <input
@@ -485,9 +485,9 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 ">
+            {/* <div className="col-lg-6 col-md-6 col-12 ">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>SIC Code</lable> &nbsp;&nbsp;
                 <input
@@ -498,9 +498,9 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Annual Revenue</lable> &nbsp;&nbsp;
                 <input
@@ -511,7 +511,7 @@ function AccountsCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="container-fluid my-5">

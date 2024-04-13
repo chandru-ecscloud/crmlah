@@ -142,7 +142,7 @@ function LeadsEdit() {
               <h4>
                 <b>Update Lead</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -153,7 +153,7 @@ function LeadsEdit() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* Input for image upload  */}
                 <input
                   type="file"
@@ -162,7 +162,7 @@ function LeadsEdit() {
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                {/* <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -364,7 +364,7 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Mobile</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -372,9 +372,9 @@ function LeadsEdit() {
                 id="mobile"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Fax</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -382,7 +382,7 @@ function LeadsEdit() {
                 id="fax"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -409,7 +409,7 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Website</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -417,7 +417,7 @@ function LeadsEdit() {
                 id="Website"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -481,7 +481,7 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <label>Industry</label>&nbsp;&nbsp;
               <select
                 type="text"
@@ -493,9 +493,9 @@ function LeadsEdit() {
                 <option value="IT">IT</option>
                 <option value="None IT">None IT</option>
               </select>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>No. of Employees</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -503,9 +503,9 @@ function LeadsEdit() {
                 id="employees"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Annual Revenue</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -513,9 +513,9 @@ function LeadsEdit() {
                 id="annual"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <label htmlFor="lead_owner">Rating</label>&nbsp;&nbsp;
               <select id="rating" className="form-size form-select">
                 <option value="--">--</option>
@@ -530,9 +530,9 @@ function LeadsEdit() {
                 <option value="9">9</option>
                 <option value="10">10</option>
               </select>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Email Opt Out</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -540,7 +540,7 @@ function LeadsEdit() {
                 id="email_opt"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -566,7 +566,7 @@ function LeadsEdit() {
                 </div>
               </div>
             </div>
-
+{/* 
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Secondary Email</lable> &nbsp;&nbsp;
               <input
@@ -576,7 +576,7 @@ function LeadsEdit() {
                 id="secondary_email"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">

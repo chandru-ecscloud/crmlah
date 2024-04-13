@@ -42,7 +42,7 @@ function ContactShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -54,19 +54,19 @@ function ContactShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
-          <SendEmail toEmail={contactData.email} />
+        <div className="col-9 mt-1" id="buttons-container">
+        {contactData.email && <SendEmail toEmail={contactData.email} />}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -85,7 +85,7 @@ function ContactShow() {
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -128,7 +128,7 @@ function ContactShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div
@@ -159,7 +159,7 @@ function ContactShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.countryCode || "--"}&nbsp;
+                  &nbsp; : &nbsp;{contactData.countryCode || ""}&nbsp;
                   {contactData.phone || ""}
                 </span>
               </div>
@@ -207,12 +207,12 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Title</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.title || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Phone</label>
@@ -221,7 +221,7 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Mobile</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.mobile || ""}
@@ -233,9 +233,9 @@ function ContactShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.contact_source || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Industry</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.company || ""}
@@ -254,7 +254,7 @@ function ContactShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.updatedBy || ""}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
@@ -279,12 +279,12 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Website</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.website || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Contact Status</label>
@@ -293,7 +293,7 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">No of Employees</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.employees || ""}
@@ -305,7 +305,7 @@ function ContactShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.rating || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Created By</label>
@@ -328,12 +328,12 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Secondary Email</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.secondary_email || ""}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Address Information */}

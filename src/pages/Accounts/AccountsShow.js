@@ -69,7 +69,7 @@ function AccountsShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -81,21 +81,21 @@ function AccountsShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
+        <div className="col-9 mt-1" id="buttons-container">
           <SendQuotes accountData={accountData} />
 
-          <SendEmail />
+          {accountData.email && <SendEmail toEmail={accountData.email} />}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -114,7 +114,7 @@ function AccountsShow() {
       {/* Accounts Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -163,7 +163,7 @@ function AccountsShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div
@@ -180,50 +180,50 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">Account Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.accountOwner || "--"}
+                  &nbsp; : &nbsp;{accountData.accountOwner || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.email || "--"}
+                  &nbsp; : &nbsp;{accountData.email || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;{accountData.countryCode || "--"}&nbsp;
-                  {accountData.phone || "--"}
+                  &nbsp; : &nbsp;&nbsp;{accountData.countryCode || ""}&nbsp;
+                  {accountData.phone || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Mobile</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.mobile || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Account Status</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.account_status || "--"}
+                  &nbsp; : &nbsp;{accountData.account_status || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.company || "--"}
+                  &nbsp; : &nbsp;{accountData.company || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.billingCountry || "--"}
+                  &nbsp; : &nbsp;{accountData.billingCountry || ""}
                 </span>
               </div>
             </div>
@@ -249,12 +249,12 @@ function AccountsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Title</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.title || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Phone</label>
@@ -263,7 +263,7 @@ function AccountsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Lead Source</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.lead_source || "--"}
@@ -282,7 +282,7 @@ function AccountsShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.updatedBy || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
@@ -307,7 +307,7 @@ function AccountsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Fax</label>
                 <span className="text-dark">--</span>
               </div>
@@ -315,16 +315,16 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">Website</label>
                 <span className="text-dark">--</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Account Status</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.status || "--"}
+                  &nbsp; : &nbsp;{accountData.status || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Annual Revenue</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
               </div>
@@ -332,26 +332,26 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">No of Employees</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.createdBy || "--"}
+                  &nbsp; : &nbsp;{accountData.createdBy || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Skype Id</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.skype_id || "--"}
+                  &nbsp; : &nbsp;{accountData.skype_id || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Twitter</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.twitter || "--"}
+                  &nbsp; : &nbsp;{accountData.twitter || ""}
                 </span>
               </div>
             </div>
@@ -373,31 +373,31 @@ function AccountsShow() {
                 <div>
                   <label className="text-dark Label">Shipping Street</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.shippingStreet || "--"}
+                    &nbsp; : &nbsp;{accountData.shippingStreet || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Shipping State</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.shippingState || "--"}
+                    &nbsp; : &nbsp;{accountData.shippingState || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Shipping City</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.shippingCity || "--"}
+                    &nbsp; : &nbsp;{accountData.shippingCity || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Shipping Code</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.shippingCode || "--"}
+                    &nbsp; : &nbsp;{accountData.shippingCode || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Shipping Country</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.shippingCountry || "--"}
+                    &nbsp; : &nbsp;{accountData.shippingCountry || ""}
                   </span>
                 </div>
               </div>
@@ -406,31 +406,31 @@ function AccountsShow() {
                 <div>
                   <label className="text-dark Label">Billing Street</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.billingStreet || "--"}
+                    &nbsp; : &nbsp;{accountData.billingStreet || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Billing State</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.billingState || "--"}
+                    &nbsp; : &nbsp;{accountData.billingState || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Billing City</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.billingCity || "--"}
+                    &nbsp; : &nbsp;{accountData.billingCity || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Billing Code</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.billingCode || "--"}
+                    &nbsp; : &nbsp;{accountData.billingCode || ""}
                   </span>
                 </div>
                 <div>
                   <label className="text-dark Label">Billing Country</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{accountData.billingCountry || "--"}
+                    &nbsp; : &nbsp;{accountData.billingCountry || ""}
                   </span>
                 </div>
               </div>
@@ -447,7 +447,7 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">Description</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.descriptionInfo || "--"}
+                  &nbsp; : &nbsp;{accountData.descriptionInfo || ""}
                 </span>
               </div>
             </div>

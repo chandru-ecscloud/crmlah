@@ -137,7 +137,7 @@ function ContactsLead() {
               <h4>
                 <b>Create Contacts</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -148,16 +148,16 @@ function ContactsLead() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* Input for image upload */}
-                <input
+                {/* <input
                   type="file"
                   id="imageInput"
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -236,7 +236,7 @@ function ContactsLead() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Firs Name</lable> &nbsp;&nbsp;
+                <lable>First Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -343,7 +343,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Title</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -352,7 +352,7 @@ function ContactsLead() {
                 id="title"
                 placeholder="--"
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
@@ -411,7 +411,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Department</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -430,8 +430,8 @@ function ContactsLead() {
                 id="other_phone"
                 placeholder="--"
               />
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div> */}
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <label htmlFor="home_phone">Home Phone</label>&nbsp;&nbsp;
               <input
                 type="tel"
@@ -440,7 +440,7 @@ function ContactsLead() {
                 id="home_phone"
                 placeholder="--"
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Land Line</label>&nbsp;&nbsp;
@@ -465,7 +465,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Fax</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -474,8 +474,8 @@ function ContactsLead() {
                 id="fax"
                 placeholder="--"
               />
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div> */}
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Assistant</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -484,8 +484,8 @@ function ContactsLead() {
                 id="assistant"
                 placeholder="--"
               />
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div> */}
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <label htmlFor="dob">Date of Birth</label>&nbsp;&nbsp;
               <input
                 type="text"
@@ -514,7 +514,7 @@ function ContactsLead() {
                 name="email_opt"
                 placeholder="--"
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Skype ID</lable> &nbsp;&nbsp;
@@ -539,7 +539,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Secondary Email</lable> &nbsp;&nbsp;
               <input
                 type="email"
@@ -548,7 +548,7 @@ function ContactsLead() {
                 id="secondary_email"
                 placeholder="--"
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Twitter</lable> &nbsp;&nbsp;
@@ -573,7 +573,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Reporting To</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -582,7 +582,7 @@ function ContactsLead() {
                 id="reporting_to"
                 placeholder="--"
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="container-fluid my-5">

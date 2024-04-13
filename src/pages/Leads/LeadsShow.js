@@ -70,10 +70,10 @@ function LeadsShow() {
   // };
 
   return (
-    <>
+    <div>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -86,21 +86,21 @@ function LeadsShow() {
                   </button>
                 </Tooltip>
 
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
-          {/* <BookAppointment /> */}
+        <div className="col-9 mt-1" id="buttons-container">
+           {/* <BookAppointment />  */}
 
-          <SendEmail />
+           {clientData.email && <SendEmail toEmail={clientData.email} />}
 
           {/* <button
             className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
@@ -125,8 +125,9 @@ function LeadsShow() {
 
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* left Side Content 
+        */}
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -169,14 +170,14 @@ function LeadsShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
-        {/* Right Side Content */}
+        {/* Right Side Content  */}
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
         >
-          {/* Details */}
+          {/* {/ Details /} */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
@@ -190,17 +191,17 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Title</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.title || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.countryCode || "--"}&nbsp;
+                  &nbsp; : &nbsp;{clientData.countryCode || ""}&nbsp;
                   {clientData.phone || "--"}
                 </span>
               </div>
@@ -208,28 +209,28 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Lead Source</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.lead_source || "--"}
+                  &nbsp; : &nbsp;{clientData.lead_source || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Land Line</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.land_line || "--"}
+                  &nbsp; : &nbsp;{clientData.land_line || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.company || "--"}
+                  &nbsp; : &nbsp;{clientData.company || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.country || "--"}
+                  &nbsp; : &nbsp;{clientData.country || ""}
                 </span>
               </div>
             </div>
@@ -237,7 +238,7 @@ function LeadsShow() {
             <div className="container-fluid col-md-6"></div>
           </div>
 
-          {/* Hide Details */}
+          {/* {/ Hide Details /} */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3">Hide Details</span>
@@ -255,12 +256,12 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Title</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.title || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Phone</label>
@@ -269,7 +270,7 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Industry</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.industry || "--"}
@@ -281,7 +282,7 @@ function LeadsShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.updated_by || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
@@ -307,10 +308,10 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Website</label>
                 <span className="text-dark">--</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Lead Status</label>
@@ -319,7 +320,7 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Annual Revenue</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
               </div>
@@ -332,7 +333,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Rating</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Created By</label>
@@ -355,13 +356,13 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Secondary Email</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
             </div>
 
-            {/* Address Information */}
+            {/* {/ Address Information /} */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
@@ -412,7 +413,7 @@ function LeadsShow() {
               </div>
             </div>
 
-            {/* Description Information */}
+            {/* {/ Description Information /} */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
                 <span className="my-3 fs-6 fw-bold my-3">
@@ -429,7 +430,7 @@ function LeadsShow() {
             </div>
           </div>
 
-          {/* Notes */}
+          {/* {/ Notes /} */}
           <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
@@ -626,7 +627,7 @@ function LeadsShow() {
           </Offcanvas.Body>
         </Offcanvas> */}
       </section>
-    </>
+    </div>
   );
 }
 

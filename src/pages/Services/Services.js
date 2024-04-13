@@ -10,6 +10,7 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { LinearProgress } from "@mui/material";
 // import { BsFiletypeCsv } from "react-icons/bs";
 // import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
@@ -27,6 +28,7 @@ const csvConfig = mkConfig({
 
 const Services = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -89,6 +91,7 @@ const Services = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios(`${API_URL}allServices`, {
         headers: {
           "Content-Type": "application/json",
@@ -98,6 +101,9 @@ const Services = () => {
       setData(response.data);
     } catch (error) {
       toast.error("Error fetching data:", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -295,6 +301,9 @@ const Services = () => {
 
   return (
     <section>
+      {loading && <LinearProgress />}
+      {!loading && (
+        <>
       <div className="d-flex align-items-center justify-content-end py-4 px-3">
         <div style={{ paddingRight: "10px" }}>
           <button
@@ -379,6 +388,8 @@ const Services = () => {
       <ThemeProvider theme={theme}>
         <MaterialReactTable table={table} />
       </ThemeProvider>
+      </>
+      )};
     </section>
   );
 };

@@ -219,7 +219,7 @@ function DealsEdit() {
               <h4>
                 <b>Update Deal</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -230,16 +230,16 @@ function DealsEdit() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* {/ Input for image upload /} */}
-                <input
+                {/* <input
                   type="file"
                   id="imageInput"
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -460,7 +460,7 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Account</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -491,7 +491,7 @@ function DealsEdit() {
                 id="type"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -522,7 +522,7 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Next Step</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -531,7 +531,7 @@ function DealsEdit() {
                 id="next_step"
                 placeholder="--"
               />
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
@@ -558,7 +558,7 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Career Source</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -588,7 +588,7 @@ function DealsEdit() {
                 id="lead_name"
                 placeholder="--"
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Campaign Source</lable> &nbsp;&nbsp;

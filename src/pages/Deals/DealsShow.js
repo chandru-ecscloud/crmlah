@@ -64,7 +64,7 @@ function DealsShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -76,19 +76,19 @@ function DealsShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
-          <SendEmail />
+        <div className="col-9 mt-1" id="buttons-container">
+        {dealData.email && <SendEmail toEmail={dealData.email} />}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -107,7 +107,7 @@ function DealsShow() {
       {/* Deals Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -150,7 +150,7 @@ function DealsShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div
@@ -167,49 +167,49 @@ function DealsShow() {
               <div>
                 <label className="text-dark Label">Deals Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.dealOwner || "--"}
+                  &nbsp; : &nbsp;{dealData.dealOwner || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.email || "--"}
+                  &nbsp; : &nbsp;{dealData.email || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.phone || "--"}
+                  &nbsp; : &nbsp;{dealData.phone || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Mobile</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.mobile || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Deal Status</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.dealStatus || "--"}
+                  &nbsp; : &nbsp;{dealData.dealStatus || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.company || "--"}
+                  &nbsp; : &nbsp;{dealData.company || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.country || "--"}
+                  &nbsp; : &nbsp;{dealData.country || ""}
                 </span>
               </div>
             </div>
@@ -231,112 +231,112 @@ function DealsShow() {
               <div>
                 <label className="text-dark Label">Deals Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.dealOwner || "--"}
+                  &nbsp; : &nbsp;{dealData.dealOwner || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Title</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.title || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.phone || "--"}
+                  &nbsp; : &nbsp;{dealData.phone || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Lead Source</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.leadSource || "--"}
+                  &nbsp; : &nbsp;{dealData.leadSource || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Campaign Source</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.campaignSource || "--"}
+                  &nbsp; : &nbsp;{dealData.campaignSource || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Industry</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.industry || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Closing Date</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.closingDate || "--"}
+                  &nbsp; : &nbsp;{dealData.closingDate || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Modified By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.updatedBy || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
               <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.company || "--"}
+                  &nbsp; : &nbsp;{dealData.company || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Deal Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.dealName || "--"}
+                  &nbsp; : &nbsp;{dealData.dealName || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.email || "--"}
+                  &nbsp; : &nbsp;{dealData.email || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Website</label>
                 <span className="text-dark">--</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Contact Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.contactName || "--"}
+                  &nbsp; : &nbsp;{dealData.contactName || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Account Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.accountName || "--"}
+                  &nbsp; : &nbsp;{dealData.accountName || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Fax</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.fax || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Amount</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.amount || "--"}
+                  &nbsp; : &nbsp;{dealData.amount || ""}
                 </span>
               </div>
 
@@ -347,19 +347,19 @@ function DealsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Annual Revenue</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Probability</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.probability || "--"}
+                  &nbsp; : &nbsp;{dealData.probability || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">No of Employees</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
               </div>
@@ -367,33 +367,33 @@ function DealsShow() {
               <div>
                 <label className="text-dark Label">Rating</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.createdBy || "--"}
+                  &nbsp; : &nbsp;{dealData.createdBy || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Skype Id</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.skypeId || "--"}
+                  &nbsp; : &nbsp;{dealData.skypeId || ""}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Twitter</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.twitter || "--"}
+                  &nbsp; : &nbsp;{dealData.twitter || ""}
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Secondary Email</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Address Information */}

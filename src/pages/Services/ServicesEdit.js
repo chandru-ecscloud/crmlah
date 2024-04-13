@@ -417,12 +417,12 @@ function ServicesEdit() {
             <h4>
               <b>Update Service</b>
               <br></br>
-              <img
+              {/* <img
                 src={User}
                 className="img-fluid"
                 style={{ width: "70px", height: "70px" }}
                 alt="user"
-              />
+              /> */}
             </h4>
           </div>
           <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">

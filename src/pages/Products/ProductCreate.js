@@ -109,7 +109,7 @@ function ProductCreate() {
               <h4>
                 <b>Create Product</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -120,16 +120,16 @@ function ProductCreate() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* Input for image upload */}
-                <input
+                {/* <input
                   type="file"
                   id="imageInput"
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex justify-content-lg-end justify-content-md-end">
@@ -296,7 +296,7 @@ function ProductCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Manufacturer</lable> &nbsp;&nbsp;
                 <input
@@ -307,7 +307,7 @@ function ProductCreate() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
@@ -654,7 +654,7 @@ function ProductCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Reorder Level</lable> &nbsp;&nbsp;
                 <input
@@ -665,7 +665,7 @@ function ProductCreate() {
                   id="reorder_level"
                   placeholder="--"
                 />
-              </div>
+              </div> */}
               {/* <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6">
@@ -674,7 +674,7 @@ function ProductCreate() {
                   )}
                 </div>
               </div> */}
-            </div>
+            {/* </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
@@ -701,7 +701,7 @@ function ProductCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Quantity in Demand</lable> &nbsp;&nbsp;
                 <input
@@ -712,7 +712,7 @@ function ProductCreate() {
                   id="quantity_in_demand"
                   placeholder="--"
                 />
-              </div>
+              </div> */}
               {/* <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6">
@@ -721,7 +721,7 @@ function ProductCreate() {
                   )}
                 </div>
               </div> */}
-            </div>
+            {/* </div> */}
           </div>
         </div>
 

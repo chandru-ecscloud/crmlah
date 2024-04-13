@@ -71,7 +71,7 @@ function ProductsShow() {
     <>
       {/* {/ header section /} */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
@@ -83,19 +83,19 @@ function ProductsShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
-          <SendEmail />
+        <div className="col-9 mt-1" id="buttons-container">
+          {/* <SendEmail /> */}
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
@@ -114,7 +114,7 @@ function ProductsShow() {
       {/* {/ Products Information Section /} */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* {/ left Side Content /} */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -157,7 +157,7 @@ function ProductsShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* {/ Right Side Content /} */}
         <div
@@ -203,12 +203,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Qty Ordered</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.qtyOrdered || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Quantity in Stock</label>
@@ -268,12 +268,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Modified By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.updatedBy || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
@@ -291,12 +291,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Manufacturer</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.manufacturer || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Sales Start Date</label>
@@ -389,24 +389,24 @@ function ProductsShow() {
               </div>
 
               <div className="container col-md-6">
-                <div>
+                {/* <div>
                   <label className="text-dark Label">Qty Ordered</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.handler || "--"}
                   </span>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label className="text-dark Label">Reorder Level</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.reorderLevel || "--"}
                   </span>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label className="text-dark Label">Qty Demand</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.qtyDemand || "--"}
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
 
