@@ -225,7 +225,9 @@ function SendInvoice({ invoiceData }) {
                       <td style="white-space: nowrap">Product Name</td>
                       <td style="white-space: nowrap">Price</td>
                       <td style="white-space: nowrap">Quantity</td>
+                      <td style="white-space: nowrap">Amount</td>
                       <td style="white-space: nowrap">Tax</td>
+                      <td style="white-space: nowrap">Total Amount</td>
                     </tr>
                     ${invoiceData.productsWithInvoice
                       .map(
@@ -235,7 +237,9 @@ function SendInvoice({ invoiceData }) {
                             <td>${product.productName || "--"}</td>
                             <td>${product.unitPrice || "--"}</td>
                             <td>${product.quantityInStock || "--"}</td>
-                            <td>${product.tax || "--"}</td>
+                            <td>${((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
+                            <td>${product.tax || "--"} %</td>
+                            <td>${((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
                             </tr>
                             `
                       )
@@ -258,7 +262,7 @@ function SendInvoice({ invoiceData }) {
                     <td style="width: 75%">
                       <b>Tax Total</b>
                     </td>
-                    <td>${taxTotal|| "--"}</td>
+                    <td>${taxTotal || "--"}</td>
                   </tr>
                 </table>
     
@@ -310,8 +314,8 @@ function SendInvoice({ invoiceData }) {
   const handleShow = () => setShow(true);
 
   const handleHide = () => {
-    setShow(false)
-    setSubject("")
+    setShow(false);
+    setSubject("");
   };
 
   useEffect(() => {
@@ -330,27 +334,30 @@ function SendInvoice({ invoiceData }) {
 
   const calculateTotals = () => {
     if (invoiceData && invoiceData.productsWithInvoice) {
-      const totalUnitPrice = invoiceData.productsWithInvoice.reduce(
-        (total, product) => total + (product.unitPrice || 0),
-        0
-      );
-
-      const totalTax = invoiceData.productsWithInvoice.reduce(
+      const totalAmount = invoiceData.productsWithInvoice.reduce(
         (total, product) =>
-          total + ((product.unitPrice || 0) * (product.tax || 0)) / 100,
+          total +
+          ((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)),
         0
-      );
-
+      ).toFixed(2);
+  
+      const totalUnitPrice = invoiceData.productsWithInvoice.reduce(
+        (total, product) => total + ((product.unitPrice || 0) * (product.quantityInStock || 0)),
+        0
+      ).toFixed(2);
+  
+      const totalTax = (totalAmount - totalUnitPrice).toFixed(2);
+  
       setSubtotal(totalUnitPrice);
       setTaxTotal(totalTax);
-      setGrandTotal(totalUnitPrice + totalTax);
+      setGrandTotal(totalAmount);
     } else {
       setSubtotal(0);
       setTaxTotal(0);
       setGrandTotal(0);
     }
   };
-
+  
   const sendEmail = async () => {
     try {
       const response = await axios.post(`${API_URL}sendMail`, {
@@ -400,8 +407,8 @@ function SendInvoice({ invoiceData }) {
             x
           </button>
         </Offcanvas.Header>
-        
-          <Offcanvas.Body>
+
+        <Offcanvas.Body>
           <form onSubmit={formik.handleSubmit}>
             <div className="d-flex align-items-center pb-3">
               <img className="img-fluid" src={user} width={40} alt="user" />
@@ -437,10 +444,10 @@ function SendInvoice({ invoiceData }) {
               />
             </div>
             <div>
-                {formik.touched.subject && formik.errors.subject && (
-                    <p className="text-danger">{formik.errors.subject}</p>
-                  )}
-              </div>
+              {formik.touched.subject && formik.errors.subject && (
+                <p className="text-danger">{formik.errors.subject}</p>
+              )}
+            </div>
             <p className="my-2 fs-5 fw-bold" style={{ color: "#424242" }}>
               Address
             </p>
@@ -553,6 +560,7 @@ function SendInvoice({ invoiceData }) {
               </div>
             </div>
 
+            {/* Product Table */}
             <div className="d-flex align-items-center py-3">
               <div className="container col-12">
                 {invoiceData && invoiceData.productsWithInvoice ? (
@@ -573,7 +581,13 @@ function SendInvoice({ invoiceData }) {
                             Quantity In Stock
                           </th>
                           <th scope="col" className="bg-secondary text-white">
+                            Amount
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
                             Tax
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Total Amount
                           </th>
                         </tr>
                       </thead>
@@ -585,7 +599,9 @@ function SendInvoice({ invoiceData }) {
                               <td>{product.productName || "--"}</td>
                               <td>{product.unitPrice || "--"}</td>
                               <td>{product.quantityInStock || "--"}</td>
-                              <td>{product.tax || "--"}</td>
+                              <td>{((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
+                              <td>{product.tax || "--"} %</td>
+                              <td>{((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
                             </tr>
                           )
                         )}
@@ -660,11 +676,9 @@ function SendInvoice({ invoiceData }) {
                 </button>
               </span>
             </div>
-            </form>
-          </Offcanvas.Body>
-      
+          </form>
+        </Offcanvas.Body>
       </Offcanvas>
-
     </div>
   );
 }
