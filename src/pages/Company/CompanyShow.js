@@ -42,7 +42,7 @@ function CompanyShow() {
   // }, [id]);
 
   const handelEdit = () => {
-    navigate(`/company/companyedit`);
+    navigate(`/company/edit`);
   };
 
   return (
@@ -163,9 +163,8 @@ function CompanyShow() {
                 </span>
               </div>
               <div className="container-fluid col-md-6"></div>
-             
-          </div>
-          <div className="container-fluid col-sm-12">
+            </div>
+            <div className="container-fluid col-sm-12">
               <div className="my-3 container-fluid row d-flex justify-content-between">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information

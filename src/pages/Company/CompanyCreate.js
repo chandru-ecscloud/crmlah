@@ -287,7 +287,7 @@ function CompanyCreate() {
                 >
                   <option value="--"></option>
                   <option value="approved">Approved</option>
-                  <option value="pending">Pending</option>
+                  <option value="pending" selected>Pending</option>
                   <option value="rejected">Rejected</option>
                 </select>
               </div>

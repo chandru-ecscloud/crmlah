@@ -179,14 +179,14 @@ function App() {
 
             {/* Change Role  */}
             <Route path="/changerole" element={<ChangeRole />} />
-            <Route path="/changerole/show/:id" element={<ChangeRoleShow />} />
-            <Route path="/changerole/edit/:id" element={<ChangeRoleEdit />} />
+            <Route path="/changerole/show" element={<ChangeRoleShow />} />
+            <Route path="/changerole/edit" element={<ChangeRoleEdit />} />
 
             {/* Company */}
             <Route path="/company" element={<Company />} />
-            <Route path="/company/companycreate" element={<CompanyCreate />} />
-            <Route path="/company/companyedit" element={<CompanyEdit />} />
-            <Route path="/company/companyshow" element={<CompanyShow />} />
+            <Route path="/company/create" element={<CompanyCreate />} />
+            <Route path="/company/edit" element={<CompanyEdit />} />
+            <Route path="/company/show" element={<CompanyShow />} />
 
             {/* User */}
             <Route path="/users" element={<User />} />

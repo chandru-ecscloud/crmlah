@@ -493,8 +493,6 @@ nav .nav-link Link {
   }
 }
 
-
-
 /* Dragable sales work */
 .row-container > * {
   padding-left: 0px;
@@ -533,4 +531,8 @@ nav .nav-link Link {
 
 .phone-icons {
   font-size: small;
+}
+
+.calender-table {
+  font-size: small !important;
 }

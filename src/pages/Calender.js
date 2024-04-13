@@ -7,7 +7,7 @@ function Calender() {
     <>
       <div className="container-fluid p-4">
         <table
-          class="table table-bordered rounded text-center shadow-lg p-3  bg-white rounded"
+          class="table table-bordered calender-table rounded text-center shadow-lg p-3  bg-white rounded"
           style={{
             borderRadius: "15px",
             height: "25rem",
@@ -67,38 +67,29 @@ function Calender() {
                 </div>
               </td>
             </tr>
-            <tr>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Time
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Rita
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Merlin
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Liam
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                John
-              </th>
+            <tr className="table-info">
+              <th className="p-4">Time</th>
+              <th className="p-4">Rita</th>
+              <th className="p-4">Merlin</th>
+              <th className="p-4">Liam</th>
+              <th className="p-4">John</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="p-3" style={{ background: "#cdd0c9" }}>
-                9-10 AM
+              <td className="p-3" style={{ background: "#fff3cd" }}>
+                <b>9-10 AM</b>
               </td>
               <td className="p-3">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#f2eafe",
                     border: "none",
                     borderLeft: "5px solid #bd28e3",
-                    borderRadius: "15px",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >
@@ -117,18 +108,19 @@ function Calender() {
               </td>
             </tr>
             <tr>
-              <td className="p-3" style={{ background: "#cdd0c9" }}>
-                10-11 PM
+              <td className="p-3" style={{ background: "#fff3cd" }}>
+                <b>10-11 PM</b>
               </td>
               <td className="p-3">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#fff9e7",
                     border: "none",
                     borderLeft: "5px solid #fecc3f",
-                    borderRadius: "15px",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >
@@ -140,13 +132,14 @@ function Calender() {
               </td>
               <td className="p-3">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#ffebf0",
                     border: "none",
                     borderLeft: "5px solid #ff4373",
-                    borderRadius: "15px",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >
@@ -164,8 +157,8 @@ function Calender() {
               </td>
             </tr>
             <tr>
-              <td className="p-4" style={{ background: "#cdd0c9" }}>
-                11-12 PM
+              <td className="p-4" style={{ background: "#fff3cd" }}>
+                <b>11-12 PM</b>
               </td>
               <td className="p-4">
                 <AppointmentsCreate />
@@ -178,13 +171,14 @@ function Calender() {
               </td>
               <td className="p-4">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#e2e5fd",
                     border: "none",
                     borderLeft: "5px solid gray",
-                    borderRadius: " 0 15px 15px 0",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >
@@ -195,8 +189,8 @@ function Calender() {
               </td>
             </tr>
             <tr>
-              <td className="p-2" style={{ background: "#cdd0c9" }}>
-                12-1 PM
+              <td className="p-2" style={{ background: "#fff3cd" }}>
+                <b>12-1 PM</b>
               </td>
               <td className="p-2">
                 <AppointmentsCreate />
@@ -206,13 +200,14 @@ function Calender() {
               </td>
               <td className="p-2">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#f0ffea",
                     border: "none",
                     borderLeft: "5px solid #52d066",
-                    borderRadius: "15px",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >
@@ -227,21 +222,22 @@ function Calender() {
               </td>
             </tr>
             <tr>
-              <td className="p-4" style={{ background: "#cdd0c9" }}>
-                1-2 PM
+              <td className="p-4" style={{ background: "#fff3cd" }}>
+                <b>1-2 PM</b>
               </td>
               <td className="p-4">
                 <AppointmentsCreate />
               </td>
               <td className="p-4">
                 <button
+                  className="py-2"
                   style={{
                     width: "80%",
                     height: "100%",
                     background: "#e2e5fd",
                     border: "none",
                     borderLeft: "5px solid #7d97ff",
-                    borderRadius: "15px",
+                    borderRadius: "5px",
                     color: "black",
                   }}
                 >

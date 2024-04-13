@@ -26,7 +26,11 @@ const csvConfig = mkConfig({
 });
 
 const UserActivation = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    {
+      userName: "Chandru",
+    },
+  ]);
   const [loading, setLoading] = useState(false);
   const role = sessionStorage.getItem("role");
   // console.log(role);
@@ -91,7 +95,6 @@ const UserActivation = () => {
         accessorKey: "country",
         header: "Country",
       },
-
     ],
     []
   );
@@ -299,11 +302,12 @@ const UserActivation = () => {
           </button>
         </Tooltip>
 
-        <button className="btn text-secondary"
+        <button
+          className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-        //   onClick={() =>
-        //     handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-        //   }
+          //   onClick={() =>
+          //     handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          //   }
         >
           <MdPictureAsPdf size={23} />
         </button>
@@ -313,10 +317,11 @@ const UserActivation = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-          // onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            // onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
           >
             <MdOutlinePictureAsPdf size={23} />
-          </button></Tooltip>
+          </button>
+        </Tooltip>
       </Box>
     ),
   });
@@ -329,8 +334,9 @@ const UserActivation = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                  }`}
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >

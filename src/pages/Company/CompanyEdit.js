@@ -287,7 +287,9 @@ function CompanyEdit() {
                 >
                   <option value="--"></option>
                   <option value="approved">Approved</option>
-                  <option value="pending">Pending</option>
+                  <option value="pending" selected>
+                    Pending
+                  </option>
                   <option value="rejected">Rejected</option>
                 </select>
               </div>
@@ -322,7 +324,7 @@ function CompanyEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Password</label>&nbsp;&nbsp;
-                <div className="input-group " style={{width:"60%"}}>
+                <div className="input-group " style={{ width: "60%" }}>
                   <input
                     {...formik.getFieldProps("Password")}
                     type={showPassword ? "text" : "password"}
@@ -348,34 +350,37 @@ function CompanyEdit() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
-          <div className="d-flex align-items-center justify-content-end  sm-device">
-            <label>Confirm Password</label>&nbsp;&nbsp;
-            <div className="input-group"  style={{width:"60%"}}>
-              <input
-                {...formik.getFieldProps("confirm_Password")}
-                type={showConfirmPassword ? "text" : "password"}
-                className="form-size form-control"
-                id="confirm_Password"
-                name="confirm_Password"
-              />
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={toggleConfirmPasswordVisibility}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <label>Confirm Password</label>&nbsp;&nbsp;
+                <div className="input-group" style={{ width: "60%" }}>
+                  <input
+                    {...formik.getFieldProps("confirm_Password")}
+                    type={showConfirmPassword ? "text" : "password"}
+                    className="form-size form-control"
+                    id="confirm_Password"
+                    name="confirm_Password"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.confirm_Password &&
+                    formik.errors.confirm_Password && (
+                      <div className="text-danger ">
+                        {formik.errors.confirm_Password}
+                      </div>
+                    )}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="row sm-device pb-4">
-            <div className="col-5"></div>
-            <div className="col-6 sm-device">
-              {formik.touched.confirm_Password && formik.errors.confirm_Password && (
-                <div className="text-danger ">{formik.errors.confirm_Password}</div>
-              )}
-            </div>
-          </div>
-        </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Address</lable> &nbsp;&nbsp;
