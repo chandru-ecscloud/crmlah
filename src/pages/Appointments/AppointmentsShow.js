@@ -18,7 +18,7 @@ function AppointmentsShow() {
   useEffect(() => {
     const userData = async () => {
       try {
-        const response = await axios.get(`${API_URL}allAppointments/${11}`, {
+        const response = await axios.get(`${API_URL}allAppointments/${id}`, {
           headers: {
             "Content-Type": "application/json",
             //Authorization: `Bearer ${token}`,
@@ -39,29 +39,29 @@ function AppointmentsShow() {
     <>
       {/* header section */}
       <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-sm-6 py-1">
+        <div className="col-3 py-1">
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <img
+                {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                />
+                /> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-sm-6 mt-1" id="buttons-container">
+        <div className="col-9 mt-1" id="buttons-container">
           {/* <BookAppointment /> */}
 
           <button className="btn bg-primary bg-gradient mx-2 text-white shadow-none">
             Send Email
           </button>
 
-          <AppointmentsEdit />
+          <AppointmentsEdit id={id} name="Edit "/>
 
           <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
@@ -72,7 +72,7 @@ function AppointmentsShow() {
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         {/* left Side Content */}
-        <div className="container-fluid col-md-2 m-0" id="ulList-container">
+        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
             <li className="mt-2">
@@ -115,7 +115,7 @@ function AppointmentsShow() {
               <Link className="ms-2 text-primary fw-bold">Add Links</Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Right Side Content */}
         <div

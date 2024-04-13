@@ -9,8 +9,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  appointmentfor: Yup.string().required("*Appointment for is required"),
-  serviceName: Yup.string().required("*Service is required"),
+  leadId: Yup.string().required("*Appointment for is required"),
+  serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Appointment name is required"),
   appointmentStartDate: Yup.string().required(
@@ -30,29 +30,35 @@ const validationSchema = Yup.object().shape({
   state: Yup.string().required("*State is required"),
   zipCode: Yup.string().required("*Zip code is required"),
   country: Yup.string().required("*Country is required"),
-  description_info: Yup.string().required("*Description is required"),
+  additionalInformation: Yup.string().required("*Description is required"),
 });
 
-function AppointmentsCreate() {
+function AppointmentsCreate({name}) {
   const [lgShow, setLgShow] = useState(false);
   const [idAndName, setIdAndName] = useState([]);
+  const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
+  const cId = sessionStorage.getItem("userId");
+  const userName=sessionStorage.getItem("user_name")
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      company_id: "userId",
-      appointmentFor: "",
-      serviceName: "",
+      companyId: cId,
+      leadId: "",
+      serviceId: "",
+      // email: "",
+      // appointmentFor: "",
+      // serviceName: "",
       appointmentStartDate: "",
       appointmentStartTime: "",
       duration: "",
       appointmentName: "",
       location: "",
       member: "",
-      minutes: "",
-      time: "",
-      hour: "",
-      none: "",
+      // minutes: "",
+      // time: "",
+      // hour: "",
+      // none: "",
       street: "",
       city: "",
       state: "",
@@ -61,26 +67,43 @@ function AppointmentsCreate() {
       additionalInformation: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log("User Datas:", values);
-      // try {
-      //   const response = await axios.post(`${API_URL}newAppointment`, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     toast.success("Appointment Created Successfully.");
-      //     navigate("/appointment");
-      //   } else {
-      //     toast.error("Appointment Created Unsuccessful.");
-      //   }
-      // } catch (error) {
-      //   toast.error("Failed: " + error.message);
-      // }
+    onSubmit: async (data) => {
+      const lead = leadData.find((user) => user.id == data.leadId);
+      const service = idAndName.find((user) => user.id == data.serviceId);
+
+      data.appointmentFor = lead.name;
+      data.email = lead.email;
+      data.serviceName = service.serviceName;
+      data.appointmentOwner=userName;
+      data.reminder=2
+      data.mailContent = "<h2>Mail Sent Successfully</h2>";
+      console.log(data)
+
+      try {
+        const response = await axios.post(`${API_URL}book-appointment`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200 ) {
+          toast.success(response.data.message);
+          setLgShow(false)
+        } else {
+          toast.error("Appointment Created Unsuccessful.");
+        }
+      } catch (error) {
+        if(error.response?.status === 400){
+          toast.warning(error.response?.data.message);
+        }else{
+          toast.error(error.response?.data.message);
+        }
+        
+      }
     },
   });
-  const fetchOptionsData = async () => {
+
+
+  const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
         headers: {
@@ -97,8 +120,27 @@ function AppointmentsCreate() {
     }
   };
 
+
+  const fetchLeadData = async () => {
+    try {
+      const response = await axios(`${API_URL}getLeadBasicDetails/${cId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setleadData(response.data);
+      console.log("userid", leadData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchOptionsData();
+    fetchServiceData();
+    fetchLeadData();
   }, []);
 
   return (
@@ -108,7 +150,7 @@ function AppointmentsCreate() {
         disabled={role === "CMP_USER"}
         onClick={() => setLgShow(true)}
       >
-        Create Appointment
+        {name}
       </Button>
       <Modal
         size="xl"
@@ -118,7 +160,7 @@ function AppointmentsCreate() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
-            Create Appointment
+            {name}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -159,54 +201,43 @@ function AppointmentsCreate() {
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment </lable> &nbsp;&nbsp;
                       <select
-                        name="appointmentfor"
+                        name="leadId"
                         className={`form-select form-size ${
-                          formik.touched.appointmentfor &&
-                          formik.errors.appointmentfor
+                          formik.touched.leadId && formik.errors.leadId
                             ? "is-invalid"
                             : ""
                         }`}
-                        {...formik.getFieldProps("appointmentfor")}
+                        {...formik.getFieldProps("leadId")}
                       >
-                        <option value=""></option>
-                        <option value="Vignesh Devan">Vignesh Devan</option>
-                        <option value="Chandru R">Chandru R</option>
-                        <option value="Gayathri M">Gayathri M</option>
-                        <option value="Poongodi K">Poongodi K</option>
-                        <option value="Suriya G">Suriya G</option>
-                        <option value="Leela Prasanna D">
-                          Leela Prasanna D
-                        </option>
-                        <option value="Saravanan M">Saravanan M</option>
-                        <option value="Nagaraj VR">Nagaraj VR</option>
-                        <option value="Yalini A">Yalini A</option>
-                        <option value="Vishnu Priya">Vishnu Priya</option>
-                        <option value="Kavitha">Kavitha</option>
+                        <option value=" "></option>
+                        {leadData.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
-                    {formik.touched.appointmentfor &&
-                      formik.errors.appointmentfor && (
-                        <p className="text-danger text-end">
-                          {formik.errors.appointmentfor}
-                        </p>
-                      )}
+                    {formik.touched.leadId && formik.errors.leadId && (
+                      <p className="text-danger text-end">
+                        {formik.errors.leadId}
+                      </p>
+                    )}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Service Name</lable> &nbsp;&nbsp;
                       <select
                         type="text"
-                        name="serviceName"
-                        id="serviceName"
-                        {...formik.getFieldProps("serviceName")}
+                        name="serviceId"
+                        id="serviceId"
+                        {...formik.getFieldProps("serviceId")}
                         className={`form-size form-select ${
-                          formik.touched.serviceName &&
-                          formik.errors.serviceName
+                          formik.touched.serviceId && formik.errors.serviceId
                             ? "is-invalid"
                             : ""
                         }`}
                       >
-                        <option value="">Select</option>
+                        <option value=""></option>
                         {idAndName.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.serviceName}
@@ -214,12 +245,11 @@ function AppointmentsCreate() {
                         ))}
                       </select>
                     </div>
-                    {formik.touched.serviceName &&
-                      formik.errors.serviceName && (
-                        <p className="text-danger text-end">
-                          {formik.errors.serviceName}
-                        </p>
-                      )}
+                    {formik.touched.serviceId && formik.errors.serviceId && (
+                      <p className="text-danger text-end">
+                        {formik.errors.serviceId}
+                      </p>
+                    )}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
