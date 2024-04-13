@@ -33,13 +33,13 @@ const validationSchema = Yup.object().shape({
   additionalInformation: Yup.string().required("*Description is required"),
 });
 
-function AppointmentsCreate({name}) {
+function AppointmentsCreate({ name }) {
   const [lgShow, setLgShow] = useState(false);
   const [idAndName, setIdAndName] = useState([]);
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
   const cId = sessionStorage.getItem("userId");
-  const userName=sessionStorage.getItem("user_name")
+  const userName = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -74,10 +74,135 @@ function AppointmentsCreate({name}) {
       data.appointmentFor = lead.name;
       data.email = lead.email;
       data.serviceName = service.serviceName;
-      data.appointmentOwner=userName;
-      data.reminder=2
-      data.mailContent = "<h2>Mail Sent Successfully</h2>";
-      console.log(data)
+      data.appointmentOwner = userName;
+      data.reminder = 2;
+      data.mailContent = `
+      <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice</title>
+    <style>
+      body{
+        background-color: #ddd;
+      }
+      .invoice-box {
+        font-size: 12px;
+        max-width: 600px;
+        background-color: #fff;
+        margin: auto;
+        padding: 30px;
+        border-bottom: 3px solid #0059ff;
+        line-height: 24px;
+        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        color: #555;
+        min-height: 85vh;
+      }
+
+    .invoice-box table {
+      width: 100%;
+      line-height: inherit;
+      text-align: left;
+    }
+
+    .invoice-box table td {
+      padding: 5px;
+      vertical-align: top;
+    }
+
+    .invoice-box table td.third {
+      text-align: right;
+    }
+
+    .invoice-box table tr.heading td {
+      background: #eee;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+    }
+
+    .invoice-box table tr.item td {
+      border-bottom: 1px solid #eee;
+    }
+
+    .invoice-box table tr.item.last td {
+      border-bottom: none;
+    }
+
+    .invoice-box table tr.total td:nth-child(2) {
+      border-top: 2px solid #eee;
+      font-weight: bold;
+    }
+    .invoice{
+        padding: 1rem;
+    }
+
+    #scan {
+      float: right;
+    }
+
+    #scan img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    @media print {
+      .invoice-box {
+        border: 0;
+      }
+    }
+    
+  </style>
+  </head>
+  <body >
+    <div class="invoice-box">
+      <table>
+        <tr class="top">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td class="title">
+                  <img
+                    src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
+                    style="width: 75%; max-width: 180px"
+                    alt="Logo"
+                  />
+                </td>
+                <td class="third">
+                  <b>Date:</b> 24-01-2024<br />
+                  The Alexcier, 237 Alexandra Road,<br />
+                  #04-10, Singapore-159929.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      
+     <div class="invoice" >
+      <h1 style="color: black;">Hi there, ManiKandan S!</h1>
+      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With Maniecs0120 for Java On 
+        12 Apr 2024 at 04:15 PM <br />(Asia/Kolkata GMT +05:30).
+      </p>
+
+      <!-- <p>The Invoice Number is: EC-000012.</p> -->
+      <h3 style="margin-bottom: 0;">Location details:</h3>
+      <h4 style="margin:0 ;">chennai</h4>
+
+      <p style="margin: 1.5rem 0px 2rem 0px;"
+      >You Can Still <span><a href="#">reschedule</a></span> or <a href="#">Cancel</a> Your Appointment</p>
+      <hr />
+
+      <p style=" margin: 2rem 0 0;">See You Soon,</p>
+      <h4 style=" margin: 0; ">Maniecs0120</h4>
+      <p style=" margin: 0 ; ">ECS Cloud</p>
+      <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
+      <hr />
+    </div>
+    </div>
+  </body>
+</html>`;
+      console.log(data);
 
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
@@ -85,23 +210,21 @@ function AppointmentsCreate({name}) {
             "Content-Type": "application/json",
           },
         });
-        if (response.status === 200 ) {
+        if (response.status === 200) {
           toast.success(response.data.message);
-          setLgShow(false)
+          setLgShow(false);
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
       } catch (error) {
-        if(error.response?.status === 400){
+        if (error.response?.status === 400) {
           toast.warning(error.response?.data.message);
-        }else{
+        } else {
           toast.error(error.response?.data.message);
         }
-        
       }
     },
   });
-
 
   const fetchServiceData = async () => {
     try {
@@ -119,7 +242,6 @@ function AppointmentsCreate({name}) {
       // setLoading(false);
     }
   };
-
 
   const fetchLeadData = async () => {
     try {
@@ -159,9 +281,7 @@ function AppointmentsCreate({name}) {
         aria-labelledby="example-modal-sizes-title-lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-lg">
-            {name}
-          </Modal.Title>
+          <Modal.Title id="example-modal-sizes-title-lg">{name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <section className="createLead">
