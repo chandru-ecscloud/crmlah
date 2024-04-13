@@ -180,21 +180,20 @@ function AppointmentsCreate({ name }) {
 
       
      <div class="invoice" >
-      <h1 style="color: black;">Hi there, ManiKandan S!</h1>
-      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With Maniecs0120 for Java On 
-        12 Apr 2024 at 04:15 PM <br />(Asia/Kolkata GMT +05:30).
+      <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
+      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+        ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Kolkata GMT +05:30).
       </p>
 
-      <!-- <p>The Invoice Number is: EC-000012.</p> -->
       <h3 style="margin-bottom: 0;">Location details:</h3>
-      <h4 style="margin:0 ;">chennai</h4>
+      <h4 style="margin:0 ;">${data.state}</h4>
 
       <p style="margin: 1.5rem 0px 2rem 0px;"
       >You Can Still <span><a href="#">reschedule</a></span> or <a href="#">Cancel</a> Your Appointment</p>
       <hr />
 
       <p style=" margin: 2rem 0 0;">See You Soon,</p>
-      <h4 style=" margin: 0; ">Maniecs0120</h4>
+      <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
       <p style=" margin: 0 ; ">ECS Cloud</p>
       <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
       <hr />
@@ -202,7 +201,7 @@ function AppointmentsCreate({ name }) {
     </div>
   </body>
 </html>`;
-      console.log(data);
+      // console.log(data);
 
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
