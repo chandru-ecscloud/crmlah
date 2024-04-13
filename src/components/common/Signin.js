@@ -9,17 +9,18 @@ import { useNavigate } from "react-router-dom";
 import "react-phone-input-2/lib/style.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 
 
 const validationSchema = yup.object().shape({
+  userName: yup.string().required("*Enter the User Name"),
   userName: yup.string().required("*Enter the User Name"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
     .email("*Pls Enter valid email")
     .required("*Enter the Email"),
+
+  role: yup.string().required("*Select the Role"),
   password: yup
     .string()
     .required("*Enter the valid Password")
@@ -37,8 +38,8 @@ const validationSchema = yup.object().shape({
   phone: yup
     .string()
     .required("*Phone number is required")
-    .min(10, "*phone must be at atleast 8 characters")
-    .max(12, "*phone must be at most 10 characters"),
+    .min(8, "*phone must be at atleast 8 characters")
+    .max(10, "*phone must be at most 10 characters"),
   address: yup.string().required("*Enter Address"),
   city: yup.string().required("*Enter city"),
   state: yup.string().required("*Enter state"),
@@ -61,6 +62,7 @@ const CompanyRegistrationForm = () => {
       userName: "",
       companyName: "",
       email: "",
+      role: "",
       password: "",
       cpassword: "",
       country_code: "",
@@ -72,7 +74,6 @@ const CompanyRegistrationForm = () => {
       hour: "",
       none: "",
       street: "",
-      city: "",
       state: "",
       zipCode: "",
       country: "",
@@ -82,22 +83,22 @@ const CompanyRegistrationForm = () => {
     onSubmit: async (data) => {
       console.log("User Datas:", data);
       data.role = "CMP_USER";
-    data.jwtRole = "CMP_USER";
-    try {
-      const response = await axios.post(`${API_URL}newUserRegister`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        navigate("/emailsuccess");
-      } else {
-        toast.error(response.data.message);
+      data.jwtRole = "CMP_USER";
+      try {
+        const response = await axios.post(`${API_URL}newUserRegister`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/emailsuccess");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
       }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
     },
   });
 
@@ -181,23 +182,70 @@ const CompanyRegistrationForm = () => {
         )}
       </div>
 
+      {/* <div className="mb-3">
+        <label htmlfor="email" className="form-label">
+          Role  :
+        </label>
+        <input
+          type="text"
+          name="role"
+          id="role"
+          {...formik.getFieldProps("role")}
+          className={`form-control ${formik.touched.role && formik.errors.role
+            ? "is-invalid"
+            : ""
+            }`}
+        />
+        {formik.touched.role && formik.errors.role && (
+          <p className="text-danger text-start">
+            {formik.errors.role}
+          </p>
+        )}
+      </div> */}
+
+      <div className="mb-3 ">
+        <label className="form-label">
+          Role  :
+        </label>
+        <select
+          type="text"
+          name="role"
+          className={`form-select form-size  ${formik.touched.role && formik.errors.role
+            ? "is-invalid"
+            : ""
+            }`}
+          {...formik.getFieldProps("role")}
+        >
+          <option value=""></option>
+          <option value="ceo">CEO</option>
+          <option value="manager">Manager</option>
+          <option value="others">Others</option>
+        </select>
+        {formik.touched.role && formik.errors.role && (
+          <p className="text-danger text-start">
+            {formik.errors.role}
+          </p>
+        )}
+
+      </div>
+
       {/* password */}
       <div className="form-group mb-3">
         <label htmlfor="password" className="form-label">
           Password
         </label>
         <div className="input-group">
-        <input
-          type="text"
-          name="password"
-          id="password"
-          {...formik.getFieldProps("password")}
-          className={`form-control ${formik.touched.password && formik.errors.password
-            ? "is-invalid"
-            : ""
-            }`}
-        />
-        
+          <input
+            type="text"
+            name="password"
+            id="password"
+            {...formik.getFieldProps("password")}
+            className={`form-control ${formik.touched.password && formik.errors.password
+              ? "is-invalid"
+              : ""
+              }`}
+          />
+
           <span
             className="input-group-append eye-icon"
             onClick={togglePasswordVisibility}
@@ -218,17 +266,17 @@ const CompanyRegistrationForm = () => {
           ConfirmPassword
         </label>
         <div className="input-group">
-        <input
-          type="text"
-          name="cpassword"
-          id="cpassword"
-          {...formik.getFieldProps("cpassword")}
-          className={`form-control ${formik.touched.cpassword && formik.errors.cpassword
-            ? "is-invalid"
-            : ""
-            }`}
-        />
-        
+          <input
+            type="text"
+            name="cpassword"
+            id="cpassword"
+            {...formik.getFieldProps("cpassword")}
+            className={`form-control ${formik.touched.cpassword && formik.errors.cpassword
+              ? "is-invalid"
+              : ""
+              }`}
+          />
+
           <span
             className="input-group-append eye-icon"
             onClick={toggleCPasswordVisibility}
@@ -284,16 +332,16 @@ const CompanyRegistrationForm = () => {
             </select>
           </div>
           <input
-          type="tel"
-          name="phone"
-          id="phone"
-          {...formik.getFieldProps("phone")}
-          className={`form-control ${formik.touched.phone && formik.errors.phone
-            ? "is-invalid"
-            : ""
-            }`}
-        />
-         
+            type="tel"
+            name="phone"
+            id="phone"
+            {...formik.getFieldProps("phone")}
+            className={`form-control ${formik.touched.phone && formik.errors.phone
+              ? "is-invalid"
+              : ""
+              }`}
+          />
+
         </div>
         {formik.touched.phone && formik.errors.phone && (
           <p className="text-danger text-start">
@@ -307,7 +355,7 @@ const CompanyRegistrationForm = () => {
         <label className="form-label">Address</label>
         <div className="mb-3">
           <input
-            
+
             type="type"
             name="address"
             id="address"
@@ -316,36 +364,36 @@ const CompanyRegistrationForm = () => {
               ? "is-invalid"
               : ""
               }`}
-          
+
             placeholder="Enter address"
           />
-           {formik.touched.address && formik.errors.address && (
-          <p className="text-danger text-start">
-            {formik.errors.address}
-          </p>
-        )}
+          {formik.touched.address && formik.errors.address && (
+            <p className="text-danger text-start">
+              {formik.errors.address}
+            </p>
+          )}
         </div>
         <div className="mb-3">
           <input
-             type="type"
-             name="city"
-             id="city"
-             {...formik.getFieldProps("city")}
-             className={`form-control ${formik.touched.city && formik.errors.city
-               ? "is-invalid"
-               : ""
-               }`}
+            type="type"
+            name="city"
+            id="city"
+            {...formik.getFieldProps("city")}
+            className={`form-control ${formik.touched.city && formik.errors.city
+              ? "is-invalid"
+              : ""
+              }`}
             placeholder="City"
           />
           {formik.touched.city && formik.errors.city && (
-          <p className="text-danger text-start">
-            {formik.errors.city}
-          </p>
-        )}
+            <p className="text-danger text-start">
+              {formik.errors.city}
+            </p>
+          )}
         </div>
         <div className="row">
-          <div className="col-md-6 col-12">
-           
+          <div className="col-md-6 col-12 mb-3 ">
+
             <input
               type="type"
               name="state"
@@ -355,17 +403,17 @@ const CompanyRegistrationForm = () => {
                 ? "is-invalid"
                 : ""
                 }`}
-             placeholder="Enter state"
+              placeholder="Enter state"
             />
             {formik.touched.state && formik.errors.state && (
-          <p className="text-danger text-start">
-            {formik.errors.state}
-          </p>
-        )}
+              <p className="text-danger text-start">
+                {formik.errors.state}
+              </p>
+            )}
           </div>
           <div className="col-md-6 col-12">
             <input
-             
+
               type="text"
               //className="form-control "
               pattern="[0-9]*"
@@ -378,36 +426,35 @@ const CompanyRegistrationForm = () => {
               placeholder="zip"
             //  onChange={(e)=>{e.target.value.replace(/\D/g, '')}}
             />
-             {formik.touched.zipCode && formik.errors.zipCode && (
-          <p className="text-danger text-start">
-            {formik.errors.zipCode}
-          </p>
-        )}
+            {formik.touched.zipCode && formik.errors.zipCode && (
+              <p className="text-danger text-start">
+                {formik.errors.zipCode}
+              </p>
+            )}
           </div>
         </div>
         <div className="mb-3">
           <input
-           
             type="text"
             id="country"
             {...formik.getFieldProps("country")}
-              className={`form-control ${formik.touched.country && formik.errors.country
-                ? "is-invalid"
-                : ""
-                }`}
+            className={`form-control ${formik.touched.country && formik.errors.country
+              ? "is-invalid"
+              : ""
+              }`}
             placeholder="Country"
           />
           {formik.touched.country && formik.errors.country && (
-          <p className="text-danger text-start">
-            {formik.errors.country}
-          </p>
-        )}
+            <p className="text-danger text-start">
+              {formik.errors.country}
+            </p>
+          )}
         </div>
       </div>
 
       <button
         className="contactsubmitBtn btn btn-danger mx-auto"
-         type="submit"
+        type="submit"
       >
         Register
       </button>
