@@ -188,7 +188,7 @@ function App() {
             <Route path="/company/companyedit" element={<CompanyEdit />} />
             <Route path="/company/companyshow" element={<CompanyShow />} />
 
-            {/ User /}
+            {/* User */}
             <Route path="/users" element={<User />} />
             <Route path="/users/create" element={<UserCreate />} />
             <Route path="/users/edit" element={<UserEdit />} />
