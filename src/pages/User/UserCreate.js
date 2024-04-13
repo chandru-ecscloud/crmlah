@@ -84,21 +84,21 @@ function UserCreate() {
         onSubmit: async (data) => {
             console.log(data);
 
-            try {
-                const response = await axios.post(`https://65963d8b6bb4ec36ca02337b.mockapi.io/newuser`, data, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                if (response.status === 201) {
-                    toast.success(response.data.message);
-                    navigate("/users");
-                } else {
-                    toast.error(response.data.message);
-                }
-            } catch (error) {
-                toast.error("Failed: " + error.message);
-            }
+            // try {
+            //     const response = await axios.post(``, data, {
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //     });
+            //     if (response.status === 201) {
+            //         toast.success(response.data.message);
+            //         navigate("/users");
+            //     } else {
+            //         toast.error(response.data.message);
+            //     }
+            // } catch (error) {
+            //     toast.error("Failed: " + error.message);
+            // }
         },
     });
 
