@@ -59,6 +59,15 @@ import ChangeRole from "./pages/Change_Role/ChangeRole";
 import ChangeRoleShow from "./pages/Change_Role/ChangeRoleShow";
 import ChangeRoleEdit from "./pages/Change_Role/ChangeRoleEdit";
 import Dragable from "./pages/Dragable";
+import Company from "./pages/Company/Company";
+import CompanyCreate from "./pages/Company/CompanyCreate";
+import CompanyEdit from "./pages/Company/CompanyEdit";
+import CompanyShow from "./pages/Company/CompanyShow";
+import User from "./pages/User/User";
+import UserCreate from "./pages/User/UserCreate";
+import UserEdit from "./pages/User/UserEdit";
+import UserShow from "./pages/User/UserShow";
+import Calender from "./pages/Calender";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -122,6 +131,9 @@ function App() {
 
         {isAdmin && (
           <>
+            {/*  Other Modules  */}
+            <Route path="/calender" element={<Calender />} />
+
             <Route path="/dragable" element={<Dragable />} />
             {/* Lead   */}
             <Route path="/leads" element={<Leads />} />
@@ -169,6 +181,18 @@ function App() {
             <Route path="/changerole" element={<ChangeRole />} />
             <Route path="/changerole/show/:id" element={<ChangeRoleShow />} />
             <Route path="/changerole/edit/:id" element={<ChangeRoleEdit />} />
+
+            {/* Company */}
+            <Route path="/company" element={<Company />} />
+            <Route path="/company/companycreate" element={<CompanyCreate />} />
+            <Route path="/company/companyedit" element={<CompanyEdit />} />
+            <Route path="/company/companyshow" element={<CompanyShow />} />
+
+            {/ User /}
+            <Route path="/users" element={<User />} />
+            <Route path="/users/create" element={<UserCreate />} />
+            <Route path="/users/edit" element={<UserEdit />} />
+            <Route path="/users/show" element={<UserShow />} />
 
             {/* Appointments  */}
             <Route path="/appointments" element={<Appointments />} />
