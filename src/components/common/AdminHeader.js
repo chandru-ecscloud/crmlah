@@ -10,17 +10,20 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import CRMLogo from "../../assets/CRMLogo.png";
 import User from "../../assets/user.png";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd,IoMdAddCircleOutline } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { Tooltip, Zoom } from "@mui/material";
 import { AiOutlineEllipsis } from "react-icons/ai";
 import { FiPlus } from "react-icons/fi";
 import { IoSettings } from "react-icons/io5";
+import { HiBuildingOffice2 } from "react-icons/hi2";
+import { MdOutlineDomainAdd } from "react-icons/md";
 const menuItems = [
   { to: "/calls", label: "calls" },
   { to: "/meeting", label: "meeting" },
   { to: "/report", label: "report" },
   { to: "/task", label: "task" },
+  { to: "/calender", label: "calender" },
   { to: "/projects", label: "projects" },
   { to: "/services", label: "services" },
   { to: "/cases", label: "cases" },
@@ -39,6 +42,7 @@ const mainMenu = [
   { to: "/invoices", label: "Invoices" },
   { to: "/appointments", label: "Appointments" },
   { to: "/services", label: "Services" },
+  // { to: "/company", label: "Company" },
 ];
 
 function AdminHeader({ handleLogout }) {
@@ -55,6 +59,10 @@ function AdminHeader({ handleLogout }) {
     setShow(false);
     setSearchTerm("");
   };
+  const handelNavigate = () => {
+    navigate("/users");
+    handleClose();
+  }
   const handleShow = () => setShow(true);
 
   const filteredMenuItems = menuItems.filter((item) =>
@@ -145,6 +153,12 @@ function AdminHeader({ handleLogout }) {
                   <NavDropdown.Item as={NavLink} to="/invoices/create">
                     <IoMdAdd /> create invoice
                   </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/company/companycreate">
+                    <IoMdAdd /> create company
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/users/create">
+                    <IoMdAdd /> create User
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Tooltip>
 
@@ -164,6 +178,18 @@ function AdminHeader({ handleLogout }) {
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton></Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column align-items-center ">
+           {/* <button onClick={handelNavigate}>
+            Add user</button> */}
+
+{role === "CRM_SUPERADMIN" ? (
+            <div className="d-flex align-items-end align-self-end h-10">            
+            <button className="btn" onClick={handelNavigate}>
+              <IoMdAddCircleOutline  className="h3" />
+            </button>             
+        </div>
+          ) : (
+            <span></span>
+          )}
           <img className="img-fluid" src={User} alt="user" width={100} />
           <p>Users</p>
           <p>Company Id : {company_id}</p>
@@ -182,8 +208,21 @@ function AdminHeader({ handleLogout }) {
             </button>
           </Link>
 
+          <div  className="d-flex gap-3 align-items-end align-self-start h-100">
           {role === "CRM_SUPERADMIN" ? (
-            <div className="d-flex align-items-end align-self-end h-100">
+            <div className="">
+              <Link to="/company">
+                <button className="btn" onClick={handleClose}>
+                  <MdOutlineDomainAdd  className="mx-1"/>Add Company
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <span></span>
+          )}
+          
+          {role === "CRM_SUPERADMIN" ? (
+            <div className="">
               <Link to="/changerole">
                 <button className="btn" onClick={handleClose}>
                   <IoSettings className="mx-1" /> Change Role
@@ -192,7 +231,7 @@ function AdminHeader({ handleLogout }) {
             </div>
           ) : (
             <span></span>
-          )}
+          )}</div>
 
           {/* <div className="d-flex align-items-end align-self-end h-100">
             <Link to="/changerole">

@@ -130,6 +130,8 @@ const Section = ({
           overflow: "auto",
           backgroundColor: isOver ? "#cfefff" : bgContainer,
           border: isOver ? "2px solid #34a6ba" : "none",
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(0,0,0,0.2) rgba(0,0,0,0.1)",
         }}
       >
         {tasksToMap.length > 0 &&
@@ -192,7 +194,7 @@ const Task = ({ task, tasks, setTasks }) => {
     type: "task",
     item: { id: task.id },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
   }));
 
@@ -233,8 +235,7 @@ const Task = ({ task, tasks, setTasks }) => {
       ref={drag}
       style={{
         border: "1px solid #dcdcdc",
-        backgroundColor: "#fff",
-        opacity: isDragging ? 0.5 : 1,
+        backgroundColor: isDragging ? "#000" : "#fff",
       }}
       className={`color p-3 d-flex align-items-center justify-content-between mx-1 cursor-grab`}
     >
