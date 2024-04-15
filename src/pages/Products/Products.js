@@ -32,7 +32,7 @@ const Products = () => {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
 
   const columns = useMemo(
     () => [
@@ -99,7 +99,7 @@ const Products = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}allProductsByCompanyId/${userId}`,
+        `${API_URL}allProductsByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",

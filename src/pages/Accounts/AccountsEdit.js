@@ -41,14 +41,14 @@ function AccountsEdit() {
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   // console.log(accountOption);
 
   const formik = useFormik({
     initialValues: {
       account_owner: "",
-      company_id: userId,
+      company_id: companyId,
       account_name: "",
       country_code: "",
       phone: "",
@@ -132,7 +132,7 @@ function AccountsEdit() {
         const getData = response.data;
 
         const payload = {
-          company_id: userId,
+          company_id: companyId,
           account_owner: getData.accountOwner,
           account_name: getData.accountName,
           country_code: getData.countryCode,
@@ -217,13 +217,6 @@ function AccountsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("company_id")}
-              value={userId}
-              name="company_id"
-            />
-
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Account Owner</lable> &nbsp;&nbsp;

@@ -34,7 +34,7 @@ const Example = () => {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   // console.log("rowId",rowId)
 
   const columns = useMemo(
@@ -182,7 +182,7 @@ const Example = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}allInvoicesByCompanyId/${userId}`,
+        `${API_URL}allInvoicesByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",

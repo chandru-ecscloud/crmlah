@@ -34,7 +34,7 @@ const validationSchema = yup.object().shape({
 function QuotesEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -65,7 +65,7 @@ function QuotesEdit() {
 
   const formik = useFormik({
     initialValues: {
-      company_id: userId,
+      company_id: companyId,
       quote_owner: "",
       deal_name: "",
       subject: "",
@@ -201,6 +201,7 @@ function QuotesEdit() {
         const payload = {
           product: getData.product,
           quantity: getData.quantity,
+          company_id:companyId,
           price: getData.price,
           discount: getData.discount,
           total_amount: getData.totalAmount,

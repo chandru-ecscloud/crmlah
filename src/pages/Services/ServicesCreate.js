@@ -20,13 +20,14 @@ const validationSchema = yup.object().shape({
 });
 
 function ServicesCreate() {
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
+  const owner = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      serviceOwner: "",
-      company_id: userId,
+      serviceOwner: owner,
+      company_id: companyId,
       serviceName: "",
       duration: "",
       location: "",
@@ -129,12 +130,6 @@ function ServicesCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("companyId")}
-              value={userId}
-              name="companyId"
-            />
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label htmlFor="serviceOwner">Service Owner</label>&nbsp;&nbsp;
@@ -144,7 +139,7 @@ function ServicesCreate() {
                   {...formik.getFieldProps("serviceOwner")}
                   name="serviceOwner"
                 >
-                  <option value=""></option>
+                  <option selected value={owner}>{owner}</option>
                   <option value="Suriya">Suriya</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>
                   <option value="Chandru R">Chandru R</option>

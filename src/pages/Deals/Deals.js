@@ -30,7 +30,7 @@ const Deals = () => {
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
 
   const columns = useMemo(
@@ -140,7 +140,7 @@ const Deals = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}allDealsByCompanyId/${userId}`, {
+      const response = await axios(`${API_URL}allDealsByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,

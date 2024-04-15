@@ -40,7 +40,7 @@ function InvoicesCreate() {
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   const [dealOption, setDealOption] = useState([]);
   const [contactOption, setContactOption] = useState([]);
@@ -49,7 +49,7 @@ function InvoicesCreate() {
   const formik = useFormik({
     initialValues: {
       invoice_owner: owner,
-      company_id: userId,
+      company_id: companyId,
       sales_order: "",
       subject: "",
       purchase_order: "",
@@ -208,7 +208,6 @@ function InvoicesCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <input type="hidden" value={userId} name="company_id" />
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Invoice Owner</lable> &nbsp;&nbsp;

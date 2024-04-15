@@ -40,13 +40,13 @@ function AccountsCreate() {
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   console.log(accountOption);
 
   const formik = useFormik({
     initialValues: {
-      company_id: userId,
+      company_id: companyId,
       account_owner: owner,
       account_name: "",
       country_code: "",
@@ -67,7 +67,7 @@ function AccountsCreate() {
       billing_country: "",
       description_info: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Account Datas:", data);
       try {
@@ -173,13 +173,6 @@ function AccountsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("company_id")}
-              value={userId}
-              name="company_id"
-            />
-
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Account Owner</lable> &nbsp;&nbsp;
