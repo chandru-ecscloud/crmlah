@@ -39,7 +39,7 @@ function DealsEdit() {
   const { id } = useParams();
   const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   const [dealOption, setDealOption] = useState([]);
   const [contactOption, setContactOption] = useState([]);
@@ -50,7 +50,7 @@ function DealsEdit() {
   const formik = useFormik({
     initialValues: {
       deal_owner: "",
-      company_id: userId,
+      company_id: companyId,
       amount: "",
       email: "",
       deal_name: "",
@@ -174,7 +174,7 @@ function DealsEdit() {
 
         const payload = {
           deal_owner: getData.dealOwner,
-          company_id: userId,
+          company_id: companyId,
           amount: getData.amount,
           email: getData.email,
           deal_name: getData.dealName,
@@ -262,12 +262,6 @@ function DealsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("companyId")}
-              value={userId}
-              name="companyId"
-            />
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Deal Owner</lable> &nbsp;&nbsp;

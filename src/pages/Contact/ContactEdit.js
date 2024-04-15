@@ -45,7 +45,7 @@ function ContactEdit() {
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [account_name, setaccount_name] = useState([]);
   console.log(account_name);
 
@@ -56,7 +56,7 @@ function ContactEdit() {
   const formik = useFormik({
     initialValues: {
       contact_owner: "",
-      company_id: userId,
+      company_id: companyId,
       lead_source: "",
       first_name: "",
       last_name: "",
@@ -117,7 +117,7 @@ function ContactEdit() {
         const getData = response.data;
         const payload = {
           contact_owner: getData.contactOwner,
-          company_id: userId,
+          company_id: companyId,
           lead_source: getData.leadSource,
           first_name: getData.firstName,
           last_name: getData.lastName,
@@ -233,12 +233,6 @@ function ContactEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("conpany_id")}
-              value={userId}
-              name="company_id"
-            />
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Contact Owner</lable> &nbsp;&nbsp;

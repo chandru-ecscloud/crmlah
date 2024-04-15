@@ -32,7 +32,7 @@ const Lead = () => {
   // console.log(role);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
 
   const columns = useMemo(
     () => [
@@ -130,7 +130,7 @@ const Lead = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${API_URL}allClientsByCompanyId/${userId}`,
+        `${API_URL}allClientsByCompanyId/${companyId}`,
         {
           // headers: {
           //   //Authorization: `Bearer ${token}`,
@@ -287,7 +287,7 @@ const Lead = () => {
 
   const handleBulkConvert = async (rows) => {
     rows.forEach((row) => {
-      row.original.company_id = userId;
+      row.original.company_id = companyId;
     });
 
     console.log(rows);

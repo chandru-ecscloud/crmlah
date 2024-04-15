@@ -33,7 +33,7 @@ const Accounts = () => {
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
  
 
@@ -161,7 +161,7 @@ const Accounts = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}allAccountsByCompanyId/${userId}`,
+        `${API_URL}allAccountsByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -306,7 +306,7 @@ const Accounts = () => {
 
   const handleBulkConvert = async (rows) => {
     rows.forEach((row) => {
-      row.original.company_id = userId;
+      row.original.company_id = companyId;
     });
     const rowData = rows.map((row) => row.original);
     try {

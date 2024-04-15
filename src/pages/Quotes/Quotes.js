@@ -34,26 +34,8 @@ const Quotes = () => {
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
-
-  // const refreshData = async () => {
-  //   // destroyDataTable();
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios(`${API_URL}allQuotesByCompanyId/${userId}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         //Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     setData(response.data);
-  //     // initializeDataTable();
-  //   } catch (error) {
-  //     console.error("Error refreshing data:", error);
-  //   }
-  //   setLoading(false);
-  // };
 
   const columns = useMemo(
     () => [
@@ -165,7 +147,7 @@ const Quotes = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}allQuotesByCompanyId/${userId}`, {
+      const response = await axios(`${API_URL}allQuotesByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,

@@ -50,7 +50,7 @@ function AdminHeader({ handleLogout }) {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  const company_id = sessionStorage.getItem("company_id");
+  // const company_name = sessionStorage.getItem("company_name");
   const user_name = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
 
@@ -193,7 +193,7 @@ function AdminHeader({ handleLogout }) {
 
           <img className="img-fluid" src={User} alt="user" width={100} />
           <p>Users</p>
-          <p>Company Id : {company_id}</p>
+          {/* <p>Company Name : {company_name}</p> */}
           <p>User Name : {user_name}</p>
 
           <button

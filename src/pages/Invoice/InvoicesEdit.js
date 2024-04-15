@@ -45,7 +45,7 @@ function InvoicesEdit() {
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   const [dealOption, setDealOption] = useState([]);
   const [contactOption, setContactOption] = useState([]);
@@ -53,7 +53,7 @@ function InvoicesEdit() {
   const formik = useFormik({
     initialValues: {
       invoice_owner: "",
-      company_id: userId,
+      company_id: companyId,
       sales_order: "",
       subject: "",
       purchase_order: "",
@@ -184,6 +184,7 @@ function InvoicesEdit() {
 
         const payload = {
           invoice_owner: getData.invoiceOwner,
+          company_id: companyId,
           sales_order: getData.salesOrder,
           subject: getData.subject,
           purchase_order: getData.purchaseOrder,
@@ -272,11 +273,6 @@ function InvoicesEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              //  value={userId}
-              name="company_id"
-            />
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Invoice Owner</lable> &nbsp;&nbsp;

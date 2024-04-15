@@ -30,7 +30,7 @@ const Contacts = () => {
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
 
   const navigate = useNavigate();
 
@@ -158,7 +158,7 @@ const Contacts = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}allContactsByCompanyId/${userId}`,
+        `${API_URL}allContactsByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",

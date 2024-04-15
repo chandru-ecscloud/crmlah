@@ -36,7 +36,7 @@ function QuotesCreate() {
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   console.log(accountOption);
   const [dealOption, setDealOption] = useState([]);
@@ -60,7 +60,7 @@ function QuotesCreate() {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      company_id: userId,
+      company_id: companyId,
       quote_owner: owner,
       deal_name: "",
       subject: "",
@@ -222,12 +222,7 @@ function QuotesCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <input
-              type="hidden"
-              {...formik.getFieldProps("company_id")}
-              value={userId}
-              name="company_id"
-            />
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device ">
                 <lable>Quote Owner</lable> &nbsp;&nbsp;

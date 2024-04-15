@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  company_id: yup.string().required("*please enter the UserId"),
+  // company_name: yup.string().required("*please enter the Company Id"),
   username: yup.string().required('*UserName is required.'),
   password: yup.string().required("*Enter the valid Password"),
   // min(4, "*min length of 4 chars").matches(
@@ -24,8 +24,7 @@ function LogIn({ handleLogin }) {
 
   const formik = useFormik({
     initialValues: {
-
-      company_id: '',
+      // company_name: '',
       username: '',
       password: '',
     },
@@ -49,9 +48,10 @@ function LogIn({ handleLogin }) {
       });
       if (response.status === 200) {
         toast.success(response.data.message);
-        sessionStorage.setItem("company_id", data.company_id);
+        // sessionStorage.setItem("company_name", data.company_name);
         sessionStorage.setItem("user_name", data.username);
         sessionStorage.setItem("email", response.data.email);
+        sessionStorage.setItem("companyId", response.data.companyId);
         sessionStorage.setItem("role", response.data.role);
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.userId);
@@ -66,82 +66,6 @@ function LogIn({ handleLogin }) {
   };
 
   return (
-    // <section className="logIn">
-    //   <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
-    //     <div className="container">
-    //       <div className="row py-5">
-    //         <div className="col-md-6 col-12 heroImageBackground d-flex align-items-center justify-content-center">
-    //           <img className="img-fluid" src={CRM} alt="CRMLAH" />
-    //         </div>
-    //         <div className="col-lg-6 col-md-6 col-12">
-    //           <h3 className="registerWord text-center">LOGIN</h3>
-    //           <form>
-    //             <div className="form-group mt-3">
-    //               <label htmlFor="companyId">Company ID:</label>
-    //               <input
-    //                 type="text"
-    //                 {...register('company_id')}
-    //                 className="form-control"
-    //                 value={company_id}
-    //                 onChange={(e) => setCompanyId(e.target.value)}
-    //                 name="company_id"
-    //                 id="company_id"
-    //               />
-    //               <p className='text-danger'>{errors.company_id?.message}</p>
-    //             </div>
-    //             <div className="form-group mt-3">
-    //               <label htmlFor="Username">User Name:</label>
-    //               <input
-    //                 type="text"
-    //                 className="form-control"
-    //                 onChange={(e) => setUserName(e.target.value)}
-    //                 value={username}
-    //                 name="username"
-    //                 id="username"
-    //               />
-    //             </div>
-    //             <div className="form-group mt-3">
-    //               <label htmlFor="Password">Password:</label>
-    //               <input
-    //                 type="password"
-    //                 value={password}
-    //                 onChange={(e) => setPassword(e.target.value)}
-    //                 name="password"
-    //                 className="form-control"
-    //                 id="password"
-    //               />
-    //             </div>
-    //             <button
-    //               className="contactsubmitBtn btn btn-primary mt-3"
-    //               type="button"
-    //               onClick={handelLogin}
-    //               // onClick={handleSubmit((data => {
-    //               //                   console.log("Login Data:",data)
-    //               //                   handelLogin()
-    //               //                 }))}
-    //             >
-    //               Login
-    //             </button>
-    //             <p className="forgotWord text-center mt-5">
-    //               Forgot{" "}
-    //               <Link to="/forgot" className="password-link">
-    //                 Password
-    //               </Link>
-    //               ?
-    //             </p>
-    //             <p className="forgotWord text-center">
-    //               Don't have an account?{" "}
-    //               <Link to="/signin" className="password-link">
-    //                 Sign up
-    //               </Link>
-    //             </p>
-    //           </form>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </section>
-
     <section className="signIn">
       
         <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
@@ -154,19 +78,19 @@ function LogIn({ handleLogin }) {
                 <h3 className="registerWord text-center">LOGIN</h3>
                 <form onSubmit={formik.handleSubmit}>
                   
-                  <div className="form-group mt-3">
-                    <label htmlFor="companyId">Company ID:</label>
+                  {/* <div className="form-group mt-3">
+                    <label>Company ID:</label>
                     <input
                       type="text"
-                      className={`form-size form-control  ${formik.touched.company_id && formik.errors.company_id ? 'is-invalid' : ''}`}
-                      {...formik.getFieldProps('company_id')}
-                      name="company_id"
-                      id="company_id"
+                      className={`form-size form-control  ${formik.touched.company_name && formik.errors.company_name ? 'is-invalid' : ''}`}
+                      {...formik.getFieldProps('company_name')}
+                      name="company_name"
+                      id="company_name"
                     />
-                    {formik.touched.company_id && formik.errors.company_id && (
-                      <p className="text-danger">{formik.errors.company_id}</p>
+                    {formik.touched.company_name && formik.errors.company_name && (
+                      <p className="text-danger">{formik.errors.company_name}</p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="form-group mt-3">
                     <label htmlFor="username">User Name:</label>

@@ -21,14 +21,15 @@ const validationSchema = yup.object().shape({
 
 function ServicesEdit() {
   const { id } = useParams();
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
+  const owner = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
 
 
   const formik = useFormik({
     initialValues: {
       serviceOwner: "",
-      company_id: userId,
+      company_id: companyId,
       serviceName: "",
       duration: "",
       location: "",
@@ -73,7 +74,7 @@ function ServicesEdit() {
         const getData = response.data;
         const payload = {
           serviceOwner: getData.serviceOwner,
-          company_id: userId,
+          company_id: companyId,
           serviceName: getData.serviceName,
           duration: getData.duration,
           location: getData.location,
@@ -150,7 +151,7 @@ function ServicesEdit() {
     //         <input
     //           type="hidden"
     //           {...formik.getFieldProps("companyId")}
-    //           value={userId}
+    //           value={companyId}
     //           name="companyId"
     //         />
     //         <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -455,7 +456,7 @@ function ServicesEdit() {
           <input
             type="hidden"
             {...formik.getFieldProps("companyId")}
-            value={userId}
+            value={companyId}
             name="companyId"
           />
           <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -467,7 +468,7 @@ function ServicesEdit() {
                 {...formik.getFieldProps("serviceOwner")}
                 name="serviceOwner"
               >
-                <option value=""></option>
+                <option selected value={owner}>{owner}</option>
                 <option value="Suriya">Suriya</option>
                 <option value="Vignesh Devan">Vignesh Devan</option>
                 <option value="Chandru R">Chandru R</option>

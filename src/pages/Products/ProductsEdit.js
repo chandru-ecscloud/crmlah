@@ -35,14 +35,14 @@ function ProductsEdit() {
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const [userImage, setUserImage] = useState(User);
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const [checked, setChecked] = useState(false);
 
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       product_owner: "",
-      company_id: userId,
+      company_id: companyId,
       product_name: "",
       product_code: "",
       vendor_name: "",
@@ -147,7 +147,7 @@ function ProductsEdit() {
 
         const payload = {
           product_owner: getData.productOwner,
-          company_id: userId,
+          company_id: companyId,
           product_name: getData.productName,
           product_code: getData.productCode,
           vendor_name: getData.vendorName,

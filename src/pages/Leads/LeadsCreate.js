@@ -32,7 +32,7 @@ const validationSchema = yup.object().shape({
 });
 
 function LeadsCreate() {
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
@@ -42,7 +42,7 @@ function LeadsCreate() {
   const formik = useFormik({
     initialValues: {
       lead_owner: owner,
-      company_id: userId,
+      company_id: companyId,
       company: "",
       first_name: "",
       last_name: "",
@@ -146,13 +146,6 @@ function LeadsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            {/* <input
-              type="hidden"
-              {...formik.getFieldProps("company_id")}
-              value={userId}
-              name="company_id"
-            /> */}
-
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Lead Owner</lable> &nbsp;&nbsp;
