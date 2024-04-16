@@ -10,13 +10,19 @@ import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import { Tooltip, Zoom } from "@mui/material";
+import Appointment from '../Appointments/AppointmentsCreate';
 function DealsShow() {
   const { id } = useParams();
   const [dealData, setdealData] = useState({});
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-
+  const scheduleData ={
+    model :"Deals",
+    id : id,
+    appointmentName: dealData.dealName ,
+    email:dealData.email
+  }
   useEffect(() => {
     const userData = async () => {
       try {
@@ -89,9 +95,9 @@ function DealsShow() {
 
         <div className="col-9 mt-1" id="buttons-container">
         {dealData.email && <SendEmail toEmail={dealData.email} />}
-
+        <Appointment name={"schedule"} schedule={scheduleData}/>
           <button
-            className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >

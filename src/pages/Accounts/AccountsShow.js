@@ -17,6 +17,7 @@ import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import SendQuotes from "../Email/SendQuotes";
 import { Tooltip, Zoom } from "@mui/material";
+import Appointment from '../Appointments/AppointmentsCreate'
 
 function AccountsShow() {
   const { id } = useParams();
@@ -26,8 +27,15 @@ function AccountsShow() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
+  
   const navigate = useNavigate();
+  const scheduleData ={
+    model :"Accounts",
+    id : id,
+    appointmentName: accountData.accountName ,
+    email:accountData.email
 
+  }
   useEffect(() => {
     const userData = async () => {
       try {
@@ -94,11 +102,11 @@ function AccountsShow() {
 
         <div className="col-9 mt-1" id="buttons-container">
           <SendQuotes accountData={accountData} />
-
+          <Appointment name={"schedule"} schedule={scheduleData}/>
           {accountData.email && <SendEmail toEmail={accountData.email} />}
 
           <button
-            className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
