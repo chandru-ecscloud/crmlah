@@ -195,8 +195,8 @@ function App() {
             {/* User */}
             <Route path="/users" element={<User />} />
             <Route path="/users/create" element={<UserCreate />} />
-            <Route path="/users/edit" element={<UserEdit />} />
-            <Route path="/users/show" element={<UserShow />} />
+            <Route path="/users/edit/:id" element={<UserEdit />} />
+            <Route path="/users/show/:id" element={<UserShow />} />
 
             {/* Appointments  */}
             <Route path="/appointments" element={<Appointments />} />

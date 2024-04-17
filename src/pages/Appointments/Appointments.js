@@ -10,8 +10,6 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { BsFiletypeCsv } from "react-icons/bs";
-import { FaRegFilePdf } from "react-icons/fa";
 import { LinearProgress } from "@mui/material";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -31,6 +29,7 @@ const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
+  const companyId = sessionStorage.getItem("companyId");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
@@ -70,19 +69,25 @@ const Appointments = () => {
         enableHiding: false,
         header: "Appointment Type",
         Cell: ({ row }) => (
-          <span className={``}>
-            {row.original.typeOfAppointment}
-          </span>
+          row.original.typeOfAppointment === "Leads" ? (
+            <span className="badge bg-info py-2 " style={{color:"#1f1f1f !important"}}>
+              {row.original.typeOfAppointment}
+            </span>
+          ) : row.original.typeOfAppointment ==="Contacts"? (
+            <span className="badge bg-primary py-2 " >{row.original.typeOfAppointment}</span>
+          ): row.original.typeOfAppointment ==="Accounts"?(
+            <span className="badge bg-warning py-2">{row.original.typeOfAppointment}</span>
+          ): (
+            <span className="badge bg-success py-2">{row.original.typeOfAppointment}</span>
+          )
         ),
       },
       {
         accessorKey: "serviceName",
-        // enableHiding: false,
         header: "Service Name",
       },
       {
         accessorKey: "duration",
-        // enableHiding: false,
         header: "Duration",
       },
       {
@@ -132,14 +137,14 @@ const Appointments = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}allAppointments`, {
+      const response = await axios(`${API_URL}getAllAppointmentsByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
         },
       });
       setData(response.data);
-      console.log("data",data)
+      // console.log("data",data)
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
