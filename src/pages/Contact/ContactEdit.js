@@ -22,7 +22,8 @@ const validationSchema = yup.object().shape({
     .required("*Phone Number is required is required"),
   account_name: yup.string().required("*Account Name is required"),
   vendor_name: yup.string().required("*Vendor Name is required"),
-  land_line: yup.string().required("*Land Line is required"),
+  land_line: yup.string().matches(/^\d+$/, "Must be only digits")
+  .required("*Land Line is required is required"),
   skype_id: yup.string().required("*Skype ID is required"),
   twitter: yup.string().required("*Twitter is required"),
 

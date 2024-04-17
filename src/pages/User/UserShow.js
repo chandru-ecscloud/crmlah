@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 function UserShow() {
-  const { id } = useParams;
+  const { id } = useParams();
   const [userData, setUserData] = useState({});
 
   console.log("id", id);
@@ -19,7 +19,7 @@ function UserShow() {
     const userData = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}allUserRegistrations/${8}`,
+          `${API_URL}allUserRegistrations/${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -40,15 +40,17 @@ function UserShow() {
 
   return (
     <>
-      <section className="container-fluid row section1 m-0 p-0">
-        <div className="col-9 mt-1">
-          {/* <UserEdit id={id} name="Edit " /> */}
-          <Link to="/users">
-            <IoArrowBack />
-          </Link>
-        </div>
+      <section className="container-fluid row section1 m-0 p-0 ">
+         {/* <Tooltip TransitionComponent={Zoom} title="Back"> */}
+            <Link to="/users">
+              <button className="btn fs-4 border-white">
+                <IoArrowBack className="back_arrow" />
+              </button>
+            </Link>
+          {/* </Tooltip> */}
+        
       </section>
-      <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
+      <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center" style={{minHeight:"90vh"}}>
         {/* Right Side Content */}
         <div
           className="container-fluid col-md-9 m-0"

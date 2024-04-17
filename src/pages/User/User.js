@@ -8,12 +8,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import { FaSortDown } from "react-icons/fa";
-import { toast } from "react-toastify";
-import { BsFiletypeCsv } from "react-icons/bs";
-import { FaRegFilePdf } from "react-icons/fa";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
+// import { FaSortDown } from "react-icons/fa";
+// import { toast } from "react-toastify";
+// import { BsFiletypeCsv } from "react-icons/bs";
+// import { FaRegFilePdf } from "react-icons/fa";
+// import { jsPDF } from "jspdf";
+// import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
@@ -31,8 +31,8 @@ const UserActivation = () => {
   const role = sessionStorage.getItem("role");
   // console.log(role);
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
-  const userId = sessionStorage.getItem("userId");
+  // const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
 
   const columns = useMemo(
     () => [
@@ -41,7 +41,7 @@ const UserActivation = () => {
         enableHiding: false,
         header: "User Name",
         Cell: ({ row }) => (
-          <Link to={`/users/show`} className="rowName">
+          <Link to={`/users/show/${row.original.id}`} className="rowName">
             {row.original.userName}
           </Link>
         ),
@@ -60,6 +60,21 @@ const UserActivation = () => {
         accessorKey: "role",
         enableHiding: false,
         header: "Role",
+        Cell:({row})=>(
+          row.original.role === "CRM_SUPERADMIN" ? (
+            <span className="badge bg-info py-2 " style={{color:"#1f1f1f !important"}}>
+              Super Admin
+            </span>
+          ) : row.original.role ==="CMP_OWNER"? (
+            <span className="badge bg-primary py-2 " >Company Owner</span>
+          ): row.original.role ==="CRM_ADMIN"?(
+            <span className="badge bg-warning py-2">Admin</span>
+          ): row.original.role ==="CMP_ADMIN"?(
+            <span className="badge bg-success py-2">Company Admin</span>
+          ): (
+            <span className="badge bg-danger  py-2">Company User</span>
+          )
+        )
       },
       {
         accessorKey: "phone",
@@ -98,7 +113,7 @@ const UserActivation = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}allUserRegistrations`, {
+      const response = await axios(`${API_URL}getAllUserRegistrationsByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
