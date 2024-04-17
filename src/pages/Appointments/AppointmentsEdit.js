@@ -79,11 +79,10 @@ function AppointmentsCreate({name,id}) {
       data.serviceName = service.serviceName;
       data.appointmentOwner=userName;
       data.reminder=2
-      // data.mailContent = "<h2>Mail Sent Successfully</h2>";
       console.log(data)
 
       try {
-        const response = await axios.post(`${API_URL}updateAppointment/${id}`, data, {
+        const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -115,7 +114,7 @@ function AppointmentsCreate({name,id}) {
         },
       });
       formik.setValues(response.data);
-      console.log("response.data", response.data);
+      // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -148,7 +147,7 @@ function AppointmentsCreate({name,id}) {
           //Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data)
+      // console.log(response.data)
       setleadData(response.data);
       console.log("userid", leadData);
     } catch (error) {

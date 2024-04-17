@@ -73,39 +73,12 @@ function AppointmentsCreate({ name, schedule }) {
         data.serviceName = service ? service.serviceName : "";
         data.appointmentFor = lead.name;
         data.email = lead.email;
-        data.typeOfAppointment = "General";
-      }
-      {
-        /*switch (name) {
-          case "":
-            
-            
-          
-          break;
-        case "schedule":
-          data.appointmentFor = schedule.appointmentName ;
-          data.email = schedule.email ;
-          
-          if (schedule.model === "Contacts") {
-            data.contactId = schedule.id;
-          } else if (schedule.model === "Accounts") {
-            data.accountId = schedule.id;
-          } else if(schedule.model ==="Deals"){
-            data.dealId = schedule.id;
-          }else if(schedule.model ==="Leads"){
-            data.leadId = schedule.id;
-          }
-          break;
-        default:
-          break;
-      }*/
+        data.typeOfAppointment = "Leads";
       }
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-
       // console.log(data);
-
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
           headers: {
@@ -113,8 +86,8 @@ function AppointmentsCreate({ name, schedule }) {
           },
         });
         if (response.status === 201) {
-          console.log(response.data.appointmentId)
-          
+          console.log(response.data.appointmentId);
+
           toast.success(response.data.message);
           setShow(false);
           const mailContent = `
@@ -242,26 +215,25 @@ function AppointmentsCreate({ name, schedule }) {
                 </div>
               </body>
               </html>`;
-              console.log(response.data)
-              try {
-                const response = await axios.post(`${API_URL}sendMail`, {
-                  toMail: data.email,
-                  fromMail: data.email,
-                  subject: data.appointmentName,
-                  htmlContent: mailContent,
-                });
-          
-                if (response.status === 200) {
-                  toast.success(response.data.message);
-                  toast.success("Mail Send Successfully");
-                } else {
-                  toast.error(response.data.message);
-                }
-              } catch (error) {
-                toast.error("Mail Not Send");
-                // console.error("Failed to send email:", error);
-              }
+          console.log(response.data);
+          try {
+            const response = await axios.post(`${API_URL}sendMail`, {
+              toMail: data.email,
+              fromMail: data.email,
+              subject: data.appointmentName,
+              htmlContent: mailContent,
+            });
 
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              toast.success("Mail Send Successfully");
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error("Mail Not Send");
+            // console.error("Failed to send email:", error);
+          }
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
@@ -276,6 +248,7 @@ function AppointmentsCreate({ name, schedule }) {
       resetForm();
     },
   });
+
   const openModal = () => {
     setShow(true);
     console.log("scheduleDataM", schedule);
