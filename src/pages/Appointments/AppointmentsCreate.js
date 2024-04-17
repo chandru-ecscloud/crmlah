@@ -114,6 +114,7 @@ function AppointmentsCreate({ name, schedule }) {
         });
         if (response.status === 201) {
           console.log(response.data.appointmentId)
+          
           toast.success(response.data.message);
           setShow(false);
           const mailContent = `
@@ -229,7 +230,7 @@ function AppointmentsCreate({ name, schedule }) {
                   <h4 style="margin:0 ;">${data.state}</h4>
 
                   <p style="margin: 1.5rem 0px 2rem 0px;"
-                  >You Can Still <span><a href="/reshedule/${response.data.appointmentId}">reschedule</a></span> or <a href="/cancel/${response.data.appointmentId}">Cancel</a> Your Appointment</p>
+                  >You Can Still <span><a href="http://localhost:3000/Crm_Appoinment_Reschedule/${response.data.appointmentId}">reschedule</a></span> or <a href="http://localhost:3000/Crm_Appoinment_Cancelschedule/${response.data.appointmentId}">Cancel</a> Your Appointment</p>
                   <hr />
 
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
@@ -241,6 +242,7 @@ function AppointmentsCreate({ name, schedule }) {
                 </div>
               </body>
               </html>`;
+              console.log(response.data)
               try {
                 const response = await axios.post(`${API_URL}sendMail`, {
                   toMail: data.email,
