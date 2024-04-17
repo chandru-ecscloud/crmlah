@@ -39,13 +39,13 @@ function AppointmentsCreate({name,id}) {
   const [leadData, setleadData] = useState([]);
   const [apidata, setApiData] = useState([]);
   const role = sessionStorage.getItem("role");
-  const cId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const userName=sessionStorage.getItem("user_name")
   const navigate = useNavigate();
  
   const formik = useFormik({
     initialValues: {
-      companyId: cId,
+      companyId: companyId,
       leadId: "",
       serviceId: "",
       // email: "",
@@ -56,17 +56,17 @@ function AppointmentsCreate({name,id}) {
       duration: "",
       appointmentName: "",
       location: "",
-      member: "test",
+      member: "",
       // minutes: "",
       // time: "",
       // hour: "",
       // none: "",
-      street: apidata.street,
-      city: apidata.city,
-      state: apidata.state,
-      zipCode: apidata.zipCode,
-      country: apidata.country,
-      additionalInformation: apidata.additionalInformation,
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+      additionalInformation: "",
     },
     validationSchema: validationSchema,
    
@@ -79,11 +79,10 @@ function AppointmentsCreate({name,id}) {
       data.serviceName = service.serviceName;
       data.appointmentOwner=userName;
       data.reminder=2
-      // data.mailContent = "<h2>Mail Sent Successfully</h2>";
-      // console.log(data)
+      console.log(data)
 
       try {
-        const response = await axios.post(`${API_URL}updateAppointment/${id}`, data, {
+        const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -115,7 +114,7 @@ function AppointmentsCreate({name,id}) {
         },
       });
       formik.setValues(response.data);
-      console.log("response.data", response.data);
+      // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -142,15 +141,15 @@ function AppointmentsCreate({name,id}) {
 
   const fetchLeadData = async () => {
     try {
-      const response = await axios(`${API_URL}getLeadBasicDetails/${cId}`, {
+      const response = await axios(`${API_URL}getLeadBasicDetails/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data)
+      // console.log(response.data)
       setleadData(response.data);
-      // console.log("userid", leadData);
+      console.log("userid", leadData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {

@@ -49,11 +49,6 @@ const Appointments = () => {
           </Link>
         ),
       },
-      {
-        accessorKey: "serviceName",
-        enableHiding: false,
-        header: "Service Name",
-      },
       
       {
         accessorKey: "appointmentName",
@@ -69,6 +64,21 @@ const Appointments = () => {
         accessorKey: "appointmentStartDate",
         enableHiding: false,
         header: "Appointment Start Date",
+      },
+      {
+        accessorKey: "typeOfAppointment",
+        enableHiding: false,
+        header: "Appointment Type",
+        Cell: ({ row }) => (
+          <span className={``}>
+            {row.original.typeOfAppointment}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "serviceName",
+        // enableHiding: false,
+        header: "Service Name",
       },
       {
         accessorKey: "duration",
@@ -261,6 +271,7 @@ const Appointments = () => {
     data,
     initialState: {
       columnVisibility: {
+        serviceName:false,
         duration:false,
         appointmentStartTime: false,
         location: false,

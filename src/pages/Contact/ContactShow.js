@@ -8,12 +8,20 @@ import { API_URL } from "../../Config/URL";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import { Tooltip, Zoom } from "@mui/material";
+import Appointment from '../Appointments/AppointmentsCreate';
 function ContactShow() {
   const { id } = useParams();
   const [contactData, setContactData] = useState({});
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
+  const scheduleData ={
+    model :"Contacts",
+    id : id,
+    appointmentName: contactData.contact_name,
+    email: contactData.email
+  }
+  // console.log("scheduleData",scheduleData)
 
   useEffect(() => {
     const userData = async () => {
@@ -54,12 +62,12 @@ function ContactShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </Tooltip>
-                {/* <img
+                {/*<img
                   className="img-fluid"
                   style={{ width: "5rem" }}
                   src={USER}
                   alt="profile"
-                /> */}
+                />*/}
               </div>
             </div>
           </div>
@@ -67,9 +75,9 @@ function ContactShow() {
 
         <div className="col-9 mt-1" id="buttons-container">
         {contactData.email && <SendEmail toEmail={contactData.email} />}
-
+          <Appointment name={"schedule"} schedule={scheduleData}/>
           <button
-            className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >

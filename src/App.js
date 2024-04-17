@@ -68,6 +68,8 @@ import UserCreate from "./pages/User/UserCreate";
 import UserEdit from "./pages/User/UserEdit";
 import UserShow from "./pages/User/UserShow";
 import Calender from "./pages/Calender";
+import Schedule from "./components/common/Schedule";
+import { CancelSchedule}  from "./components/common/CancelSchedule";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -128,6 +130,8 @@ function App() {
         <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/emailsuccess" element={<EmailSuccess />} />
+        <Route path="/Crm_Appoinment_Reschedule/:id" element={<Schedule />} />
+        <Route path="/Crm_Appoinment_Cancelschedule/:id" element={<CancelSchedule />} />
 
         {isAdmin && (
           <>

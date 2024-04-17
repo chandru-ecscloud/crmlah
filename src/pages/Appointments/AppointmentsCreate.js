@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  leadId: Yup.string().required("*Appointment for is required"),
+  // appointmentFor: Yup.string().required("*Appointment for is required"),
   serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Appointment name is required"),
@@ -30,25 +30,23 @@ const validationSchema = Yup.object().shape({
   state: Yup.string().required("*State is required"),
   zipCode: Yup.string().required("*Zip code is required"),
   country: Yup.string().required("*Country is required"),
-  additionalInformation: Yup.string().required("*Description is required"),
+  // additionalInformation: Yup.string().required("*Description is required"),
 });
 
-function AppointmentsCreate({ name }) {
-  const [lgShow, setLgShow] = useState(false);
-  const [idAndName, setIdAndName] = useState([]);
+function AppointmentsCreate({ name, schedule }) {
+  const [show, setShow] = useState(false);
+  const [serviceData, setserviceData] = useState([]);
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
-  const cId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const userName = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
-      companyId: cId,
-      leadId: "",
       serviceId: "",
-      // email: "",
-      // appointmentFor: "",
-      // serviceName: "",
+      email: "",
+      serviceName: "",
       appointmentStartDate: "",
       appointmentStartTime: "",
       duration: "",
@@ -64,154 +62,178 @@ function AppointmentsCreate({ name }) {
       state: "",
       zipCode: "",
       country: "",
+      typeOfAppointment: "",
       additionalInformation: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (data) => {
-      const lead = leadData.find((user) => user.id == data.leadId);
-      const service = idAndName.find((user) => user.id == data.serviceId);
-
-      data.appointmentFor = lead.name;
-      data.email = lead.email;
-      data.serviceName = service.serviceName;
+    onSubmit: async (data, { resetForm }) => {
+      if (name === "Create Appointment") {
+        const lead = leadData.find((user) => user.id == data.leadId);
+        const service = serviceData.find((user) => user.id == data.serviceId);
+        data.serviceName = service ? service.serviceName : "";
+        data.appointmentFor = lead.name;
+        data.email = lead.email;
+        data.typeOfAppointment = "Leads";
+      }
+      data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      data.mailContent = `
-      <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Invoice</title>
-    <style>
-      body{
-        background-color: #ddd;
-      }
-      .invoice-box {
-        font-size: 12px;
-        max-width: 600px;
-        background-color: #fff;
-        margin: auto;
-        padding: 30px;
-        border-bottom: 3px solid #0059ff;
-        line-height: 24px;
-        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-        color: #555;
-        min-height: 85vh;
-      }
-
-    .invoice-box table {
-      width: 100%;
-      line-height: inherit;
-      text-align: left;
-    }
-
-    .invoice-box table td {
-      padding: 5px;
-      vertical-align: top;
-    }
-
-    .invoice-box table td.third {
-      text-align: right;
-    }
-
-    .invoice-box table tr.heading td {
-      background: #eee;
-      border-bottom: 1px solid #ddd;
-      font-weight: bold;
-    }
-
-    .invoice-box table tr.item td {
-      border-bottom: 1px solid #eee;
-    }
-
-    .invoice-box table tr.item.last td {
-      border-bottom: none;
-    }
-
-    .invoice-box table tr.total td:nth-child(2) {
-      border-top: 2px solid #eee;
-      font-weight: bold;
-    }
-    .invoice{
-        padding: 1rem;
-    }
-
-    #scan {
-      float: right;
-    }
-
-    #scan img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    @media print {
-      .invoice-box {
-        border: 0;
-      }
-    }
-    
-  </style>
-  </head>
-  <body >
-    <div class="invoice-box">
-      <table>
-        <tr class="top">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td class="title">
-                  <img
-                    src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
-                    style="width: 75%; max-width: 180px"
-                    alt="Logo"
-                  />
-                </td>
-                <td class="third">
-                  <b>Date:</b> 24-01-2024<br />
-                  The Alexcier, 237 Alexandra Road,<br />
-                  #04-10, Singapore-159929.
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-
-      
-     <div class="invoice" >
-      <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
-      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
-        ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Kolkata GMT +05:30).
-      </p>
-
-      <h3 style="margin-bottom: 0;">Location details:</h3>
-      <h4 style="margin:0 ;">${data.state}</h4>
-
-      <p style="margin: 1.5rem 0px 2rem 0px;"
-      >You Can Still <span><a href="#">reschedule</a></span> or <a href="#">Cancel</a> Your Appointment</p>
-      <hr />
-
-      <p style=" margin: 2rem 0 0;">See You Soon,</p>
-      <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
-      <p style=" margin: 0 ; ">ECS Cloud</p>
-      <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
-      <hr />
-    </div>
-    </div>
-  </body>
-</html>`;
       // console.log(data);
-
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
           headers: {
             "Content-Type": "application/json",
           },
         });
-        if (response.status === 200) {
+        if (response.status === 201) {
+          console.log(response.data.appointmentId);
+
           toast.success(response.data.message);
-          setLgShow(false);
+          setShow(false);
+          const mailContent = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <title>Invoice</title>
+                <style>
+                  body{
+                    background-color: #ddd;
+                  }
+                  .invoice-box {
+                    font-size: 12px;
+                    max-width: 600px;
+                    background-color: #fff;
+                    margin: auto;
+                    padding: 30px;
+                    border-bottom: 3px solid #0059ff;
+                    line-height: 24px;
+                    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+                    color: #555;
+                    min-height: 85vh;
+                  }
+
+                .invoice-box table {
+                  width: 100%;
+                  line-height: inherit;
+                  text-align: left;
+                }
+
+                .invoice-box table td {
+                  padding: 5px;
+                  vertical-align: top;
+                }
+
+                .invoice-box table td.third {
+                  text-align: right;
+                }
+
+                .invoice-box table tr.heading td {
+                  background: #eee;
+                  border-bottom: 1px solid #ddd;
+                  font-weight: bold;
+                }
+
+                .invoice-box table tr.item td {
+                  border-bottom: 1px solid #eee;
+                }
+
+                .invoice-box table tr.item.last td {
+                  border-bottom: none;
+                }
+
+                .invoice-box table tr.total td:nth-child(2) {
+                  border-top: 2px solid #eee;
+                  font-weight: bold;
+                }
+                .invoice{
+                    padding: 1rem;
+                }
+
+                #scan {
+                  float: right;
+                }
+
+                #scan img {
+                  max-width: 100%;
+                  height: auto;
+                }
+
+                @media print {
+                  .invoice-box {
+                    border: 0;
+                  }
+                }
+                
+              </style>
+              </head>
+              <body >
+                <div class="invoice-box">
+                  <table>
+                    <tr class="top">
+                      <td colspan="2">
+                        <table>
+                          <tr>
+                            <td class="title">
+                              <img
+                                src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
+                                style="width: 75%; max-width: 180px"
+                                alt="Logo"
+                              />
+                            </td>
+                            <td class="third">
+                              <b>Date:</b> 24-01-2024<br />
+                              The Alexcier, 237 Alexandra Road,<br />
+                              #04-10, Singapore-159929.
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+
+                  
+                <div class="invoice" >
+                  <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
+                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+                    ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Kolkata GMT +05:30).
+                  </p>
+
+                  <h3 style="margin-bottom: 0;">Location details:</h3>
+                  <h4 style="margin:0 ;">${data.state}</h4>
+
+                  <p style="margin: 1.5rem 0px 2rem 0px;"
+                  >You Can Still <span><a href="http://localhost:3000/Crm_Appoinment_Reschedule/${response.data.appointmentId}">reschedule</a></span> or <a href="http://localhost:3000/Crm_Appoinment_Cancelschedule/${response.data.appointmentId}">Cancel</a> Your Appointment</p>
+                  <hr />
+
+                  <p style=" margin: 2rem 0 0;">See You Soon,</p>
+                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
+                  <p style=" margin: 0 ; ">ECS Cloud</p>
+                  <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
+                  <hr />
+                </div>
+                </div>
+              </body>
+              </html>`;
+          console.log(response.data);
+          try {
+            const response = await axios.post(`${API_URL}sendMail`, {
+              toMail: data.email,
+              fromMail: data.email,
+              subject: data.appointmentName,
+              htmlContent: mailContent,
+            });
+
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              toast.success("Mail Send Successfully");
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error("Mail Not Send");
+            // console.error("Failed to send email:", error);
+          }
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
@@ -222,9 +244,32 @@ function AppointmentsCreate({ name }) {
           toast.error(error.response?.data.message);
         }
       }
+
+      resetForm();
     },
   });
 
+  const openModal = () => {
+    setShow(true);
+    console.log("scheduleDataM", schedule);
+    if (name === "schedule") {
+      let scheduleData = {
+        appointmentFor: schedule.appointmentName,
+        email: schedule.email,
+        typeOfAppointment: schedule.model,
+      };
+      if (schedule.model === "Contacts") {
+        scheduleData.contactid = schedule.id;
+      } else if (schedule.model === "Accounts") {
+        scheduleData.accountid = schedule.id;
+      } else if (schedule.model === "Deals") {
+        scheduleData.dealid = schedule.id;
+      } else if (schedule.model === "Leads") {
+        scheduleData.leadid = schedule.id;
+      }
+      formik.setValues(scheduleData);
+    }
+  };
   const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
@@ -233,8 +278,8 @@ function AppointmentsCreate({ name }) {
           //Authorization: `Bearer ${token}`,
         },
       });
-      setIdAndName(response.data);
-      console.log("idAndName", idAndName);
+      setserviceData(response.data);
+      // console.log("idAndName", idAndName);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -244,14 +289,17 @@ function AppointmentsCreate({ name }) {
 
   const fetchLeadData = async () => {
     try {
-      const response = await axios(`${API_URL}getLeadBasicDetails/${cId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getLeadBasicDetails/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setleadData(response.data);
-      console.log("userid", leadData);
+      // console.log("userid", leadData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -269,14 +317,14 @@ function AppointmentsCreate({ name }) {
       <Button
         className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
         disabled={role === "CMP_USER"}
-        onClick={() => setLgShow(true)}
+        onClick={openModal}
       >
         {name}
       </Button>
       <Modal
         size="xl"
-        show={lgShow}
-        onHide={() => setLgShow(false)}
+        show={show}
+        onHide={() => setShow(false)}
         aria-labelledby="example-modal-sizes-title-lg"
       >
         <Modal.Header closeButton>
@@ -291,7 +339,7 @@ function AppointmentsCreate({ name }) {
                     <span>
                       <button
                         className="btn btn-danger"
-                        onClick={() => setLgShow(false)}
+                        onClick={() => setShow(false)}
                       >
                         Cancel
                       </button>
@@ -317,7 +365,50 @@ function AppointmentsCreate({ name }) {
               <div className="container">
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
+                    {name == "schedule" ? (
+                      <div className="d-flex align-items-center justify-content-end sm-device">
+                        <lable>Appointment</lable> &nbsp;&nbsp;
+                        <input
+                          type="text"
+                          name="appointmentFor"
+                          id="appointmentFor"
+                          {...formik.getFieldProps("appointmentFor")}
+                          className={`form-size form-control   ${
+                            formik.touched.appointmentFor &&
+                            formik.errors.appointmentFor
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        />
+                      </div>
+                    ) : (
+                      <div className="d-flex align-items-center justify-content-end sm-device">
+                        <lable>Appointment </lable> &nbsp;&nbsp;
+                        <select
+                          name="leadId"
+                          className={`form-select form-size ${
+                            formik.touched.leadId && formik.errors.leadId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("leadId")}
+                        >
+                          <option value=""></option>
+                          {leadData.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    {formik.touched.appointmentFor &&
+                      formik.errors.appointmentFor && (
+                        <p className="text-danger text-end">
+                          {formik.errors.appointmentFor}
+                        </p>
+                      )}
+                    {/* <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment </lable> &nbsp;&nbsp;
                       <select
                         name="leadId"
@@ -335,12 +426,7 @@ function AppointmentsCreate({ name }) {
                           </option>
                         ))}
                       </select>
-                    </div>
-                    {formik.touched.leadId && formik.errors.leadId && (
-                      <p className="text-danger text-end">
-                        {formik.errors.leadId}
-                      </p>
-                    )}
+                    </div> */}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -357,7 +443,7 @@ function AppointmentsCreate({ name }) {
                         }`}
                       >
                         <option value=""></option>
-                        {idAndName.map((option) => (
+                        {serviceData.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.serviceName}
                           </option>

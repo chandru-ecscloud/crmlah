@@ -11,6 +11,7 @@ import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { Tooltip, Zoom } from "@mui/material";
 import SendEmail from "../Email/SendEmail";
+import Appointment from '../Appointments/AppointmentsCreate';
 
 function LeadsShow() {
   const { id } = useParams();
@@ -31,7 +32,12 @@ function LeadsShow() {
   //   setSelectedFiles([]);
   //   setShow(false);
   // };
-
+  const scheduleData ={
+    model :"Leads",
+    id : id,
+    appointmentName: clientData.first_name,
+    email: clientData.email
+  }
   useEffect(() => {
     const userData = async () => {
       try {
@@ -108,9 +114,9 @@ function LeadsShow() {
           >
             Send Email
           </button> */}
-
+          <Appointment name={"schedule"} schedule={scheduleData}/>
           <button
-            className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
