@@ -9,6 +9,7 @@ import {
 import { GiChampions } from "react-icons/gi";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { IoMdMailOpen } from "react-icons/io";
+import { FaUserTie } from "react-icons/fa";
 
 // import Women from "../../assets/women 1.jpg";
 import { toast } from "react-toastify";
@@ -124,7 +125,7 @@ const Section = ({
     <div className={`col-md-3`} ref={drop}>
       <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
       <div
-        className={` pt-3`}
+        className={`pt-3`}
         style={{
           height: "85vh",
           overflow: "auto",
@@ -145,6 +146,7 @@ const Section = ({
 
 const Header = ({ text, count, bgContainer }) => {
   let icons;
+  // let progressBarColor;
   switch (text) {
     case "New Lead":
       icons = <FaPlus />;
@@ -162,6 +164,11 @@ const Header = ({ text, count, bgContainer }) => {
       icons = null;
   }
 
+  
+  const percentage = count * 10; // Increase by 10% for each task
+  const progressBarColor =
+    percentage < 25 ? "bg-danger" : percentage < 50 ? "bg-warning" : percentage < 75 ? "bg-info" : "bg-success";
+
   return (
     <div
       className={`p-3 d-flex align-items-center justify-content-between rounded-md text-sm text-dark `}
@@ -177,7 +184,11 @@ const Header = ({ text, count, bgContainer }) => {
           aria-valuemin="0"
           aria-valuemax="100"
         >
-          <div class={`progress-bar bg-success`} style={{ width: "50%" }}></div>
+          {/* <div class={`progress-bar bg-success`} style={{ width: "50%" }}></div> */}
+          <div
+            className={`progress-bar ${progressBarColor}`}
+            style={{ width: `${percentage}%` }}
+          ></div>
         </div>
       </p>
       <span className={`badge text-dark ms-2 dragable-heading-count`}>
@@ -235,22 +246,23 @@ const Task = ({ task, tasks, setTasks }) => {
       ref={drag}
       style={{
         border: "1px solid #dcdcdc",
-        backgroundColor: isDragging ? "#000" : "#fff",
+        backgroundColor: "#fff",
+        opacity: isDragging ? 1 : 1,
       }}
       className={`color p-3 d-flex align-items-center justify-content-between mx-1 cursor-grab`}
     >
       <span>
-        <p className="dragable-content-text" style={{ marginBottom: "0px" }}>
-          {task.name}
+        <p className="dragable-content-text">
+          <FaUserTie/>&nbsp;&nbsp;&nbsp;{task.name}
         </p>
         <p className="dragable-content-amount">
-          <BsCurrencyDollar className="phone-icons" /> &nbsp; 2000
+          <BsCurrencyDollar/> &nbsp; {task.amount}
         </p>
         <p className="dragable-content-amount">
-          <FaPhoneAlt className="phone-icons" /> &nbsp; 9941286931
+          <FaPhoneAlt/> &nbsp; {task.phone}
         </p>
         <p className="dragable-content-amount">
-          <IoMdMailOpen className="phone-icons" /> &nbsp; chandru@gmail.com
+          <IoMdMailOpen/> &nbsp; {task.email}
         </p>
       </span>
       <span className="d-flex flex-column align-items-center">
