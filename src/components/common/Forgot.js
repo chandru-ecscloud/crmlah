@@ -4,14 +4,16 @@ import { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
-import * as yup from 'yup';
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import { useFormik } from "formik";
 
-
 const validationSchema = yup.object().shape({
-  email: yup.string().email("*Please Enter valid email").required("*Enter the Email"),
+  email: yup
+    .string()
+    .email("*Please Enter valid email")
+    .required("*Enter the Email"),
 });
 
 const RadioFormSelector = () => {
@@ -21,39 +23,34 @@ const RadioFormSelector = () => {
   const formik = useFormik({
     initialValues: {
       email: "",
-     
-
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("User Datas:", data);
-      handelForgot()
-    },
-    });
- 
-
-  const handelForgot = async () => {
-    try {
-      const response = await axios.get(
-        `${API_URL}userForgotPassword`,
-        { params: { email: Email } },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      // console.log("User Datas:", data);
+      try {
+        const response = await axios.get(
+          `${API_URL}userForgotPassword`,
+          { params: data },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 201) {
+          toast.success("Password send to mail");
+          navigate("/login");
+        } else {
+          toast.error("Unsuccess");
         }
-      );
-      if (response.status === 201) {
-        toast.success("Password send to mail");
-        navigate('/login')
-      } else {
-        toast.error("Unsuccess");
+      } catch (error) {
+        toast.error("Failed: " + error.message);
       }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
-    console.log("Api Data:",Email);
-  };
+      console.log("Api Data:", Email);
+    },
+  });
+
+  const handelForgot = async () => {};
 
   return (
     <div style={{ marginTop: "105px" }}>
@@ -73,21 +70,21 @@ const RadioFormSelector = () => {
                     </label>
                     <input
                       type="text"
-                     // className="form-control"
+                      // className="form-control"
                       id="companyId"
                       {...formik.getFieldProps("email")}
-                      className={`form-control ${formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.email && formik.errors.email
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       placeholder="Enter User Email"
                     />
                     {formik.touched.email && formik.errors.email && (
-          <p className="text-danger text-start">
-            {formik.errors.email}
-          </p>
-        )}
-
+                      <p className="text-danger text-start">
+                        {formik.errors.email}
+                      </p>
+                    )}
                   </div>
                   <button
                     className="contactsubmitBtn btn btn-primary mt-3"

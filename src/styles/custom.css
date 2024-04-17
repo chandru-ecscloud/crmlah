@@ -536,3 +536,27 @@ nav .nav-link Link {
 .calender-table {
   font-size: small !important;
 }
+
+.newCircle {
+  position: static;
+  top: -5px;
+  right: -5px;
+  width: 7px;
+  height: 7px;
+  background-color: rgb(0, 30, 255);
+  border-radius: 50%;
+  animation: pulse 0.8s infinite alternate; /* Defines the animation */
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1); /* Initial scale */
+  }
+  to {
+    transform: scale(1.5); /* Scale up */
+  }
+}
+
+.badge {
+  font-weight: 500 !important;
+}
