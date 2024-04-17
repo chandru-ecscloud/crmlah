@@ -30,7 +30,7 @@ const Services = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  // const token = sessionStorage.getItem("token");
+  const companyId = sessionStorage.getItem("companyId");
   const role = sessionStorage.getItem("role");
 
   const columns = useMemo(
@@ -92,7 +92,7 @@ const Services = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}allServices`, {
+      const response = await axios(`${API_URL}getAllServicesByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,

@@ -10,14 +10,13 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { BsFiletypeCsv } from "react-icons/bs";
-import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { Tooltip, Zoom } from "@mui/material";
+import WebSocketService from "../../Config/WebSocketService";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -27,12 +26,13 @@ const csvConfig = mkConfig({
 
 const Lead = () => {
   const [data, setData] = useState([]);
+  console.log(data);
   const [loading, setLoading] = useState(true);
   const role = sessionStorage.getItem("role");
   // console.log(role);
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
   const companyId = sessionStorage.getItem("companyId");
+  const [count, setCount] = useState(0);
 
   const columns = useMemo(
     () => [
@@ -41,8 +41,12 @@ const Lead = () => {
         enableHiding: false,
         header: "Lead Name",
         Cell: ({ row }) => (
-          <Link to={`/leads/show/${row.original.id}`} className="rowName">
-            {row.original.first_name}
+          <Link
+            to={`/leads/show/${row.original.id}`}
+            className="rowName d-flex"
+          >
+            {row.original.first_name} &nbsp;
+            {row.original.newLead && <div className="newCircle"></div>}
           </Link>
         ),
       },
@@ -126,16 +130,20 @@ const Lead = () => {
     []
   );
 
+  useEffect(() => {
+    const subscription = WebSocketService.subscribeToLeadUpdates((data) => {
+      console.log(data);
+      if (data === true) {
+        setCount((prevCount) => prevCount + 1);
+      }
+    });
+  }, []);
+
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${API_URL}allClientsByCompanyId/${companyId}`,
-        {
-          // headers: {
-          //   //Authorization: `Bearer ${token}`,
-          // },
-        }
+        `${API_URL}allClientsByCompanyId/${companyId}`
       );
       setData(response.data);
     } catch (error) {
@@ -147,7 +155,7 @@ const Lead = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [count]);
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -268,7 +276,7 @@ const Lead = () => {
         cellHeight: "auto",
       },
     });
-    
+
     doc.save("ECS.pdf");
   };
 
@@ -373,40 +381,44 @@ const Lead = () => {
           flexWrap: "wrap",
         }}
       >
-         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </Tooltip>
+
+        <button
+          className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </Tooltip>
       </Box>
     ),
   });

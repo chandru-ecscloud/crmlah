@@ -25,7 +25,7 @@ function AppointmentsShow() {
           },
         });
         setClientData(response.data);
-        console.log("clientData",clientData)
+        // console.log("clientData",clientData)
       } catch (error) {
         toast.error("Error fetching data:", error);
         

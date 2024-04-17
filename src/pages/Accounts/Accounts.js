@@ -17,7 +17,7 @@ import QuotesModel from "./QuotesModel";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { Tooltip, Zoom } from "@mui/material";
 
@@ -35,7 +35,6 @@ const Accounts = () => {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
- 
 
   const columns = useMemo(
     () => [
@@ -46,6 +45,7 @@ const Accounts = () => {
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
             {row.original.accountName}
+            {row.original.newAppointment && <div className="newCircle"></div>}
           </Link>
         ),
       },
@@ -276,10 +276,10 @@ const Accounts = () => {
         cellHeight: "auto",
       },
     });
-   
+
     doc.save("ECS.pdf");
   };
-  
+
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -416,40 +416,42 @@ const Accounts = () => {
           flexWrap: "wrap",
         }}
       >
-         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </Tooltip>
+
+        <button
+          className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </Tooltip>
       </Box>
     ),
   });

@@ -153,12 +153,12 @@ function AdminHeader({ handleLogout }) {
                   <NavDropdown.Item as={NavLink} to="/invoices/create">
                     <IoMdAdd /> create invoice
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/company/companycreate">
+                  {/* <NavDropdown.Item as={NavLink} to="/company/companycreate">
                     <IoMdAdd /> create company
                   </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/users/create">
                     <IoMdAdd /> create User
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                 </NavDropdown>
               </Tooltip>
 
@@ -177,15 +177,13 @@ function AdminHeader({ handleLogout }) {
       </Navbar>
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton className="d-flex align-items-center ">
-          {role === "CRM_SUPERADMIN" ? (
+          {(role === "CRM_SUPERADMIN" || role === "CMP_OWNER" || role === "CRM_ADMIN")&&  (
             <div>
               <button className="btn" onClick={handelNavigate}>
                 <IoPersonAdd /> User
               </button>
             </div>
-          ) : (
-            <span></span>
-          )}
+          ) }
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column align-items-center ">
           {/* <button onClick={handelNavigate}>
@@ -210,7 +208,7 @@ function AdminHeader({ handleLogout }) {
           </Link>
 
           <div className="d-flex gap-3 align-items-end align-self-start h-100">
-            {role === "CRM_SUPERADMIN" ? (
+            {(role === "CRM_SUPERADMIN" || role==="CRM_ADMIN") && (
               <div className="">
                 <Link to="/company">
                   <button className="btn" onClick={handleClose}>
@@ -219,11 +217,9 @@ function AdminHeader({ handleLogout }) {
                   </button>
                 </Link>
               </div>
-            ) : (
-              <span></span>
             )}
 
-            {role === "CRM_SUPERADMIN" ? (
+            {(role === "CRM_SUPERADMIN" || role==="CRM_ADMIN") && (
               <div className="">
                 <Link to="/changerole">
                   <button className="btn" onClick={handleClose}>
@@ -231,9 +227,7 @@ function AdminHeader({ handleLogout }) {
                   </button>
                 </Link>
               </div>
-            ) : (
-              <span></span>
-            )}
+            ) }
           </div>
 
           {/* <div className="d-flex align-items-end align-self-end h-100">

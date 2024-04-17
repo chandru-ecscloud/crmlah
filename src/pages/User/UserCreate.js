@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const validationSchema = yup.object().shape({
   userName: yup.string().required("*Enter the User Name"),
+  name: yup.string().required("*Enter the Name"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
@@ -54,6 +55,7 @@ function UserCreate() {
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
+  const [userNameAvailable, setUserNameAvailable] = useState(false);
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -62,6 +64,7 @@ function UserCreate() {
   const formik = useFormik({
     initialValues: {
       userName: "",
+      name: "",
       companyId: companyId,
       companyName: "",
       email: "",
@@ -122,6 +125,36 @@ function UserCreate() {
       reader.readAsDataURL(file);
     }
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (formik.values.userName.length >= 4) {
+          const response = await axios.get(
+            `${API_URL}checkUserName?userName=${formik.values.userName}`
+          );
+          if (response.status === 200) {
+            console.log(response.data);
+            setUserNameAvailable(true);
+          }
+        }
+        // setUserNameAvailable()
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          // Check for response status
+          setUserNameAvailable(false);
+        } else {
+          toast.error(
+            "Error Fetching User Name",
+            error?.response?.data?.message
+          );
+        }
+      }
+    };
+
+    if (formik.values.userName) {
+      fetchUserData();
+    }
+  }, [formik.values.userName]);
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
@@ -195,7 +228,44 @@ function UserCreate() {
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.userName && formik.errors.userName && (
-                    <p className="text-danger">{formik.errors.userName}</p>
+                    <p className="text-danger text-start">
+                      {formik.errors.userName}
+                    </p>
+                  )}
+                  {formik.values.userName.length >= 4 &&
+                    (userNameAvailable ? (
+                      <p className="text-success text-start">
+                         User Name is available!
+                      </p>
+                    ) : (
+                      <p className="text-danger text-start">
+                        *User Name is already taken. Please try another.
+                      </p>
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Name</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.name && formik.errors.name
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("name")}
+                  name="name"
+                  id="name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.name && formik.errors.name && (
+                    <p className="text-danger">{formik.errors.name}</p>
                   )}
                 </div>
               </div>

@@ -12,6 +12,7 @@ import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
   userName: yup.string().required("*Enter the User Name"),
+  name: yup.string().required("*Enter the Name"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
@@ -48,7 +49,7 @@ const validationSchema = yup.object().shape({
   country: yup.string().required("*Enter contry"),
 });
 function UserEdit() {
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
@@ -59,7 +60,9 @@ function UserEdit() {
   const [showCPassword, setShowCPasword] = useState(false);
   const formik = useFormik({
     initialValues: {
+      companyId:companyId,
       userName: "",
+      name: "",
       companyName: "",
       email: "",
       role: "",
@@ -162,6 +165,31 @@ function UserEdit() {
                 <div className="col-6 sm-device">
                   {formik.touched.userName && formik.errors.userName && (
                     <p className="text-danger">{formik.errors.userName}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Name</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.name && formik.errors.name
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("name")}
+                  name="name"
+                  id="name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.name && formik.errors.name && (
+                    <p className="text-danger">{formik.errors.name}</p>
                   )}
                 </div>
               </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -21,10 +20,6 @@ const validationSchema = Yup.object().shape({
   ),
   location: Yup.string().required("*Location is required"),
   member: Yup.string().required("*Member is required"),
-  // minutes: Yup.string().required("*Minutes is required"),
-  // time: Yup.string().required("*Time is required"),
-  // hour: Yup.string().required("*Hour is required"),
-  // none: Yup.string().required("*None is required"),
   street: Yup.string().required("*Street is required"),
   city: Yup.string().required("*City is required"),
   state: Yup.string().required("*State is required"),
@@ -41,26 +36,19 @@ function AppointmentsCreate({name,id}) {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const userName=sessionStorage.getItem("user_name")
-  const navigate = useNavigate();
+ 
  
   const formik = useFormik({
     initialValues: {
       companyId: companyId,
       leadId: "",
       serviceId: "",
-      // email: "",
-      // appointmentFor: "",
-      // serviceName: "",
       appointmentStartDate: "",
       appointmentStartTime: "",
       duration: "",
       appointmentName: "",
       location: "",
       member: "",
-      // minutes: "",
-      // time: "",
-      // hour: "",
-      // none: "",
       street: "",
       city: "",
       state: "",
@@ -79,7 +67,7 @@ function AppointmentsCreate({name,id}) {
       data.serviceName = service.serviceName;
       data.appointmentOwner=userName;
       data.reminder=2
-      console.log(data)
+      // console.log(data)
 
       try {
         const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
@@ -103,7 +91,6 @@ function AppointmentsCreate({name,id}) {
       }
     },
   });
-  // console.log("apidata.country",apidata.country)
 
   const findDataById = async () => {
     try {
@@ -117,8 +104,6 @@ function AppointmentsCreate({name,id}) {
       // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      // setLoading(false);
     }
   };
   const fetchServiceData = async () => {
@@ -133,8 +118,6 @@ function AppointmentsCreate({name,id}) {
       // console.log("idAndName", ServiceData);
     } catch (error) {
       console.error("Error fetching data:",error);
-    } finally {
-      // setLoading(false);
     }
   };
 
@@ -152,8 +135,6 @@ function AppointmentsCreate({name,id}) {
       console.log("userid", leadData);
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      // setLoading(false);
     }
   };
 
@@ -238,7 +219,7 @@ function AppointmentsCreate({name,id}) {
                       </select>
                     </div>
                     {formik.touched.leadId && formik.errors.leadId && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.leadId}
                       </p>
                     )}
@@ -266,7 +247,7 @@ function AppointmentsCreate({name,id}) {
                       </select>
                     </div>
                     {formik.touched.serviceId && formik.errors.serviceId && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.serviceId}
                       </p>
                     )}
@@ -290,7 +271,7 @@ function AppointmentsCreate({name,id}) {
                     </div>
                     {formik.touched.appointmentStartDate &&
                       formik.errors.appointmentStartDate && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger ">
                           {formik.errors.appointmentStartDate}
                         </p>
                       )}
@@ -315,7 +296,7 @@ function AppointmentsCreate({name,id}) {
                     </div>
                     {formik.touched.appointmentStartTime &&
                       formik.errors.appointmentStartTime && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger ">
                           {formik.errors.appointmentStartTime}
                         </p>
                       )}
@@ -341,7 +322,7 @@ function AppointmentsCreate({name,id}) {
                       </select>
                     </div>
                     {formik.touched.duration && formik.errors.duration && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.duration}
                       </p>
                     )}
@@ -365,7 +346,7 @@ function AppointmentsCreate({name,id}) {
                     </div>
                     {formik.touched.appointmentName &&
                       formik.errors.appointmentName && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger ">
                           {formik.errors.appointmentName}
                         </p>
                       )}
@@ -393,7 +374,7 @@ function AppointmentsCreate({name,id}) {
                       </select>
                     </div>
                     {formik.touched.location && formik.errors.location && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.location}
                       </p>
                     )}
@@ -415,142 +396,13 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.member && formik.errors.member && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.member}
                       </p>
                     )}
                   </div>
                 </div>
               </div>
-              {/* <div className="container-fluid my-5">
-                <h4>
-                  <b>Reminder</b>
-                </h4>
-              </div>
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="minutes">Minutes</label>&nbsp;&nbsp;
-                      <select
-                        id="minutes"
-                        //className="form-size form-select"
-                        name="minutes"
-                        {...formik.getFieldProps("minutes")}
-                        className={`form-size form-select   ${
-                          formik.touched.minutes && formik.errors.minutes
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="15 minutes before">
-                          15 minutes before
-                        </option>
-                        <option value="30 minutes before">
-                          30 minutes before
-                        </option>
-                        <option value="45 minutes before">
-                          45 minutes before
-                        </option>
-                        <option value="50 minutes before">
-                          50 minutes before
-                        </option>
-                      </select>
-                    </div>
-                    {formik.touched.minutes && formik.errors.minutes && (
-                      <p className="text-danger text-end">
-                        {formik.errors.minutes}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="days">Days</label>&nbsp;&nbsp;
-                      <select
-                        id="time"
-                        //className="form-size form-select"
-                        name="time"
-                        {...formik.getFieldProps("time")}
-                        className={`form-size form-select   ${
-                          formik.touched.time && formik.errors.time
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="At time of appointment">
-                          At time of appointment
-                        </option>
-                        <option value="option 1">1 day before</option>
-                        <option value="option 2">2 day before</option>
-                        <option value="option 3">3 day before</option>
-                      </select>
-                    </div>
-                    {formik.touched.time && formik.errors.time && (
-                      <p className="text-danger text-end">
-                        {formik.errors.time}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="hours">Hours</label>&nbsp;&nbsp;
-                      <select
-                        id="hour"
-                        //className="form-size form-select"
-                        name="hour"
-                        {...formik.getFieldProps("hour")}
-                        className={`form-size form-select   ${
-                          formik.touched.hour && formik.errors.hour
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="1 hour before">1 hour before</option>
-                        <option value="2 hour before">2 hour before</option>
-                        <option value="3 hour before">3 hour before</option>
-                        <option value="4 hour before">4 hour before</option>
-                      </select>
-                    </div>
-                    {formik.touched.hour && formik.errors.hour && (
-                      <p className="text-danger text-end">
-                        {formik.errors.hour}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="none">Not Neccessary</label>&nbsp;&nbsp;
-                      <select
-                        id="none"
-                        // className="form-size form-select"
-                        name="none"
-                        {...formik.getFieldProps("none")}
-                        className={`form-size form-select   ${
-                          formik.touched.none && formik.errors.none
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option></option>
-                        <option value="Option 1">Option 1</option>
-                        <option value="Option 2">Option 2</option>
-                        <option value="Option 3">Option 3</option>
-                      </select>
-                    </div>
-                    {formik.touched.none && formik.errors.none && (
-                      <p className="text-danger text-end">
-                        {formik.errors.none}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div> */}
 
               <div className="container-fluid my-5">
                 <h4>
@@ -577,7 +429,7 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.street && formik.errors.street && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.street}
                       </p>
                     )}
@@ -600,7 +452,7 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.city && formik.errors.city && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.city}
                       </p>
                     )}
@@ -623,7 +475,7 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.state && formik.errors.state && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.state}
                       </p>
                     )}
@@ -646,7 +498,7 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.zipCode && formik.errors.zipCode && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.zipCode}
                       </p>
                     )}
@@ -669,7 +521,7 @@ function AppointmentsCreate({name,id}) {
                       />
                     </div>
                     {formik.touched.country && formik.errors.country && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger ">
                         {formik.errors.country}
                       </p>
                     )}
@@ -704,7 +556,7 @@ function AppointmentsCreate({name,id}) {
                     </div>
                     {formik.touched.additionalInformation &&
                       formik.errors.additionalInformation && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger ">
                           {formik.errors.additionalInformation}
                         </p>
                       )}

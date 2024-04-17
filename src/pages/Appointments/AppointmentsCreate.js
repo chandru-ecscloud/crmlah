@@ -53,10 +53,6 @@ function AppointmentsCreate({ name, schedule }) {
       appointmentName: "",
       location: "",
       member: "",
-      // minutes: "",
-      // time: "",
-      // hour: "",
-      // none: "",
       street: "",
       city: "",
       state: "",
@@ -404,29 +400,11 @@ function AppointmentsCreate({ name, schedule }) {
                     )}
                     {formik.touched.appointmentFor &&
                       formik.errors.appointmentFor && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger">
                           {formik.errors.appointmentFor}
                         </p>
                       )}
-                    {/* <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment </lable> &nbsp;&nbsp;
-                      <select
-                        name="leadId"
-                        className={`form-select form-size ${
-                          formik.touched.leadId && formik.errors.leadId
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        {...formik.getFieldProps("leadId")}
-                      >
-                        <option value=" "></option>
-                        {leadData.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div> */}
+                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -451,7 +429,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.serviceId && formik.errors.serviceId && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.serviceId}
                       </p>
                     )}
@@ -475,7 +453,7 @@ function AppointmentsCreate({ name, schedule }) {
                     </div>
                     {formik.touched.appointmentStartDate &&
                       formik.errors.appointmentStartDate && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger">
                           {formik.errors.appointmentStartDate}
                         </p>
                       )}
@@ -500,7 +478,7 @@ function AppointmentsCreate({ name, schedule }) {
                     </div>
                     {formik.touched.appointmentStartTime &&
                       formik.errors.appointmentStartTime && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger">
                           {formik.errors.appointmentStartTime}
                         </p>
                       )}
@@ -526,7 +504,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.duration && formik.errors.duration && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.duration}
                       </p>
                     )}
@@ -550,7 +528,7 @@ function AppointmentsCreate({ name, schedule }) {
                     </div>
                     {formik.touched.appointmentName &&
                       formik.errors.appointmentName && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger">
                           {formik.errors.appointmentName}
                         </p>
                       )}
@@ -578,7 +556,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.location && formik.errors.location && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.location}
                       </p>
                     )}
@@ -600,7 +578,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.member && formik.errors.member && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.member}
                       </p>
                     )}
@@ -644,7 +622,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.minutes && formik.errors.minutes && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.minutes}
                       </p>
                     )}
@@ -674,7 +652,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.time && formik.errors.time && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.time}
                       </p>
                     )}
@@ -702,7 +680,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.hour && formik.errors.hour && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.hour}
                       </p>
                     )}
@@ -729,7 +707,7 @@ function AppointmentsCreate({ name, schedule }) {
                       </select>
                     </div>
                     {formik.touched.none && formik.errors.none && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.none}
                       </p>
                     )}
@@ -762,7 +740,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.street && formik.errors.street && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.street}
                       </p>
                     )}
@@ -785,7 +763,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.city && formik.errors.city && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.city}
                       </p>
                     )}
@@ -808,7 +786,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.state && formik.errors.state && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.state}
                       </p>
                     )}
@@ -831,7 +809,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.zipCode && formik.errors.zipCode && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.zipCode}
                       </p>
                     )}
@@ -854,7 +832,7 @@ function AppointmentsCreate({ name, schedule }) {
                       />
                     </div>
                     {formik.touched.country && formik.errors.country && (
-                      <p className="text-danger text-end">
+                      <p className="text-danger">
                         {formik.errors.country}
                       </p>
                     )}
@@ -889,7 +867,7 @@ function AppointmentsCreate({ name, schedule }) {
                     </div>
                     {formik.touched.additionalInformation &&
                       formik.errors.additionalInformation && (
-                        <p className="text-danger text-end">
+                        <p className="text-danger">
                           {formik.errors.additionalInformation}
                         </p>
                       )}

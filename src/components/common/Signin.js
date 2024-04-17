@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import HeroImage from "../../assets/heroImage.png";
 import axios from "axios";
@@ -7,12 +7,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
-  userName: yup.string().required("*Enter the User Name"),
-  userName: yup.string().required("*Enter the User Name"),
+  name: yup.string().required("*Enter the Name"),
+  userName: yup.string().required("*Enter the User Name").min(4,"*min length of 4 chars"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
@@ -51,9 +51,11 @@ const CompanyRegistrationForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPasword] = useState(false);
+  const [userNameAvailable, setUserNameAvailable] = useState(false);
 
   const formik = useFormik({
     initialValues: {
+      name: "",
       userName: "",
       companyName: "",
       email: "",
@@ -79,12 +81,15 @@ const CompanyRegistrationForm = () => {
       data.role = "CMP_OWNER";
       data.jwtRole = "CMP_OWNER";
       try {
-        const response = await axios.post(`${API_URL}newUserRegister`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
+        let response; 
+        if (userNameAvailable) {
+          response = await axios.post(`${API_URL}newUserRegister`, data, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        }
+        if (response && response.status === 201) {
           toast.success(response.data.message);
           sessionStorage.setItem("companyId", response.data.companyId);
           navigate("/emailsuccess");
@@ -104,9 +109,55 @@ const CompanyRegistrationForm = () => {
   const toggleCPasswordVisibility = () => {
     setShowCPasword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (formik.values.userName.length >= 4) {
+          const response = await axios.get(
+            `${API_URL}checkUserName?userName=${formik.values.userName}`
+          );
+          if (response.status === 200) {
+            console.log(response.data);
+            setUserNameAvailable(true);
+          }
+        }
+        // setUserNameAvailable()
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          // Check for response status
+          setUserNameAvailable(false);
+        } else {
+          toast.error(
+            "Error Fetching User Name",
+            error?.response?.data?.message
+          );
+        }
+      }
+    };
 
+    if (formik.values.userName) {
+      fetchUserData();
+    }
+  }, [formik.values.userName]);
   return (
     <form onSubmit={formik.handleSubmit}>
+      <div className="mb-3">
+        <label htmlfor="userName" className="form-label">
+          Name:
+        </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          {...formik.getFieldProps("name")}
+          className={`form-control ${
+            formik.touched.name && formik.errors.name ? "is-invalid" : ""
+          }`}
+        />
+        {formik.touched.name && formik.errors.name && (
+          <p className="text-danger text-start">{formik.errors.name}</p>
+        )}
+      </div>
       {/*  UserName */}
       <div className="mb-3">
         <label htmlfor="userName" className="form-label">
@@ -126,6 +177,14 @@ const CompanyRegistrationForm = () => {
         {formik.touched.userName && formik.errors.userName && (
           <p className="text-danger text-start">{formik.errors.userName}</p>
         )}
+        {formik.values.userName.length >= 4 &&
+          (userNameAvailable ? (
+            <p className="text-success text-start">User Name is available!</p>
+          ) : (
+            <p className="text-danger text-start">
+              User Name is already taken. Please try another.
+            </p>
+          ))}
       </div>
 
       <div className="mb-3">
