@@ -10,7 +10,7 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   // company_name: yup.string().required("*please enter the Company Id"),
-  username: yup.string().required('*UserName is required.'),
+  username: yup.string().required("*UserName is required."),
   password: yup.string().required("*Enter the valid Password"),
   // min(4, "*min length of 4 chars").matches(
   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
@@ -25,13 +25,13 @@ function LogIn({ handleLogin }) {
   const formik = useFormik({
     initialValues: {
       // company_name: '',
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Api login Data:", data);
-      handelLoginClick(data)
+      handelLoginClick(data);
     },
   });
 
@@ -67,18 +67,16 @@ function LogIn({ handleLogin }) {
 
   return (
     <section className="signIn">
-      
-        <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
-          <div className="container">
-            <div className="row py-5">
-              <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
-                <img className="img-fluid" src={CRM} alt="CRMLAH" />
-              </div>
-              <div className="col-lg-6 col-md-6 col-12">
-                <h3 className="registerWord text-center">LOGIN</h3>
-                <form onSubmit={formik.handleSubmit}>
-                  
-                  {/* <div className="form-group mt-3">
+      <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
+        <div className="container">
+          <div className="row py-5">
+            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
+              <img className="img-fluid" src={CRM} alt="CRMLAH" />
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <h3 className="registerWord text-center">LOGIN</h3>
+              <form onSubmit={formik.handleSubmit}>
+                {/* <div className="form-group mt-3">
                     <label>Company ID:</label>
                     <input
                       type="text"
@@ -92,69 +90,77 @@ function LogIn({ handleLogin }) {
                     )}
                   </div> */}
 
-                  <div className="form-group mt-3">
-                    <label htmlFor="username">User Name:</label>
-                    <input
-                      type="text"
-                      className={`form-size form-control  ${formik.touched.username && formik.errors.username ? 'is-invalid' : ''}`}
-                      {...formik.getFieldProps('username')}
-                      name="username"
-                      id="username"
-                    />
-                    {formik.touched.username && formik.errors.username && (
-                      <p className="text-danger">{formik.errors.username}</p>
-                    )}
-                  </div>
+                <div className="form-group mt-3">
+                  <label htmlFor="username">User Name:</label>
+                  <input
+                    type="text"
+                    className={`form-size form-control  ${
+                      formik.touched.username && formik.errors.username
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("username")}
+                    name="username"
+                    id="username"
+                  />
+                  {formik.touched.username && formik.errors.username && (
+                    <p className="text-danger">{formik.errors.username}</p>
+                  )}
+                </div>
 
-                  <div className="form-group mb-3">
-                    <label htmlfor="password" className="form-label">
-                      Password
-                    </label>
-                    <div className="input-group">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className={`form-size form-control  ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
-                      {...formik.getFieldProps('password')}
+                <div className="form-group mb-3">
+                  <label htmlfor="password" className="form-label">
+                    Password
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className={`form-size form-control  ${
+                        formik.touched.password && formik.errors.password
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("password")}
                       name="password"
                       id="password"
-                        style={{ margin: "0px" }}
-                      />
-                      <span
-                        className="input-group-append eye-icon"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </span>
-                    </div>
-                    {formik.touched.password && formik.errors.password && (
-                      <p className="text-danger">{formik.errors.password}</p>
-                    )}
+                      style={{ margin: "0px" }}
+                    />
+                    <span
+                      className="input-group-append eye-icon"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
                   </div>
+                  {formik.touched.password && formik.errors.password && (
+                    <p className="text-danger">{formik.errors.password}</p>
+                  )}
+                </div>
 
-                  <button
-                    className="contactsubmitBtn btn btn-primary mx-auto"
-                    type="submit"
-                  >
-                    Login
-                  </button>
-                  <p className="forgotWord text-center mt-5">
-                    Forgot{" "}
-                    <Link to="/forgot" className="password-link">
-                      Password
-                    </Link>
-                    ?
-                  </p>
-                  <p className="forgotWord text-center">
-                    Don't have an account?{" "}
-                    <Link to="/signin" className="password-link">
-                      Sign up
-                    </Link>
-                  </p>
-                </form>
-              </div>
+                <button
+                  className="contactsubmitBtn btn btn-primary mx-auto"
+                  type="submit"
+                >
+                  Login
+                </button>
+                <p className="forgotWord text-center mt-5">
+                  Forgot{" "}
+                  <Link to="/forgot" className="password-link">
+                    Password
+                  </Link>
+                  ?
+                </p>
+                <p className="forgotWord text-center">
+                  Don't have an account?{" "}
+                  <Link to="/signin" className="password-link">
+                    Sign up
+                  </Link>
+                </p>
+              </form>
             </div>
           </div>
         </div>
+      </div>
     </section>
   );
 }

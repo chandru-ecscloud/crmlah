@@ -10,7 +10,6 @@ import "react-phone-input-2/lib/style.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-
 const validationSchema = yup.object().shape({
   userName: yup.string().required("*Enter the User Name"),
   userName: yup.string().required("*Enter the User Name"),
@@ -21,15 +20,13 @@ const validationSchema = yup.object().shape({
     .required("*Enter the Email"),
 
   role: yup.string().required("*Select the Role"),
-  password: yup
-    .string()
-    .required("*Enter the valid Password")
-    .min(4, "*min length of 4 chars")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-    )
-    .max(10, "*Enter upto 15 chars only"),
+  password: yup.string().required("*Enter the valid Password"),
+  // .min(4, "*min length of 4 chars")
+  // .matches(
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+  //   "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+  // )
+  // .max(10, "*Enter upto 15 chars only"),
   cpassword: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
@@ -49,8 +46,6 @@ const validationSchema = yup.object().shape({
     .matches(/^\d+$/, "Must be only digits"),
   country: yup.string().required("*Enter contry"),
 });
-
-
 
 const CompanyRegistrationForm = () => {
   const navigate = useNavigate();
@@ -77,13 +72,12 @@ const CompanyRegistrationForm = () => {
       state: "",
       zipCode: "",
       country: "",
-
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("User Datas:", data);
-      data.role = "CMP_USER";
-      data.jwtRole = "CMP_USER";
+      data.role = "CMP_OWNER";
+      data.jwtRole = "CMP_OWNER";
       try {
         const response = await axios.post(`${API_URL}newUserRegister`, data, {
           headers: {
@@ -92,6 +86,7 @@ const CompanyRegistrationForm = () => {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+          sessionStorage.setItem("companyId", response.data.companyId);
           navigate("/emailsuccess");
         } else {
           toast.error(response.data.message);
@@ -110,11 +105,8 @@ const CompanyRegistrationForm = () => {
     setShowCPasword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
 
-
-
   return (
     <form onSubmit={formik.handleSubmit}>
-
       {/*  UserName */}
       <div className="mb-3">
         <label htmlfor="userName" className="form-label">
@@ -125,17 +117,15 @@ const CompanyRegistrationForm = () => {
           name="userName"
           id="userName"
           {...formik.getFieldProps("userName")}
-          className={`form-control ${formik.touched.userName && formik.errors.userName
-            ? "is-invalid"
-            : ""
-            }`}
+          className={`form-control ${
+            formik.touched.userName && formik.errors.userName
+              ? "is-invalid"
+              : ""
+          }`}
         />
         {formik.touched.userName && formik.errors.userName && (
-          <p className="text-danger text-start">
-            {formik.errors.userName}
-          </p>
+          <p className="text-danger text-start">{formik.errors.userName}</p>
         )}
-
       </div>
 
       <div className="mb-3">
@@ -147,17 +137,15 @@ const CompanyRegistrationForm = () => {
           name="companyName"
           id="companyName"
           {...formik.getFieldProps("companyName")}
-          className={`form-control ${formik.touched.companyName && formik.errors.companyName
-            ? "is-invalid"
-            : ""
-            }`}
+          className={`form-control ${
+            formik.touched.companyName && formik.errors.companyName
+              ? "is-invalid"
+              : ""
+          }`}
         />
         {formik.touched.companyName && formik.errors.companyName && (
-          <p className="text-danger text-start">
-            {formik.errors.companyName}
-          </p>
+          <p className="text-danger text-start">{formik.errors.companyName}</p>
         )}
-
       </div>
 
       {/* Email */}
@@ -170,15 +158,12 @@ const CompanyRegistrationForm = () => {
           name="email"
           id="email"
           {...formik.getFieldProps("email")}
-          className={`form-control ${formik.touched.email && formik.errors.email
-            ? "is-invalid"
-            : ""
-            }`}
+          className={`form-control ${
+            formik.touched.email && formik.errors.email ? "is-invalid" : ""
+          }`}
         />
         {formik.touched.email && formik.errors.email && (
-          <p className="text-danger text-start">
-            {formik.errors.email}
-          </p>
+          <p className="text-danger text-start">{formik.errors.email}</p>
         )}
       </div>
 
@@ -204,16 +189,13 @@ const CompanyRegistrationForm = () => {
       </div> */}
 
       <div className="mb-3 ">
-        <label className="form-label">
-          Role  :
-        </label>
+        <label className="form-label">Role :</label>
         <select
           type="text"
           name="role"
-          className={`form-select form-size  ${formik.touched.role && formik.errors.role
-            ? "is-invalid"
-            : ""
-            }`}
+          className={`form-select form-size  ${
+            formik.touched.role && formik.errors.role ? "is-invalid" : ""
+          }`}
           {...formik.getFieldProps("role")}
         >
           <option value=""></option>
@@ -222,11 +204,8 @@ const CompanyRegistrationForm = () => {
           <option value="others">Others</option>
         </select>
         {formik.touched.role && formik.errors.role && (
-          <p className="text-danger text-start">
-            {formik.errors.role}
-          </p>
+          <p className="text-danger text-start">{formik.errors.role}</p>
         )}
-
       </div>
 
       {/* password */}
@@ -236,16 +215,17 @@ const CompanyRegistrationForm = () => {
         </label>
         <div className="input-group">
           <input
-            type="text"
+            type={showPassword ? "text" : "password"}
+            className={`form-size form-control  ${
+              formik.touched.password && formik.errors.password
+                ? "is-invalid"
+                : ""
+            }`}
+            {...formik.getFieldProps("password")}
             name="password"
             id="password"
-            {...formik.getFieldProps("password")}
-            className={`form-control ${formik.touched.password && formik.errors.password
-              ? "is-invalid"
-              : ""
-              }`}
+            style={{ margin: "0px" }}
           />
-
           <span
             className="input-group-append eye-icon"
             onClick={togglePasswordVisibility}
@@ -254,29 +234,28 @@ const CompanyRegistrationForm = () => {
           </span>
         </div>
         {formik.touched.password && formik.errors.password && (
-          <p className="text-danger text-start">
-            {formik.errors.password}
-          </p>
+          <p className="text-danger">{formik.errors.password}</p>
         )}
       </div>
 
       {/* Cpassword */}
       <div className="form-group mb-3">
-        <label htmlfor="cpassword" className="form-label">
-          ConfirmPassword
+        <label htmlfor="password" className="form-label">
+          Confrim Password
         </label>
         <div className="input-group">
           <input
-            type="text"
+            type={showCPassword ? "text" : "password"}
+            className={`form-size form-control  ${
+              formik.touched.cpassword && formik.errors.cpassword
+                ? "is-invalid"
+                : ""
+            }`}
+            {...formik.getFieldProps("cpassword")}
             name="cpassword"
             id="cpassword"
-            {...formik.getFieldProps("cpassword")}
-            className={`form-control ${formik.touched.cpassword && formik.errors.cpassword
-              ? "is-invalid"
-              : ""
-              }`}
+            style={{ margin: "0px" }}
           />
-
           <span
             className="input-group-append eye-icon"
             onClick={toggleCPasswordVisibility}
@@ -285,9 +264,7 @@ const CompanyRegistrationForm = () => {
           </span>
         </div>
         {formik.touched.cpassword && formik.errors.cpassword && (
-          <p className="text-danger text-start">
-            {formik.errors.cpassword}
-          </p>
+          <p className="text-danger">{formik.errors.cpassword}</p>
         )}
       </div>
 
@@ -336,17 +313,13 @@ const CompanyRegistrationForm = () => {
             name="phone"
             id="phone"
             {...formik.getFieldProps("phone")}
-            className={`form-control ${formik.touched.phone && formik.errors.phone
-              ? "is-invalid"
-              : ""
-              }`}
+            className={`form-control ${
+              formik.touched.phone && formik.errors.phone ? "is-invalid" : ""
+            }`}
           />
-
         </div>
         {formik.touched.phone && formik.errors.phone && (
-          <p className="text-danger text-start">
-            {formik.errors.phone}
-          </p>
+          <p className="text-danger text-start">{formik.errors.phone}</p>
         )}
       </div>
 
@@ -355,22 +328,19 @@ const CompanyRegistrationForm = () => {
         <label className="form-label">Address</label>
         <div className="mb-3">
           <input
-
             type="type"
             name="address"
             id="address"
             {...formik.getFieldProps("address")}
-            className={`form-control ${formik.touched.address && formik.errors.address
-              ? "is-invalid"
-              : ""
-              }`}
-
+            className={`form-control ${
+              formik.touched.address && formik.errors.address
+                ? "is-invalid"
+                : ""
+            }`}
             placeholder="Enter address"
           />
           {formik.touched.address && formik.errors.address && (
-            <p className="text-danger text-start">
-              {formik.errors.address}
-            </p>
+            <p className="text-danger text-start">{formik.errors.address}</p>
           )}
         </div>
         <div className="mb-3">
@@ -379,57 +349,48 @@ const CompanyRegistrationForm = () => {
             name="city"
             id="city"
             {...formik.getFieldProps("city")}
-            className={`form-control ${formik.touched.city && formik.errors.city
-              ? "is-invalid"
-              : ""
-              }`}
+            className={`form-control ${
+              formik.touched.city && formik.errors.city ? "is-invalid" : ""
+            }`}
             placeholder="City"
           />
           {formik.touched.city && formik.errors.city && (
-            <p className="text-danger text-start">
-              {formik.errors.city}
-            </p>
+            <p className="text-danger text-start">{formik.errors.city}</p>
           )}
         </div>
         <div className="row">
           <div className="col-md-6 col-12 mb-3 ">
-
             <input
               type="type"
               name="state"
               id="state"
               {...formik.getFieldProps("state")}
-              className={`form-control ${formik.touched.state && formik.errors.state
-                ? "is-invalid"
-                : ""
-                }`}
+              className={`form-control ${
+                formik.touched.state && formik.errors.state ? "is-invalid" : ""
+              }`}
               placeholder="Enter state"
             />
             {formik.touched.state && formik.errors.state && (
-              <p className="text-danger text-start">
-                {formik.errors.state}
-              </p>
+              <p className="text-danger text-start">{formik.errors.state}</p>
             )}
           </div>
           <div className="col-md-6 col-12">
             <input
-
               type="text"
               //className="form-control "
               pattern="[0-9]*"
               id="zipCode"
               {...formik.getFieldProps("zipCode")}
-              className={`form-control ${formik.touched.zipCode && formik.errors.zipCode
-                ? "is-invalid"
-                : ""
-                }`}
+              className={`form-control ${
+                formik.touched.zipCode && formik.errors.zipCode
+                  ? "is-invalid"
+                  : ""
+              }`}
               placeholder="zip"
-            //  onChange={(e)=>{e.target.value.replace(/\D/g, '')}}
+              //  onChange={(e)=>{e.target.value.replace(/\D/g, '')}}
             />
             {formik.touched.zipCode && formik.errors.zipCode && (
-              <p className="text-danger text-start">
-                {formik.errors.zipCode}
-              </p>
+              <p className="text-danger text-start">{formik.errors.zipCode}</p>
             )}
           </div>
         </div>
@@ -438,24 +399,20 @@ const CompanyRegistrationForm = () => {
             type="text"
             id="country"
             {...formik.getFieldProps("country")}
-            className={`form-control ${formik.touched.country && formik.errors.country
-              ? "is-invalid"
-              : ""
-              }`}
+            className={`form-control ${
+              formik.touched.country && formik.errors.country
+                ? "is-invalid"
+                : ""
+            }`}
             placeholder="Country"
           />
           {formik.touched.country && formik.errors.country && (
-            <p className="text-danger text-start">
-              {formik.errors.country}
-            </p>
+            <p className="text-danger text-start">{formik.errors.country}</p>
           )}
         </div>
       </div>
 
-      <button
-        className="contactsubmitBtn btn btn-danger mx-auto"
-        type="submit"
-      >
+      <button className="contactsubmitBtn btn btn-danger mx-auto" type="submit">
         Register
       </button>
     </form>

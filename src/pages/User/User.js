@@ -26,11 +26,7 @@ const csvConfig = mkConfig({
 });
 
 const UserActivation = () => {
-  const [data, setData] = useState([
-    {
-      userName: "Chandru",
-    },
-  ]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const role = sessionStorage.getItem("role");
   // console.log(role);
@@ -99,28 +95,28 @@ const UserActivation = () => {
     []
   );
 
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.get(
-  //       `https://65963d8b6bb4ec36ca02337b.mockapi.io/newuser`,
-  //       {
-  //         // headers: {
-  //         //   //Authorization: `Bearer ${token}`,
-  //         // },
-  //       }
-  //     );
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios(`${API_URL}allUserRegistrations`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+      setData(response.data);
+      console.log("Api data:", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -340,7 +336,7 @@ const UserActivation = () => {
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >
-                Create Lead
+                Create User
               </button>
             </div>
           </div>
