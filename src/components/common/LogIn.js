@@ -67,7 +67,7 @@ function LogIn({ handleLogin }) {
 
   return (
     <section className="signIn">
-      <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
+      <div style={{backgroundColor: "#ECFAFE" }} className="py-5">
         <div className="container">
           <div className="row py-5">
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">

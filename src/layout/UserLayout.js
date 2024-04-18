@@ -14,6 +14,9 @@ import Forgot from "../components/common/Forgot";
 import EmailSuccess from "../components/common/EmailSuccess";
 import "../styles/user.css";
 import { ToastContainer } from "react-toastify";
+import EntryAppointment from "../pages/EntryAppointment";
+import Page404 from "../components/common/404";
+
 
 // import About from "../Components/About";
 // import Feature from "../Components/Feature";
@@ -40,7 +43,13 @@ function UserLayout({ handleLogin }) {
             path="/Crm_Appoinment_Cancelschedule/:id"
             element={<CancelSchedule />}
           />
+          <Route
+            path="/entryappointment"
+            element={<EntryAppointment />}
+          />
+        <Route path="*" element={<Page404 />} />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </>
