@@ -1,0 +1,63 @@
+.volunteerBtn {
+  border-radius: 5px;
+  background: #ff3e54;
+  color: #ff3e54;
+  font-family: "Eudoxus Sans", sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 5px;
+  width: 100px;
+  background-color: transparent;
+  border: 2px solid #ff3e54;
+}
+
+.volunteerBtn:hover {
+  background: #ff001e;
+  color: #fff;
+}
+
+.donateBtn {
+  border-radius: 5px;
+  background: #3d63ea;
+  width: 90px;
+  color: #3d63ea;
+  font-family: "Eudoxus Sans", sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  line-height: normal;
+  background-color: transparent;
+  border: 2px solid #3d63ea;
+}
+
+.donateBtn:hover {
+  background: #0037ff;
+  color: #fff;
+}
+
+.nav-link {
+  color: #000; /* default color */
+  transition: color 0.3s ease; /* smooth transition effect */
+}
+
+.nav-link:hover {
+  color: #007bff; /* primary color on hover */
+}
+.key-features:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.navBar-CRM {
+  position: sticky;
+  top: 0;
+  background-color: rgb(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(6px);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
