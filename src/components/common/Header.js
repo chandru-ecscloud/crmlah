@@ -9,7 +9,7 @@ function Header() {
   useLocation();
   return (
     <>
-      <Navbar expand={expand} className="bg-body-tertiary header">
+      <Navbar expand={expand} className="bg-body-tertiary header ">
         <Container fluid>
           <Navbar.Brand href="#">
             <img src={Logo} alt="WWG" className="img-fluid" />
@@ -78,12 +78,12 @@ function Header() {
                   Contact Us
                 </NavLink>
               </Nav>
-              <Nav className="d-flex">
+              <Nav className="d-flex" style={{padding:"20px 0"}}>
                 <Link to="/login">
                   <button className="btn donateBtn">Sign In</button>
                 </Link>
                 <Link to="/register">
-                  <button className="btn volunteerBtn">Sign Up</button>
+                  <button className="btn volunteerBtn">Sign </button>
                 </Link>
               </Nav>
             </Offcanvas.Body>

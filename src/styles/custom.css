@@ -68,7 +68,7 @@ nav .nav-link {
   font-family: Montserrat;
   font-size: 15px;
   font-style: normal;
-  padding-right: 20px !important;
+  /* padding-right: 20px !important; */
   font-weight: 600;
   line-height: normal;
 }
@@ -77,46 +77,6 @@ nav .nav-link Link {
   color: rgba(0, 0, 0, 0.85) !important;
 }
 
-.donateBtn {
-  border-radius: 5px;
-  background: #3d63ea;
-  width: 90px;
-  color: #3d63ea;
-  font-family: Montserrat;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  margin-right: 10px;
-  margin-bottom: 5px;
-  line-height: normal;
-  background-color: transparent;
-  border: 2px solid #3d63ea;
-}
-
-.donateBtn:hover {
-  background: #0037ff;
-  color: #fff;
-}
-
-.volunteerBtn {
-  border-radius: 5px;
-  background: #ff3e54;
-  color: #ff3e54;
-  font-family: Montserrat;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-bottom: 5px;
-  width: 100px;
-  background-color: transparent;
-  border: 2px solid #ff3e54;
-}
-
-.volunteerBtn:hover {
-  background: #ff001e;
-  color: #fff;
-}
 
 /* Footer  */
 .footerSection {
@@ -545,15 +505,15 @@ nav .nav-link Link {
   height: 7px;
   background-color: rgb(0, 30, 255);
   border-radius: 50%;
-  animation: pulse 0.8s infinite alternate; /* Defines the animation */
+  animation: pulse 0.8s infinite alternate; 
 }
 
 @keyframes pulse {
   from {
-    transform: scale(1); /* Initial scale */
+    transform: scale(1);
   }
   to {
-    transform: scale(1.5); /* Scale up */
+    transform: scale(1.5); 
   }
 }
 
