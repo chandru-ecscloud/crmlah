@@ -78,7 +78,7 @@ function ServicesShow() {
               <Tooltip TransitionComponent={Zoom} title="Back">
                   <button
                     className="btn fs-4 border-white"
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/services")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>

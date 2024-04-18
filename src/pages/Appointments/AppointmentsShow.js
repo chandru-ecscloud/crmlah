@@ -49,7 +49,7 @@ function AppointmentsShow() {
               <Tooltip TransitionComponent={Zoom} title="Back">
                   <button
                     className="btn fs-4 border-white"
-                    onClick={() => navigate("/appoinment")}
+                    onClick={() => navigate("/appointments")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
