@@ -26,21 +26,6 @@ function Footer() {
               <FaYoutube size={30} />
             </span>
           </div> */}
-          <div className="col-lg-3 col-md-3 col-12 mb-3 d-flex flex-column justify-content-center">
-            <h6 className=" mt-3 fw-bold ">CloudECS Infotech</h6>
-            <span className="d-flex flex-column my-2 ">
-              <span className="footerContent mb-2">
-                <FaPhoneAlt /> &nbsp;&nbsp;(+65) 88941306
-              </span>
-              <span className="footerContent mb-2 ">
-                <IoIosMailUnread /> &nbsp;&nbsp;sales@ecscloudinfotech.com
-              </span>
-              <span className="footerContent">
-                <FaLocationDot /> &nbsp;&nbsp;766,Shakthi Towers,Tower-2,6th
-                floor,Anna Salai,Chennai,India-600002
-              </span>
-            </span>
-          </div>
 
           <div className="col-lg-3 col-md-3 col-12 mb-3 d-flex flex-column justify-content-center">
             <h6 className=" mt-3 fw-bold">ECS Cloud Infotech</h6>
@@ -63,14 +48,36 @@ function Footer() {
             <FaWhatsapp className="footerIcon" />
           </span> */}
           </div>
+
+          <div className="col-lg-3 col-md-3 col-12 mb-3 d-flex flex-column justify-content-center">
+            <h6 className=" mt-3 fw-bold ">CloudECS Infotech</h6>
+            <span className="d-flex flex-column my-2 ">
+              <span className="footerContent mb-2">
+                <FaPhoneAlt /> &nbsp;&nbsp;(+91) 9361365818
+              </span>
+              <span className="footerContent mb-2 ">
+                <IoIosMailUnread /> &nbsp;&nbsp;sales@ecscloudinfotech.com
+              </span>
+              <span className="footerContent">
+                <FaLocationDot /> &nbsp;&nbsp;766,Shakthi Towers,Tower-2,6th
+                floor,Anna Salai,Chennai,India-600002
+              </span>
+            </span>
+          </div>
+
           <div className="col-lg-3 col-md-3 col-12">
-            <div>
+            <div className="text-center">
               <h6 className=" mt-3 fw-bold">Pages</h6>
-              <span className="my-2 ">
-                
-                <Link className="nav-link footerContent mt-2 " to="/contact">Contact</Link>
-                <Link className="nav-link footerContent mt-2 " to="/feature">Feature</Link>
-                <Link className="nav-link footerContent mt-2 " to="/about">About</Link>
+              <span className="my-2">
+                <Link className="nav-link footerContent mt-2 " to="/about">
+                  About
+                </Link>
+                <Link className="nav-link footerContent mt-2 " to="/feature">
+                  Feature
+                </Link>
+                <Link className="nav-link footerContent mt-2 " to="/contact">
+                  Contact
+                </Link>
               </span>
             </div>
           </div>

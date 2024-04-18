@@ -181,7 +181,7 @@ const Quotes = () => {
   };
 
   const handleAssignProducts = async (rows) => {
-    const rowData = rows.map((row) => row.original.id);
+    setRowId(() => rows.map((row) => row.original.id));
     
   };
   const handleExportRowsPDF = (rows) => {

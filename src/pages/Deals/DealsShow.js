@@ -52,8 +52,8 @@ function DealsShow() {
           },
           {}
         );
-        console.log("Account Show :", transformedData.data);
         setdealData(transformedData);
+        console.log("Account Show :", dealData);
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -184,12 +184,12 @@ function DealsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.phone || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Mobile</label>
@@ -198,27 +198,27 @@ function DealsShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Deal Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.dealStatus || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.company || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.country || ""}
                 </span>
-              </div>
-            </div>
+              </div>*/}
+            </div> 
 
             <div className="container-fluid col-md-6"></div>
           </div>
@@ -248,7 +248,7 @@ function DealsShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.phone || ""}
@@ -260,7 +260,7 @@ function DealsShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.leadSource || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Campaign Source</label>
@@ -292,12 +292,12 @@ function DealsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+             {/*  <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.company || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Deal Name</label>
