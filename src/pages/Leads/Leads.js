@@ -451,147 +451,140 @@ const Lead = () => {
 
   return (
     <section>
-      {loading && <LinearProgress />}
-      {!loading && (
-        <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            <div style={{ paddingRight: "10px" }}>
-              <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
-                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
-                onClick={handelNavigateClick}
-              >
-                Create Lead
-              </button>
-            </div>
-            <div class="dropdown-center">
-              <button
-                class="btn btn-danger dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Action <FaSortDown style={{ marginTop: "-6px" }} />
-              </button>
-              <ul class="dropdown-menu">
-                {role === "CRM_SUPERADMIN" ? (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Convert Contact
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  // Render disabled buttons for CMP_USER
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable table={table} />
-          </ThemeProvider>
-        </>
-      )}
+      <div className="d-flex align-items-center justify-content-end py-4 px-3">
+        <div style={{ paddingRight: "10px" }}>
+          <button
+            className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
+            disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+            onClick={handelNavigateClick}
+          >
+            Create Lead
+          </button>
+        </div>
+        <div class="dropdown-center">
+          <button
+            class="btn btn-danger dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Action <FaSortDown style={{ marginTop: "-6px" }} />
+          </button>
+          <ul class="dropdown-menu">
+            {role === "CRM_SUPERADMIN" ? (
+              <>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled={
+                      !(
+                        table.getIsSomeRowsSelected() ||
+                        table.getIsAllRowsSelected()
+                      ) || table.getSelectedRowModel().rows.length !== 1
+                    }
+                    onClick={() =>
+                      handleBulkConvert(table.getSelectedRowModel().rows)
+                    }
+                  >
+                    Convert Contact
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled={
+                      !table.getIsSomeRowsSelected() &&
+                      !table.getIsAllRowsSelected()
+                    }
+                    onClick={() =>
+                      handleBulkConvert(table.getSelectedRowModel().rows)
+                    }
+                  >
+                    Mass Convert
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled={
+                      !(
+                        table.getIsSomeRowsSelected() ||
+                        table.getIsAllRowsSelected()
+                      ) || table.getSelectedRowModel().rows.length !== 1
+                    }
+                    onClick={() =>
+                      handleBulkDelete(table.getSelectedRowModel().rows)
+                    }
+                  >
+                    Delete
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled={
+                      !table.getIsSomeRowsSelected() &&
+                      !table.getIsAllRowsSelected()
+                    }
+                    onClick={() =>
+                      handleBulkDelete(table.getSelectedRowModel().rows)
+                    }
+                  >
+                    Mass Delete
+                  </button>
+                </li>
+              </>
+            ) : (
+              // Render disabled buttons for CMP_USER
+              <>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled
+                  >
+                    Convert
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled
+                  >
+                    Mass Convert
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled
+                  >
+                    Delete
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn"
+                    style={{ width: "100%", border: "none" }}
+                    disabled
+                  >
+                    Mass Delete
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable table={table} />
+      </ThemeProvider>
     </section>
   );
 };
