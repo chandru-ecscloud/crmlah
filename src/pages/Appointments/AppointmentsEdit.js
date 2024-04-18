@@ -148,13 +148,13 @@ function AppointmentsCreate({name,id}) {
 
   return (
     <>
-      <Button
+      <button
         className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
         disabled={role === "CMP_USER"}
         onClick={() => setLgShow(true)}
       >
         {name}
-      </Button>
+      </button>
       <Modal
         size="xl"
         show={lgShow}
