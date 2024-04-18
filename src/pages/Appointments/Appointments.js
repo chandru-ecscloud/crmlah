@@ -160,7 +160,6 @@ const Appointments = () => {
         }
       );
       setData(response.data);
-      // console.log("data",data)
     } catch (error) {
       toast.error("Error fetching data:", error);
     } finally {
@@ -209,10 +208,10 @@ const Appointments = () => {
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.appointment_for,
-        row.original.service,
+        row.original.leadId,
+        row.original.serviceName,
         row.original.duration,
-        row.original.appointment_name,
+        row.original.appointmentName,
       ];
     });
 
@@ -237,11 +236,11 @@ const Appointments = () => {
     ];
     const tableData2 = rows.map((row) => {
       return [
-        row.original.appointment_start_date,
+        row.original.appointmentStartDate,
         row.original.location,
-        row.original.address,
+        row.original.street,
         row.original.member,
-        row.original.remainder,
+        row.original.reminder,
       ];
     });
     autoTable(doc, {
