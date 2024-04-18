@@ -82,6 +82,7 @@ function DealsCreate() {
       billing_street: "",
       billing_code: "",
       billing_country: "",
+      description_info:""
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -247,7 +248,7 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>amount</lable> &nbsp;&nbsp;
+                <lable>Amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
