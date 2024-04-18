@@ -10,9 +10,6 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { BsFiletypeCsv } from "react-icons/bs";
-import { FaRegFilePdf } from "react-icons/fa";
-import { ImQuotesRight } from "react-icons/im";
 import QuotesModel from "./QuotesModel";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -31,7 +28,7 @@ const Accounts = () => {
   const [data, setData] = useState([]);
   const [rowId, setRowId] = useState("");
   const [loading, setLoading] = useState(true);
-  const token = sessionStorage.getItem("token");
+
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
@@ -45,7 +42,7 @@ const Accounts = () => {
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
             {row.original.accountName}
-            {row.original.newAppointment && <div className="newCircle"></div>}
+           
           </Link>
         ),
       },
@@ -157,6 +154,7 @@ const Accounts = () => {
     []
   );
 
+  
   const fetchData = async () => {
     try {
       setLoading(true);

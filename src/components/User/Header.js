@@ -6,8 +6,9 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Logo from "../../assets/Logo.png";
+import Logo from "../assests/Ecs Website Logo.png";
 import "../../styles/user.css";
+
 
 function Header() {
   const expand = "lg";
@@ -32,7 +33,6 @@ function Header() {
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}
               aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="end"
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
@@ -43,13 +43,9 @@ function Header() {
                 <Nav className="justify-content-center align-items-center flex-grow-1 pe-3 gap-4 ">
                   <NavLink
                     to="/about"
-                    exact
                     activeClassName="active"
-                    className="custom-nav-link text-primary"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
+                    className="headers"
+                   
                   >
                     About
                   </NavLink>
@@ -64,25 +60,17 @@ function Header() {
                    }}>Home</NavLink> */}
                   <NavLink
                     to="/contact"
-                    exact
                     activeClassName="active"
-                    className="custom-nav-link text-primary"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
+                    className="headers"
+                   
                   >
                     Contact
                   </NavLink>
                   <NavLink
                     to="/feature"
-                    exact
                     activeClassName="active"
-                    className="custom-nav-link text-primary"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.85)",
-                      textDecoration: "none",
-                    }}
+                    className="headers"
+                    
                   >
                     Features
                   </NavLink>
@@ -107,7 +95,7 @@ function Header() {
                     className="me-2"
                     aria-label="Search"
                   /> */}
-                  <Nav className="d-flex">
+                  <Nav className="d-flex py-2">
                     <Link to="/login">
                       <button className="btn donateBtn">Sign In</button>
                     </Link>
