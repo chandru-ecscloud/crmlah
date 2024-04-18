@@ -308,13 +308,13 @@ function AppointmentsCreate({ name, schedule }) {
 
   return (
     <>
-      <Button
+      <button
         className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
         disabled={role === "CMP_USER"}
         onClick={openModal}
       >
         {name}
-      </Button>
+      </button>
       <Modal
         size="xl"
         show={show}

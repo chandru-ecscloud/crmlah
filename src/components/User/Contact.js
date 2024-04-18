@@ -7,7 +7,6 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object().shape({
   first_name: yup.string().required("*First Name is required"),
@@ -22,7 +21,6 @@ const validationSchema = yup.object().shape({
 function Contact() {
   // const companyId = sessionStorage.getItem("companyId");
   // const owner = sessionStorage.getItem("user_name");
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       company_id: "",
@@ -45,7 +43,7 @@ function Contact() {
         });
         if (response.status === 201) {
           toast.success("Thank You for Contacting Us! We'll be in touch soon!");
-          navigate("/login");
+          formik.resetForm();
         } else {
           toast.error(response.data.message);
         }

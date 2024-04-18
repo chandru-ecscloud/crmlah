@@ -37,7 +37,6 @@
   background-color: transparent;
   color: #3d63ea;
   border: 2px solid #3d63ea;
-
 }
 
 .nav-link {
@@ -63,7 +62,7 @@
   z-index: 999;
 }
 
-.register-image{
+.register-image {
   position: sticky;
   top: 25%;
 }
@@ -74,28 +73,27 @@
 }
 
 .headers::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
-  bottom: -2px; 
+  bottom: -2px;
   width: 0;
-  height: 2px; 
-  background-color: #0080FF;
-  transition: width 0.10s ;
+  height: 2px;
+  background-color: #0080ff;
+  transition: width 0.1s;
   margin: 0 6px;
 }
 
 .headers:hover::after {
   width: 78%;
-    margin: 0 6px;
-    background-color: #0080FF;
+  margin: 0 6px;
+  background-color: #0080ff;
 }
 .headers:hover {
-  color:#0080FF; 
+  color: #0080ff;
 }
 
 .headers.active::after {
-  width: 78%;
+  width: 85%;
   margin-bottom: 10px;
-   
 }

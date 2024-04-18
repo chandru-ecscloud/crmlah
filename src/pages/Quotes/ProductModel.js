@@ -12,7 +12,7 @@ const ProductModel = ({ path }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
 
   const openModal = () => {
     setIsOpen(true);
@@ -28,7 +28,7 @@ const ProductModel = ({ path }) => {
     try {
       //   setLoading(true);
       const response = await axios(
-        `${API_URL}allProductsByCompanyId/${userId}`,
+        `${API_URL}allProductsByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",

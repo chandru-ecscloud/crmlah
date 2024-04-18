@@ -20,7 +20,9 @@ const validationSchema = Yup.object().shape({
     .required("*Phone Number is required"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
   parent_account: Yup.string().required("*Parent Account is required"),
-  account_number: Yup.string().required("*Account Number is required"),
+  account_number: Yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Account Number is required"),
   account_type: Yup.string().required("*Account Type is required"),
   shipping_street: Yup.string().required("*Shipping Street is required"),
   billing_street: Yup.string().required("*Billing Street is required"),

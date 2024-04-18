@@ -18,7 +18,7 @@ function ContactShow() {
   const scheduleData ={
     model :"Contacts",
     id : id,
-    appointmentName: contactData.contact_name,
+    appointmentName: contactData.firstName,
     email: contactData.email
   }
   // console.log("scheduleData",scheduleData)
@@ -33,7 +33,7 @@ function ContactShow() {
           },
         });
         setContactData(response.data);
-        // console.log("Contact Show :",response.data);
+        console.log("Contact Show :",contactData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -172,19 +172,19 @@ function ContactShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Contact Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.contactOwner || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.contactOwner || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Country</label>
@@ -215,12 +215,12 @@ function ContactShow() {
                 </span>
               </div>
 
-              {/* <div>
-                <label className="text-dark Label">Title</label>
+              <div>
+                <label className="text-dark Label">Contact Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.title || ""}
+                  &nbsp; : &nbsp;{`${contactData.firstName}${contactData.lastName}`}
                 </span>
-              </div> */}
+              </div>
 
               <div>
                 <label className="text-dark Label">Phone</label>
@@ -266,19 +266,19 @@ function ContactShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.company || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Contact Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.contact_name || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Email</label>
@@ -294,12 +294,12 @@ function ContactShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Contact Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.contact_status || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">No of Employees</label>
