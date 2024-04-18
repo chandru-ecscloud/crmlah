@@ -5,7 +5,6 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 
 const ProductModel = ({ path }) => {
-  console.log(path);
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const [productsData, setProdcutsData] = useState([]);
@@ -13,7 +12,6 @@ const ProductModel = ({ path }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
-
   const openModal = () => {
     setIsOpen(true);
   };
@@ -37,7 +35,7 @@ const ProductModel = ({ path }) => {
         }
       );
       setProdcutsData(response.data);
-      console.log("ProductsData", response.data);
+      // console.log("ProductsData", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -121,7 +119,7 @@ const ProductModel = ({ path }) => {
     }
   };
 
-  console.log("selected", selectedRows);
+  // console.log("selected", selectedRows);
 
   return (
     <div>

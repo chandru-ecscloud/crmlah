@@ -66,7 +66,7 @@ function LeadsCreate() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      // console.log(data);
+      console.log(data);
       try {
         const response = await axios.post(`${API_URL}newClient`, data, {
           headers: {
