@@ -8,14 +8,10 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   appointmentFor: Yup.string().required("*Appointment for is required"),
-  appointmentStartDate: Yup.string().required(
-    "*Appointment start date is required"
-  ),
-  appointmentStartTime: Yup.string().required(
-    "*Appointment start Time is required"
-  ),
-  email: Yup.string().required("*Member is required"),
-  additionalInformation: Yup.string().required("*Description is required"),
+  appointmentStartDate: Yup.string().required("*Prefer Date is required"),
+  appointmentStartTime: Yup.string().required("*Prefer Time is required"),
+  email: Yup.string().required("*Email is required"),
+  additionalInformation: Yup.string().required("*Enquiry is required"),
 });
 const EntryAppointment = () => {
   const formik = useFormik({
@@ -32,6 +28,29 @@ const EntryAppointment = () => {
       data.typeOfAppointment = "website";
       data.appointmentName = "General Enquiry";
       console.log(data);
+
+      const payload = {
+        first_name :data.appointmentFor,
+        email: data.email,
+        company_id:2,
+        company:"ECSCloudInfotech",
+        lead_status:"Processed",
+        description_info: data.additionalInformation,
+        phone: 9876543211,
+      }
+      try {
+        const response = await axios.post(`${API_URL}newClient`,payload ,{
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        // toast.success("Lead Created Successfully");
+        console.log(response.data.message);
+      } catch (error) {
+        // toast.error("Lead Not Create");
+        console.log("Error");
+      }
+
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
           headers: {
@@ -172,6 +191,7 @@ const EntryAppointment = () => {
               </div>
             </body>
           </html>`;
+          
           try {
             const response = await axios.post(`${API_URL}sendMail`, {
               toMail: data.email,
@@ -179,8 +199,10 @@ const EntryAppointment = () => {
               subject: data.appointmentName,
               htmlContent: mailContent,
             });
+            // toast.success("Mail Send Successfully");
           } catch (error) {
-            toast.error("Mail Not Send");
+            // toast.error("Mail Not Send");
+            console.log("Error");
           }
         } else {
           toast.error("Appointment Created Unsuccessful.");
@@ -188,12 +210,14 @@ const EntryAppointment = () => {
       } catch (error) {
         if (error.response?.status === 400) {
           toast.warning(error.response?.data.message);
+          toast.error(error.response1?.data.message);
         } else {
           toast.error(error.response?.data.message);
         }
       }
       resetForm();
     },
+
   });
   return (
     <section className="signIn">
@@ -310,7 +334,8 @@ const EntryAppointment = () => {
                     <div className="col-12 mb-3">
                       <div className="">
                         <lable className="form-label">Enquiry</lable>
-                        <input
+                        <textarea
+                          rows={5}
                           type="text"
                           name="additionalInformation"
                           //value={formData.additionalInformation || ""}
@@ -340,11 +365,6 @@ const EntryAppointment = () => {
                         Book
                       </button>
                     </div>
-                  </div>
-                </div>
-                <div className="container-fluid">
-                  <div className="row mt-3">
-                    <div className="col-12 d-flex "></div>
                   </div>
                 </div>
               </form>

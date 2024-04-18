@@ -7,6 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Logo from "../../assets/EcsWebsiteLogo.png";
+// import Logo from "../../assets/WebsiteLogo.png";
 import "../../styles/user.css";
 
 
@@ -58,6 +59,14 @@ function Header() {
                      color: "rgba(0, 0, 0, 0.85)",
                      textDecoration: "none",
                    }}>Home</NavLink> */}
+                   <NavLink
+                    to="/feature"
+                    activeClassName="active"
+                    className="headers"
+                    
+                  >
+                    Features
+                  </NavLink>
                   <NavLink
                     to="/contact"
                     activeClassName="active"
@@ -66,14 +75,7 @@ function Header() {
                   >
                     Contact
                   </NavLink>
-                  <NavLink
-                    to="/feature"
-                    activeClassName="active"
-                    className="headers"
-                    
-                  >
-                    Features
-                  </NavLink>
+                  
                   {/* <NavDropdown
                     title="Dropdown"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}

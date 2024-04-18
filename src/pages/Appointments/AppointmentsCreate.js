@@ -902,7 +902,8 @@ function AppointmentsCreate({ name, schedule }) {
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Description</lable> &nbsp;&nbsp;
-                      <input
+                      <textarea
+                        rows={5}
                         type="text"
                         style={{ width: "70%" }}
                         // className="form-control"

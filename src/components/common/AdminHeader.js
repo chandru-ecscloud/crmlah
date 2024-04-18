@@ -36,7 +36,7 @@ const menuItems = [
 const mainMenu = [
   { to: "/dashboard", label: "Home" },
   { to: "/leads", label: "Leads" },
-  { to: "/contacts", label: "Contacts" },
+  { to: "/contacts", label: "Contacted" },
   { to: "/accounts", label: "Accounts" },
   { to: "/deals", label: "Deals" },
   { to: "/dragable", label: "Sales" },
