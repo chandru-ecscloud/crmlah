@@ -6,8 +6,8 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Logo from "../../assets/EcsWebsiteLogo.png";
-// import Logo from "../../assets/WebsiteLogo.png";
+// import Logo from "../../assets/EcsWebsiteLogo.png";
+import Logo from "../../assets/WebsiteLogo.png";
 import "../../styles/user.css";
 
 
