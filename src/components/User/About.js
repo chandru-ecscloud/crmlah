@@ -1,5 +1,6 @@
 import React from "react";
 import Contact from "../../assets/Contact.png";
+import { Link } from "react-router-dom";
 
 function About() {
   return (
@@ -11,7 +12,7 @@ function About() {
           <h1 className=" fw-bold ">
             App Platform with AI-Powered Capabilities
           </h1>
-          <p className="p-5 fw">
+          <p className="p-5 pb-3 fw">
             CRMLAH is a suite of CRM App platform featuring an AI-powered
             Chatbot, customer relationship <br /> management, marketing
             automation, website building capabilities, email marketing tools,
@@ -21,12 +22,15 @@ function About() {
             analytics and reporting tools, SMS <br /> marketing, and additional
             features.
           </p>
+          <Link to={"/entryappointment"} className="">
+            <button class="btn donateBtn py-3">Book Demo</button>
+          </Link>
         </div>
 
         <div className="row pt-4">
           <div className="col-md-7 col-12 ps-3 p-5">
-            <h3 className="mb-4">
-              Enhance Customer Engagement with Integrated Chatbots
+            <h3 className="mb-4 ">
+              <b>Enhance Customer Engagement with Integrated Chatbots</b>
             </h3>
 
             <p className="" style={{ fontSize: "1vw" }}>

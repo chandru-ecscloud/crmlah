@@ -456,8 +456,10 @@ function LeadsEdit() {
                   id="lead_status"
                 >
                   <option value=""></option>
+                  <option value="Processed" selected>
+                    Processed
+                  </option>
                   <option value="Analysed">Analysed</option>
-                  <option value="Processed">Processed</option>
                   <option value="Delivered">Delivered</option>
                   <option value="Intermediated">Intermediated</option>
                   <option value="Terminated">Terminated</option>
@@ -559,7 +561,7 @@ function LeadsEdit() {
                 </div>
               </div>
             </div>
-{/* 
+            {/* 
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
               <lable>Secondary Email</lable> &nbsp;&nbsp;
               <input

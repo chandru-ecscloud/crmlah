@@ -17,7 +17,7 @@ import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { Tooltip, Zoom } from "@mui/material";
 import WebSocketService from "../../Config/WebSocketService";
-import "../../styles/custom.css"
+import "../../styles/custom.css";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -79,21 +79,23 @@ const Lead = () => {
         accessorKey: "lead_status",
         enableHiding: false,
         header: "Lead Status",
-        Cell: ({ row }) => (
+        Cell: ({ row }) =>
           row.original.lead_status === "Processed" ? (
-            <span className="badge bg-info py-2 " style={{color:"#1f1f1f !important"}}>
+            <span
+              className="badge bg-info py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
               Processed
             </span>
-          ) : row.original.lead_status ==="Analysed"? (
-            <span className="badge bg-primary py-2 " >Analysed</span>
-          ): row.original.lead_status ==="Delivered"?(
+          ) : row.original.lead_status === "Analysed" ? (
+            <span className="badge bg-primary py-2 ">Analysed</span>
+          ) : row.original.lead_status === "Delivered" ? (
             <span className="badge bg-success py-2">Delivered</span>
-          ): row.original.lead_status ==="Intermediated"?(
+          ) : row.original.lead_status === "Intermediated" ? (
             <span className="badge bg-warning py-2">Intermediated</span>
-          ): (
+          ) : (
             <span className="badge bg-danger  py-2">Terminated</span>
-          )
-        ),
+          ),
       },
       {
         accessorKey: "land_line",
@@ -107,7 +109,7 @@ const Lead = () => {
         accessorKey: "lead_source",
         header: "Lead Source",
       },
-      
+
       {
         accessorKey: "street",
         header: "Street",
@@ -154,7 +156,7 @@ const Lead = () => {
 
   useEffect(() => {
     const subscription = WebSocketService.subscribeToLeadUpdates((data) => {
-      console.log("subscription",data);
+      console.log("subscription", data);
       if (data === true) {
         setCount((prevCount) => prevCount + 1);
       }
@@ -203,6 +205,7 @@ const Lead = () => {
       "Phone Number",
       "Lead Owner",
     ];
+
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
@@ -260,6 +263,7 @@ const Lead = () => {
       "Created By",
       "Updated By",
     ];
+
     const tableData3 = rows.map((row) => {
       return [
         row.original.zipCode,
@@ -376,8 +380,9 @@ const Lead = () => {
     data,
     initialState: {
       columnVisibility: {
+        description_info: false,
         city: false,
-        lead_owner:false,
+        lead_owner: false,
         lead_source: false,
         land_line: false,
         street: false,

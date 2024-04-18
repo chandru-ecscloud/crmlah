@@ -9,15 +9,16 @@ import Speaker from "../../assets/speaker.png";
 import Rocket from "../../assets/rocket.png";
 import Calender from "../../assets/calender.png";
 import Sensex from "../../assets/sensex.png";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
     <section className="container-fluid ">
       <div
         className="row"
-        style={{ backgroundColor: "#ECFAFE", minHeight: "60vh" }}
+        style={{ backgroundColor: "#ECFAFE", minHeight: "75vh" }}
       >
-        <div className="d-flex mt-5  align-items-center flex-column">
+        <div className="d-flex mt-5  align-items-center justify-content-center flex-column">
           <h1 className="text-primary fw-bold" style={{ fontSize: "4vw" }}>
             CONVERSATIONAL
           </h1>
@@ -26,15 +27,14 @@ function Home() {
           </h1>
           <h6 className="mt-3 " style={{ fontSize: "1.5vw" }}>
             {" "}
-            Accelerate your Business Revenue with an AI-powered Chatbot CRM
+            <b>
+              Accelerate your Business Revenue with an AI-powered Chatbot CRM
+            </b>
           </h6>
 
-          <button
-            class="btn btn-lg mt-5"
-            style={{ backgroundColor: "#3D63EA" }}
-          >
-            <span className="text-white">View More</span>
-          </button>
+          <Link to={"/entryappointment"} className="mt-3">
+            <button class="btn donateBtn py-3">Book Demo</button>
+          </Link>
         </div>
       </div>
 

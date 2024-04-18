@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -27,8 +27,7 @@ const validationSchema = yup.object().shape({
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
       "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-    )
-    .max(10, "*Enter upto 15 chars only"),
+    ),
   cpassword: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
@@ -75,10 +74,10 @@ function UserCreate() {
       phone: "",
       address: "",
       city: "",
-      minutes: "",
-      time: "",
-      hour: "",
-      none: "",
+      // minutes: "",
+      // time: "",
+      // hour: "",
+      // none: "",
       street: "",
       state: "",
       zipCode: "",
@@ -87,7 +86,7 @@ function UserCreate() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log(data);
-
+      data.jwtRole = data.role;
       try {
         const response = await axios.post(`${API_URL}newUserRegister`, data, {
           headers: {
@@ -235,7 +234,7 @@ function UserCreate() {
                   {formik.values.userName.length >= 4 &&
                     (userNameAvailable ? (
                       <p className="text-success text-start">
-                         User Name is available!
+                        User Name is available!
                       </p>
                     ) : (
                       <p className="text-danger text-start">
@@ -334,7 +333,7 @@ function UserCreate() {
                   id="role"
                 >
                   <option value=""></option>
-                  <option value="CMP_OWNER">Admin</option>
+                  <option value="CMP_ADMIN">Admin</option>
                   <option value="CMP_USER">User</option>
                 </select>
               </div>
