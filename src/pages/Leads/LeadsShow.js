@@ -47,8 +47,8 @@ function LeadsShow() {
             //Authorization: `Bearer ${token}`,
           },
         });
-        // console.log("Lead Show :",response.data);
         setClientData(response.data);
+        console.log("Lead Show :",response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -193,7 +193,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Lead Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.lead_owner || "--"}
+                  &nbsp; : &nbsp;{clientData.lead_owner }
                 </span>
               </div>
 

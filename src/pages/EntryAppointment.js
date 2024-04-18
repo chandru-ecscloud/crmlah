@@ -179,8 +179,7 @@ const EntryAppointment = () => {
               subject: data.appointmentName,
               htmlContent: mailContent,
             });
-
-           } catch (error) {
+          } catch (error) {
             toast.error("Mail Not Send");
           }
         } else {
@@ -193,7 +192,7 @@ const EntryAppointment = () => {
           toast.error(error.response?.data.message);
         }
       }
-        resetForm()
+      resetForm();
     },
   });
   return (
@@ -201,7 +200,7 @@ const EntryAppointment = () => {
       <div style={{ backgroundColor: "#ecfafe" }}>
         <div className="container-fluid ">
           <div className="row py-5 px-4">
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
+            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center  justify-content-center">
               <img className="img-fluid" src={CRM} alt="CRMLAH" />
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center ">
@@ -209,8 +208,12 @@ const EntryAppointment = () => {
                 <div className="container">
                   <div className="row">
                     <h3
-                      className=" text-center  my-3"
-                      style={{ fontFamily: "Nunito Sans, sans-serif",fontSize:"2vw",fontWeight:"bold" }}
+                      className=" text-center  my-3 mb-4"
+                      style={{
+                        fontFamily: "Nunito Sans, sans-serif",
+                        fontSize: "3vw",
+                        fontWeight: "bold",
+                      }}
                     >
                       Book A Demo
                     </h3>
@@ -330,7 +333,7 @@ const EntryAppointment = () => {
                     </div>
                     <div className="col-12 mb-3 d-flex justify-content-center ">
                       <button
-                        className="btn donateBtn "
+                        className="btn donateBtn px-5 py-3"
                         type="submit"
                         onClick={formik.handleSubmit}
                       >

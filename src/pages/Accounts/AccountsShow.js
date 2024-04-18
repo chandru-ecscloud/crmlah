@@ -46,7 +46,7 @@ function AccountsShow() {
           },
         });
         setAccountData(response.data);
-        // console.log("Account Show :",response.data);
+        console.log("Account Show :",response.data);
         setTotal(response.data.quotes ? response.data.quotes.length : 0);
       } catch (error) {
         toast.error("Error fetching data:", error);
@@ -214,19 +214,19 @@ function AccountsShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Account Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.account_status || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.company || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Country</label>
@@ -294,12 +294,12 @@ function AccountsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.company || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Account Name</label>
@@ -325,12 +325,12 @@ function AccountsShow() {
                 <span className="text-dark">--</span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Account Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.status || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Annual Revenue</label>
@@ -349,19 +349,19 @@ function AccountsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Skype Id</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.skype_id || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Twitter</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.twitter || ""}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Address Information */}
