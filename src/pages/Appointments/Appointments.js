@@ -14,10 +14,11 @@ import { LinearProgress } from "@mui/material";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { Tooltip, Zoom } from "@mui/material";
 import AppointmentsCreate from "./AppointmentsCreate";
+import WebSocketService from "../../Config/WebSocketService";
 const csvConfig = mkConfig({
   fieldSeparator: ",",
   decimalSeparator: ".",
@@ -27,8 +28,7 @@ const csvConfig = mkConfig({
 const Appointments = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const owner = sessionStorage.getItem("user_name");
-  const token = sessionStorage.getItem("token");
+  const [count, setCount] = useState(0);
   const companyId = sessionStorage.getItem("companyId");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
@@ -42,13 +42,18 @@ const Appointments = () => {
         Cell: ({ row }) => (
           <Link
             to={`/appointments/show/${row.original.id}`}
-            className="rowName"
+            className="rowName d-flex"
           >
-            {row.original.appointmentFor}
+            {row.original.appointmentFor} &nbsp;&nbsp;
+            {row.original.newAppointment && (
+              <div className="newCircle">
+                <span class="badge text-bg-danger">New</span>
+              </div>
+            )}
           </Link>
         ),
       },
-      
+
       {
         accessorKey: "appointmentName",
         enableHiding: false,
@@ -68,19 +73,27 @@ const Appointments = () => {
         accessorKey: "typeOfAppointment",
         enableHiding: false,
         header: "Appointment Type",
-        Cell: ({ row }) => (
+        Cell: ({ row }) =>
           row.original.typeOfAppointment === "Leads" ? (
-            <span className="badge bg-info py-2 " style={{color:"#1f1f1f !important"}}>
+            <span
+              className="badge bg-info py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
               {row.original.typeOfAppointment}
             </span>
-          ) : row.original.typeOfAppointment ==="Contacts"? (
-            <span className="badge bg-primary py-2 " >{row.original.typeOfAppointment}</span>
-          ): row.original.typeOfAppointment ==="Accounts"?(
-            <span className="badge bg-warning py-2">{row.original.typeOfAppointment}</span>
-          ): (
-            <span className="badge bg-success py-2">{row.original.typeOfAppointment}</span>
-          )
-        ),
+          ) : row.original.typeOfAppointment === "Contacts" ? (
+            <span className="badge bg-primary py-2 ">
+              {row.original.typeOfAppointment}
+            </span>
+          ) : row.original.typeOfAppointment === "Accounts" ? (
+            <span className="badge bg-warning py-2">
+              {row.original.typeOfAppointment}
+            </span>
+          ) : (
+            <span className="badge bg-success py-2">
+              {row.original.typeOfAppointment}
+            </span>
+          ),
       },
       {
         accessorKey: "serviceName",
@@ -137,25 +150,38 @@ const Appointments = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}getAllAppointmentsByCompanyId/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getAllAppointmentsByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setData(response.data);
       // console.log("data",data)
     } catch (error) {
       toast.error("Error fetching data:", error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    const subscription = WebSocketService.subscribeToAppointmentUpdates(
+      (data) => {
+        // console.log("Websocket Data", data);
+        if (data === true) {
+          setCount((prevCount) => prevCount + 1);
+        }
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [count]);
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -179,7 +205,6 @@ const Appointments = () => {
       "Service Name",
       "Duration",
       "Appointment Name",
-      
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -209,7 +234,7 @@ const Appointments = () => {
       "Address",
       "Member",
       "Remainder",
-     ];
+    ];
     const tableData2 = rows.map((row) => {
       return [
         row.original.appointment_start_date,
@@ -230,7 +255,7 @@ const Appointments = () => {
       },
     });
 
-    console.log(tableData1)
+    console.log(tableData1);
     doc.save("ECS.pdf");
   };
 
@@ -276,17 +301,17 @@ const Appointments = () => {
     data,
     initialState: {
       columnVisibility: {
-        serviceName:false,
-        duration:false,
+        serviceName: false,
+        duration: false,
         appointmentStartTime: false,
         location: false,
         member: false,
         reminder: false,
-        street:false,
-        city:false,
-        state:false,
-        zipCode:false,
-        additionalInformation:false,
+        street: false,
+        city: false,
+        state: false,
+        zipCode: false,
+        additionalInformation: false,
       },
     },
     enableRowSelection: true,
@@ -301,40 +326,44 @@ const Appointments = () => {
           flexWrap: "wrap",
         }}
       >
-         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </Tooltip>
+
+        <button
+          className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </Tooltip>
       </Box>
     ),
   });
@@ -344,40 +373,40 @@ const Appointments = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-      <div className="d-flex align-items-center justify-content-end py-4 px-3">
-        <div style={{ paddingRight: "10px" }}>
-          <AppointmentsCreate  name="Create Appointment"/>
-        </div>
-        <div class="dropdown-center">
-          <button
-            class="btn btn-danger dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Action <FaSortDown style={{ marginTop: "-6px" }} />
-          </button>
-          <ul class="dropdown-menu">
-            {role !== "CMP_USER" ? (
-              <>
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled={
-                      !(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      ) || table.getSelectedRowModel().rows.length !== 1
-                    }
-                    onClick={() =>
-                      handleBulkDelete(table.getSelectedRowModel().rows)
-                    }
-                  >
-                    Delete
-                  </button>
-                </li>
-                {/* <li>
+          <div className="d-flex align-items-center justify-content-end py-4 px-3">
+            <div style={{ paddingRight: "10px" }}>
+              <AppointmentsCreate name="Create Appointment" />
+            </div>
+            <div class="dropdown-center">
+              <button
+                class="btn btn-danger dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Action <FaSortDown style={{ marginTop: "-6px" }} />
+              </button>
+              <ul class="dropdown-menu">
+                {role !== "CMP_USER" ? (
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !(
+                            table.getIsSomeRowsSelected() ||
+                            table.getIsAllRowsSelected()
+                          ) || table.getSelectedRowModel().rows.length !== 1
+                        }
+                        onClick={() =>
+                          handleBulkDelete(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -392,20 +421,20 @@ const Appointments = () => {
                     Mass Delete
                   </button>
                 </li> */}
-              </>
-            ) : (
-              // Render disabled buttons for CMP_USER
-              <>
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled
-                  >
-                    Delete
-                  </button>
-                </li>
-                {/* <li>
+                  </>
+                ) : (
+                  // Render disabled buttons for CMP_USER
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -414,15 +443,15 @@ const Appointments = () => {
                     Mass Delete
                   </button>
                 </li> */}
-              </>
-            )}
-          </ul>
-        </div>
-      </div>
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
-      </>
+                  </>
+                )}
+              </ul>
+            </div>
+          </div>
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable table={table} />
+          </ThemeProvider>
+        </>
       )}
     </section>
   );
