@@ -95,9 +95,6 @@ function ServicesShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <button className="btn bg-primary bg-gradient mx-2 text-white shadow-none">
-            Send Email
-          </button>
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}

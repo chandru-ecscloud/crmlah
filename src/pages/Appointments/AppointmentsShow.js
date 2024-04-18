@@ -10,6 +10,7 @@ import AppointmentsEdit from "./AppointmentsEdit";
 import { toast } from "react-toastify";
 import { Tooltip, Zoom } from "@mui/material";
 import { IoArrowBack } from "react-icons/io5";
+import SendEmail from "../Email/SendEmail";
 function AppointmentsShow() {
   const { id } = useParams();
   const [clientData, setClientData] = useState({});
@@ -67,9 +68,7 @@ function AppointmentsShow() {
         <div className="col-9 mt-1" id="buttons-container">
           {/* <BookAppointment /> */}
 
-          <button className="btn bg-primary bg-gradient mx-2 text-white shadow-none">
-            Send Email
-          </button>
+          {clientData.email && <SendEmail toEmail={clientData.email} />}
 
           <AppointmentsEdit id={id} name="Edit "/>
 
