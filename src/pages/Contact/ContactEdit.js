@@ -33,8 +33,11 @@ const validationSchema = yup.object().shape({
   other_city: yup.string().required("*Other City is required"),
   mailing_state: yup.string().required("*Mailing State is required"),
   other_state: yup.string().required("*Other State is required"),
-  mailing_zip: yup.string().required("*Mailing Zip is required"),
-  other_zip: yup.string().required("*Other Zip is required"),
+  mailing_zip: yup.string().matches(/^\d+$/, "Must be only digits")
+  .required("*Mailing Zip is required"),
+  other_zip: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Other Zip is required"),
   mailing_country: yup.string().required("*Mailing Country is required"),
   other_country: yup.string().required("*Other Country is required"),
 

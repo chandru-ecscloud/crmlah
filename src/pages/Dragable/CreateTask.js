@@ -119,7 +119,7 @@ const CreateTask = ({ tasks, setTasks }) => {
                   />
                 </div>
                 <div className="d-flex align-items-center justify-content-start mb-3 sm-device my-2">
-                  <label style={{width:"20%"}} className="me-4">Ammount</label>
+                  <label style={{width:"20%"}} className="me-4">Amount</label>
                   <input
                     type="text"
                     name="amount"

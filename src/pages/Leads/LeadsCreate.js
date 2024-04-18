@@ -18,7 +18,9 @@ const validationSchema = yup.object().shape({
     .required("*Phone is required")
     .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
   email: yup.string().required("*Email is required"),
-  landLine: yup.string().required("*Land Line is required"),
+  landLine: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Land Line is required"),
   lead_source: yup.string().required("*Lead Source is required"),
   lead_status: yup.string().required("*Lead Status is required"),
   skypeId: yup.string().required("*Skype ID is required"),
@@ -27,7 +29,9 @@ const validationSchema = yup.object().shape({
   street: yup.string().required("*Street is required"),
   city: yup.string().required("*City is required"),
   state: yup.string().required("*State is required"),
-  zipCode: yup.string().required("*Zipcode is required"),
+  zipCode: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Zipcode is required"),
   country: yup.string().required("*Country is required"),
 });
 
