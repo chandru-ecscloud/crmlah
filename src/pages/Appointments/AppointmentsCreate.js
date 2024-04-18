@@ -59,7 +59,7 @@ function AppointmentsCreate({ name, schedule }) {
       typeOfAppointment: "",
       additionalInformation: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (data, { resetForm }) => {
       if (name === "Create Appointment") {
         const lead = leadData.find((user) => user.id == data.leadId);
