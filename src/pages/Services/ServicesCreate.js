@@ -15,8 +15,12 @@ const validationSchema = yup.object().shape({
   members: yup.string().required("*Members is required"),
   availableDays: yup.string().required("*Available days is required"),
   availableTime: yup.string().required("*Available time is required"),
-  price: yup.string().required("*Price is required"),
-  tax: yup.string().required("*Tax is required"),
+  price: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Price is required"),
+  tax: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Tax is required"),
 });
 
 function ServicesCreate() {

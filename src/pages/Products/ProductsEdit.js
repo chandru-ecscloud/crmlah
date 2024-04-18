@@ -19,12 +19,22 @@ const validationSchema = yup.object().shape({
   sales_end_date: yup.date().required("*Date is required"),
   support_start_date: yup.date().required("*Date is required"),
   support_end_date: yup.date().required("*Date is required"),
-  unit_price: yup.number().required("*Unit price is required."),
-  commission_rate: yup.number().required("*Commission rate is required."),
-  tax: yup.number().required("*Tax is required."),
+  unit_price: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Unit price is required."),
+  commission_rate: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Commission rate is required."),
+  tax: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Tax is required."),
   usage_unit: yup.string().required("*Usage unit is required."),
-  quantity_ordered: yup.number().required("*Quantity ordered is required."),
-  quantity_in_stock: yup.number().required("*Quantity in stock is required."),
+  quantity_ordered: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Quantity ordered is required."),
+  quantity_in_stock: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Quantity in stock is required."),
   handler: yup.string().required("*Handler demand is required."),
   description_info: yup.string().required("*Description is required"),
 });

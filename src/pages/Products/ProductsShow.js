@@ -105,9 +105,9 @@ function ProductsShow() {
             Edit
           </button>
 
-          <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
+          {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
-          </button>
+          </button> */}
         </div>
       </section>
 

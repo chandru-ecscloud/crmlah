@@ -104,9 +104,9 @@ function DealsShow() {
             Edit
           </button>
 
-          <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
+          {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
-          </button>
+          </button> */}
         </div>
       </section>
 
@@ -382,19 +382,19 @@ function DealsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Skype Id</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.skypeId || ""}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Twitter</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.twitter || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Secondary Email</label>

@@ -26,8 +26,12 @@ const validationSchema = yup.object({
   billing_city: yup.string().required("*Enter The Billing City "),
   shipping_state: yup.string().required("*Enter The Shipping State "),
   billing_state: yup.string().required("*Enter The Billing State "),
-  shipping_code: yup.string().required("*Enter The Shipping Code "),
-  billing_code: yup.string().required("*Enter The Billing Code "),
+  shipping_code: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Enter The Shipping Code "),
+  billing_code: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Enter The Billing Code "),
   shipping_country: yup.string().required("*Enter The Shipping Country "),
   billing_country: yup.string().required("*Enter The Billing Country "),
   terms_and_conditions: yup

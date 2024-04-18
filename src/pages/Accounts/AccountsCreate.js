@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
     .max(10)
-    .required("*Phone Number is required is required"),
+    .required("*Phone Number is required"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
   parent_account: Yup.string().required("*Parent Account is required"),
   account_number: Yup.string().required("*Account Number is required"),
@@ -26,8 +26,10 @@ const validationSchema = Yup.object().shape({
   billing_street: Yup.string().required("*Billing Street is required"),
   shipping_city: Yup.string().required("*Shipping City is required"),
   billing_city: Yup.string().required("*Billing City is required"),
-  shipping_code: Yup.string().required("*Shipping Code is required"),
-  billing_code: Yup.string().required("*Billing Code is required"),
+  shipping_code: Yup.string().matches(/^\d+$/, "Must be only digits")
+  .required("*Shipping Code is required"),
+  billing_code: Yup.string().matches(/^\d+$/, "Must be only digits")
+  .required("*Billing Code is required"),
   shipping_state: Yup.string().required("*Shipping State is required"),
   billing_state: Yup.string().required("*Billing State is required"),
   shipping_country: Yup.string().required("*Shipping Country is required"),
@@ -174,7 +176,7 @@ function AccountsCreate() {
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Owner</lable> &nbsp;&nbsp;
                 <select
                   {...formik.getFieldProps("account_owner")}
@@ -223,7 +225,7 @@ function AccountsCreate() {
             </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -254,7 +256,7 @@ function AccountsCreate() {
             </div>
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Phone</lable> &nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
@@ -308,7 +310,7 @@ function AccountsCreate() {
             </div> */}
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("email")}
@@ -329,7 +331,7 @@ function AccountsCreate() {
             </div>
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Parent Account</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("parent_account")}
@@ -379,7 +381,7 @@ function AccountsCreate() {
             </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Number</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("account_number")}
@@ -416,7 +418,7 @@ function AccountsCreate() {
             </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Type</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("account_type")}
@@ -515,7 +517,7 @@ function AccountsCreate() {
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Street</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shipping_street")}
@@ -538,7 +540,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billing_street")}
@@ -561,7 +563,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shipping_city")}
@@ -584,7 +586,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billing_city")}
@@ -607,7 +609,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping State</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shipping_state")}
@@ -630,7 +632,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing State</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billing_state")}
@@ -653,7 +655,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 ">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Code</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shipping_code")}
@@ -676,7 +678,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billing_code")}
@@ -700,7 +702,7 @@ function AccountsCreate() {
             </div>
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Country</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shipping_country")}
@@ -723,7 +725,7 @@ function AccountsCreate() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Country</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billing_country")}
@@ -755,7 +757,7 @@ function AccountsCreate() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+              <div className="d-flex align-items-start justify-content-center sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"

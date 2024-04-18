@@ -29,8 +29,16 @@ const validationSchema = yup.object().shape({
   billing_city: yup.string().required("*Billing city is required"),
   billing_street: yup.string().required("*Billing street is required"),
   shipping_state: yup.string().required("*Shipping state is required"),
-  shipping_code: yup.string().required("*Shipping code is required"),
-  billing_code: yup.string().required("*Billing code is required"),
+  shipping_code: yup
+    .string()
+    .matches(/^\d+$/, "Must be only digits")
+
+    .required("*Shipping code is required"),
+  billing_code: yup
+    .string()
+    .matches(/^\d+$/, "Must be only digits")
+
+    .required("*Billing code is required"),
   shipping_country: yup.string().required("*Shipping country is required"),
   billing_country: yup.string().required("*Billing country is required"),
 });
@@ -70,7 +78,6 @@ function DealsCreate() {
       billing_street: "",
       billing_code: "",
       billing_country: "",
-      
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {

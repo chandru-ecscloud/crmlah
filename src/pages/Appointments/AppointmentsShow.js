@@ -3,17 +3,19 @@ import "../../styles/Ragul.css";
 import { Link } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import USER from "../../assets/user.png";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import AppointmentsEdit from "./AppointmentsEdit";
 import { toast } from "react-toastify";
-
+import { Tooltip, Zoom } from "@mui/material";
+import { IoArrowBack } from "react-icons/io5";
 function AppointmentsShow() {
   const { id } = useParams();
   const [clientData, setClientData] = useState({});
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
+  const navigate=useNavigate();
 
   useEffect(() => {
     const userData = async () => {
@@ -43,6 +45,14 @@ function AppointmentsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
+              <Tooltip TransitionComponent={Zoom} title="Back">
+                  <button
+                    className="btn fs-4 border-white"
+                    onClick={() => navigate("/appoinment")}
+                  >
+                    <IoArrowBack className="back_arrow" />
+                  </button>
+                </Tooltip>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -63,9 +73,9 @@ function AppointmentsShow() {
 
           <AppointmentsEdit id={id} name="Edit "/>
 
-          <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
+          {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
-          </button>
+          </button> */}
         </div>
       </section>
 

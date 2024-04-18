@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
-
+import { Tooltip, Zoom } from "@mui/material";
+import { IoArrowBack } from "react-icons/io5";
 function ServicesShow() {
   const { id } = useParams();
   // const owner = sessionStorage.getItem("user_name");
@@ -74,6 +75,14 @@ function ServicesShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
+              <Tooltip TransitionComponent={Zoom} title="Back">
+                  <button
+                    className="btn fs-4 border-white"
+                    onClick={() => navigate("/products")}
+                  >
+                    <IoArrowBack className="back_arrow" />
+                  </button>
+                </Tooltip>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -98,9 +107,9 @@ function ServicesShow() {
             Edit
           </button>
 
-          <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
+          {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
-          </button>
+          </button> */}
         </div>
       </section>
 

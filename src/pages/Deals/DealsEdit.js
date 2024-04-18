@@ -29,8 +29,14 @@ const validationSchema = yup.object().shape({
   billing_city: yup.string().required("*Billing city is required"),
   billing_street: yup.string().required("*Billing street is required"),
   shipping_state: yup.string().required("*Shipping state is required"),
-  shipping_code: yup.string().required("*Shipping code is required"),
-  billing_code: yup.string().required("*Billing code is required"),
+  shipping_code: yup
+    .string()
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Shipping code is required"),
+  billing_code: yup
+    .string()
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Billing code is required"),
   shipping_country: yup.string().required("*Shipping country is required"),
   billing_country: yup.string().required("*Billing country is required"),
 });
@@ -262,8 +268,8 @@ function DealsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Deal Owner</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -290,8 +296,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -315,8 +321,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="email"
@@ -339,8 +345,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Deal Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -366,8 +372,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Contact Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -396,8 +402,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
@@ -426,8 +432,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Closing Date</lable> &nbsp;&nbsp;
                 <input
                   type="date"
@@ -487,8 +493,8 @@ function DealsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>stage</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -527,8 +533,8 @@ function DealsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>probability(%)</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -583,8 +589,8 @@ function DealsEdit() {
                 placeholder="--"
               />
             </div> */}
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Campaign Source</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -612,8 +618,8 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <select
                   className={`form-size form-select  ${
@@ -650,8 +656,8 @@ function DealsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -678,8 +684,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -706,8 +712,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -733,8 +739,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -760,8 +766,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -788,8 +794,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -815,8 +821,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -842,8 +848,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -869,8 +875,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -897,8 +903,8 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -934,8 +940,8 @@ function DealsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+            <div className="col-12 mb-3 ">
+              <div className="d-flex align-items-start justify-content-center  sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
