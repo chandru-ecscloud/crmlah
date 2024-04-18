@@ -19,11 +19,11 @@ const validationSchema = yup.object().shape({
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
     .max(10)
-    .required("*Phone Number is required is required"),
+    .required("*Phone Number is required"),
   account_name: yup.string().required("*Account Name is required"),
   vendor_name: yup.string().required("*Vendor Name is required"),
   land_line: yup.string().matches(/^\d+$/, "Must be only digits")
-  .required("*Land Line is required is required"),
+  .required("*Land Line is required"),
   skype_id: yup.string().required("*Skype ID is required"),
   twitter: yup.string().required("*Twitter is required"),
 
