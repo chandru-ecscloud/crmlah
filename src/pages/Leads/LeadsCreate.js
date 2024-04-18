@@ -146,8 +146,8 @@ function LeadsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Owner</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -173,8 +173,8 @@ function LeadsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Company</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -198,8 +198,8 @@ function LeadsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>First Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -223,8 +223,8 @@ function LeadsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Last Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -247,8 +247,8 @@ function LeadsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Phone</lable> &nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
@@ -294,8 +294,8 @@ function LeadsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="email"
@@ -318,7 +318,7 @@ function LeadsCreate() {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Mobile</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -328,7 +328,7 @@ function LeadsCreate() {
               />
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Fax</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -338,8 +338,8 @@ function LeadsCreate() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Land Line</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -363,7 +363,7 @@ function LeadsCreate() {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Website</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -373,8 +373,8 @@ function LeadsCreate() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -403,8 +403,8 @@ function LeadsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Status</lable> &nbsp;&nbsp;
                 <select
                   type="text"
@@ -435,7 +435,7 @@ function LeadsCreate() {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <label>Industry</label>&nbsp;&nbsp;
               <select
                 type="text"
@@ -449,7 +449,7 @@ function LeadsCreate() {
               </select>
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>No. of Employees</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -459,7 +459,7 @@ function LeadsCreate() {
               />
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Annual Revenue</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -469,7 +469,7 @@ function LeadsCreate() {
               />
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <label htmlFor="lead_owner">Rating</label>&nbsp;&nbsp;
               <select id="rating" className="form-size form-select">
                 <option value="--">--</option>
@@ -486,7 +486,7 @@ function LeadsCreate() {
               </select>
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Email Opt Out</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -496,8 +496,8 @@ function LeadsCreate() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Skype ID</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -521,7 +521,7 @@ function LeadsCreate() {
               </div>
             </div>
 {/* 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Secondary Email</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -532,8 +532,8 @@ function LeadsCreate() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Twitter</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -566,8 +566,8 @@ function LeadsCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -590,8 +590,8 @@ function LeadsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -614,8 +614,8 @@ function LeadsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -638,8 +638,8 @@ function LeadsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -662,8 +662,8 @@ function LeadsCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
@@ -697,7 +697,7 @@ function LeadsCreate() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+              <div className="d-flex align-items-start justify-content-center  sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
