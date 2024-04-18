@@ -445,7 +445,7 @@ const Accounts = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+            onClick={() =>  handleExportRowsPDF(table.getSelectedRowModel().rows)}
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
