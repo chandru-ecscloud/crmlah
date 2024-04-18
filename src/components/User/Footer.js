@@ -14,7 +14,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="container-fluid " style={{ backgroundColor: "#DFE6FF" }}>
+    <div className="container-fluid " style={{ backgroundColor: "#f7ffff" }}>
       <div className="p-3">
         <div className="row">
           {/* <div>
@@ -27,7 +27,7 @@ function Footer() {
             </span>
           </div> */}
           <div className="col-lg-3 col-md-3 col-12 mb-3 d-flex flex-column justify-content-center">
-            <h5 className="footerHeading mt-3">CloudECS Infotech</h5>
+            <h6 className=" mt-3 fw-bold ">CloudECS Infotech</h6>
             <span className="d-flex flex-column my-2 ">
               <span className="footerContent mb-2">
                 <FaPhoneAlt /> &nbsp;&nbsp;(+65) 88941306
@@ -43,7 +43,7 @@ function Footer() {
           </div>
 
           <div className="col-lg-3 col-md-3 col-12 mb-3 d-flex flex-column justify-content-center">
-            <h5 className="footerHeading mt-3">ECS Cloud Infotech</h5>
+            <h6 className=" mt-3 fw-bold">ECS Cloud Infotech</h6>
             <span className="d-flex flex-column my-2 ">
               <span className="footerContent mb-2 ">
                 <FaPhoneAlt /> &nbsp;&nbsp;(+65) 88941306
@@ -65,19 +65,19 @@ function Footer() {
           </div>
           <div className="col-lg-3 col-md-3 col-12">
             <div>
-              <h5 className=" mt-3">Pages</h5>
-              <span className="d-flex flex-column my-2">
+              <h6 className=" mt-3 fw-bold">Pages</h6>
+              <span className="my-2 ">
                 
-                <NavLink className="nav-link mt-2 " to="/contact">Contact</NavLink>
-                <NavLink className="nav-link mt-2 " to="/feature">Feature</NavLink>
-                <NavLink className="nav-link mt-2 " to="/about">About</NavLink>
+                <Link className="nav-link footerContent mt-2 " to="/contact">Contact</Link>
+                <Link className="nav-link footerContent mt-2 " to="/feature">Feature</Link>
+                <Link className="nav-link footerContent mt-2 " to="/about">About</Link>
               </span>
             </div>
           </div>
 
           <div className="col-lg-3 col-md-3 col-12">
             <div>
-              <h5 className="footerHeading mt-3">Others</h5>
+              <h6 className="mt-3 fw-bold">Others</h6>
               <span className="d-flex flex-column my-2 ">
                 <span className="footerContent mb-2 ">Privacy Policy</span>
                 <span className="footerContent mb-2 ">Terms & Conditions</span>
@@ -92,7 +92,7 @@ function Footer() {
         className="d-flex flex-column align-items-center py-3"
         // style={{ backgroundColor: "rgba(61, 99, 234, 0.90)", color: "#fff" }}
       >
-        <span className="footerCopyrights">
+        <span className="">
           2024 © Copyright ECS Cloud Infotech. All Rights Reserved.{" "}
         </span>
       </div>

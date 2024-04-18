@@ -2,19 +2,68 @@ import React from "react";
 import { BiLogoGmail } from "react-icons/bi";
 import { MdOutlineGpsFixed } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
+import { useFormik } from "formik";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
+
+const validationSchema = yup.object().shape({
+  first_name: yup.string().required("*First Name is required"),
+  phone: yup
+    .string()
+    .required("*Phone is required")
+    .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
+  email: yup.string().required("*Email is required"),
+  description_info : yup.string().required("*Enquiry is required"),
+});
 
 function Contact() {
+  const companyId = sessionStorage.getItem("companyId");
+  const owner = sessionStorage.getItem("user_name");
+  const navigate = useNavigate();
+  const formik = useFormik({
+    initialValues: {
+      company_id: companyId,
+      first_name: "",
+      phone: "",
+      email: "",
+      description_info: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      // console.log(data);
+      data.company = "ECSCloudInfotech";
+      try {
+        const response = await axios.post(`${API_URL}newClient`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success("Thank You for Contacting Us! We'll be in touch soon!");
+          navigate("/login");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    },
+  });
+
   return (
     <section>
       <div
         className=" container-fluid p-4"
         style={{ backgroundColor: "#ECFAFE" }}
       >
-        <div className="row contactCard">
-          <div className="col-lg-6 col-md-6 col-12 contactColumn p-5 d-flex flex-column ">
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-12 p-5 d-flex flex-column ">
             <div className="">
               <h2 className=" pt-3 mb-4">
-                <b>Let's</b> <b className="text-primary">Talk!</b>{" "}
+                <b>Let's &nbsp; Talk!</b>
               </h2>
               <p className="mb-4">
                 We love hearing from you! Whether you have a question, feedback,
@@ -69,47 +118,74 @@ function Contact() {
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-12 p-4">
-            <form>
+            <form onSubmit={formik.handleSubmit}>
               <div className="row">
                 <h3 className=" text-center ">CONTACT</h3>
                 <div className="col-12 mb-3">
-                  <label className="contactFields">First Name</label>
+                  <label className="contactFields">Name<span className="text-danger">*</span></label>
                   <input
-                    type="text"
-                    name="fname"
-                    id="fname"
-                    className="form-control "
+                     type="text"
+                     className={`form-control  ${
+                       formik.touched.first_name && formik.errors.first_name
+                         ? "is-invalid"
+                         : ""
+                     }`}
+                     {...formik.getFieldProps("first_name")}
+                     name="first_name"
+                     id="first_name"
                   />
+                  {formik.touched.first_name && formik.errors.first_name && (
+                    <p className="text-danger">{formik.errors.first_name}</p>
+                  )}
                 </div>
                 <div className="col-12 mb-3">
-                  <label className="contactFields">Phone</label>
+                  <label className="contactFields">Phone<span className="text-danger">*</span></label>
                   <input
-                    type="text"
-                    name="lname"
-                    id="lname"
-                    className="form-control "
+                    type="tel"
+                    name="phone"
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("phone")}
+                    id="phone"
                   />
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-danger">{formik.errors.phone}</p>
+                  )}
                 </div>
                 <div className="col-12 mb-3">
-                  <label className="contactFields">Email</label>
+                  <label className="contactFields">Email<span className="text-danger">*</span></label>
                   <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="form-control "
+                   type="email"
+                   name="email"
+                   className={`form-size form-control  ${
+                     formik.touched.email && formik.errors.email
+                       ? "is-invalid"
+                       : ""
+                   }`}
+                   {...formik.getFieldProps("email")}
+                   id="email"
                   />
+                  {formik.touched.email && formik.errors.email && (
+                    <p className="text-danger">{formik.errors.email}</p>
+                  )}
                 </div>
 
                 <div className="col-12 mb-4">
-                  <label className="contactFields">Enquiry</label>
+                  <label className="contactFields">Enquiry<span className="text-danger">*</span></label>
                   <textarea
-                    name="message"
-                    id="message"
+                     {...formik.getFieldProps("description_info")}
+                     name="description_info"
                     className="form-control "
                   ></textarea>
+                  {formik.touched.description_info && formik.errors.description_info && (
+                    <p className="text-danger">{formik.errors.description_info}</p>
+                  )}
                 </div>
                 <div className="col-12 mb-3">
-                  <button className="form-control btn btn-primary py-2">
+                  <button type="submit" className="form-control btn btn-primary py-2">
                     Submit Form
                   </button>
                 </div>

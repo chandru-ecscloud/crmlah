@@ -99,9 +99,9 @@ function AdminHeader({ handleLogout }) {
 
               <Tooltip TransitionComponent={Zoom} title="Other Modules">
                 <NavDropdown
-                  title={<AiOutlineEllipsis className="text-white mt-2" />}
+                  title={<AiOutlineEllipsis className="text-white " />}
                   className="navDropdown"
-                  style={{ marginTop: "-7px" }}
+                  style={{marginTop:"7px"}}
                 >
                   <span>
                     <input
@@ -129,7 +129,7 @@ function AdminHeader({ handleLogout }) {
 
               <Tooltip TransitionComponent={Zoom} title="Creat Menus">
                 <NavDropdown
-                  title={<FiPlus className="text-white fs-5" />}
+                  title={<FiPlus className="text-white fs-5 mt-2" />}
                   className="navDropdowns"
                 >
                   <NavDropdown.Item as={NavLink} to="/leads/create">
@@ -165,7 +165,7 @@ function AdminHeader({ handleLogout }) {
               <Tooltip TransitionComponent={Zoom} title="Profile">
                 <Nav
                   className="custom-nav-links"
-                  style={{ fontSize: "20px" }}
+                  style={{ fontSize: "20px",paddingTop:"8px"}}
                   onClick={handleShow}
                 >
                   <FaUserCircle style={{ cursor: "pointer" }} />

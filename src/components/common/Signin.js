@@ -12,7 +12,10 @@ import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("*Enter the Name"),
-  userName: yup.string().required("*Enter the User Name").min(4,"*min length of 4 chars"),
+  userName: yup
+    .string()
+    .required("*Enter the User Name")
+    .min(4, "*min length of 4 chars"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
@@ -81,7 +84,7 @@ const CompanyRegistrationForm = () => {
       data.role = "CMP_OWNER";
       data.jwtRole = "CMP_OWNER";
       try {
-        let response; 
+        let response;
         if (userNameAvailable) {
           response = await axios.post(`${API_URL}newUserRegister`, data, {
             headers: {
@@ -481,11 +484,11 @@ const CompanyRegistrationForm = () => {
 const CompanyRegistrationPage = () => {
   return (
     <div className="signIn">
-      <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
+      <div style={{ backgroundColor: "#ECFAFE" }} className="py-5">
         <div className="container">
           <div className="row py-5">
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-start justify-content-center mt-5">
-              <img src={HeroImage} alt="CRMLAH" className="img-fluid" />
+              <img src={HeroImage} alt="CRMLAH" className="img-fluid register-image" />
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row">
