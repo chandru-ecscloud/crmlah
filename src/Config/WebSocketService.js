@@ -27,6 +27,7 @@ class WebSocketService {
       return;
     }
     this.stompClient.subscribe("/topic/leadGeneration", (response) => {
+      console.log("Received lead update");
       console.log(response);
       callback(JSON.parse(response.body));
     });
@@ -38,9 +39,18 @@ class WebSocketService {
       return;
     }
     this.stompClient.subscribe("/topic/appointmentBooking", (response) => {
+      console.log("Received appointment update");
       console.log(response);
       callback(JSON.parse(response.body));
     });
+  }
+
+  newData(message) {
+    if (!this.connected) {
+      console.error("STOMP connection not established");
+      return;
+    }
+    this.stompClient.send("/app/newData", {}, JSON.stringify(message));
   }
 }
 
