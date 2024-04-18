@@ -555,12 +555,7 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
-                <label className="text-dark Label">Quote Number</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteNumber || ""}
-                </span>
-              </div>
+              
 
               <div>
                 <label className="text-dark Label">Deal Name</label>
