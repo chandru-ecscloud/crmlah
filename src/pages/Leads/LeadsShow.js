@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
 import { Link, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
+// import { BsThreeDots } from "react-icons/bs";
+// import USER from "../../assets/user.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import BookAppointment from "../Appointments/BookAppointment";
-import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
+// import BookAppointment from "../Appointments/BookAppointment";
+// import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { Tooltip, Zoom } from "@mui/material";
 import SendEmail from "../Email/SendEmail";
-import Appointment from '../Appointments/AppointmentsCreate';
+import Appointment from "../Appointments/AppointmentsCreate";
 
 function LeadsShow() {
   const { id } = useParams();
@@ -32,12 +32,12 @@ function LeadsShow() {
   //   setSelectedFiles([]);
   //   setShow(false);
   // };
-  const scheduleData ={
-    model :"Leads",
-    id : id,
+  const scheduleData = {
+    model: "Leads",
+    id: id,
     appointmentName: clientData.first_name,
-    email: clientData.email
-  }
+    email: clientData.email,
+  };
   useEffect(() => {
     const userData = async () => {
       try {
@@ -48,7 +48,7 @@ function LeadsShow() {
           },
         });
         setClientData(response.data);
-        console.log("Lead Show :",response.data);
+        console.log("Lead Show :", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -104,9 +104,9 @@ function LeadsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-           {/* <BookAppointment />  */}
+          {/* <BookAppointment />  */}
 
-           {clientData.email && <SendEmail toEmail={clientData.email} />}
+          {clientData.email && <SendEmail toEmail={clientData.email} />}
 
           {/* <button
             className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
@@ -114,9 +114,11 @@ function LeadsShow() {
           >
             Send Email
           </button> */}
-          <Appointment name={"schedule"} schedule={scheduleData}/>
+          <Appointment name={"schedule"} schedule={scheduleData} />
           <button
-            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${
+              role === "CMP_USER" && "disabled"
+            }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
@@ -131,8 +133,8 @@ function LeadsShow() {
 
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content 
-        */}
+        {/* left Side Content
+         */}
         {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
           <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
           <ul className="m-0 py-1">
@@ -193,7 +195,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Lead Owner</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.lead_owner }
+                  &nbsp; : &nbsp;{clientData.lead_owner}
                 </span>
               </div>
 
@@ -303,7 +305,7 @@ function LeadsShow() {
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.first_name || "--"}{" "}
-                  {clientData.last_name}
+                  {/* {clientData.last_name} */}
                 </span>
               </div>
 

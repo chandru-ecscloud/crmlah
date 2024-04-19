@@ -197,7 +197,7 @@ function AppointmentsCreate({ name, schedule }) {
                   <h4 style="margin:0 ;">${data.state}</h4>
 
                   <p style="margin: 1.5rem 0px 2rem 0px;"
-                  >You Can Still <span><a href="http://localhost:3000/Crm_Appoinment_Reschedule/${response.data.appointmentId}">reschedule</a></span> or <a href="http://localhost:3000/Crm_Appoinment_Cancelschedule/${response.data.appointmentId}">Cancel</a> Your Appointment</p>
+                  >You Can Still <span><a href="https://crmlah.com/CrmAppoinmentReschedule/${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/CrmAppoinmentCancelschedule/${response.data.appointmentId}">Cancel</a> Your Appointment</p>
                   <hr />
 
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
@@ -487,15 +487,14 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.appointmentStartTime &&
-                      formik.errors.appointmentStartTime && (
-                        <p className="text-danger">
-                          {formik.errors.appointmentStartTime}
-                        </p>
-                      )}
+                        {formik.touched.appointmentStartTime &&
+                          formik.errors.appointmentStartTime && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentStartTime}
+                            </p>
+                          )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -520,12 +519,13 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.duration && formik.errors.duration && (
-                      <p className="text-danger">{formik.errors.duration}</p>
-                    )}
+                        {formik.touched.duration && formik.errors.duration && (
+                          <p className="text-danger">
+                            {formik.errors.duration}
+                          </p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -547,15 +547,14 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.appointmentName &&
-                      formik.errors.appointmentName && (
-                        <p className="text-danger">
-                          {formik.errors.appointmentName}
-                        </p>
-                      )}
+                        {formik.touched.appointmentName &&
+                          formik.errors.appointmentName && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentName}
+                            </p>
+                          )}
                       </div>
                     </div>
-                    
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -582,12 +581,13 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.location && formik.errors.location && (
-                      <p className="text-danger">{formik.errors.location}</p>
-                    )}
+                        {formik.touched.location && formik.errors.location && (
+                          <p className="text-danger">
+                            {formik.errors.location}
+                          </p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -608,13 +608,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.member && formik.errors.member && (
-                      <p className="text-danger">{formik.errors.member}</p>
-                    )}
+                        {formik.touched.member && formik.errors.member && (
+                          <p className="text-danger">{formik.errors.member}</p>
+                        )}
                       </div>
                     </div>
-                   
-                    
                   </div>
                 </div>
               </div>
@@ -775,12 +773,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.street && formik.errors.street && (
-                      <p className="text-danger">{formik.errors.street}</p>
-                    )}
+                        {formik.touched.street && formik.errors.street && (
+                          <p className="text-danger">{formik.errors.street}</p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -802,12 +799,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.city && formik.errors.city && (
-                      <p className="text-danger">{formik.errors.city}</p>
-                    )}
+                        {formik.touched.city && formik.errors.city && (
+                          <p className="text-danger">{formik.errors.city}</p>
+                        )}
                       </div>
                     </div>
-                    
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -829,12 +825,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.state && formik.errors.state && (
-                      <p className="text-danger">{formik.errors.state}</p>
-                    )}
+                        {formik.touched.state && formik.errors.state && (
+                          <p className="text-danger">{formik.errors.state}</p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -856,12 +851,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.zipCode && formik.errors.zipCode && (
-                      <p className="text-danger">{formik.errors.zipCode}</p>
-                    )}
+                        {formik.touched.zipCode && formik.errors.zipCode && (
+                          <p className="text-danger">{formik.errors.zipCode}</p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -883,12 +877,11 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.country && formik.errors.country && (
-                      <p className="text-danger">{formik.errors.country}</p>
-                    )}
+                        {formik.touched.country && formik.errors.country && (
+                          <p className="text-danger">{formik.errors.country}</p>
+                        )}
                       </div>
                     </div>
-                   
                   </div>
                 </div>
               </div>
@@ -922,15 +915,14 @@ function AppointmentsCreate({ name, schedule }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                      {formik.touched.additionalInformation &&
-                      formik.errors.additionalInformation && (
-                        <p className="text-danger">
-                          {formik.errors.additionalInformation}
-                        </p>
-                      )}
+                        {formik.touched.additionalInformation &&
+                          formik.errors.additionalInformation && (
+                            <p className="text-danger">
+                              {formik.errors.additionalInformation}
+                            </p>
+                          )}
                       </div>
                     </div>
-                    
                   </div>
                 </div>
               </div>
