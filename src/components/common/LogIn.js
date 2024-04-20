@@ -67,15 +67,15 @@ function LogIn({ handleLogin }) {
 
   return (
     <section className="signIn">
-      <div style={{backgroundColor: "#ECFAFE" }} className="py-5">
+      <div style={{ backgroundColor: "#ECFAFE" }} className="py-5">
         <div className="container">
           <div className="row py-5">
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
               <img className="img-fluid" src={CRM} alt="CRMLAH" />
             </div> */}
             <div className="col-md-6 col-12 heroImageBackground">
-            <img className="img-fluid" src={CRM} alt="CRMLAH" />
-          </div>
+              <img className="img-fluid" src={CRM} alt="CRMLAH" />
+            </div>
             <div className="col-lg-6 col-md-6 col-12">
               <h3 className="registerWord text-center">LOGIN</h3>
               <form onSubmit={formik.handleSubmit}>
@@ -139,15 +139,16 @@ function LogIn({ handleLogin }) {
                     <p className="text-danger">{formik.errors.password}</p>
                   )}
                 </div>
+                <div className="d-flex justify-content-center ">
+                  <button
+                    // className="donateBtn btn btn-primary mx-auto"
+                    className="btn donateBtn "
+                    type="submit"
+                  >
+                    Login
+                  </button>
+                </div>
 
-                <button
-                  // className="donateBtn btn btn-primary mx-auto"
-                  className="btn donateBtn mx-auto"
-                  type="submit"
-                  style={{ width: "100%" }}
-                >
-                  Login
-                </button>
                 <p className="forgotWord text-center mt-5">
                   Forgot{" "}
                   <Link to="/forgot" className="password-link">

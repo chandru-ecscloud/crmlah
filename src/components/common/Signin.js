@@ -474,9 +474,15 @@ const CompanyRegistrationForm = () => {
         </div>
       </div>
 
-      <button className="contactsubmitBtn btn btn-danger mx-auto" type="submit">
-        Register
-      </button>
+      <div className="d-flex justify-content-center ">
+        <button
+          // className="donateBtn btn btn-primary mx-auto"
+          className="btn donateBtn "
+          type="submit"
+        >
+          Register
+        </button>
+      </div>
     </form>
   );
 };
@@ -488,7 +494,11 @@ const CompanyRegistrationPage = () => {
         <div className="container">
           <div className="row py-5">
             <div className="col-lg-6 col-md-6 col-12 d-flex align-items-start justify-content-center mt-5">
-              <img src={HeroImage} alt="CRMLAH" className="img-fluid register-image" />
+              <img
+                src={HeroImage}
+                alt="CRMLAH"
+                className="img-fluid register-image"
+              />
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row">

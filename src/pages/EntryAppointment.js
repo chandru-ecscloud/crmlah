@@ -395,7 +395,7 @@ const EntryAppointment = () => {
                         class="spinner-border spinner-border-sm me-2"
                         aria-hidden="true"
                       ></span>}
-                        Book
+                        Book Demo
                       </button>
                     </div>
                   </div>
