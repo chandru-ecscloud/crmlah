@@ -10,15 +10,19 @@ const validationSchema = Yup.object().shape({
   appointmentFor: Yup.string().required("*Appointment for is required"),
   appointmentStartDate: Yup.string().required("*Prefer Date is required"),
   appointmentStartTime: Yup.string().required("*Prefer Time is required"),
-  email: Yup.string().required("*Email is required"),
+  email: Yup.string().email("*Invalid Email").required("*Email is required"),
+  phone: Yup.string().required("*Phone Number is required")
+  .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
   additionalInformation: Yup.string().required("*Enquiry is required"),
 });
 const EntryAppointment = () => {
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
       appointmentFor: "",
       email: "",
       appointmentStartDate: "",
+      phone:"",
       appointmentStartTime: "",
       additionalInformation: "",
     },
@@ -28,7 +32,7 @@ const EntryAppointment = () => {
       data.typeOfAppointment = "website";
       data.appointmentName = "General Enquiry";
       console.log(data);
-
+      setLoadIndicator(true)
       const payload = {
         first_name :data.appointmentFor,
         email: data.email,
@@ -36,7 +40,7 @@ const EntryAppointment = () => {
         company:"ECSCloudInfotech",
         lead_status:"Processed",
         description_info: data.additionalInformation,
-        phone: 9876543211,
+        phone: data.phone,
       }
       try {
         const response = await axios.post(`${API_URL}newClient`,payload ,{
@@ -59,6 +63,7 @@ const EntryAppointment = () => {
         });
         if (response.status === 201) {
           toast.success("Thank You for Request Demo! We'll be in touch soon!");
+          setLoadIndicator(false)
           const mailContent = `
           <!DOCTYPE html>
           <html lang="en">
@@ -203,9 +208,11 @@ const EntryAppointment = () => {
           } catch (error) {
             // toast.error("Mail Not Send");
             console.log("Error");
+            setLoadIndicator(false)
           }
         } else {
           toast.error("Appointment Created Unsuccessful.");
+          setLoadIndicator(false)
         }
       } catch (error) {
         if (error.response?.status === 400) {
@@ -265,7 +272,8 @@ const EntryAppointment = () => {
                         )}
                     </div>
                     <div className="col-12 mb-3">
-                      <div className="">
+                      <div className="row">
+                        <div className="col-6">
                         <lable className="form-label">Prefer Date</lable>
                         <input
                           type="date"
@@ -279,16 +287,16 @@ const EntryAppointment = () => {
                               : ""
                           }`}
                         />
-                      </div>
+                      
                       {formik.touched.appointmentStartDate &&
                         formik.errors.appointmentStartDate && (
                           <p className="text-danger">
                             {formik.errors.appointmentStartDate}
                           </p>
                         )}
-                    </div>
-                    <div className="col-12 mb-3">
-                      <div className="">
+                        </div>
+                        <div className="col-6">
+                        <div className="">
                         <lable className="form-label">Prefer Time</lable>
                         <input
                           type="time"
@@ -310,8 +318,10 @@ const EntryAppointment = () => {
                             {formik.errors.appointmentStartTime}
                           </p>
                         )}
+                        </div>
+                        </div>
                     </div>
-
+                   
                     <div className="col-12 mb-3">
                       <div className="">
                         <lable className="form-label">Email</lable>
@@ -329,6 +339,25 @@ const EntryAppointment = () => {
                       </div>
                       {formik.touched.email && formik.errors.email && (
                         <p className="text-danger">{formik.errors.email}</p>
+                      )}
+                    </div>
+                    <div className="col-12 mb-3">
+                      <div className="">
+                        <lable className="form-label">Phone</lable>
+                        <input
+                          type="phone"
+                          name="phone"
+                          id="phone"
+                          {...formik.getFieldProps("phone")}
+                          className={`form-size form-control mt-1  ${
+                            formik.touched.phone && formik.errors.phone
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        />
+                      </div>
+                      {formik.touched.phone && formik.errors.phone && (
+                        <p className="text-danger">{formik.errors.phone}</p>
                       )}
                     </div>
                     <div className="col-12 mb-3">
@@ -362,6 +391,10 @@ const EntryAppointment = () => {
                         type="submit"
                         onClick={formik.handleSubmit}
                       >
+                        {loadIndicator && <span
+                        class="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>}
                         Book
                       </button>
                     </div>
