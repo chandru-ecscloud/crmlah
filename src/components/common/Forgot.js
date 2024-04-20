@@ -53,18 +53,19 @@ const RadioFormSelector = () => {
   const handelForgot = async () => {};
 
   return (
-    <div style={{ marginTop: "105px" }}>
+    <section className="signIn">
+    <div style={{backgroundColor: "#ECFAFE" }} className="py-5">
       <div className="container">
         <div className="row py-5">
           <div className="col-md-6 col-12 heroImageBackground">
             <img className="img-fluid" src={CRM} alt="CRMLAH" />
           </div>
           <div className="col-md-6 col-12 d-flex flex-column align-items-center justify-content-center">
-            <h3 className="registerWord">FORGOT PASSWORD</h3>
             <div className="card my-3" style={{ width: "25rem" }}>
               <div className="card-body">
                 <form onSubmit={formik.handleSubmit}>
                   <div className="form-group my-2">
+                    <h3 className="registerWord ms-5">FORGOT PASSWORD</h3>
                     <label htmlFor="companyId" className="mb-1">
                       User Email:
                     </label>
@@ -87,7 +88,8 @@ const RadioFormSelector = () => {
                     )}
                   </div>
                   <button
-                    className="contactsubmitBtn btn btn-primary mt-3"
+                    // className="contactsubmitBtn btn btn-primary mt-3"
+                    className="btn donateBtn"
                     type="submit"
                     style={{ width: "100%" }}
                   >
@@ -95,7 +97,7 @@ const RadioFormSelector = () => {
                   </button>
                   <p className="forgotWord text-center mt-2">
                     Return to{" "}
-                    <Link to="/forgot" className="password-link">
+                    <Link to="/login" className="password-link">
                       Login
                     </Link>
                     ?
@@ -107,6 +109,7 @@ const RadioFormSelector = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

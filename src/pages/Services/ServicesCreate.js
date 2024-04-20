@@ -16,11 +16,11 @@ const validationSchema = yup.object().shape({
   availableDays: yup.string().required("*Available days is required"),
   availableTime: yup.string().required("*Available time is required"),
   price: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Price is required"),
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Price is required"),
   tax: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Tax is required"),
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Tax is required"),
 });
 
 function ServicesCreate() {
@@ -31,7 +31,7 @@ function ServicesCreate() {
   const formik = useFormik({
     initialValues: {
       serviceOwner: owner,
-      company_id: companyId,
+      companyId: companyId,
       serviceName: "",
       duration: "",
       location: "",
@@ -47,7 +47,7 @@ function ServicesCreate() {
     onSubmit: async (data) => {
       // console.log("Service Datas:", data);
       try {
-        const response = await axios.post(`${API_URL}newServices`,data, {
+        const response = await axios.post(`${API_URL}newServices`, data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -299,9 +299,9 @@ function ServicesCreate() {
                 >
                   <option value=""></option>
                   <option value="Same as Business Time">Same as Business Time</option>
-                  <option value="Option 1">Option 1</option>
-                  <option value="Option 2">Option 2</option>
-                  <option value="Option 3">Option 3</option>
+                  <option value="10.00AM to 12.00PM">10.00AM to 12.00PM</option>
+                  <option value="12.00PM to 2.00PM">12.00PM to 2.00PM</option>
+                  <option value="2.00PM to 4.00PM">2.00PM to 4.00PM</option>
                 </select>
               </div>
               <div className="row sm-device">
@@ -347,9 +347,8 @@ function ServicesCreate() {
                 <lable>Tax</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.tax && formik.errors.tax ? "is-invalid" : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.tax && formik.errors.tax ? "is-invalid" : ""
+                    }`}
                   {...formik.getFieldProps("tax")}
                   name="tax"
                   id="tax"
@@ -373,16 +372,18 @@ function ServicesCreate() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-8 d-flex align-items-center justify-content-end ">
-              <lable>Description</lable> &nbsp;&nbsp;
-              <input
-                type="text"
-                style={{ width: "70%" }}
-                className=" form-control form-size"
-                {...formik.getFieldProps("description_info")}
-                name="description_info"
-                id="description_info"
-              />
+            <div className="col-12">
+              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+                <lable>Description</lable> &nbsp;&nbsp;
+                <textarea
+                  rows="5"
+                  type="text"
+                  className="form-size form-control"
+                  {...formik.getFieldProps("description_info")}
+                  name="description_info"
+                  id="description_info"
+                />
+              </div>
             </div>
           </div>
         </div>

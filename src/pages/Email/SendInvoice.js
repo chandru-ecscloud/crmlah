@@ -12,7 +12,7 @@ const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
 });
 
-function SendInvoice({ invoiceData }) {
+function SendInvoice({ invoiceData, id }) {
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
@@ -22,17 +22,22 @@ function SendInvoice({ invoiceData }) {
   const [subject, setSubject] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       subject: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async () => {
-      const generateHtmlContent = () => {
-        let html = "";
-        {
-          const htmlContent = `
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+
+
+        const generateHtmlContent = () => {
+          setLoadIndicator(true);
+          let html = "";
+          {
+            const htmlContent = `
           <!DOCTYPE html>
           <html lang="en">
             <head>
@@ -152,33 +157,28 @@ function SendInvoice({ invoiceData }) {
                 <br />
                 <div style="display: flex;">
                   <label>Billing Street</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].billingStreet || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingStreet || "--"
+              }</span>
           
                   <label>Billing City</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].billingCity || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCity || "--"
+              }</span>
                 </div>
           
                 <div style="display: flex">
                   <label>Billing State</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].billingState || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingState || "--"
+              }</span>
           
                   <label>Billing Code</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].billingCode || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCode || "--"
+              }</span>
                 </div>
                 
                 <div style="display: flex">
                   <label>Billing Country</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].billingCountry || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCountry || "--"
+              }</span>
                 </div>
               </div>
               <br/>
@@ -186,33 +186,28 @@ function SendInvoice({ invoiceData }) {
                
                   <div style="display: flex;">
                   <label>Shipping Street</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].shippingStreet || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingStreet || "--"
+              }</span>
           
                   <label>Shipping City</label>
-                  <span>:&nbsp;&nbsp;${
-                    invoiceData.dealsWithInvoice[0].shippingCity || "--"
-                  }</span>
+                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCity || "--"
+              }</span>
                   </div>
           
                   <div style="display: flex">
                     <label>Shipping State</label>
-                    <span>:&nbsp;&nbsp;${
-                      invoiceData.dealsWithInvoice[0].shippingState || "--"
-                    }</span>
+                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingState || "--"
+              }</span>
           
                     <label>Shipping Code</label>
-                    <span>:&nbsp;&nbsp;${
-                      invoiceData.dealsWithInvoice[0].shippingCode || "--"
-                    }</span>
+                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCode || "--"
+              }</span>
                   </div>
                     
                   <div style="display: flex">
                     <label>Shipping Country</label>
-                    <span>:&nbsp;&nbsp;${
-                      invoiceData.dealsWithInvoice[0].shippingCountry || "--"
-                    }</span>
+                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCountry || "--"
+              }</span>
                   </div>
                 </div>
               
@@ -230,8 +225,8 @@ function SendInvoice({ invoiceData }) {
                       <td style="white-space: nowrap">Total Amount</td>
                     </tr>
                     ${invoiceData.productsWithInvoice
-                      .map(
-                        (product, index) => `
+                .map(
+                  (product, index) => `
                             <tr>
                             <td>${index + 1 || "--"}</td>
                             <td>${product.productName || "--"}</td>
@@ -242,8 +237,8 @@ function SendInvoice({ invoiceData }) {
                             <td>${((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
                             </tr>
                             `
-                      )
-                      .join("")}
+                )
+                .join("")}
                   </table>
                 </div>
     
@@ -302,12 +297,35 @@ function SendInvoice({ invoiceData }) {
           </html>
     
         `;
-          html += htmlContent;
+            html += htmlContent;
+          }
+          setHtmlContent(html);
+          setIsSendingEmail(true);
+        };
+        generateHtmlContent();
+        const response = await axios.post(`${API_URL}sendMail`, {
+          toMail: invoiceData?.dealsWithInvoice[0]?.email || "",
+          fromMail: userEmail,
+          subject: values.subject,
+          htmlContent: htmlContent,
+        });
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          handleHide();
+        } else {
+          toast.error(response.data.message);
         }
-        setHtmlContent(html);
-        setIsSendingEmail(true);
-      };
-      generateHtmlContent();
+        setIsSendingEmail(false);
+        setSubmitting(false);
+        setLoadIndicator(false);
+      } catch (error) {
+        toast.error("Mail Not Send");
+        console.error("Failed to send email:", error);
+        setIsSendingEmail(false); // Reset on error
+        setSubmitting(false);
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -340,14 +358,14 @@ function SendInvoice({ invoiceData }) {
           ((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)),
         0
       ).toFixed(2);
-  
+
       const totalUnitPrice = invoiceData.productsWithInvoice.reduce(
         (total, product) => total + ((product.unitPrice || 0) * (product.quantityInStock || 0)),
         0
       ).toFixed(2);
-  
+
       const totalTax = (totalAmount - totalUnitPrice).toFixed(2);
-  
+
       setSubtotal(totalUnitPrice);
       setTaxTotal(totalTax);
       setGrandTotal(totalAmount);
@@ -357,7 +375,11 @@ function SendInvoice({ invoiceData }) {
       setGrandTotal(0);
     }
   };
-  
+  let values = {
+    total: parseInt(subtotal),
+    grand_total: parseInt(grandTotal),
+  }
+  console.log(values)
   const sendEmail = async () => {
     try {
       const response = await axios.post(`${API_URL}sendMail`, {
@@ -373,6 +395,21 @@ function SendInvoice({ invoiceData }) {
         handleHide();
       } else {
         toast.error(response.data.message);
+      }
+      // Update invoice
+      const updateResponse = await axios.put(`${API_URL}updateInvoice/${id}`, values, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      }
+      );
+
+      if (updateResponse.status === 200) {
+        console.log(updateResponse.data.message);
+
+      } else {
+        toast.error(updateResponse.data.message);
       }
       setIsSendingEmail(false);
     } catch (error) {
@@ -435,11 +472,10 @@ function SendInvoice({ invoiceData }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control  ${
-                  formik.touched.subject && formik.errors.subject
+                className={`form-control  ${formik.touched.subject && formik.errors.subject
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>
@@ -671,6 +707,10 @@ function SendInvoice({ invoiceData }) {
             <div className="d-flex align-items-end justify-content-end">
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button type="submit" className="btn btn-primary mt-4">
+                  {loadIndicator && <span
+                    class="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>}
                   Send
                   <IoMdSend className="ms-2 mb-1" />
                 </button>
