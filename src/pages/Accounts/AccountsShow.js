@@ -17,25 +17,26 @@ import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import SendQuotes from "../Email/SendQuotes";
 import { Tooltip, Zoom } from "@mui/material";
-import Appointment from '../Appointments/AppointmentsCreate'
+import Appointment from "../Appointments/AppointmentsCreate";
 
 function AccountsShow() {
   const { id } = useParams();
-  const token = sessionStorage.getItem("token");
+
   const role = sessionStorage.getItem("role");
   const [total, setTotal] = useState(0);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  // const [selectedFile, setSelectedFile] = useState(null);
+  // const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
-  
-  const navigate = useNavigate();
-  const scheduleData ={
-    model :"Accounts",
-    id : id,
-    appointmentName: accountData.accountName ,
-    email:accountData.email
 
-  }
+  const navigate = useNavigate();
+
+  const scheduleData = {
+    model: "Accounts",
+    id: id,
+    appointmentName: accountData.accountName,
+    email: accountData.email,
+  };
+
   useEffect(() => {
     const userData = async () => {
       try {
@@ -46,7 +47,8 @@ function AccountsShow() {
           },
         });
         setAccountData(response.data);
-        console.log("Account Show :",response.data);
+        console.log(accountData.quotes);
+        // console.log("Account Show :",response.data.quotes.productsWithQuote      );
         setTotal(response.data.quotes ? response.data.quotes.length : 0);
       } catch (error) {
         toast.error("Error fetching data:", error);
@@ -102,11 +104,18 @@ function AccountsShow() {
 
         <div className="col-9 mt-1" id="buttons-container">
           <SendQuotes accountData={accountData} />
-          <Appointment name={"schedule"} schedule={scheduleData}/>
-          {accountData.email && <SendEmail toEmail={accountData.email} />}
-
+          <Appointment name={"schedule"} schedule={scheduleData} />
+          {accountData.email && (
+            <Tooltip TransitionComponent={Zoom} title="Send Email">
+              <span>
+                <SendEmail toEmail={accountData.email} />
+              </span>
+            </Tooltip>
+          )}
           <button
-            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${
+              role === "CMP_USER" && "disabled"
+            }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
@@ -370,9 +379,9 @@ function AccountsShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information
                 </span>
-                <button className="btn bg-info col-2 text-white">
+                {/* <button className="btn bg-info col-2 text-white">
                   Locate Map
-                </button>
+                </button> */}
               </div>
 
               <div className="my-3"></div>
@@ -465,35 +474,66 @@ function AccountsShow() {
           <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
-                <span className="my-3 fs-6 fw-bold my-3">Notes</span>
+                <span className="my-3 fs-6 fw-bold my-3">Quotes</span>
               </div>
             </div>
 
             <div className="container  col-12">
               {accountData.quotes ? (
-                <div className="table-responsive">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">S.No</th>
-                        <th scope="col">Deal Name</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Quote Stage</th>
-                        <th scope="col">Quote Owner</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {accountData.quotes.map((quote, index) => (
-                        <tr key={quote.id}>
-                          <td>{index + 1}</td>
-                          <td>{quote.dealName || "--"}</td>
-                          <td>{quote.subject || "--"}</td>
-                          <td>{quote.quoteStage || "--"}</td>
-                          <td>{quote.quoteOwner || "--"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div>
+                  {accountData.quotes.map((quote) => (
+                    <div key={quote.id} className="row mt-4">
+                      <div className="col-md-6 col-12">
+                        <label className="text-dark"><b>Quote Name</b></label>
+                        <span className="text-dark">
+                          &nbsp; : &nbsp;{quote.dealName || "--"}
+                        </span>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <label className="text-dark Label"><b>Subject</b></label>
+                        <span className="text-dark">
+                          &nbsp; : &nbsp;{quote.subject || "--"}
+                        </span>
+                      </div>
+
+                      <div className="table-responsive">
+                        <table className="table table-bordered">
+                          <thead className="table-secondary">
+                            <tr>
+                              <th scope="col">S.No</th>
+                              <th scope="col">product Name</th>
+                              <th scope="col">product Code</th>
+                              <th scope="col">QuantityInStock</th>
+                              <th scope="col">Tax</th>
+                            </tr>
+                          </thead>
+                          {/* <tbody>
+                            {quote.map((quote, index) => (
+                              <tr key={quote.id}>
+                                <td>{index + 1}</td>
+                                <td>{quote.dealName || "--"}</td>
+                                <td>{quote.subject || "--"}</td>
+                                <td>{quote.quoteStage || "--"}</td>
+                                <td>{quote.quoteOwner || "--"}</td>
+                              </tr>
+                            ))}
+                          </tbody> */}
+                          <tbody>
+                            {quote.productsWithQuote &&
+                              quote.productsWithQuote.map((item, index) => (
+                                <tr key={item.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{item.productName || "--"}</td>
+                                  <td>{item.productCode || "--"}</td>
+                                  <td>{item.quantityInStock || "--"}</td>
+                                  <td>{item.tax || "--"}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <p>No quotes available.</p>
@@ -502,7 +542,7 @@ function AccountsShow() {
           </div>
 
           {/* Notes */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Notes</span>
@@ -528,7 +568,7 @@ function AccountsShow() {
                 placeholder="'Add note...'"
               ></textarea>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

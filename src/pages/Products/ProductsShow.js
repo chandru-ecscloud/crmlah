@@ -428,7 +428,7 @@ function ProductsShow() {
           </div>
 
           {/* {/ Notes /} */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Notes</span>
@@ -454,7 +454,7 @@ function ProductsShow() {
                 placeholder="'Add note...'"
               ></textarea>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

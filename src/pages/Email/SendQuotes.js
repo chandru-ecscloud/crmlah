@@ -18,6 +18,7 @@ function SendQuotes({ accountData }) {
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
   const [subject, setSubject] = useState("");
+  const [loadIndicator, setLoadIndicator] = useState(false);
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
 
@@ -28,6 +29,7 @@ function SendQuotes({ accountData }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoadIndicator(true);
         const response = await axios.post(`${API_URL}sendMail`, {
           toMail: accountData.email,
           fromMail: userEmail,
@@ -44,6 +46,9 @@ function SendQuotes({ accountData }) {
       } catch (error) {
         console.error("Error sending email:", error);
         toast.error("Failed to send email");
+      }
+      finally {
+        setLoadIndicator(false); // Set loading indicator back to false after request completes
       }
     },
   });
@@ -326,6 +331,10 @@ function SendQuotes({ accountData }) {
                   className="btn btn-primary mt-4"
                   onClick={formik.handleSubmit}
                 >
+                   {loadIndicator && <span
+                    class="spinner-border spinner-border-sm me-2 "
+                    aria-hidden="true"
+                  ></span>}
                   Send
                   <IoMdSend className="ms-2 mb-1" />
                 </button>

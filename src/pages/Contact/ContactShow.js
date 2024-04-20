@@ -74,7 +74,13 @@ function ContactShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-        {contactData.email && <SendEmail toEmail={contactData.email} />}
+        {contactData.email && (
+        <Tooltip  TransitionComponent={Zoom} title="Send Email">
+          <span>
+          <SendEmail toEmail={contactData.email} />
+          </span>
+        </Tooltip>
+        )}
           <Appointment name={"schedule"} schedule={scheduleData}/>
           <button
             className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
@@ -350,9 +356,9 @@ function ContactShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information
                 </span>
-                <button className="btn bg-info col-2 text-white">
+                {/* <button className="btn bg-info col-2 text-white">
                   Locate Map
-                </button>
+                </button> */}
               </div>
 
               <div className="my-3"></div>
@@ -413,7 +419,7 @@ function ContactShow() {
           </div>
 
           {/* Notes */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Notes</span>
@@ -439,10 +445,10 @@ function ContactShow() {
                 placeholder="'Add note...'"
               ></textarea>
             </div>
-          </div>
+          </div> */}
 
           {/* Attachments */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Attachments</span>
@@ -469,7 +475,7 @@ function ContactShow() {
                 No Attachment{" "}
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

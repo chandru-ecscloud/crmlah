@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState }from "react";
 import { BiLogoGmail } from "react-icons/bi";
 import { MdOutlineGpsFixed } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -21,6 +21,7 @@ const validationSchema = yup.object().shape({
 function Contact() {
   // const companyId = sessionStorage.getItem("companyId");
   // const owner = sessionStorage.getItem("user_name");
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
       company_id: "",
@@ -35,6 +36,7 @@ function Contact() {
       data.company_id = 2;
       data.company = "ECSCloudInfotech";
       data.lead_status = "Processed";
+      setLoadIndicator(true)
       try {
         const response = await axios.post(`${API_URL}newClient`, data, {
           headers: {
@@ -44,11 +46,14 @@ function Contact() {
         if (response.status === 201) {
           toast.success("Thank You for Contacting Us! We'll be in touch soon!");
           formik.resetForm();
+          setLoadIndicator(false)
         } else {
           toast.error(response.data.message);
+          setLoadIndicator(false)
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+        setLoadIndicator(false)
       }
     },
   });
@@ -195,12 +200,16 @@ function Contact() {
                       </p>
                     )}
                 </div>
-                <div className="col-12 mb-3">
+                <div className="col-12 mb-3 d-flex justify-content-center ">
                   <button
                     type="submit"
-                    className="form-control btn btn-primary py-2"
+                    className="btn donateBtn  "
                   >
-                    Submit Form
+                    {loadIndicator && <span
+                        class="spinner-border spinner-border-sm me-2 "
+                        aria-hidden="true"
+                      ></span>}
+                    Submit
                   </button>
                 </div>
                 {/* <span className="d-flex justify-content-center col-12 ">

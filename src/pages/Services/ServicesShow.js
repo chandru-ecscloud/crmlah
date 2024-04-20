@@ -225,7 +225,7 @@ function ServicesShow() {
           </div>
 
           {/* Notes */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Notes</span>
@@ -251,10 +251,10 @@ function ServicesShow() {
                 placeholder="'Add note...'"
               ></textarea>
             </div>
-          </div>
+          </div> */}
 
           {/* Appointments */}
-          <div className="container-fluid row my-3" id="Details">
+          {/* <div className="container-fluid row my-3" id="Details">
             <div
               className="container-fluid col-12"
               style={{ overflowX: "scroll" }}
@@ -283,7 +283,7 @@ function ServicesShow() {
                     <td className="p-2">Location</td>
                   </tr>
                 </thead>
-                {/* <tbody>{renderQuotedItems()}</tbody> */}
+              
               </table>
             </div>
 
@@ -296,7 +296,7 @@ function ServicesShow() {
                 alignItems: "flex-end",
               }}
             ></div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

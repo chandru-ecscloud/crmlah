@@ -244,7 +244,7 @@ function SendEmail({ toEmail }) {
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button className="btn btn-primary" type="submit">
                   {loadIndicator && <span
-                    class="spinner-border spinner-border-sm"
+                    class="spinner-border spinner-border-sm me-3"
                     aria-hidden="true"
                   ></span>}
                   &nbsp;<span role="status">Send</span>
