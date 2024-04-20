@@ -368,7 +368,7 @@ function InvoiceShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <SendInvoice invoiceData={invoiceData} />
+          <SendInvoice invoiceData={invoiceData} id={id} />
 
           {/* <SendEmail /> */}
 
@@ -834,7 +834,7 @@ function InvoiceShow() {
               <div>
                 <label className="text-dark Label">Description</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{invoiceData.description_info || "--"}
+                  &nbsp; : &nbsp;{invoiceData.description || "--"}
                 </span>
               </div>
             </div>

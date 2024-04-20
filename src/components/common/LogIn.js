@@ -70,9 +70,12 @@ function LogIn({ handleLogin }) {
       <div style={{backgroundColor: "#ECFAFE" }} className="py-5">
         <div className="container">
           <div className="row py-5">
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
+            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-center">
               <img className="img-fluid" src={CRM} alt="CRMLAH" />
-            </div>
+            </div> */}
+            <div className="col-md-6 col-12 heroImageBackground">
+            <img className="img-fluid" src={CRM} alt="CRMLAH" />
+          </div>
             <div className="col-lg-6 col-md-6 col-12">
               <h3 className="registerWord text-center">LOGIN</h3>
               <form onSubmit={formik.handleSubmit}>
@@ -138,8 +141,10 @@ function LogIn({ handleLogin }) {
                 </div>
 
                 <button
-                  className="contactsubmitBtn btn btn-primary mx-auto"
+                  // className="donateBtn btn btn-primary mx-auto"
+                  className="btn donateBtn mx-auto"
                   type="submit"
+                  style={{ width: "100%" }}
                 >
                   Login
                 </button>

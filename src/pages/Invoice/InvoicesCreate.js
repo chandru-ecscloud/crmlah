@@ -16,7 +16,10 @@ const validationSchema = yup.object({
   invoice_date: yup.string().required("*Enter The Invoice Date"),
   status: yup.string().required("*Enter The Status"),
   due_date: yup.string().required("*Enter The Due Date"),
-  sales_commission: yup.string().required("*Enter The Sales Commission"),
+  // sales_commission: yup.string().required("*Enter The Sales Commission"),
+  sales_commission: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Enter The Sales Commission"),
   deal_name: yup.string().required("*Select The Deal Name "),
   account_name: yup.string().required("*Select The Account Name "),
   contact_name: yup.string().required("*Select The Contact Name "),

@@ -8,28 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const validationSchema = Yup.object().shape({
-  // appointmentFor: Yup.string().required("*Appointment for is required"),
-  serviceId: Yup.string().required("*Service is required"),
-  duration: Yup.string().required("*Duration is required"),
-  appointmentName: Yup.string().required("*Name is required"),
-  appointmentStartDate: Yup.string().required("*Start date is required"),
-  appointmentStartTime: Yup.string().required("*Start Time is required"),
-  location: Yup.string().required("*Location is required"),
-  member: Yup.string().required("*Member is required"),
-  // minutes: Yup.string().required("*Minutes is required"),
-  // time: Yup.string().required("*Time is required"),
-  // hour: Yup.string().required("*Hour is required"),
-  // none: Yup.string().required("*None is required"),
-  street: Yup.string().required("*Street is required"),
-  city: Yup.string().required("*City is required"),
-  state: Yup.string().required("*State is required"),
-  zipCode: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Zip code is required"),
-  country: Yup.string().required("*Country is required"),
-  // additionalInformation: Yup.string().required("*Description is required"),
-});
+
 
 function AppointmentsCreate({ name, schedule }) {
   const [show, setShow] = useState(false);
@@ -39,6 +18,39 @@ function AppointmentsCreate({ name, schedule }) {
   const companyId = sessionStorage.getItem("companyId");
   const userName = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
+
+  const validationSchema = Yup.object().shape({
+    // appointmentFor: Yup.string().required("*Appointment for is required"),
+    serviceId: Yup.string().required("*Service is required"),
+    duration: Yup.string().required("*Duration is required"),
+    appointmentName: Yup.string().required("*Name is required"),
+    appointmentStartDate: Yup.string().required("*Start date is required"),
+    appointmentStartTime: Yup.string().required("*Start Time is required"),
+    location: Yup.string().required("*Location is required"),
+    member: Yup.string().required("*Member is required"),
+    // minutes: Yup.string().required("*Minutes is required"),
+    // time: Yup.string().required("*Time is required"),
+    // hour: Yup.string().required("*Hour is required"),
+    // none: Yup.string().required("*None is required"),
+    street: Yup.string().required("*Street is required"),
+    city: Yup.string().required("*City is required"),
+    state: Yup.string().required("*State is required"),
+    zipCode: Yup.string()
+      .matches(/^\d+$/, "Must be only digits")
+      .required("*Zip code is required"),
+    country: Yup.string().required("*Country is required"),
+    // appointmentFor: Yup.string().required("*Description is required"),
+    // leadId: Yup.string().when('name', {
+    //   is: 'Create Appointment',
+    //   then: Yup.string().required("*Appointment for is required"),
+    //   otherwise: Yup.string()
+    // }),
+    // appointmentFor: Yup.string().when('name', {
+    //   is: 'schedule',
+    //   then: Yup.string().required("*Appointment for is required"),
+    //   otherwise: Yup.string()
+    // }),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -59,8 +71,9 @@ function AppointmentsCreate({ name, schedule }) {
       typeOfAppointment: "",
       additionalInformation: "",
     },
-    // validationSchema: validationSchema,
-    onSubmit: async (data, { resetForm }) => {
+    validationSchema: validationSchema,
+    
+    onSubmit: async (data, { resetForm,setSubmitting }) => {
       if (name === "Create Appointment") {
         const lead = leadData.find((user) => user.id == data.leadId);
         const service = serviceData.find((user) => user.id == data.serviceId);
@@ -81,7 +94,7 @@ function AppointmentsCreate({ name, schedule }) {
         });
         if (response.status === 201) {
           console.log(response.data.appointmentId);
-
+          resetForm();
           toast.success(response.data.message);
           setShow(false);
           const mailContent = `
@@ -239,13 +252,14 @@ function AppointmentsCreate({ name, schedule }) {
         }
       }
 
-      resetForm();
+      
     },
   });
 
   const openModal = () => {
     setShow(true);
     console.log("scheduleDataM", schedule);
+     
     if (name === "schedule") {
       let scheduleData = {
         appointmentFor: schedule.appointmentName,
@@ -342,8 +356,14 @@ function AppointmentsCreate({ name, schedule }) {
                     <span>
                       <button
                         className="btn btn-primary"
-                        type="submit"
-                        onClick={formik.handleSubmit}
+                        type="button"
+                        onClick={()=>{
+                          formik.handleSubmit();
+                          formik.setTouched(Object.keys(formik.initialValues).reduce((touched, key) => {
+                            touched[key] = true;
+                            return touched;
+                          }, {}));
+                        }}
                       >
                         Save
                       </button>
@@ -360,6 +380,7 @@ function AppointmentsCreate({ name, schedule }) {
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     {name == "schedule" ? (
+                      <>
                       <div className="d-flex align-items-center justify-content-end sm-device">
                         <lable>Appointment</lable> &nbsp;&nbsp;
                         <input
@@ -375,7 +396,15 @@ function AppointmentsCreate({ name, schedule }) {
                           }`}
                         />
                       </div>
+                      {formik.touched.appointmentFor &&
+                        formik.errors.appointmentFor && (
+                          <p className="text-danger">
+                            {formik.errors.appointmentFor}
+                          </p>
+                        )}
+                        </>
                     ) : (
+                      <>
                       <div className="d-flex align-items-center justify-content-end sm-device">
                         <lable>Appointment </lable> &nbsp;&nbsp;
                         <select
@@ -395,13 +424,15 @@ function AppointmentsCreate({ name, schedule }) {
                           ))}
                         </select>
                       </div>
+                      {formik.touched.leadId &&
+                        formik.errors.leadId && (
+                          <p className="text-danger">
+                            {formik.errors.leadId}
+                          </p>
+                        )}
+                        </>
                     )}
-                    {formik.touched.appointmentFor &&
-                      formik.errors.appointmentFor && (
-                        <p className="text-danger">
-                          {formik.errors.appointmentFor}
-                        </p>
-                      )}
+                    
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">

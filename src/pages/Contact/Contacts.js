@@ -39,6 +39,7 @@ const Contacts = () => {
       {
         accessorKey: "firstName",
         header: "Contact Name",
+        enableHiding: false,
         Cell: ({ row }) => (
           <Link to={`/contacts/show/${row.original.id}`} className="rowName">
             {row.original.firstName}
@@ -48,10 +49,12 @@ const Contacts = () => {
       {
         accessorKey: "email",
         header: "Email-Address",
+        enableHiding: false,
       },
       {
         accessorKey: "phone",
         header: "Phone Number",
+        enableHiding: false,
         Cell: ({ row }) => (
           <span>
             {row.original.countryCode}&nbsp;&nbsp;{row.original.phone}
@@ -61,6 +64,7 @@ const Contacts = () => {
       {
         accessorKey: "contactOwner",
         header: "Contact Owner",
+        enableHiding: false,
       },
       {
         accessorKey: "lastName",

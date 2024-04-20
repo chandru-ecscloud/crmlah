@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { IoMdTrash } from "react-icons/io";
+import { v4 as uuidv4 } from "uuid";
 import { FaPhoneAlt } from "react-icons/fa";
 import {
   MdOutlineLeaderboard,
@@ -10,35 +11,145 @@ import { GiChampions } from "react-icons/gi";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { IoMdMailOpen } from "react-icons/io";
 import { FaUserTie } from "react-icons/fa";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
 
 // import Women from "../../assets/women 1.jpg";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 
-const ListTasks = ({ tasks, setTasks }) => {
+const ListTasks = ({ }) => {
+  const [tasks, setTasks] = useState([]);
   const [newTasks, setNewTasks] = useState([]);
   const [qualifiedTasks, setQualifiedTasks] = useState([]);
   const [propositionTasks, setPropositionTasks] = useState([]);
   const [wonTasks, setWonTasks] = useState([]);
   const [hoveredSection, setHoveredSection] = useState(null);
+  const companyId =sessionStorage.getItem("companyId")
 
-  useEffect(() => {
-    if (tasks) {
-      const fNewTasks = tasks.filter((task) => task.status === "New");
-      const fQualifiedTasks = tasks.filter(
-        (task) => task.status === "Qualified"
-      );
-      const fPropositionTasks = tasks.filter(
-        (task) => task.status === "Proposition"
-      );
-      const fWonTasks = tasks.filter((task) => task.status === "Won");
-      setNewTasks(fNewTasks);
-      setQualifiedTasks(fQualifiedTasks);
-      setPropositionTasks(fPropositionTasks);
-      setWonTasks(fWonTasks);
+//  console.log("tasks",tasks)
+
+ const fetchLeadData = async () => {
+  try {
+    // setLoading(true);
+    const response = await axios.get(
+      `${API_URL}allClientsByCompanyId/${companyId}`
+    );
+    if(response.status ===200){
+      // console.log("apilead",response.data)
+      const newTasks = response.data.map(client => ({
+        id: client.id,
+        name: client.first_name,
+        phone: client.phone,
+        email: client.email,
+        status: "New",
+      }));
+      setNewTasks(newTasks);
     }
-  }, [tasks]);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+ const fetchContactData = async () => {
+  try {
+    // setLoading(true);
+    const response = await axios.get(
+      `${API_URL}allContactsByCompanyId/${companyId}`
+    );
+    if(response.status ===200){
+      // console.log("apicontact",response.data)
+      const newTask = response.data.map((client,i )=> ({
+        id: client.id,
+        name: client.firstName,
+        phone: client.phone,
+        email: client.email,
+        status: "Qualified",
+      }));
+      setQualifiedTasks(newTask) 
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+
+ const fetchAcconutData = async () => {
+  try {
+    // setLoading(true);
+    const response = await axios.get(
+      `${API_URL}allAccountsByCompanyId/${companyId}`
+    );
+    if(response.status ===200){
+      // console.log("apiAccount",response.data)
+      const newTask = response.data.map(client => ({
+        id: client.id,
+        name: client.accountName,
+        phone: client.phone,
+        email: client.email,
+        status: "Proposition",
+      }));
+      setPropositionTasks(newTask)
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+
+ const fetchDealData = async () => {
+  try {
+    // setLoading(true);
+    const response = await axios.get(
+      `${API_URL}allContactsByCompanyId/${companyId}`
+    );
+    if(response.status ===200){
+      // console.log("api",response.data)
+      const newTasks = response.data.map(client => ({
+        id: client.id,
+        name: client.firstName,
+        phone: client.phone,
+        email: client.email,
+        status: "Won",
+      }));
+      setWonTasks(newTasks)
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchLeadData();
+  fetchContactData();
+  fetchAcconutData();
+  fetchDealData();
+}, []);
+  // useEffect(() => {
+  //   if (tasks) {
+  //     const fNewTasks = tasks.filter((task) => task.status === "New");
+  //     const fQualifiedTasks = tasks.filter(
+  //       (task) => task.status === "Qualified"
+  //     );
+  //     const fPropositionTasks = tasks.filter(
+  //       (task) => task.status === "Proposition"
+  //     );
+  //     const fWonTasks = tasks.filter((task) => task.status === "Won");
+  //     setNewTasks(fNewTasks);
+  //     setQualifiedTasks(fQualifiedTasks);
+  //     setPropositionTasks(fPropositionTasks);
+  //     setWonTasks(fWonTasks);
+  //   }
+  // }, [tasks]);
 
   const statuses = ["New", "Qualified", "Proposition", "Won"];
 
@@ -108,9 +219,11 @@ const Section = ({
   }
 
   const addItemToSection = (id) => {
+    console.log( id,"id")
     setTasks((prev) => {
       const mTasks = prev.map((t) => {
         if (t.id === id) {
+          
           return { ...t, status: status };
         }
         return t;

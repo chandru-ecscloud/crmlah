@@ -33,7 +33,7 @@ function ServicesEdit() {
   const formik = useFormik({
     initialValues: {
       serviceOwner: "",
-      company_id: companyId,
+      companyId: companyId,
       serviceName: "",
       duration: "",
       location: "",
@@ -78,7 +78,7 @@ function ServicesEdit() {
         const getData = response.data;
         const payload = {
           serviceOwner: getData.serviceOwner,
-          company_id: companyId,
+          companyId: companyId,
           serviceName: getData.serviceName,
           duration: getData.duration,
           location: getData.location,
@@ -701,20 +701,22 @@ function ServicesEdit() {
         </h4>
       </div>
       <div className="container">
-        <div className="row">
-          <div className="col-8 d-flex align-items-center justify-content-end ">
-            <lable>Description</lable> &nbsp;&nbsp;
-            <input
-              type="text"
-              style={{ width: "70%" }}
-              className=" form-control form-size"
-              {...formik.getFieldProps("description")}
-              name="description"
-              id="description"
-            />
+          <div className="row">
+            <div className="col-12">
+              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+                <lable>Description</lable> &nbsp;&nbsp;
+                <textarea
+                  rows="5"
+                  type="text"
+                  className="form-size form-control"
+                  {...formik.getFieldProps("description")}
+                  name="description"
+                  id="description"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
     </form>
   </section>
   );

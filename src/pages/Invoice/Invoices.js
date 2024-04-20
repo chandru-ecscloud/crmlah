@@ -156,6 +156,10 @@ const Example = () => {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
+      {
+        accessorKey: "description",
+        header: "Description",
+      },
 
       {
         accessorKey: "createdAt",
