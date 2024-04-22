@@ -15,9 +15,9 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -145,7 +145,7 @@ const Products = () => {
       "Vendor Name",
       "Product Owner",
       "Product Active",
-      
+
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -155,7 +155,7 @@ const Products = () => {
         row.original.vendorName,
         row.original.productOwner,
         row.original.productActive,
-        
+
       ];
     });
 
@@ -175,14 +175,14 @@ const Products = () => {
       "Product Category",
       "Sales Start Date",
       "Sales End Date",
-      
+
     ];
     const tableData2 = rows.map((row) => {
       return [
         row.original.productCategory,
         row.original.salesStartDate,
         row.original.salesEndDate,
-        
+
       ];
     });
     autoTable(doc, {
@@ -218,7 +218,7 @@ const Products = () => {
         cellHeight: "auto",
       },
     });
-   
+
     doc.save("ECS.pdf");
   };
 
@@ -340,39 +340,44 @@ const Products = () => {
         }}
       >
         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </OverlayTrigger>
+
+        <button className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger>
       </Box>
     ),
   });
@@ -385,9 +390,8 @@ const Products = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                  }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >

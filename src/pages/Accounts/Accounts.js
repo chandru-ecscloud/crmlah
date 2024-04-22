@@ -16,7 +16,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -42,7 +42,7 @@ const Accounts = () => {
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
             {row.original.accountName}
-           
+
           </Link>
         ),
       },
@@ -154,7 +154,7 @@ const Accounts = () => {
     []
   );
 
-  
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -418,7 +418,9 @@ const Accounts = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
@@ -428,7 +430,7 @@ const Accounts = () => {
           >
             <RiFileExcel2Line size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
 
         <button
           className="btn text-secondary"
@@ -439,17 +441,19 @@ const Accounts = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() =>  handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
       </Box>
     ),
   });
@@ -465,9 +469,8 @@ const Accounts = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                  }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >

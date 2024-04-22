@@ -9,7 +9,7 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function ProductsShow() {
   const { id } = useParams();
@@ -75,14 +75,17 @@ function ProductsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/products")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}

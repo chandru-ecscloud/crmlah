@@ -16,9 +16,9 @@ import { LinearProgress } from "@mui/material";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -138,7 +138,7 @@ const Services = () => {
       "Price",
       "Location",
       "Service Owner",
-      
+
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -148,7 +148,7 @@ const Services = () => {
         row.original.price,
         row.original.location,
         row.original.serviceOwner,
-        
+
       ];
     });
 
@@ -191,7 +191,7 @@ const Services = () => {
       },
     });
 
-   
+
     // console.log("tableData",tableData1)
     // console.log("tableHeaders",tableHeaders1 )
     doc.save("ECS.pdf");
@@ -212,7 +212,7 @@ const Services = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    console.log("rowData",rowData[0])
+    console.log("rowData", rowData[0])
     // console.log("rowData",rowData.id)
     try {
       const response = await axios.delete(
@@ -261,40 +261,45 @@ const Services = () => {
           flexWrap: "wrap",
         }}
       >
-         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </OverlayTrigger>
+
+        <button className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger>
       </Box>
     ),
   });
@@ -304,46 +309,46 @@ const Services = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-      <div className="d-flex align-items-center justify-content-end py-4 px-3">
-        <div style={{ paddingRight: "10px" }}>
-          <button
-            className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
-            disabled={role === "CMP_USER"}
-            onClick={handelNavigateClick}
-          >
-            Create Service
-          </button>
-        </div>
-        <div class="dropdown-center">
-          <button
-            class="btn btn-danger dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Action <FaSortDown style={{ marginTop: "-6px" }} />
-          </button>
-          <ul class="dropdown-menu">
-            {role !== "CMP_USER" ? (
-              <>
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled={
-                      !(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      ) || table.getSelectedRowModel().rows.length !== 1
-                    }
-                    onClick={() =>
-                      handleBulkDelete(table.getSelectedRowModel().rows)
-                    }
-                  >
-                    Delete
-                  </button>
-                </li>
-                {/* <li>
+          <div className="d-flex align-items-center justify-content-end py-4 px-3">
+            <div style={{ paddingRight: "10px" }}>
+              <button
+                className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
+                disabled={role === "CMP_USER"}
+                onClick={handelNavigateClick}
+              >
+                Create Service
+              </button>
+            </div>
+            <div class="dropdown-center">
+              <button
+                class="btn btn-danger dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Action <FaSortDown style={{ marginTop: "-6px" }} />
+              </button>
+              <ul class="dropdown-menu">
+                {role !== "CMP_USER" ? (
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled={
+                          !(
+                            table.getIsSomeRowsSelected() ||
+                            table.getIsAllRowsSelected()
+                          ) || table.getSelectedRowModel().rows.length !== 1
+                        }
+                        onClick={() =>
+                          handleBulkDelete(table.getSelectedRowModel().rows)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    {/* <li>
                   <button
                     className="btn"
                     style={{ width: "100%", border: "none" }}
@@ -358,37 +363,37 @@ const Services = () => {
                     Mass Delete
                   </button>
                 </li> */}
-              </>
-            ) : (
-              // Render disabled buttons for CMP_USER
-              <>
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled
-                  >
-                    Delete
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled
-                  >
-                    Mass Delete
-                  </button>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </div>
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
-      </>
+                  </>
+                ) : (
+                  // Render disabled buttons for CMP_USER
+                  <>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Delete
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn"
+                        style={{ width: "100%", border: "none" }}
+                        disabled
+                      >
+                        Mass Delete
+                      </button>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+          </div>
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable table={table} />
+          </ThemeProvider>
+        </>
       )};
     </section>
   );

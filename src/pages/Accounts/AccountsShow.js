@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import SendQuotes from "../Email/SendQuotes";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Appointment from "../Appointments/AppointmentsCreate";
 
 function AccountsShow() {
@@ -83,14 +83,17 @@ function AccountsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/accounts")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -106,16 +109,18 @@ function AccountsShow() {
           <SendQuotes accountData={accountData} />
           <Appointment name={"schedule"} schedule={scheduleData} />
           {accountData.email && (
-            <Tooltip TransitionComponent={Zoom} title="Send Email">
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+            >
               <span>
                 <SendEmail toEmail={accountData.email} />
               </span>
-            </Tooltip>
+            </OverlayTrigger>
           )}
           <button
-            className={`btn btn-warning ms-2 ${
-              role === "CMP_USER" && "disabled"
-            }`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"
+              }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >

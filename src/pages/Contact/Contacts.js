@@ -15,9 +15,9 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -39,7 +39,6 @@ const Contacts = () => {
       {
         accessorKey: "firstName",
         header: "Contact Name",
-        enableHiding: false,
         Cell: ({ row }) => (
           <Link to={`/contacts/show/${row.original.id}`} className="rowName">
             {row.original.firstName}
@@ -49,12 +48,10 @@ const Contacts = () => {
       {
         accessorKey: "email",
         header: "Email-Address",
-        enableHiding: false,
       },
       {
         accessorKey: "phone",
         header: "Phone Number",
-        enableHiding: false,
         Cell: ({ row }) => (
           <span>
             {row.original.countryCode}&nbsp;&nbsp;{row.original.phone}
@@ -64,7 +61,6 @@ const Contacts = () => {
       {
         accessorKey: "contactOwner",
         header: "Contact Owner",
-        enableHiding: false,
       },
       {
         accessorKey: "lastName",
@@ -204,7 +200,7 @@ const Contacts = () => {
       "Phone Number",
       "Contact Owner",
       "Last Name",
-      
+
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -267,7 +263,7 @@ const Contacts = () => {
     ];
     const tableData3 = rows.map((row) => {
       return [
-         row.original.mailingStreet,
+        row.original.mailingStreet,
         row.original.mailingCity,
         row.original.mailingState,
         row.original.mailingZip,
@@ -293,7 +289,7 @@ const Contacts = () => {
     ];
     const tableData4 = rows.map((row) => {
       return [
-         row.original.otherStreet,
+        row.original.otherStreet,
         row.original.otherCity,
         row.original.otherState,
         row.original.otherZip,
@@ -336,7 +332,7 @@ const Contacts = () => {
         cellHeight: "auto",
       },
     });
-    
+
     doc.save("ECS.pdf");
   };
 
@@ -462,40 +458,44 @@ const Contacts = () => {
           flexWrap: "wrap",
         }}
       >
-         <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </OverlayTrigger>
+
+        <button className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button></OverlayTrigger>
       </Box>
     ),
   });
@@ -508,9 +508,8 @@ const Contacts = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                  }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >

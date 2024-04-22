@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { IoArrowBack } from "react-icons/io5";
 function ServicesShow() {
   const { id } = useParams();
@@ -75,14 +75,17 @@ function ServicesShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-              <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/services")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -98,7 +101,7 @@ function ServicesShow() {
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
-            disabled={role === "CMP_USER"|| role === "CMP_ADMIN"}
+            disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
             Edit

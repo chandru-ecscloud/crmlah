@@ -15,7 +15,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip} from 'react-bootstrap';
 import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
 
@@ -411,7 +411,9 @@ const Lead = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
@@ -421,7 +423,7 @@ const Lead = () => {
           >
             <RiFileExcel2Line size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
 
         <button
           className="btn text-secondary"
@@ -432,7 +434,10 @@ const Lead = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
@@ -444,7 +449,7 @@ const Lead = () => {
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
       </Box>
     ),
   });

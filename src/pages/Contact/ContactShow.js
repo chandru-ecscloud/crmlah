@@ -7,20 +7,22 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
-import { Tooltip, Zoom } from "@mui/material";
 import Appointment from '../Appointments/AppointmentsCreate';
+import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+
 function ContactShow() {
   const { id } = useParams();
   const [contactData, setContactData] = useState({});
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const scheduleData ={
-    model :"Contacts",
-    id : id,
+  const scheduleData = {
+    model: "Contacts",
+    id: id,
     appointmentName: contactData.firstName,
     email: contactData.email
   }
+
   // console.log("scheduleData",scheduleData)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ function ContactShow() {
           },
         });
         setContactData(response.data);
-        console.log("Contact Show :",contactData);
+        console.log("Contact Show :", contactData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -54,14 +56,18 @@ function ContactShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <Tooltip TransitionComponent={Zoom} title="Back">
+
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/contacts")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/*<img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -74,14 +80,17 @@ function ContactShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-        {contactData.email && (
-        <Tooltip  TransitionComponent={Zoom} title="Send Email">
-          <span>
-          <SendEmail toEmail={contactData.email} />
-          </span>
-        </Tooltip>
-        )}
-          <Appointment name={"schedule"} schedule={scheduleData}/>
+          {contactData.email && (
+            <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+          >
+              <span>
+                <SendEmail toEmail={contactData.email} />
+              </span>
+            </OverlayTrigger>
+          )}
+          <Appointment name={"schedule"} schedule={scheduleData} />
           <button
             className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}

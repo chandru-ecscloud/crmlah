@@ -9,7 +9,7 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Appointment from '../Appointments/AppointmentsCreate';
 function DealsShow() {
   const { id } = useParams();
@@ -17,11 +17,11 @@ function DealsShow() {
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-  const scheduleData ={
-    model :"Deals",
-    id : id,
-    appointmentName: dealData.dealName ,
-    email:dealData.email
+  const scheduleData = {
+    model: "Deals",
+    id: id,
+    appointmentName: dealData.dealName,
+    email: dealData.email
   }
   useEffect(() => {
     const userData = async () => {
@@ -74,14 +74,17 @@ function DealsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/deals")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -94,14 +97,17 @@ function DealsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-        {dealData.email && (
-            <Tooltip TransitionComponent={Zoom} title="Send Email">
+          {dealData.email && (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+            >
               <span>
                 <SendEmail toEmail={dealData.email} />
               </span>
-            </Tooltip>
+            </OverlayTrigger>
           )}
-        <Appointment name={"schedule"} schedule={scheduleData}/>
+          <Appointment name={"schedule"} schedule={scheduleData} />
           <button
             className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
@@ -224,7 +230,7 @@ function DealsShow() {
                   &nbsp; : &nbsp;{dealData.country || ""}
                 </span>
               </div>*/}
-            </div> 
+            </div>
 
             <div className="container-fluid col-md-6"></div>
           </div>
@@ -298,7 +304,7 @@ function DealsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-             {/*  <div>
+              {/*  <div>
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.company || ""}

@@ -9,7 +9,7 @@ import { API_URL } from "../../Config/URL";
 // import BookAppointment from "../Appointments/BookAppointment";
 // import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import SendEmail from "../Email/SendEmail";
 import Appointment from "../Appointments/AppointmentsCreate";
 
@@ -83,14 +83,17 @@ function LeadsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-                <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/leads")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
 
                 {/* <img
                   className="img-fluid"
@@ -107,11 +110,14 @@ function LeadsShow() {
           {/* <BookAppointment />  */}
 
           {clientData.email && (
-            <Tooltip TransitionComponent={Zoom} title="Send Email">
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+            >
               <span>
                 <SendEmail toEmail={clientData.email} />
               </span>
-            </Tooltip>
+            </OverlayTrigger>
           )}
           {/* <button
             className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
@@ -121,9 +127,8 @@ function LeadsShow() {
           </button> */}
           <Appointment name={"schedule"} schedule={scheduleData} />
           <button
-            className={`btn btn-warning ms-2 ${
-              role === "CMP_USER" && "disabled"
-            }`}
+            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"
+              }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >

@@ -3,12 +3,12 @@ import "../../styles/Ragul.css";
 import { Link } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import USER from "../../assets/user.png";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import AppointmentsEdit from "./AppointmentsEdit";
 import { toast } from "react-toastify";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 function AppointmentsShow() {
@@ -16,7 +16,7 @@ function AppointmentsShow() {
   const [clientData, setClientData] = useState({});
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userData = async () => {
@@ -31,13 +31,13 @@ function AppointmentsShow() {
         // console.log("clientData",clientData)
       } catch (error) {
         toast.error("Error fetching data:", error);
-        
+
       }
     };
 
     userData();
   }, [id]);
-  
+
   return (
     <>
       {/* header section */}
@@ -46,14 +46,17 @@ function AppointmentsShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-              <Tooltip TransitionComponent={Zoom} title="Back">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
                   <button
                     className="btn fs-4 border-white"
                     onClick={() => navigate("/appointments")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
-                </Tooltip>
+                </OverlayTrigger>
                 {/* <img
                   className="img-fluid"
                   style={{ width: "5rem" }}
@@ -69,19 +72,22 @@ function AppointmentsShow() {
           {/* <BookAppointment /> */}
 
           {clientData.email && (
-            <Tooltip TransitionComponent={Zoom} title="Send Email">
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+            >
               <span>
                 <SendEmail toEmail={clientData.email} />
               </span>
-            </Tooltip>
+            </OverlayTrigger>
           )}
-          
-          <AppointmentsEdit id={id} name="Edit "/>
+
+          <AppointmentsEdit id={id} name="Edit " />
 
           {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
           </button> */}
-        
+
         </div>
       </section>
 

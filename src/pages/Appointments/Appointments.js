@@ -16,7 +16,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import AppointmentsCreate from "./AppointmentsCreate";
 import WebSocketService from "../../Config/WebSocketService";
 const csvConfig = mkConfig({
@@ -329,7 +329,9 @@ const Appointments = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
@@ -339,7 +341,7 @@ const Appointments = () => {
           >
             <RiFileExcel2Line size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
 
         <button
           className="btn text-secondary"
@@ -350,7 +352,9 @@ const Appointments = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <Tooltip TransitionComponent={Zoom} title="Selected Row">
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
           <button
             className="btn text-secondary border-0"
             disabled={
@@ -362,7 +366,7 @@ const Appointments = () => {
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
-        </Tooltip>
+        </OverlayTrigger>
       </Box>
     ),
   });

@@ -12,12 +12,14 @@ import CRMLogo from "../../assets/CRMLogo.png";
 import User from "../../assets/user.png";
 import { IoMdAdd, IoMdAddCircleOutline } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
-import { Tooltip, Zoom } from "@mui/material";
+// import { Tooltip, Zoom } from "@mui/material";
 import { AiOutlineEllipsis } from "react-icons/ai";
 import { FiPlus } from "react-icons/fi";
 import { IoSettings } from "react-icons/io5";
 import { BsBuildingAdd } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
+import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+
 const menuItems = [
   // { to: "/calls", label: "calls" },
   // { to: "/meeting", label: "meeting" },
@@ -97,11 +99,15 @@ function AdminHeader({ handleLogout }) {
                 </NavLink>
               ))}
 
-              <Tooltip TransitionComponent={Zoom} title="Other Modules">
+              {/* <Tooltip TransitionComponent={Zoom} title="Other Modules"> */}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="button-tooltip-2">Other Modules</Tooltip>}
+              >
                 <NavDropdown
                   title={<AiOutlineEllipsis className="text-white " />}
                   className="navDropdown"
-                  style={{marginTop:"7px"}}
+                  style={{ marginTop: "7px" }}
                 >
                   <span>
                     <input
@@ -125,9 +131,12 @@ function AdminHeader({ handleLogout }) {
                     </NavDropdown.Item>
                   ))}
                 </NavDropdown>
-              </Tooltip>
+              </OverlayTrigger>
 
-              <Tooltip TransitionComponent={Zoom} title="Creat Menus">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="button-tooltip-2">Other Modules</Tooltip>}
+              >
                 <NavDropdown
                   title={<FiPlus className="text-white fs-5 mt-2" />}
                   className="navDropdowns"
@@ -160,30 +169,34 @@ function AdminHeader({ handleLogout }) {
                     <IoMdAdd /> create User
                   </NavDropdown.Item> */}
                 </NavDropdown>
-              </Tooltip>
+              </OverlayTrigger>
 
-              <Tooltip TransitionComponent={Zoom} title="Profile">
+              {/* <Tooltip TransitionComponent={Zoom} title="Profile"> */}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="button-tooltip-2">Profile</Tooltip>}
+              >
                 <Nav
                   className="custom-nav-links"
-                  style={{ fontSize: "20px",paddingTop:"8px"}}
+                  style={{ fontSize: "20px", paddingTop: "8px" }}
                   onClick={handleShow}
                 >
                   <FaUserCircle style={{ cursor: "pointer" }} />
                 </Nav>
-              </Tooltip>
+              </OverlayTrigger>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton className="d-flex align-items-center ">
-          {(role === "CRM_SUPERADMIN" || role === "CMP_OWNER" || role === "CRM_ADMIN")&&  (
+          {(role === "CRM_SUPERADMIN" || role === "CMP_OWNER" || role === "CRM_ADMIN") && (
             <div>
               <button className="btn" onClick={handelNavigate}>
                 <IoPersonAdd /> User
               </button>
             </div>
-          ) }
+          )}
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column align-items-center ">
           {/* <button onClick={handelNavigate}>
@@ -208,7 +221,7 @@ function AdminHeader({ handleLogout }) {
           </Link>
 
           <div className="d-flex gap-3 align-items-end align-self-start h-100">
-            {(role === "CRM_SUPERADMIN" || role==="CRM_ADMIN") && (
+            {(role === "CRM_SUPERADMIN" || role === "CRM_ADMIN") && (
               <div className="">
                 <Link to="/company">
                   <button className="btn" onClick={handleClose}>
@@ -219,7 +232,7 @@ function AdminHeader({ handleLogout }) {
               </div>
             )}
 
-            {(role === "CRM_SUPERADMIN" || role==="CRM_ADMIN") && (
+            {(role === "CRM_SUPERADMIN" || role === "CRM_ADMIN") && (
               <div className="">
                 <Link to="/changerole">
                   <button className="btn" onClick={handleClose}>
@@ -227,7 +240,7 @@ function AdminHeader({ handleLogout }) {
                   </button>
                 </Link>
               </div>
-            ) }
+            )}
           </div>
 
           {/* <div className="d-flex align-items-end align-self-end h-100">

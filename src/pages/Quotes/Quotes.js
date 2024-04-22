@@ -16,9 +16,9 @@ import ProductModel from "./ProductModel";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { MdPictureAsPdf,MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { Tooltip, Zoom } from "@mui/material";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -182,7 +182,7 @@ const Quotes = () => {
 
   const handleAssignProducts = async (rows) => {
     setRowId(() => rows.map((row) => row.original.id));
-    
+
   };
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
@@ -196,7 +196,7 @@ const Quotes = () => {
       "Quote Stages",
       "Quotes Owner",
       "Product",
-      
+
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -206,7 +206,7 @@ const Quotes = () => {
         row.original.quoteStage,
         row.original.quoteOwner,
         row.original.product,
-        
+
       ];
     });
 
@@ -260,7 +260,7 @@ const Quotes = () => {
     ];
     const tableData3 = rows.map((row) => {
       return [
-         row.original.validUntil,
+        row.original.validUntil,
         row.original.shippingStreet,
         row.original.shippingCity,
         row.original.shippingState,
@@ -287,7 +287,7 @@ const Quotes = () => {
     ];
     const tableData4 = rows.map((row) => {
       return [
-         row.original.shippingCountry,
+        row.original.shippingCountry,
         row.original.billingStreet,
         row.original.billingCity,
         row.original.billingState,
@@ -305,7 +305,7 @@ const Quotes = () => {
         cellHeight: "auto",
       },
     });
-   
+
     // console.log("tableData",tableData1)
     // console.log("tableHeaders",tableHeaders1 )
     doc.save("ECS.pdf");
@@ -471,40 +471,45 @@ const Quotes = () => {
           flexWrap: "wrap",
         }}
       >
-     <button className="btn text-secondary" onClick={handleExportData}>
-    <RiFileExcel2Fill size={23}/>
-    </button>
-    
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-    >
-      <RiFileExcel2Line size={23}/> 
-    </button>
-    </Tooltip>
+        <button className="btn text-secondary" onClick={handleExportData}>
+          <RiFileExcel2Fill size={23} />
+        </button>
 
-    <button className="btn text-secondary" 
-    disabled={table.getPrePaginationRowModel().rows.length === 0}
-    onClick={() =>
-      handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-    }
-    >
-    <MdPictureAsPdf size={23}/>
-    </button>
-    <Tooltip TransitionComponent={Zoom} title="Selected Row">
-    <button
-      className="btn text-secondary border-0"
-      disabled={
-        !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-      }
-      onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
-    >
-      <MdOutlinePictureAsPdf size={23} /> 
-    </button></Tooltip>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </OverlayTrigger>
+
+        <button className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        <OverlayTrigger placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger>
       </Box>
     ),
   });
@@ -517,9 +522,8 @@ const Quotes = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                  }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >
