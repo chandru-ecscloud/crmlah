@@ -46,37 +46,36 @@ function SendQuotes({ accountData }) {
       } catch (error) {
         console.error("Error sending email:", error);
         toast.error("Failed to send email");
-      }
-      finally {
+      } finally {
         setLoadIndicator(false); // Set loading indicator back to false after request completes
       }
     },
   });
-    // onSubmit: async (data) => {
-    //   console.log("Invoice:", subject);
-    //   setSubject(data.subject)
-    //   try {
-    //     const response = await axios.post(`${API_URL}sendMail`, {
-    //       toMail: accountData.email,
-    //       fromMail: userEmail,
-    //       subject: subject,
-    //       // htmlContent: generateInvoice(accountData.quotes),
-    //       htmlContent: htmlContent,
-    //       // contentType: "text/html",
-    //     });
+  // onSubmit: async (data) => {
+  //   console.log("Invoice:", subject);
+  //   setSubject(data.subject)
+  //   try {
+  //     const response = await axios.post(`${API_URL}sendMail`, {
+  //       toMail: accountData.email,
+  //       fromMail: userEmail,
+  //       subject: subject,
+  //       // htmlContent: generateInvoice(accountData.quotes),
+  //       htmlContent: htmlContent,
+  //       // contentType: "text/html",
+  //     });
 
-    //     if (response.status === 200) {
-    //       toast.success(response.data.message);
-    //       toast.success("Mail Send Successfully");
-    //       handleHide();
-    //       setIsSendingEmail(false);
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // },
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       toast.success("Mail Send Successfully");
+  //       handleHide();
+  //       setIsSendingEmail(false);
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // },
   // });
 
   const handleShow = () => setShow(true);
@@ -99,82 +98,143 @@ function SendQuotes({ accountData }) {
     }
     const tableRows = quotes.map(
       (row, index) => `
-      <tr class="item">
-        <td>${index + 1}</td>
-        <td>${row.dealName}</td>
-        <td>${row.subject}</td>
-        <td>${row.quoteStage}</td>
-        <td>${row.quoteOwner}</td>
-      </tr>
-    `
-      );
+      <div id="LABEL1" id="LABEL2" style="width: 150% !important">
+      <br />
+      <div style="display: flex">
+        <label><b>Quote Name</b></label>
+        <span>:&nbsp;&nbsp;${row.dealName || "--"}</span>
 
-      return `
+        <label><b>Subject</b></label>
+        <span>:&nbsp;&nbsp;${row.subject || "--"}</span>
+      </div>
+    </div>
+        
+    
+
+
+
+
+    
+       <div style="max-width: 590px; overflow: auto; justify-content: space-around;">
+            <table>
+              <tr class="heading">
+                <td style="white-space: nowrap;">S No</td>
+                <td style="white-space: nowrap;">Product Name</td>
+                <td style="white-space: nowrap;">Product Code</td>
+                <td style="white-space: nowrap;">QuantityInStock</td>
+                <td style="white-space: nowrap;">Tax</td>
+              </tr>
+              
+              ${
+                row.productsWithQuote &&
+                row.productsWithQuote
+                  .map(
+                    (product, productIndex) => `
+                  <tr class="item">
+                    <td>${productIndex + 1}</td>
+                    <td>${product.productName || "--"}</td>
+                    <td>${product.productCode || "--"}</td>
+                    <td>${product.quantityInStock || "--"}</td>
+                    <td>${product.tax || "--"}</td>
+                  </tr>
+                `
+                  )
+                  .join("")
+              }
+            </table>
+          </div>
+      
+    `
+    );
+
+    return `
       <!DOCTYPE html>
       <html lang="en">
         <head>
           <meta charset="UTF-8">
           <title>Invoice</title>
           <style>
+          .invoice-box {
+            font-size: 12px;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            line-height: 24px;
+            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+            color: #555;
+            min-height: 100vh;
+          }
+    
+          .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+          }
+    
+          .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+          }
+    
+          .invoice-box table td.third {
+            text-align: right;
+          }
+    
+          .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+          }
+    
+          .invoice-box table tr.item td {
+            border-bottom: 1px solid #eee;
+          }
+    
+          .invoice-box table tr.item.last td {
+            border-bottom: none;
+          }
+    
+          .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+          }
+    
+          #scan {
+            float: right;
+          }
+    
+          #scan img {
+            max-width: 100%;
+            height: auto;
+          }
+    
+          @media print {
             .invoice-box {
-              font-size: 12px;
-              max-width: 600px;
-              margin: auto;
-              padding: 30px;
-              border: 1px solid #eee;
-              line-height: 24px;
-              font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-              color: #555;
+              border: 0;
             }
-  
-            .invoice-box table {
-              width: 100%;
-              line-height: inherit;
-              text-align: left;
-            }
-  
-            .invoice-box table td {
-              padding: 5px;
-              vertical-align: top;
-            }
-  
-            .invoice-box table td.third {
-              text-align: right;
-            }
-  
-            .invoice-box table tr.heading td {
-              background: #eee;
-              border-bottom: 1px solid #ddd;
-              font-weight: bold;
-            }
-  
-            .invoice-box table tr.item td {
-              border-bottom: 1px solid #eee;
-            }
-  
-            .invoice-box table tr.item.last td {
-              border-bottom: none;
-            }
-  
-            .invoice-box table tr.total td:nth-child(2) {
-              border-top: 2px solid #eee;
-              font-weight: bold;
-            }
-  
-            #scan {
-              float: right;
-            }
-  
-            #scan img {
-              max-width: 100%;
-              height: auto;
-            }
-  
-            @media print {
-              .invoice-box {
-                border: 0;
-              }
-            }
+          }
+          #LABEL1 label {
+            display: inline-block;
+            width: 15%;
+            padding: 5px;
+          }
+          #LABEL1 span {
+            display: inline-block;
+            width: 20%;
+            padding: 5px;
+          }
+    
+          #LABEL2 label {
+            display: inline-block;
+            width: 15%;
+            padding: 5px;
+          }
+          #LABEL2 span {
+            display: inline-block;
+            width: 20%;
+            padding: 5px;
+          }
           </style>
         </head>
         <body>
@@ -185,7 +245,7 @@ function SendQuotes({ accountData }) {
                   <table>
                     <tr>
                       <td class="title">
-                        <img src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
+                        <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                       <td class="third">
@@ -201,25 +261,14 @@ function SendQuotes({ accountData }) {
               </tr>
             </table>
     
-            <div style="max-width: 590px; overflow: auto;">
-              <table>
-                <tr class="heading">
-                  <td style="white-space: nowrap;">S No</td>
-                  <td style="white-space: nowrap;">Deal Name</td>
-                  <td style="white-space: nowrap;">Subject</td>
-                  <td style="white-space: nowrap;">Quotes Stage</td>
-                  <td style="white-space: nowrap;">Quotes Owner</td>
-                </tr>
-                ${tableRows.join("")}
-              </table>
-            </div>
+            ${tableRows.join("")}
           </div>
         </body>
       </html>
     `;
-      // setHtmlContent(invoiceHTML);
-      // setIsSendingEmail(true);
-    } ;
+    // setHtmlContent(invoiceHTML);
+    // setIsSendingEmail(true);
+  };
 
   return (
     <div>
@@ -282,32 +331,41 @@ function SendQuotes({ accountData }) {
             </div>
 
             <div className="d-flex align-items-center py-3">
-              <div className="container col-12">
-                {accountData && accountData.quotes ? (
-                  <div className="table-responsive">
-                    <table className="table table-bordered">
-                      <thead className="text-center bg-secondary text-white">
-                        <tr>
-                          <th scope="col" className="bg-secondary text-white">
-                            S.No
-                          </th>
-                          <th scope="col" className="bg-secondary text-white">
-                            Deal Name
-                          </th>
-                          <th scope="col" className="bg-secondary text-white">
-                            Subject
-                          </th>
-                          <th scope="col" className="bg-secondary text-white">
-                            Quote Stage
-                          </th>
-                          <th scope="col" className="bg-secondary text-white">
-                            Quote Owner
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-center">
-                        {accountData.quotes &&
-                          accountData.quotes.map((quote, index) => (
+              <div className="container  col-12">
+                {accountData.quotes ? (
+                  <div>
+                    {accountData.quotes.map((quote) => (
+                      <div key={quote.id} className="row mt-4">
+                        <div className="col-md-6 col-12">
+                          <label className="text-dark">
+                            <b>Quote Name</b>
+                          </label>
+                          <span className="text-dark">
+                            &nbsp; : &nbsp;{quote.dealName || "--"}
+                          </span>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <label className="text-dark Label">
+                            <b>Subject</b>
+                          </label>
+                          <span className="text-dark">
+                            &nbsp; : &nbsp;{quote.subject || "--"}
+                          </span>
+                        </div>
+
+                        <div className="table-responsive">
+                          <table className="table table-bordered">
+                            <thead className="table-secondary">
+                              <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">product Name dd</th>
+                                <th scope="col">product Code</th>
+                                <th scope="col">QuantityInStock</th>
+                                <th scope="col">Tax</th>
+                              </tr>
+                            </thead>
+                            {/* <tbody>
+                          {quote.map((quote, index) => (
                             <tr key={quote.id}>
                               <td>{index + 1}</td>
                               <td>{quote.dealName || "--"}</td>
@@ -316,8 +374,23 @@ function SendQuotes({ accountData }) {
                               <td>{quote.quoteOwner || "--"}</td>
                             </tr>
                           ))}
-                      </tbody>
-                    </table>
+                        </tbody> */}
+                            <tbody>
+                              {quote.productsWithQuote &&
+                                quote.productsWithQuote.map((item, index) => (
+                                  <tr key={item.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.productName || "--"}</td>
+                                    <td>{item.productCode || "--"}</td>
+                                    <td>{item.quantityInStock || "--"}</td>
+                                    <td>{item.tax || "--"}</td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <p>No quotes available.</p>
@@ -331,10 +404,12 @@ function SendQuotes({ accountData }) {
                   className="btn btn-primary mt-4"
                   onClick={formik.handleSubmit}
                 >
-                   {loadIndicator && <span
-                    class="spinner-border spinner-border-sm me-2 "
-                    aria-hidden="true"
-                  ></span>}
+                  {loadIndicator && (
+                    <span
+                      class="spinner-border spinner-border-sm me-2 "
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   Send
                   <IoMdSend className="ms-2 mb-1" />
                 </button>
