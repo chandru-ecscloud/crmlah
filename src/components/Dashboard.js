@@ -1,129 +1,248 @@
-import React, { useEffect, useRef } from "react";
-import Chart from 'chart.js/auto';
-import { MdOutlineLeaderboard, MdOutlineAccountBalance, MdOutlineShoppingCart   } from "react-icons/md";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import Chart from "chart.js/auto";
+import {
+  MdOutlineLeaderboard,
+  MdOutlineAccountBalance,
+  MdOutlineShoppingCart,
+} from "react-icons/md";
 import { TbPigMoney } from "react-icons/tb";
-
+import { LinearProgress } from "@mui/material";
 
 function Dashboard() {
+  const [dashboardData, setDashboardData] = useState(null);
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
 
   useEffect(() => {
-    // Sample data for line chart
-    const lineChartData = {
-      labels: ['January', 'February', 'March', 'April', 'May'],
-      datasets: [
-        {
-          label: 'Leads',
-          data: [12, 19, 3, 5, 2],
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
-          fill: false,
-        },
-        {
-          label: 'Deals',
-          data: [8, 12, 6, 9, 4],
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 2,
-          fill: false,
-        },
-        {
-          label: 'Products',
-          data: [5, 10, 15, 8, 3],
-          borderColor: 'rgba(255, 205, 86, 1)',
-          borderWidth: 2,
-          fill: false,
-        },
-      ],
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://13.213.208.92:8080/ecscrm/api/crmDashBoardOverview"
+        );
+        setDashboardData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
-    // Sample data for bar chart
-    const barChartData = {
-      labels: ['January', 'Feburary', 'March'],
-      datasets: [
-        {
-          label: 'Leads',
-          data: [30, 50, 20],
-          backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 205, 86, 0.6)'],
-        },
-        {
-          label: 'Deals',
-          data: [15, 35, 50],
-          backgroundColor: ['rgba(255, 99, 132, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(255, 205, 86, 0.4)'],
-        },
-        {
-          label: 'Products',
-          data: [10, 30, 60],
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(255, 205, 86, 0.2)'],
-        },
-      ],
-    };
+    fetchData();
+  }, []);
 
-    const lineChartCtx = document.getElementById('lineChart').getContext('2d');
-    lineChartRef.current = new Chart(lineChartCtx, {
-      type: 'line',
-      data: lineChartData,
-    });
+  useEffect(() => {
+    if (dashboardData) {
+      // Colors for charts
+      const lineChartColors = [
+        "rgba(75, 192, 192, 1)",
+        "rgba(255, 99, 132, 1)",
+        "rgba(255, 205, 86, 1)",
+        "rgba(54, 162, 235, 1)", // Additional color
+        "rgba(153, 102, 255, 1)", // Additional color
+      ];
+      const barChartColors = [
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(255, 205, 86, 0.6)",
+        "rgba(54, 162, 235, 0.6)", // Additional color
+        "rgba(153, 102, 255, 0.6)", // Additional color
+      ];
 
-    const barChartCtx = document.getElementById('barChart').getContext('2d');
-    barChartRef.current = new Chart(barChartCtx, {
-      type: 'bar',
-      data: barChartData,
-    });
+      // Filter out service data
+      const filteredChartData = dashboardData.Data.filter(
+        (item) => item.label !== "Service"
+      );
+
+      // Sample data for line chart
+      const lineChartData = {
+        labels: dashboardData.month,
+        datasets: filteredChartData.map((item, index) => ({
+          label: item.label,
+          data: item.data,
+          borderColor: lineChartColors[index % lineChartColors.length], // Cycle through colors if more than 3 datasets
+          borderWidth: 2,
+          fill: false,
+        })),
+      };
+
+      // Sample data for bar chart
+      const barChartData = {
+        labels: dashboardData.month,
+        datasets: filteredChartData.map((item, index) => ({
+          label: item.label,
+          data: item.data,
+          backgroundColor: barChartColors[index % barChartColors.length], // Cycle through colors if more than 3 datasets
+        })),
+      };
+
+      const lineChartCtx = document
+        .getElementById("lineChart")
+        .getContext("2d");
+      lineChartRef.current = new Chart(lineChartCtx, {
+        type: "line",
+        data: lineChartData,
+      });
+
+      const barChartCtx = document.getElementById("barChart").getContext("2d");
+      barChartRef.current = new Chart(barChartCtx, {
+        type: "bar",
+        data: barChartData,
+      });
+    }
 
     return () => {
       if (lineChartRef.current) lineChartRef.current.destroy();
       if (barChartRef.current) barChartRef.current.destroy();
     };
-  }, []);
+  }, [dashboardData]);
+
+  if (!dashboardData) {
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
+  }
+
+  // Calculate sales increase percentage
+  const previousMonthRevenue = dashboardData.previousMonthRevenue;
+  const currentMonthRevenue = dashboardData.currentMonthRevenue;
+  // Calculate sales increase percentage
+  let salesIncreasePercentage;
+  if (previousMonthRevenue === 0) {
+    // Handle division by zero case
+    salesIncreasePercentage = 100;
+  } else {
+    salesIncreasePercentage =
+      ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
+      100;
+  }
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
-      <div className="row mt-5">
+        <div className="row mt-5">
           <div className="col-md-3 mb-3">
-            <div className="card">
+            <div className="card h-100">
               <div className="card-body">
-               <span className="d-flex align-items-center justify-content-between">
-               <p className="card-title" style={{ color: '#000', fontSize: '20px' }}>Lead Count</p>
-                <h5 style={{ backgroundColor: "#e0dcfe", color: '#624bff', padding: '10px', borderRadius: '5px' }}><MdOutlineLeaderboard /></h5>
-               </span>
-                <h2 className="card-text"><strong>100</strong></h2>
-                <h6 className="card-text text-secondary">50 converted</h6>
+                <span className="d-flex align-items-center justify-content-between">
+                  <p
+                    className="card-title"
+                    style={{ color: "#000", fontSize: "20px" }}
+                  >
+                    Lead Count
+                  </p>
+                  <h5
+                    style={{
+                      backgroundColor: "#e0dcfe",
+                      color: "#624bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <MdOutlineLeaderboard />
+                  </h5>
+                </span>
+                <h2 className="card-text">
+                  <strong>{dashboardData.totalLead}</strong>
+                </h2>
+                <h6 className="card-text text-secondary">
+                  {dashboardData.totalContact} &nbsp; converted
+                </h6>
               </div>
             </div>
           </div>
           <div className="col-md-3 mb-3">
-            <div className="card">
+            <div className="card h-100">
               <div className="card-body">
-               <span className="d-flex align-items-center justify-content-between">
-               <p className="card-title" style={{ color: '#000', fontSize: '20px' }}>Deal Count</p>
-                <h5 style={{ backgroundColor: "#e0dcfe", color: '#624bff', padding: '10px', borderRadius: '5px' }}><MdOutlineAccountBalance  /></h5>
-               </span>
-                <h2 className="card-text"><strong>50</strong></h2>
+                <span className="d-flex align-items-center justify-content-between">
+                  <p
+                    className="card-title"
+                    style={{ color: "#000", fontSize: "20px" }}
+                  >
+                    Deal Count
+                  </p>
+                  <h5
+                    style={{
+                      backgroundColor: "#e0dcfe",
+                      color: "#624bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <MdOutlineAccountBalance />
+                  </h5>
+                </span>
+                <h2 className="card-text">
+                  <strong>{dashboardData.totalDeal}</strong>
+                </h2>
                 <h6 className="card-text text-secondary">Revenue Generated</h6>
               </div>
             </div>
-          </div><div className="col-md-3 mb-3">
-            <div className="card">
+          </div>
+          <div className="col-md-3 mb-3">
+            <div className="card  h-100">
               <div className="card-body">
-               <span className="d-flex align-items-center justify-content-between">
-               <p className="card-title" style={{ color: '#000', fontSize: '20px' }}>Products</p>
-                <h5 style={{ backgroundColor: "#e0dcfe", color: '#624bff', padding: '10px', borderRadius: '5px' }}><MdOutlineShoppingCart  /></h5>
-               </span>
-                <h2 className="card-text"><strong>75</strong></h2>
-                <h6 className="card-text text-secondary">25 Newly Added</h6>
+                <span className="d-flex align-items-center justify-content-between">
+                  <p
+                    className="card-title"
+                    style={{ color: "#000", fontSize: "20px" }}
+                  >
+                    Products
+                  </p>
+                  <h5
+                    style={{
+                      backgroundColor: "#e0dcfe",
+                      color: "#624bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <MdOutlineShoppingCart />
+                  </h5>
+                </span>
+                <h2 className="card-text">
+                  <strong>{dashboardData.totalProduct}</strong>
+                </h2>
+                <h6 className="card-text text-secondary">
+                  {dashboardData.productCountByMonth} Newly Added
+                </h6>
               </div>
             </div>
-          </div><div className="col-md-3 mb-3">
-            <div className="card">
+          </div>
+          <div className="col-md-3 mb-3">
+            <div className="card h-100">
               <div className="card-body">
-               <span className="d-flex align-items-center justify-content-between">
-               <p className="card-title" style={{ color: '#000', fontSize: '20px' }}>Total Revenue</p>
-                <h5 style={{ backgroundColor: "#e0dcfe", color: '#624bff', padding: '10px', borderRadius: '5px' }}><TbPigMoney /></h5>
-               </span>
-                <h2 className="card-text"><strong><span style={{ color: '#624bff' }}>$</span> 25,300</strong></h2>
-                <h6 className="card-text text-secondary">Sales Increse 6%</h6>
+                <span className="d-flex align-items-center justify-content-between">
+                  <p
+                    className="card-title"
+                    style={{ color: "#000", fontSize: "20px" }}
+                  >
+                    Total Revenue
+                  </p>
+                  <h5
+                    style={{
+                      backgroundColor: "#e0dcfe",
+                      color: "#624bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <TbPigMoney />
+                  </h5>
+                </span>
+                <p className="card-text">
+                  <strong>
+                    <span style={{ color: "#624bff" }}>$</span>{" "}
+                    {dashboardData.currentMonthRevenue}
+                  </strong>
+                </p>
+                <h6 className="card-text text-secondary">
+                  {" "}
+                  Sales Increase:{" "}
+                  {typeof salesIncreasePercentage === "number"
+                    ? salesIncreasePercentage + "%"
+                    : "N/A"}
+                </h6>
               </div>
             </div>
           </div>
