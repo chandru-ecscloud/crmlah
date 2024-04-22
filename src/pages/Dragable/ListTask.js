@@ -36,16 +36,16 @@ const ListTasks = ({ }) => {
     const response = await axios.get(
       `${API_URL}allClientsByCompanyId/${companyId}`
     );
-    if(response.status ===200){
-      // console.log("apilead",response.data)
-      const newTasks = response.data.map(client => ({
-        id: client.id,
-        name: client.first_name,
-        phone: client.phone,
-        email: client.email,
-        status: "New",
-      }));
-      setNewTasks(newTasks);
+    if (response.status === 200) {
+      const newTask = response.data.map(client => ({
+         id: client.id,
+          name: client.first_name,
+          phone: client.phone,
+          email: client.email,
+          status: "New",
+       }));
+      setNewTasks(newTask);
+      // console.log("newTask",newTask)
     }
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -93,6 +93,7 @@ const ListTasks = ({ }) => {
         phone: client.phone,
         email: client.email,
         status: "Proposition",
+        
       }));
       setPropositionTasks(newTask)
     }
@@ -161,6 +162,8 @@ useEffect(() => {
             key={index}
             status={status}
             tasks={tasks}
+            fetchLeadData={fetchLeadData}
+            fetchContactData={fetchContactData}
             setTasks={setTasks}
             newTasks={newTasks}
             qualifiedTasks={qualifiedTasks}
@@ -182,26 +185,39 @@ const Section = ({
   tasks,
   setTasks,
   newTasks,
+  fetchLeadData,
+  fetchContactData,
   qualifiedTasks,
   propositionTasks,
   wonTasks,
   isHovered,
   setHoveredSection,
 }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver,canDrop }, drop] = useDrop(() => ({
     accept: "task",
-    drop: (item) => addItemToSection(item.id),
+    drop: (item) => {addItemToSection(item.id, status, newTasks);},
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
     hover: (item, monitor) => {
       const hoveredSection = monitor.getItemType();
       setHoveredSection(hoveredSection);
     },
+    canDrop: (item) => {
+      const dropAllowed = (
+        item.status === status ||
+        (item.status === "New" && status === "Qualified") ||
+        (item.status === "Qualified" && status === "Proposition") ||
+        (item.status === "Proposition" && status === "Won")
+        //  ||
+        // (item.status === "Won" && status === "Proposition")
+      );
+      return dropAllowed;
+    }
   }));
-
   let text = "New Lead";
-  let bgContainer = "#ffcfcf";
+  let bgContainer = "#dacffa";
   let tasksToMap = newTasks;
 
   if (status === "Qualified") {
@@ -218,22 +234,18 @@ const Section = ({
     tasksToMap = wonTasks;
   }
 
-  const addItemToSection = (id) => {
+  const addItemToSection = async(id,status,newTasks) => {
     console.log( id,"id")
-    setTasks((prev) => {
-      const mTasks = prev.map((t) => {
-        if (t.id === id) {
-          
-          return { ...t, status: status };
-        }
-        return t;
-      });
-      localStorage.setItem("tasks", JSON.stringify(mTasks));
-      toast.info("Task status changed");
-      return mTasks;
-    });
+    // console.log( newTasks,"id")
+    const task = newTasks.find(task => task.id === id);
+    // if(task.status==="New"){
+    //   console.log("actual status",task.status)
+    // } 
   };
-
+  
+  const borderColor = canDrop ? "#34a6ba" : isOver ? "#e23344" : "transparent";
+  const border = isOver && canDrop ? `2px solid ${borderColor}` :isOver && !canDrop?"2px solid #e23344 " :"none";
+  
   return (
     <div className={`col-md-3`} ref={drop}>
       <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
@@ -242,8 +254,8 @@ const Section = ({
         style={{
           height: "85vh",
           overflow: "auto",
-          backgroundColor: isOver ? "#cfefff" : bgContainer,
-          border: isOver ? "2px solid #34a6ba" : "none",
+          backgroundColor: canDrop ? "#cfefff" : isOver ? "#f79f8d" : bgContainer,
+          border: border,
           scrollbarWidth: "thin",
           scrollbarColor: "rgba(0,0,0,0.2) rgba(0,0,0,0.1)",
         }}
@@ -278,7 +290,7 @@ const Header = ({ text, count, bgContainer }) => {
   }
 
   
-  const percentage = count * 10; // Increase by 10% for each task
+  const percentage = count * 1; // Increase by 10% for each task
   const progressBarColor =
     percentage < 25 ? "bg-danger" : percentage < 50 ? "bg-warning" : percentage < 75 ? "bg-info" : "bg-success";
 
@@ -316,7 +328,7 @@ const Header = ({ text, count, bgContainer }) => {
 const Task = ({ task, tasks, setTasks }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
-    item: { id: task.id },
+    item: { id: task.id, status: task.status },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
