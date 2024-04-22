@@ -37,7 +37,7 @@ function Header() {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  CRM WEBSITE
+                  CRMLAH 
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>

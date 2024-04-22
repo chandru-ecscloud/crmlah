@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import { GrAttachment } from "react-icons/gr";
-import { IoMdSend ,IoIosSend} from "react-icons/io";
+import { IoMdSend, IoIosSend } from "react-icons/io";
 import { MdErrorOutline } from "react-icons/md";
 import user from "../../assets/user.png";
 import axios from "axios";
@@ -10,15 +10,14 @@ import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-
 const role = sessionStorage.getItem("role");
 
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject"),
   body: yup.string().required("*Main Body"),
-  files: yup.array()
-      .min(1, "Attacment is Must")
-      .required("Attacment is Must"),
+  // files: yup.array()
+  //     .min(1, "Attacment is Must")
+  //     .required("Attacment is Must"),
 });
 
 function SendEmail({ toEmail }) {
@@ -43,7 +42,7 @@ function SendEmail({ toEmail }) {
       console.log("Subject:", values.subject);
       console.log("Main Body:", values.body);
       console.log("Files:", values.files);
-      setLoadIndicator(true)
+      setLoadIndicator(true);
 
       try {
         const formData = new FormData();
@@ -69,15 +68,14 @@ function SendEmail({ toEmail }) {
         if (response.status === 201) {
           toast.success(response.data.message);
           handleHide();
-          setLoadIndicator(false)
-          
+          setLoadIndicator(false);
         } else {
           toast.error(response.data.message);
-          setLoadIndicator(false)
+          setLoadIndicator(false);
         }
       } catch (error) {
         console.error(error);
-        setLoadIndicator(false)
+        setLoadIndicator(false);
       }
     },
   });
@@ -136,9 +134,9 @@ function SendEmail({ toEmail }) {
       <Button
         className="fs-4 btn bg-primary bg-gradient mx-2 text-white shadow-none rounded-5"
         onClick={handleShow}
-        style={{padding:"2px 8px"}}
+        style={{ padding: "2px 8px" }}
       >
-        <IoIosSend className="mb-1"/>
+        <IoIosSend className="mb-1" />
       </Button>
       <Offcanvas
         show={show}
@@ -236,17 +234,22 @@ function SendEmail({ toEmail }) {
                       &nbsp;{formik.values.files.length} files selected
                     </span>
                   ) : (
-                    <span className="text-danger">&nbsp;<MdErrorOutline className="text-danger"/>
-                    &nbsp;{formik.errors.files}</span>
+                    <span className="text-danger">
+                      &nbsp;
+                      <MdErrorOutline className="text-danger" />
+                      &nbsp;{formik.errors.files}
+                    </span>
                   )}
                 </span>
               </span>
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button className="btn btn-primary" type="submit">
-                  {loadIndicator && <span
-                    class="spinner-border spinner-border-sm me-3"
-                    aria-hidden="true"
-                  ></span>}
+                  {loadIndicator && (
+                    <span
+                      class="spinner-border spinner-border-sm me-3"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   &nbsp;<span role="status">Send</span>
                   <IoMdSend className="ms-2 mb-1" />
                 </button>

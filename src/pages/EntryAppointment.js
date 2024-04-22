@@ -41,6 +41,7 @@ const EntryAppointment = () => {
         lead_status:"Processed",
         description_info: data.additionalInformation,
         phone: data.phone,
+        
       }
       try {
         const response = await axios.post(`${API_URL}newClient`,payload ,{
@@ -50,18 +51,26 @@ const EntryAppointment = () => {
         });
         // toast.success("Lead Created Successfully");
         console.log(response.data.message);
+        // console.log("newclient Id",response.data.leadId);
+        data.leadId = response.data.leadId;
+        // console.log("New client Id:", payload);
+      
       } catch (error) {
         // toast.error("Lead Not Create");
         console.log("Error");
       }
+      
+  
 
       try {
-        const response = await axios.post(`${API_URL}book-appointment`, data, {
+        const response = await axios.post(`${API_URL}book-appointment`,data, {
           headers: {
             "Content-Type": "application/json",
           },
+
         });
         if (response.status === 201) {
+          console.log("data",data)
           toast.success("Thank You for Request Demo! We'll be in touch soon!");
           setLoadIndicator(false)
           const mailContent = `
