@@ -230,12 +230,12 @@ function Dashboard() {
                     <TbPigMoney />
                   </h5>
                 </span>
-                <p className="card-text">
+                <h2 className="card-text">
                   <strong>
                     <span style={{ color: "#624bff" }}>$</span>{" "}
                     {dashboardData.currentMonthRevenue}
                   </strong>
-                </p>
+                </h2>
                 <h6 className="card-text text-secondary">
                   {" "}
                   Sales Increase:{" "}
