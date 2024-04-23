@@ -517,4 +517,5 @@ nav .nav-link Link {
 
 .badge {
   font-weight: 500 !important;
+  padding-top: 6px;
 }

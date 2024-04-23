@@ -10,7 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 function Dragable() {
   const [tasks, setTasks] = useState([]);
 
-  console.log("tasks", tasks);
+  // console.log("tasks", tasks);
 
   useEffect(() => {
     setTasks(JSON.parse(localStorage.getItem("tasks")));
@@ -21,7 +21,7 @@ function Dragable() {
       <ToastContainer position="top-center" />
       {/* <Toaster /> */}
       <div className="bg-slate-100 w-screen h-screen flex flex-col items-center p-3 gap-16 pt-32">
-        <CreateTask tasks={tasks} setTasks={setTasks} />
+        {/* <CreateTask tasks={tasks} setTasks={setTasks} /> */}
         <ListTasks tasks={tasks} setTasks={setTasks} />
       </div>
     </DndProvider>

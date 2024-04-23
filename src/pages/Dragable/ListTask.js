@@ -18,6 +18,7 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
+import CreateTask from "./CreateTask";
 
 const ListTasks = ({ }) => {
   const [tasks, setTasks] = useState([]);
@@ -43,14 +44,13 @@ const ListTasks = ({ }) => {
           phone: client.phone,
           email: client.email,
           status: "New",
+          data:client,
        }));
       setNewTasks(newTask);
       // console.log("newTask",newTask)
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    // setLoading(false);
   }
 };
 
@@ -62,20 +62,20 @@ const ListTasks = ({ }) => {
     );
     if(response.status ===200){
       // console.log("apicontact",response.data)
+      
       const newTask = response.data.map((client,i )=> ({
         id: client.id,
         name: client.firstName,
         phone: client.phone,
         email: client.email,
         status: "Qualified",
+        data:client
       }));
       setQualifiedTasks(newTask) 
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    // setLoading(false);
-  }
+  } 
 };
 
 
@@ -93,15 +93,13 @@ const ListTasks = ({ }) => {
         phone: client.phone,
         email: client.email,
         status: "Proposition",
-        
+        data:client
       }));
       setPropositionTasks(newTask)
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    // setLoading(false);
-  }
+  } 
 };
 
 
@@ -109,24 +107,23 @@ const ListTasks = ({ }) => {
   try {
     // setLoading(true);
     const response = await axios.get(
-      `${API_URL}allContactsByCompanyId/${companyId}`
+      `${API_URL}allDealsByCompanyId/${companyId}`
     );
     if(response.status ===200){
-      // console.log("api",response.data)
+      // console.log("apideal",response.data)
       const newTasks = response.data.map(client => ({
         id: client.id,
-        name: client.firstName,
+        name: client.accountName,
         phone: client.phone,
         email: client.email,
         status: "Won",
+        data:client
       }));
       setWonTasks(newTasks)
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    // setLoading(false);
-  }
+  } 
 };
 
 useEffect(() => {
@@ -156,6 +153,7 @@ useEffect(() => {
 
   return (
     <div className="container-fluid">
+      <CreateTask tasks={tasks} setTasks={setTasks} handelLeadFetch={fetchLeadData}/>
       <div className="row row-container">
         {statuses.map((status, index) => (
           <Section
@@ -164,6 +162,8 @@ useEffect(() => {
             tasks={tasks}
             fetchLeadData={fetchLeadData}
             fetchContactData={fetchContactData}
+            fetchAcconutData={fetchAcconutData}
+            fetchDealData={fetchDealData}
             setTasks={setTasks}
             newTasks={newTasks}
             qualifiedTasks={qualifiedTasks}
@@ -187,6 +187,8 @@ const Section = ({
   newTasks,
   fetchLeadData,
   fetchContactData,
+  fetchAcconutData,
+  fetchDealData,
   qualifiedTasks,
   propositionTasks,
   wonTasks,
@@ -195,7 +197,7 @@ const Section = ({
 }) => {
   const [{ isOver,canDrop }, drop] = useDrop(() => ({
     accept: "task",
-    drop: (item) => {addItemToSection(item.id, status, newTasks);},
+    drop: (item) => {addItemToSection(item.id,item.status, status, newTasks,qualifiedTasks,propositionTasks);},
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -216,60 +218,125 @@ const Section = ({
       return dropAllowed;
     }
   }));
+
   let text = "New Lead";
-  let bgContainer = "#dacffa";
+  // let bgContainer = "#dacffa";
   let tasksToMap = newTasks;
 
   if (status === "Qualified") {
     text = "Qualified Contacts";
-    bgContainer = "#fdffed";
+    // bgContainer = "#fdffed";
     tasksToMap = qualifiedTasks;
   } else if (status === "Proposition") {
     text = "Proposition(accounts)";
-    bgContainer = "#dee7ff";
+    // bgContainer = "#dee7ff";
     tasksToMap = propositionTasks;
   } else if (status === "Won") {
     text = "Won Deals";
-    bgContainer = "#deffe3";
+    // bgContainer = "#deffe3";
     tasksToMap = wonTasks;
   }
 
-  const addItemToSection = async(id,status,newTasks) => {
-    console.log( id,"id")
-    // console.log( newTasks,"id")
-    const task = newTasks.find(task => task.id === id);
-    // if(task.status==="New"){
-    //   console.log("actual status",task.status)
-    // } 
+  const addItemToSection = async(id,itemStatus,status,) => {
+    // console.log( id,"id")
+    // console.log( itemStatus,"itemStatus")
+    // console.log( status,"status")
+
+    if(itemStatus ==="New" && status==="Qualified" ){
+      try {
+        const response = await axios.post(`${API_URL}leadToContactConvert/${id}`,{
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          console.log(response.data);
+          toast.success(response.data.message);
+          fetchLeadData();
+          fetchContactData();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    } 
+    if(itemStatus==="Qualified" && status==="Proposition" ){
+      try {
+        const response = await axios.post(`${API_URL}contactToAccountConvert/${id}`,{
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          console.log(response.data);
+          toast.success(response.data.message);
+          fetchContactData();
+          fetchAcconutData();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    } 
+    if(itemStatus==="Proposition"&&status==="Won" ){
+      try {
+        const response = await axios.post(`${API_URL}accountToDealConvert/${id}`,{
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          console.log(response.data);
+          toast.success(response.data.message);
+          fetchAcconutData();
+          fetchDealData();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    }
+    
   };
   
   const borderColor = canDrop ? "#34a6ba" : isOver ? "#e23344" : "transparent";
-  const border = isOver && canDrop ? `2px solid ${borderColor}` :isOver && !canDrop?"2px solid #e23344 " :"none";
+  const border = isOver && canDrop ? `2px solid ${borderColor}` :isOver && !canDrop? "2px solid #e23344 " :"none";
   
   return (
     <div className={`col-md-3`} ref={drop}>
-      <Header text={text} count={tasksToMap.length} bgContainer={bgContainer} />
+      <Header text={text} count={tasksToMap.length} 
+      // bgContainer={bgContainer} 
+      />
       <div
-        className={`pt-3`}
+        className={`pt-2`}
         style={{
           height: "85vh",
           overflow: "auto",
-          backgroundColor: canDrop ? "#cfefff" : isOver ? "#f79f8d" : bgContainer,
+          backgroundColor: isOver && canDrop ? "#cfefff" : isOver && !canDrop? "#f79f8d" : "",
           border: border,
-          scrollbarWidth: "thin",
+          scrollbarWidth: "none",
           scrollbarColor: "rgba(0,0,0,0.2) rgba(0,0,0,0.1)",
         }}
       >
         {tasksToMap.length > 0 &&
           tasksToMap.map((task) => (
-            <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} />
+            <Task key={task.id} task={task} tasks={tasks} setTasks={setTasks} fetchLeadData={fetchLeadData}
+            fetchContactData={fetchContactData}
+            fetchAcconutData={fetchAcconutData}
+            fetchDealData={fetchDealData}/>
           ))}
       </div>
     </div>
   );
 };
 
-const Header = ({ text, count, bgContainer }) => {
+const Header = ({ text, count, bgContainer, }) => {
   let icons;
   // let progressBarColor;
   switch (text) {
@@ -290,7 +357,11 @@ const Header = ({ text, count, bgContainer }) => {
   }
 
   
-  const percentage = count * 1; // Increase by 10% for each task
+  // const percentage = count * 1; // Increase by 10% for each task
+  const totalCount = 100; // For example, replace 100 with your total count
+const Count = count; // Replace 25 with your count
+
+const percentage = (Count / totalCount) * 100;
   const progressBarColor =
     percentage < 25 ? "bg-danger" : percentage < 50 ? "bg-warning" : percentage < 75 ? "bg-info" : "bg-success";
 
@@ -316,16 +387,16 @@ const Header = ({ text, count, bgContainer }) => {
           ></div>
         </div>
       </p>
-      <span className={`badge text-dark ms-2 dragable-heading-count`}>
+      <span className={`badge text-dark ms-2 dragable-heading-count mt-2 `} >
         <FaPlus />
         &nbsp;
-        {count}
+        <span className="fw-bold ">{count}</span>
       </span>
     </div>
   );
 };
 
-const Task = ({ task, tasks, setTasks }) => {
+const Task = ({ task, newTasks, fetchLeadData ,fetchContactData,fetchAcconutData,fetchDealData}) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task.id, status: task.status },
@@ -333,12 +404,97 @@ const Task = ({ task, tasks, setTasks }) => {
       isDragging: monitor.isDragging(),
     }),
   }));
-
-  const handleRemove = (id) => {
-    const fTasks = tasks.filter((t) => t.id !== id);
-    localStorage.setItem("tasks", JSON.stringify(fTasks));
-    setTasks(fTasks);
-    toast("Task removed", { icon: <CiCircleRemove color="red" size={20} /> });
+  // console.log("object",task)
+  const handleRemove = async(id,status) => {
+   if(status ==="New"){
+      try {
+        const response = await axios.post(
+          `${API_URL}deleteMultipleClientData`,[task.data],
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast(response.data.message, { icon: <CiCircleRemove color="red" size={20} /> });
+          fetchLeadData();
+          // toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    }
+    if(status ==="Qualified"){
+      try {
+        const response = await axios.post(
+          `${API_URL}deleteMultipleContactData`,[task.data],
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast(response.data.message, { icon: <CiCircleRemove color="red" size={20} /> });
+          fetchContactData();
+          // toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    }
+    if(status ==="Proposition"){
+      try {
+        const response = await axios.post(
+          `${API_URL}deleteMultipleAccountData`,[task.data],
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast(response.data.message, { icon: <CiCircleRemove color="red" size={20} /> });
+          fetchAcconutData();
+          // toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    }
+    if(status ==="Won"){
+      try {
+        const response = await axios.post(
+          `${API_URL}deleteMultipleDealData`,[task.data],
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast(response.data.message, { icon: <CiCircleRemove color="red" size={20} /> });
+          fetchDealData();
+          // toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    }
+    // toast("Task removed", { icon: <CiCircleRemove color="red" size={20} /> });
   };
 
   let badgeColor;
@@ -374,37 +530,37 @@ const Task = ({ task, tasks, setTasks }) => {
         backgroundColor: "#fff",
         opacity: isDragging ? 1 : 1,
       }}
-      className={`color p-3 d-flex align-items-center justify-content-between mx-1 cursor-grab`}
+      className={`color p-3 pb-1 d-flex flex-column  mx-2 cursor-grab `}
     >
       <span>
         <p className="dragable-content-text">
           <FaUserTie/>&nbsp;&nbsp;&nbsp;{task.name}
         </p>
         <p className="dragable-content-amount">
-          <BsCurrencyDollar/> &nbsp; {task.amount}
+          <IoMdMailOpen/> &nbsp; {task.email}
         </p>
         <p className="dragable-content-amount">
           <FaPhoneAlt/> &nbsp; {task.phone}
         </p>
-        <p className="dragable-content-amount">
-          <IoMdMailOpen/> &nbsp; {task.email}
-        </p>
+        {/* <p className="dragable-content-amount">
+          <BsCurrencyDollar/> &nbsp; {task.amount}
+        </p> */}
       </span>
-      <span className="d-flex flex-column align-items-center">
-        <span className={`badge rounded-pill ${badgeColor} mb-2`}>
+      <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
+        <span className={`badge rounded-pill ${badgeColor} mb-2 `} style={{paddingTop: "6px !important"}} >
           {badgeText}
         </span>
         <br />
         <button
           className="btn btn-outline-danger px-2 py-1 "
-          onClick={() => handleRemove(task.id)}
+          onClick={() => handleRemove(task.id,task.status)}
           style={{
             border: "none",
           }}
         >
           <IoMdTrash />
         </button>
-      </span>
+      </div>
     </div>
   );
 };
