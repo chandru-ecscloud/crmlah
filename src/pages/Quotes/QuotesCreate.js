@@ -124,7 +124,7 @@ function QuotesCreate() {
         },
       ],
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Quotes Create:", values);
       try {
@@ -282,10 +282,10 @@ function QuotesCreate() {
 
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
-    updatedRows[index].quantity = value;
+    updatedRows[index].quantity = parseInt(value, 10); // Parse value to integer
 
     const listPrice = updatedRows[index].listPrice || 0;
-    const quantity = value || 0;
+    const quantity = updatedRows[index].quantity || 0;
 
     updatedRows[index].amount = listPrice * quantity;
 
@@ -297,7 +297,8 @@ function QuotesCreate() {
       10000;
 
     setRows(updatedRows);
-  };
+};
+
 
   const handleDiscountChange = (index, value) => {
     const updatedRows = [...rows];
@@ -351,7 +352,7 @@ function QuotesCreate() {
     formik.setFieldValue("subTotal", subtotal.toFixed(2));
     formik.setFieldValue("discount", totalDiscount.toFixed(2));
     formik.setFieldValue("tax", totalTax.toFixed(2));
-    formik.setFieldValue("grand_total", grandTotal.toFixed(2));
+    formik.setFieldValue("grandTotal",parseInt(grandTotal));
   };
 
   // Add this function to your component
@@ -1111,8 +1112,8 @@ function QuotesCreate() {
                 <input
                   className="form-control p-1"
                   type="text"
-                  {...formik.getFieldProps("grand_total")}
-                  name="grand_total"
+                  {...formik.getFieldProps("grandTotal")}
+                  name="grandTotal"
                 />
               </div>
             </div>
