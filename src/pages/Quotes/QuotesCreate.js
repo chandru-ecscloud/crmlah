@@ -39,12 +39,13 @@ const validationSchema = yup.object().shape({
 
 function QuotesCreate() {
   const [rows, setRows] = useState([{}]);
+  console.log(rows)
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [productOptions, setProductOptions] = useState([]);
-  console.log("productOptions:", productOptions);
+  // console.log("productOptions:", productOptions);
   const [accountOption, setAccountOption] = useState([]);
   // console.log(accountOption);
   const [dealOption, setDealOption] = useState([]);
@@ -56,28 +57,36 @@ function QuotesCreate() {
 
   const addRow = () => {
     const updatedRows = [...rows, {}];
-    const updatedQuotesItemList = [...formik.values.quotesItemList, {
-      productName: "",
-      quantity: "",
-      listPrice: "",
-      amount: "",
-      discount: "",
-      tax: "",
-      total: "",
-    }];
-  
     setRows(updatedRows);
+  
+    const updatedQuotesItemList = [
+      ...formik.values.quotesItemList,
+      {
+        productName: "",
+        quantity: "",
+        listPrice: "",
+        amount: "",
+        discount: "",
+        tax: "",
+        total: "",
+      },
+    ];
     formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
-
+  
   const deleteRow = () => {
-    setRows((prevRows) => prevRows.slice(0, -1));
-    formik.setFieldValue(
-      "quotesItemList",
-      formik.values.quotesItemList.slice(0, -1)
-    );
+    if (rows.length === 1) {
+      // Prevent deleting the last row
+      return;
+    }
+  
+    const updatedRows = rows.slice(0, -1);
+    setRows(updatedRows);
+  
+    const updatedQuotesItemList = formik.values.quotesItemList.slice(0, -1);
+    formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
-
+ 
   const formik = useFormik({
     initialValues: {
       company_id: companyId,
@@ -115,66 +124,66 @@ function QuotesCreate() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Quotes Create:", values);
-      // try {
-      //   const payload = {
-      //     transactionQuotes: {
-      //       company_id: companyId,
-      //       itemDescription: values.itemDescription,
-      //       description: values.description,
-      //       termsAndConditions: values.termsAndConditions,
-      //       adjustment: values.adjustment,
-      //       grandTotal: values.grandTotal,
-      //       quoteOwner: values.quoteOwner,
-      //       subject: values.subject,
-      //       quoteStage: values.quoteStage,
-      //       dealName: values.dealName,
-      //       validUntil: values.validUntil,
-      //       contactName: values.contactName,
-      //       accountName: values.accountName,
-      //       billingStreet: values.billingStreet,
-      //       billingCity: values.billingCity,
-      //       billingState: values.billingState,
-      //       billingCode: values.billingCode,
-      //       billingCountry: values.billingCountry,
-      //       shippingStreet: values.shippingStreet,
-      //       shippingCity: values.shippingCity,
-      //       shippingState: values.shippingState,
-      //       shippingCode: values.shippingCode,
-      //       shippingCountry: values.shippingCountry,
-      //     },
-      //     quotesItem: values.quotesItemList.map((item) => ({
-      //       productName: item.productName,
-      //       quantity: item.quantity,
-      //       listPrice: item.listPrice,
-      //       amount: item.amount,
-      //       discount: item.discount,
-      //       tax: item.tax,
-      //       total: item.total,
-      //     })),
-      //   };
-      //   console.log("Payload:",payload);
-      //   const response = await axios.post(
-      //     `${API_URL}createTransactionQuotesAndQuoteItems`,
-      //     payload,
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     navigate("/quotes");
-      //     console.log("Create Quotes Data:", response.data);
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error("Failed: " + error.message);
-      // }
+      try {
+        const payload = {
+          transactionQuotes: {
+            company_id: companyId,
+            itemDescription: values.itemDescription,
+            description: values.description,
+            termsAndConditions: values.termsAndConditions,
+            adjustment: values.adjustment,
+            grandTotal: values.grandTotal,
+            quoteOwner: values.quoteOwner,
+            subject: values.subject,
+            quoteStage: values.quoteStage,
+            dealName: values.dealName,
+            validUntil: values.validUntil,
+            contactName: values.contactName,
+            accountName: values.accountName,
+            billingStreet: values.billingStreet,
+            billingCity: values.billingCity,
+            billingState: values.billingState,
+            billingCode: values.billingCode,
+            billingCountry: values.billingCountry,
+            shippingStreet: values.shippingStreet,
+            shippingCity: values.shippingCity,
+            shippingState: values.shippingState,
+            shippingCode: values.shippingCode,
+            shippingCountry: values.shippingCountry,
+          },
+          quotesItemList: rows.map((item) => ({
+            productName: item.selectedOption,
+            quantity: item.quantity,
+            listPrice: item.listPrice,
+            amount: item.amount,
+            discount: parseInt(item.discount),
+            tax: parseInt(item.tax),
+            total: parseInt(item.total),
+          })),
+        };
+        console.log("Payload:", payload);
+        const response = await axios.post(
+          `${API_URL}createTransactionQuotesAndQuoteItems`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/quotes");
+          console.log("Create Quotes Data:", response.data);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
     },
   });
 
@@ -328,16 +337,16 @@ function QuotesCreate() {
     let totalTax = 0;
 
     rows.forEach((row) => {
-      subtotal += parseFloat(row.amount);
-      totalDiscount += parseFloat(row.discount);
-      totalTax += parseFloat(row.tax);
+      subtotal += parseInt(row.amount);
+      totalDiscount += parseInt(row.discount);
+      totalTax += parseInt(row.tax);
     });
 
     const grandTotal =
       subtotal -
       totalDiscount +
       totalTax +
-      parseFloat(formik.values.adjustment || 0);
+      parseInt(formik.values.adjustment || 0);
 
     formik.setFieldValue("subTotal", subtotal.toFixed(2));
     formik.setFieldValue("discount", totalDiscount.toFixed(2));
@@ -962,11 +971,9 @@ function QuotesCreate() {
                     <td>
                       <select
                        className="form-select"
-                       name="productName"
-                       {...formik.getFieldProps(
-                         `quotesItemList[${index}].productName`
-                       )}
-                       value={row.selectedOption}
+                       name={`quotesItemList[${index}].productName`}
+                       {...formik.getFieldProps(`quotesItemList[${index}].productName`)}
+                       value={row.productName}
                        onChange={(e) =>
                          handleSelectChange(index, e.target.value)
                        }
@@ -982,10 +989,8 @@ function QuotesCreate() {
                     <td>
                       <input
                         type="text"
-                        name="quantity"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].quantity`
-                        )}
+                        name={`quotesItemList[${index}].quantity`}
+                        {...formik.getFieldProps(`quotesItemList[${index}].quantity`)}
                         value={row.quantity}
                         className="form-control"
                         onChange={(e) =>
@@ -996,63 +1001,51 @@ function QuotesCreate() {
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].listPrice`
-                        )}
-                        name="listPrice"
+                        name={`quotesItemList[${index}].listPrice`}
+                        {...formik.getFieldProps(`quotesItemList[${index}].listPrice`)}
                         value={row.listPrice}
-                        class="form-control"
-                        id="exampleFormControlInput1"
+                        className="form-control"
+                        id={`listPrice_${index}`}
                       />
                     </td>
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].amount`
-                        )}
-                        name="amount"
+                        name={`quotesItemList[${index}].amount`}
+                        {...formik.getFieldProps(`quotesItemList[${index}].amount`)}
                         value={row.amount}
-                        class="form-control"
-                        id="exampleFormControlInput1"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].discount`
-                        )}
-                        name="discount"
-                        value={row.discount}
                         className="form-control"
-                        onChange={(e) =>
-                          handleDiscountChange(index, e.target.value)
-                        }
+                        id={`amount_${index}`}
+                      />
+                    </td>
+                    <td>
+                      <input
+                         type="text"
+                         name={`quotesItemList[${index}].discount`}
+                         {...formik.getFieldProps(`quotesItemList[${index}].discount`)}
+                         value={row.discount}
+                         className="form-control"
+                         onChange={(e) => handleDiscountChange(index, e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                       type="text"
+                       name={`quotesItemList[${index}].tax`}
+                       {...formik.getFieldProps(`quotesItemList[${index}].tax`)}
+                       value={row.tax}
+                       className="form-control"
+                       onChange={(e) => handleTaxChange(index, e.target.value)}
                       />
                     </td>
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].tax`
-                        )}
-                        name="tax"
-                        value={row.tax}
-                        className="form-control"
-                        onChange={(e) => handleTaxChange(index, e.target.value)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].total`
-                        )}
-                        name="total"
+                        name={`quotesItemList[${index}].total`}
+                        {...formik.getFieldProps(`quotesItemList[${index}].total`)}
                         value={row.total}
-                        class="form-control"
-                        id="exampleFormControlInput1"
+                        className="form-control"
+                        id={`total_${index}`}
                       />
                     </td>
                   </tr>
@@ -1063,37 +1056,11 @@ function QuotesCreate() {
           <button type="button" className="btn btn-primary" onClick={addRow}>
           Add Row
         </button>
-          {/* <button
-            className="btn btn-sm btn-danger me-2"
-            type="button"
-            onClick={() => {
-              setRows((pr) => [...pr, {}]);
-            }}
-          >
-            Add Row
-          </button> */}
           {rows.length > 1 && (
           <button type="button" className="btn btn-outline-danger mx-3" onClick={deleteRow}>
             <FaTrash />
           </button>
         )}
-          {/* {rows.length > 1 && (
-            <button
-              type="button"
-              className="btn mt-3"
-              onClick={() => {
-                // Remove the last row from the state
-                setRows((pr) => pr.slice(0, -1));
-                // Remove the last item from the quotesItemList array in formik values
-                formik.setFieldValue(
-                  "quotesItemList",
-                  formik.values.quotesItemList.slice(0, -1)
-                );
-              }}
-            >
-              <FaTrash />
-            </button>
-          )} */}
         </div>
 
         {/* Quotes Items Counts */}
