@@ -8,17 +8,19 @@ import {
 } from "react-icons/md";
 import { TbPigMoney } from "react-icons/tb";
 import { LinearProgress } from "@mui/material";
+import { API_URL } from "../Config/URL";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
+  const companyId = sessionStorage.getItem("companyId");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://13.213.208.92:8080/ecscrm/api/crmDashBoardOverview"
+          `${API_URL}crmDashBoardOverview/${companyId}`
         );
         setDashboardData(response.data);
       } catch (error) {

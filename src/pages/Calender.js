@@ -1,289 +1,276 @@
-import React from "react";
-import AppointmentsCreate from "./AppointmentsModel";
-import CalenderBookingModel from "./CalenderBookingModel";
-import { FaSquare } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+import { Modal, Form } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { toast } from "react-toastify";
+import { API_URL } from "../Config/URL";
+import axios from "axios";
 
-function Calender() {
-  const completed = {
-    width: "80%",
-    height: "100%",
-    background: "#f2eafe",
-    border: "none",
-    borderLeft: "5px solid #bd28e3",
-    borderRadius: "15px",
-    color: "black",
+function Calendar() {
+  const [data, setData] = useState([]);
+  const [events, setEvents] = useState([]);
+  const companyId = sessionStorage.getItem("companyId");
+
+  const [showModal, setShowModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [newEvent, setNewEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllAppointmentsByCompanyId/${companyId}`
+      );
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
   };
-  const arrived = {
-    width: "80%",
-    height: "100%",
-    background: "#fff9e7",
-    border: "none",
-    borderLeft: "5px solid #fecc3f",
-    borderRadius: "15px",
-    color: "black",
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Transform data into FullCalendar event format
+    const formattedEvents = data.map((item) => ({
+      id: item.id,
+      title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
+      start: `${item.appointmentStartDate}T${item.appointmentStartTime}`,
+      end: `${item.appointmentStartDate}T${item.appointmentStartTime}`,
+      allDay: false, // Assuming appointments are not all-day events
+    }));
+    setEvents(formattedEvents);
+  }, [data]);
+
+  const handleEventAdd = (eventAddInfo) => {
+    const { event } = eventAddInfo;
+    const newEventWithId = { ...event, id: uuidv4() };
+    setEvents([...events, newEventWithId]);
   };
-  const started = {
-    width: "80%",
-    height: "100%",
-    background: "#f0ffea",
-    border: "none",
-    borderLeft: "5px solid #52d066",
-    borderRadius: "15px",
-    color: "black",
+
+  const handleEventClick = (eventClickInfo) => {
+    setSelectedEvent(eventClickInfo.event);
+    setShowViewModal(true);
   };
-  const notShow = {
-    width: "80%",
-    height: "100%",
-    background: "#ffebf0",
-    border: "none",
-    borderLeft: "5px solid #ff4373",
-    borderRadius: "15px",
-    color: "black",
+
+  const handleModalSave = () => {
+    if (newEvent && newEvent.title) {
+      const eventToAdd = { ...newEvent, id: uuidv4() };
+      setEvents([...events, eventToAdd]);
+      setShowModal(false);
+      setNewEvent(null);
+    }
   };
-  const newstye = {
-    width: "80%",
-    height: "100%",
-    background: "#e2e5fd",
-    border: "none",
-    borderLeft: "5px solid #7d97ff",
-    borderRadius: "15px",
-    color: "black",
+
+  const handleDeleteEvent = () => {
+    if (selectedEvent) {
+      const filteredEvents = events.filter(
+        (event) => event.id !== selectedEvent.id
+      );
+      setEvents(filteredEvents);
+      setSelectedEvent(null);
+    }
+    setShowDeleteModal(false);
+  };
+
+  const handleEditModalSave = () => {
+    if (selectedEvent && selectedEvent.title) {
+      const updatedEvents = events.map((event) =>
+        event.id === selectedEvent.id
+          ? { ...event, title: selectedEvent.title }
+          : event
+      );
+      setEvents(updatedEvents);
+      setShowEditModal(false);
+      setSelectedEvent(null);
+    }
+  };
+
+  const handleEditClick = () => {
+    setShowViewModal(false);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteClick = () => {
+    setShowViewModal(false);
+    setShowDeleteModal(true);
   };
 
   return (
-    <>
-      <div className="container-fluid p-4">
-        <table
-          class="table table-bordered rounded text-center shadow-lg p-3  bg-white rounded"
-          style={{
-            borderRadius: "15px",
-            height: "25rem",
-          }}
-        >
-          <thead className="rounded">
-            <tr>
-              <td colSpan="5">
-                <div className="row d-flex justify-content-evently mt-2">
-                  <div className="col-1"></div>
-                  <div className="col-2">
-                    <span style={{ color: "#d4dbff" }}>
-                      <FaSquare />
-                    </span>
-                    &nbsp; &nbsp;
-                    <span>
-                      <b>New</b>
-                    </span>
-                  </div>
-                  <div className="col-2">
-                    <span style={{ color: "#fecc3f" }}>
-                      <FaSquare />
-                    </span>
-                    &nbsp; &nbsp;
-                    <span>
-                      <b>Arrived</b>
-                    </span>
-                  </div>
-                  <div className="col-2">
-                    <span style={{ color: "#52d066" }}>
-                      <FaSquare />
-                    </span>
-                    &nbsp; &nbsp;
-                    <span>
-                      <b>Started</b>
-                    </span>
-                  </div>
-                  <div className="col-2">
-                    <span style={{ color: "#ff456f" }}>
-                      <FaSquare />
-                    </span>
-                    &nbsp; &nbsp;
-                    <span>
-                      <b>Not Show</b>
-                    </span>
-                  </div>
-                  <div className="col-2">
-                    <span style={{ color: "#bd28e3" }}>
-                      <FaSquare />
-                    </span>
-                    &nbsp; &nbsp;
-                    <span>
-                      <b>Completed</b>
-                    </span>
-                  </div>
-                  <div className="col-1"></div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Time
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Rita
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Merlin
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                Liam
-              </th>
-              <th className="p-4" style={{ background: "#a6c3c7" }}>
-                John
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="p-3" style={{ background: "#cdd0c9" }}>
-                9-10 AM
-              </td>
-              <td className="p-3">
-                <CalenderBookingModel
-                  style={completed}
-                  name={
-                    <>
-                      <b>09:30 AM to 10:30 AM</b> <br />
-                      <span>1. Men Hairstyle- 1 hr</span>
-                    </>
-                  }
-                />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-            </tr>
-            <tr>
-              <td className="p-3" style={{ background: "#cdd0c9" }}>
-                10-11 PM
-              </td>
-              <td className="p-3">
-                <CalenderBookingModel
-                  style={arrived}
-                  name={
-                    <>
-                      <b>11:00 AM to 00:1 PM</b> <br />
-                      <span className="text-start">
-                        1. Women Hairstyle- 1 hr
-                      </span>
-                      <br />
-                      <span>+2 services</span>
-                    </>
-                  }
-                />
-              </td>
-              <td className="p-3">
-                <CalenderBookingModel
-                  style={notShow}
-                  name={
-                    <>
-                      <b>11:00 PM to 12:30 AM</b> <br />
-                      <span className="text-start">
-                        1. Women Hairstyle- 1 hr
-                      </span>
-                      <br />
-                      <span>+2 services</span>&nbsp;&nbsp;
-                    </>
-                  }
-                />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-            </tr>
-            <tr>
-              <td className="p-4" style={{ background: "#cdd0c9" }}>
-                11-12 PM
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td className="p-4">
-                <CalenderBookingModel
-                  style={newstye}
-                  name={
-                    <>
-                      <b>11 AM to 12 PM</b> <br />
-                      <span className="text-start">1. Men Hairstyle- 1 hr</span>
-                      &nbsp;&nbsp;
-                    </>
-                  }
-                />
-              </td>
-            </tr>
-            <tr>
-              <td className="p-2" style={{ background: "#cdd0c9" }}>
-                12-1 PM
-              </td>
-              <td className="p-2">
-                <AppointmentsCreate />
-              </td>
-              <td className="p-2">
-                <AppointmentsCreate />
-              </td>
-              <td className="p-2">
-                <CalenderBookingModel
-                  style={started}
-                  name={
-                    <>
-                      <b>12:00 AM to 2 PM</b> <br />
-                      <span className="text-start">
-                        1. Women Hairstyle- 1 hr
-                      </span>
-                      <br />
-                      <span>+2 services</span>&nbsp;&nbsp;
-                    </>
-                  }
-                />
-              </td>
-              <td className="p-2">
-                <AppointmentsCreate />
-              </td>
-            </tr>
-            <tr>
-              <td className="p-4" style={{ background: "#cdd0c9" }}>
-                1-2 PM
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-              <td className="p-4">
-                <CalenderBookingModel
-                  style={newstye}
-                  name={
-                    <>
-                      <b>2 PM to 3 PM</b> <br />
-                      <span className="text-start">
-                        1. Women Hairstyle- 1 hr
-                      </span>
-                      &nbsp;&nbsp;
-                    </>
-                  }
-                />
-              </td>
-              <td>
-                <AppointmentsCreate />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </>
+    <div className="calender">
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        initialView={"dayGridMonth"}
+        headerToolbar={{
+          start: "today,prev,next",
+          center: "title",
+          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
+        }}
+        height={"90vh"}
+        events={events}
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        views={{
+          customWorkWeek: {
+            type: "timeGridWeek",
+            duration: { weeks: 1 },
+            buttonText: "Work Week",
+            hiddenDays: [0, 6],
+          },
+          customAgenda: {
+            type: "listWeek",
+            buttonText: "Agenda",
+          },
+          customDay: {
+            type: "timeGridDay",
+            buttonText: "Day",
+          },
+          customWeek: {
+            type: "timeGridWeek",
+            buttonText: "Week",
+          },
+          customMonth: {
+            type: "dayGridMonth",
+            buttonText: "Month",
+          },
+        }}
+        select={(info) => {
+          setNewEvent({
+            title: "",
+            start: info.startStr,
+            end: info.endStr,
+            allDay: info.allDay,
+          });
+          setShowModal(true);
+        }}
+        eventAdd={handleEventAdd}
+        eventClick={handleEventClick}
+      />
+
+      {/* Add Event Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <Form.Control
+            type="text"
+            placeholder="Add Title"
+            value={newEvent ? newEvent.title : ""}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, title: e.target.value })
+            }
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-sm btn-light"
+            onClick={() => setShowModal(false)}
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            className="btn btn-sm btn-primary"
+            onClick={handleModalSave}
+          >
+            Save
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* View Event Modal */}
+      <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
+        <Modal.Header closeButton>
+          <div className="d-flex justify-content-between align-items-center w-100">
+            <div>
+              <h5 className="modal-title">View Event Details</h5>
+            </div>
+            <div className="d-flex">
+              <button className="btn" onClick={handleEditClick}>
+                <MdEdit size={25} />
+              </button>
+              <button className="btn" onClick={handleDeleteClick}>
+                <MdDelete size={25} />
+              </button>
+            </div>
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Event Title</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">
+                : {selectedEvent ? selectedEvent.title : ""}
+              </p>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Edit Event Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Event Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Control
+            type="text"
+            placeholder="Event Title"
+            value={selectedEvent ? selectedEvent.title : ""}
+            onChange={(e) =>
+              setSelectedEvent({ ...selectedEvent, title: e.target.value })
+            }
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-sm btn-light"
+            onClick={() => setShowEditModal(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-sm btn-primary"
+            onClick={handleEditModalSave}
+          >
+            Update
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Event Modal */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>Are you sure you want to delete?</Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-sm btn-danger"
+            onClick={handleDeleteEvent}
+          >
+            Yes
+          </button>
+          <button type="button" className="btn btn-sm btn-light">
+            No
+          </button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 }
 
-export default Calender;
+export default Calendar;
