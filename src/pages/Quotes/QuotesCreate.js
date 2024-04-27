@@ -270,10 +270,11 @@ function QuotesCreate() {
         },
       });
       const listPrice = response.data.unitPrice;
+      const tax = response.data.tax
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
       updatedRows[index].amount = listPrice; // Update amount based on list price
-      updatedRows[index].tax = 0;
+      updatedRows[index].tax = tax;
       updatedRows[index].discount = 0;
       updatedRows[index].total = listPrice; // Update total based on list price
       setRows(updatedRows);
@@ -300,24 +301,6 @@ function QuotesCreate() {
 
     setRows(updatedRows);
   };
-
-  // const handleDiscountChange = (index, value) => {
-  //   const updatedRows = [...rows];
-  //   updatedRows[index].discount = value;
-
-  //   const listPrice = updatedRows[index].listPrice || 0;
-  //   const quantity = updatedRows[index].quantity || 0;
-  //   const discount = value || 0;
-  //   const tax = updatedRows[index].tax || 0;
-
-  //   updatedRows[index].amount = listPrice * quantity;
-
-  //   updatedRows[index].total =
-  //     (updatedRows[index].amount * (100 - discount) * (100 + tax)) / 10000;
-
-  //   setRows(updatedRows);
-  //   calculateTotals();
-  // };
 
   const handleDiscountChange = (index, value) => {
     const updatedRows = [...rows];
@@ -1091,6 +1074,7 @@ function QuotesCreate() {
                           `quotesItemList[${index}].tax`
                         )}
                         value={row.tax}
+                        readOnly
                         className="form-control"
                         onChange={(e) => handleTaxChange(index, e.target.value)}
                       />
@@ -1169,7 +1153,6 @@ function QuotesCreate() {
                   type="text"
                   {...formik.getFieldProps("adjustment")}
                   value={adjustment}
-                  // onChange={handleAdjustmentChange}
                 />
               </div>
               <div className="container-fluid py-2">
