@@ -39,7 +39,9 @@ const validationSchema = yup.object().shape({
 
 function QuotesCreate() {
   const [rows, setRows] = useState([{}]);
-  console.log(rows)
+  console.log(rows);
+  const [adjustment, setAdjustment] = React.useState(0);
+  const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -58,7 +60,7 @@ function QuotesCreate() {
   const addRow = () => {
     const updatedRows = [...rows, {}];
     setRows(updatedRows);
-  
+
     const updatedQuotesItemList = [
       ...formik.values.quotesItemList,
       {
@@ -73,20 +75,20 @@ function QuotesCreate() {
     ];
     formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
-  
+
   const deleteRow = () => {
     if (rows.length === 1) {
       // Prevent deleting the last row
       return;
     }
-  
+
     const updatedRows = rows.slice(0, -1);
     setRows(updatedRows);
-  
+
     const updatedQuotesItemList = formik.values.quotesItemList.slice(0, -1);
     formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
- 
+
   const formik = useFormik({
     initialValues: {
       company_id: companyId,
@@ -297,22 +299,45 @@ function QuotesCreate() {
       10000;
 
     setRows(updatedRows);
-};
+  };
 
+  // const handleDiscountChange = (index, value) => {
+  //   const updatedRows = [...rows];
+  //   updatedRows[index].discount = value;
+
+  //   const listPrice = updatedRows[index].listPrice || 0;
+  //   const quantity = updatedRows[index].quantity || 0;
+  //   const discount = value || 0;
+  //   const tax = updatedRows[index].tax || 0;
+
+  //   updatedRows[index].amount = listPrice * quantity;
+
+  //   updatedRows[index].total =
+  //     (updatedRows[index].amount * (100 - discount) * (100 + tax)) / 10000;
+
+  //   setRows(updatedRows);
+  //   calculateTotals();
+  // };
 
   const handleDiscountChange = (index, value) => {
     const updatedRows = [...rows];
     updatedRows[index].discount = value;
-
+  
     const listPrice = updatedRows[index].listPrice || 0;
     const quantity = updatedRows[index].quantity || 0;
     const discount = value || 0;
     const tax = updatedRows[index].tax || 0;
-
-    updatedRows[index].total =
-      (listPrice * quantity * (100 - discount) * (100 + tax)) / 10000;
-
+  
+    updatedRows[index].amount = listPrice * quantity;
+  
+    // Calculate the total amount considering the discount and tax
+    const totalAmountBeforeTax = updatedRows[index].amount * (1 - discount / 100);
+    const totalAmount = totalAmountBeforeTax * (1 + tax / 100);
+    
+    updatedRows[index].total = totalAmount;
+  
     setRows(updatedRows);
+    calculateTotals();
   };
 
   const handleTaxChange = (index, value) => {
@@ -322,44 +347,65 @@ function QuotesCreate() {
     const listPrice = updatedRows[index].listPrice || 0;
     const quantity = updatedRows[index].quantity || 0;
     const discount = updatedRows[index].discount || 0;
-    const tax = value || 0;
+    const taxPercentage = value || 0;
 
-    const subtotal = (listPrice * quantity * (100 - discount)) / 100;
-    const totalTaxAmount = (subtotal * tax) / 100;
+    let taxAmount = 0;
+    if (taxPercentage < 18) {
+      // For tax below 18%, calculate tax amount
+      taxAmount = (listPrice * quantity * taxPercentage) / 100;
+    } else {
+      // For tax 18% or above, calculate tax amount including cess
+      const taxAmountBeforeCess = (listPrice * quantity * taxPercentage) / 100;
+      taxAmount = taxAmountBeforeCess + (taxAmountBeforeCess * 1) / 100;
+    }
 
-    updatedRows[index].total = subtotal + totalTaxAmount;
+    updatedRows[index].amount = listPrice * quantity;
+    updatedRows[index].total =
+      (updatedRows[index].amount * (100 - discount) * (100 + taxAmount)) /
+      10000;
 
     setRows(updatedRows);
+    calculateTotals();
   };
 
   const calculateTotals = () => {
     let subtotal = 0;
     let totalDiscount = 0;
     let totalTax = 0;
+    let grandTotal = 0;
 
     rows.forEach((row) => {
-      subtotal += parseInt(row.amount);
-      totalDiscount += parseInt(row.discount);
-      totalTax += parseInt(row.tax);
+      subtotal += parseFloat(row.amount);
+      totalDiscount += parseFloat(row.discount);
+      totalTax += parseFloat(row.tax);
+      grandTotal += parseFloat(row.total);
     });
 
-    const grandTotal =
-      subtotal -
-      totalDiscount +
-      totalTax +
-      parseInt(formik.values.adjustment || 0);
-
-    formik.setFieldValue("subTotal", subtotal.toFixed(2));
-    formik.setFieldValue("discount", totalDiscount.toFixed(2));
-    formik.setFieldValue("tax", totalTax.toFixed(2));
-    formik.setFieldValue("grandTotal",parseInt(grandTotal));
+    formik.setFieldValue(
+      "subTotal",
+      isNaN(subtotal) ? "0.00" : subtotal.toFixed(2)
+    );
+    formik.setFieldValue(
+      "discount",
+      isNaN(totalDiscount) ? "0.00" : totalDiscount.toFixed(2)
+    );
+    formik.setFieldValue("tax", isNaN(totalTax) ? "0.00" : totalTax.toFixed(2));
+    formik.setFieldValue(
+      "grandTotal",
+      isNaN(grandTotal) ? "0.00" : grandTotal.toFixed(2)
+    );
   };
 
-  // Add this function to your component
   const handleAdjustmentChange = (e) => {
-    formik.setFieldValue("adjustment", e.target.value);
-    calculateTotals();
+    const adjustmentValue = parseFloat(e.target.value);
+    const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
+    setAdjustment(adjustmentValue);
+    formik.setFieldValue("grandTotal", newGrandTotal);
   };
+
+  useEffect(() => {
+    calculateTotals();
+  }, [rows]);
 
   useEffect(() => {
     ProductList();
@@ -367,10 +413,6 @@ function QuotesCreate() {
     DealList();
     ContactList();
   }, []);
-
-  useEffect(() => {
-    calculateTotals();
-  }, [rows]);
 
   return (
     <section className="createLead">
@@ -971,13 +1013,15 @@ function QuotesCreate() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                       className="form-select"
-                       name={`quotesItemList[${index}].productName`}
-                       {...formik.getFieldProps(`quotesItemList[${index}].productName`)}
-                       value={row.productName}
-                       onChange={(e) =>
-                         handleSelectChange(index, e.target.value)
-                       }
+                        className="form-select"
+                        name={`quotesItemList[${index}].productName`}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].productName`
+                        )}
+                        value={row.productName}
+                        onChange={(e) =>
+                          handleSelectChange(index, e.target.value)
+                        }
                       >
                         <option value="" selected disabled></option>
                         {productOptions.map((option) => (
@@ -991,7 +1035,9 @@ function QuotesCreate() {
                       <input
                         type="text"
                         name={`quotesItemList[${index}].quantity`}
-                        {...formik.getFieldProps(`quotesItemList[${index}].quantity`)}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].quantity`
+                        )}
                         value={row.quantity}
                         className="form-control"
                         onChange={(e) =>
@@ -1003,7 +1049,9 @@ function QuotesCreate() {
                       <input
                         type="text"
                         name={`quotesItemList[${index}].listPrice`}
-                        {...formik.getFieldProps(`quotesItemList[${index}].listPrice`)}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].listPrice`
+                        )}
                         value={row.listPrice}
                         className="form-control"
                         id={`listPrice_${index}`}
@@ -1013,7 +1061,9 @@ function QuotesCreate() {
                       <input
                         type="text"
                         name={`quotesItemList[${index}].amount`}
-                        {...formik.getFieldProps(`quotesItemList[${index}].amount`)}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].amount`
+                        )}
                         value={row.amount}
                         className="form-control"
                         id={`amount_${index}`}
@@ -1021,32 +1071,41 @@ function QuotesCreate() {
                     </td>
                     <td>
                       <input
-                         type="text"
-                         name={`quotesItemList[${index}].discount`}
-                         {...formik.getFieldProps(`quotesItemList[${index}].discount`)}
-                         value={row.discount}
-                         className="form-control"
-                         onChange={(e) => handleDiscountChange(index, e.target.value)}
+                        type="text"
+                        name={`quotesItemList[${index}].discount`}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].discount`
+                        )}
+                        value={row.discount}
+                        className="form-control"
+                        onChange={(e) =>
+                          handleDiscountChange(index, e.target.value)
+                        }
                       />
                     </td>
                     <td>
                       <input
-                       type="text"
-                       name={`quotesItemList[${index}].tax`}
-                       {...formik.getFieldProps(`quotesItemList[${index}].tax`)}
-                       value={row.tax}
-                       className="form-control"
-                       onChange={(e) => handleTaxChange(index, e.target.value)}
+                        type="text"
+                        name={`quotesItemList[${index}].tax`}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].tax`
+                        )}
+                        value={row.tax}
+                        className="form-control"
+                        onChange={(e) => handleTaxChange(index, e.target.value)}
                       />
                     </td>
                     <td>
                       <input
                         type="text"
                         name={`quotesItemList[${index}].total`}
-                        {...formik.getFieldProps(`quotesItemList[${index}].total`)}
-                        value={row.total}
+                        {...formik.getFieldProps(
+                          `quotesItemList[${index}].total`
+                        )}
+                        value={row.total ? row.total.toFixed(2) : "0.00"}
                         className="form-control"
                         id={`total_${index}`}
+                        readOnly
                       />
                     </td>
                   </tr>
@@ -1055,13 +1114,17 @@ function QuotesCreate() {
             </table>
           </div>
           <button type="button" className="btn btn-primary" onClick={addRow}>
-          Add Row
-        </button>
-          {rows.length > 1 && (
-          <button type="button" className="btn btn-outline-danger mx-3" onClick={deleteRow}>
-            <FaTrash />
+            Add Row
           </button>
-        )}
+          {rows.length > 1 && (
+            <button
+              type="button"
+              className="btn btn-outline-danger mx-3"
+              onClick={deleteRow}
+            >
+              <FaTrash />
+            </button>
+          )}
         </div>
 
         {/* Quotes Items Counts */}
@@ -1076,7 +1139,7 @@ function QuotesCreate() {
                   name="subTotal"
                   className="form-control p-1"
                   type="text"
-                  placeholder="--"
+                  readOnly
                 />
               </div>
               <div className="container-fluid py-2">
@@ -1086,6 +1149,7 @@ function QuotesCreate() {
                   type="text"
                   {...formik.getFieldProps("discount")}
                   name="discount"
+                  readOnly
                 />
               </div>
               <div className="container-fluid py-2">
@@ -1095,6 +1159,7 @@ function QuotesCreate() {
                   type="text"
                   {...formik.getFieldProps("tax")}
                   name="tax"
+                  readOnly
                 />
               </div>
               <div className="container-fluid py-2">
@@ -1103,8 +1168,8 @@ function QuotesCreate() {
                   className="form-control p-1"
                   type="text"
                   {...formik.getFieldProps("adjustment")}
-                  name="adjustment"
-                  onChange={handleAdjustmentChange}
+                  value={adjustment}
+                  // onChange={handleAdjustmentChange}
                 />
               </div>
               <div className="container-fluid py-2">
@@ -1114,6 +1179,7 @@ function QuotesCreate() {
                   type="text"
                   {...formik.getFieldProps("grandTotal")}
                   name="grandTotal"
+                  readOnly
                 />
               </div>
             </div>
