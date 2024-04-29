@@ -8,16 +8,18 @@ import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-
-
 function AppointmentsCreate({ name, schedule }) {
   const [show, setShow] = useState(false);
+  const owner = sessionStorage.getItem("user_time");
   const [serviceData, setserviceData] = useState([]);
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const userName = sessionStorage.getItem("user_name");
   const navigate = useNavigate();
+  const [appointmentTime, setAppointmentTime] = useState([]);
+  console.log("appointmentTime", appointmentTime);
+ 
 
   const validationSchema = Yup.object().shape({
     // appointmentFor: Yup.string().required("*Appointment for is required"),
@@ -72,11 +74,12 @@ function AppointmentsCreate({ name, schedule }) {
       additionalInformation: "",
     },
     validationSchema: validationSchema,
-    
-    onSubmit: async (data, { resetForm,setSubmitting }) => {
+
+    onSubmit: async (data, { resetForm, setSubmitting }) => {
+      console.log("Add appointment", data);
       if (name === "Create Appointment") {
-        const lead = leadData.find((user) => user.id == data.leadId);
-        const service = serviceData.find((user) => user.id == data.serviceId);
+        const lead = leadData.find((user) => user.id === data.leadId);
+        const service = serviceData.find((user) => user.id === data.serviceId);
         data.serviceName = service ? service.serviceName : "";
         data.appointmentFor = lead.name;
         data.email = lead.email;
@@ -251,15 +254,28 @@ function AppointmentsCreate({ name, schedule }) {
           toast.error(error.response?.data.message);
         }
       }
-
-      
     },
   });
+  const fetchAppointmentTime = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getTodayAvailableSlotsByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setAppointmentTime(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const openModal = () => {
     setShow(true);
     console.log("scheduleDataM", schedule);
-     
+
     if (name === "schedule") {
       let scheduleData = {
         appointmentFor: schedule.appointmentName,
@@ -318,6 +334,7 @@ function AppointmentsCreate({ name, schedule }) {
   useEffect(() => {
     fetchServiceData();
     fetchLeadData();
+    fetchAppointmentTime();
   }, []);
 
   return (
@@ -357,12 +374,17 @@ function AppointmentsCreate({ name, schedule }) {
                       <button
                         className="btn btn-primary"
                         type="button"
-                        onClick={()=>{
+                        onClick={() => {
                           formik.handleSubmit();
-                          formik.setTouched(Object.keys(formik.initialValues).reduce((touched, key) => {
-                            touched[key] = true;
-                            return touched;
-                          }, {}));
+                          formik.setTouched(
+                            Object.keys(formik.initialValues).reduce(
+                              (touched, key) => {
+                                touched[key] = true;
+                                return touched;
+                              },
+                              {}
+                            )
+                          );
                         }}
                       >
                         Save
@@ -381,58 +403,54 @@ function AppointmentsCreate({ name, schedule }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     {name == "schedule" ? (
                       <>
-                      <div className="d-flex align-items-center justify-content-end sm-device">
-                        <lable>Appointment</lable> &nbsp;&nbsp;
-                        <input
-                          type="text"
-                          name="appointmentFor"
-                          id="appointmentFor"
-                          {...formik.getFieldProps("appointmentFor")}
-                          className={`form-size form-control   ${
-                            formik.touched.appointmentFor &&
-                            formik.errors.appointmentFor
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        />
-                      </div>
-                      {formik.touched.appointmentFor &&
-                        formik.errors.appointmentFor && (
-                          <p className="text-danger">
-                            {formik.errors.appointmentFor}
-                          </p>
-                        )}
-                        </>
+                        <div className="d-flex align-items-center justify-content-end sm-device">
+                          <lable>Appointment</lable> &nbsp;&nbsp;
+                          <input
+                            type="text"
+                            name="appointmentFor"
+                            id="appointmentFor"
+                            {...formik.getFieldProps("appointmentFor")}
+                            className={`form-size form-control   ${
+                              formik.touched.appointmentFor &&
+                              formik.errors.appointmentFor
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                          />
+                        </div>
+                        {formik.touched.appointmentFor &&
+                          formik.errors.appointmentFor && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentFor}
+                            </p>
+                          )}
+                      </>
                     ) : (
                       <>
-                      <div className="d-flex align-items-center justify-content-end sm-device">
-                        <lable>Appointment </lable> &nbsp;&nbsp;
-                        <select
-                          name="leadId"
-                          className={`form-select form-size ${
-                            formik.touched.leadId && formik.errors.leadId
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("leadId")}
-                        >
-                          <option value=""></option>
-                          {leadData.map((option) => (
-                            <option key={option.id} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      {formik.touched.leadId &&
-                        formik.errors.leadId && (
-                          <p className="text-danger">
-                            {formik.errors.leadId}
-                          </p>
+                        <div className="d-flex align-items-center justify-content-end sm-device">
+                          <lable>Appointment </lable> &nbsp;&nbsp;
+                          <select
+                            name="leadId"
+                            className={`form-select form-size ${
+                              formik.touched.leadId && formik.errors.leadId
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("leadId")}
+                          >
+                            <option value=""></option>
+                            {leadData.map((option) => (
+                              <option key={option.id} value={option.id}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        {formik.touched.leadId && formik.errors.leadId && (
+                          <p className="text-danger">{formik.errors.leadId}</p>
                         )}
-                        </>
+                      </>
                     )}
-                    
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -498,11 +516,35 @@ function AppointmentsCreate({ name, schedule }) {
                     </div>
                   </div>
 
-                  <div className="col-lg-6 col-md-6 col-12  mb-3">
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+      <div className="d-flex align-items-center justify-content-end sm-device">
+        <label>Start Time</label>&nbsp;&nbsp;
+        <select
+          type="text"
+          name="appointmentStartTime"
+          className="form-select form-size"
+          {...formik.getFieldProps("appointmentStartTime")}
+          id="appointmentStartTime"
+        >
+          <option value="">Select a start time</option>
+          {appointmentTime.map((option) => (
+            <option
+              key={option.id}
+              value={option.slotTime}
+              disabled={option.allocated} // Disable already booked slots
+            >
+              {option.slotTime} {option.allocated ? "" : ""}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Time</lable> &nbsp;&nbsp;
                       <input
-                        type="time"
+                        type="text"
                         //className="form-size form-control"
                         name="appointmentStartTime"
                         id="appointmentStartTime"
@@ -526,7 +568,8 @@ function AppointmentsCreate({ name, schedule }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
