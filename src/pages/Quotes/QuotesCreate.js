@@ -4,12 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
-import { FaPlus } from "react-icons/fa";
-import { Table, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
-import { FaCamera } from "react-icons/fa6";
+// import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
@@ -91,11 +89,14 @@ function QuotesCreate() {
 
   const formik = useFormik({
     initialValues: {
-      company_id: companyId,
+      companyId: companyId,
       quoteOwner: owner,
       itemDescription: "",
       description: "",
       termsAndConditions: "",
+      subTotal: "",
+      txnDiscount: "",
+      txnTax: "",
       adjustment: "",
       grandTotal: "",
       subject: "",
@@ -126,16 +127,19 @@ function QuotesCreate() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Quotes Create:", values);
       try {
         const payload = {
           transactionQuotes: {
-            company_id: companyId,
+            companyId: companyId,
             itemDescription: values.itemDescription,
             description: values.description,
             termsAndConditions: values.termsAndConditions,
+            subTotal: values.subTotal,
+            txnDiscount: values.txnDiscount,
+            txnTax: values.txnTax,
             adjustment: values.adjustment,
             grandTotal: values.grandTotal,
             quoteOwner: values.quoteOwner,
@@ -157,7 +161,7 @@ function QuotesCreate() {
             shippingCountry: values.shippingCountry,
           },
           quotesItemList: rows.map((item) => ({
-            productName: item.selectedOption,
+            productName: item.ProductName,
             quantity: item.quantity,
             listPrice: item.listPrice,
             amount: item.amount,
@@ -269,8 +273,10 @@ function QuotesCreate() {
           //Authorization: `Bearer ${token}`,
         },
       });
+      const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
-      const tax = response.data.tax
+      const tax = response.data.tax;
+      updatedRows[index].ProductName = productName;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
       updatedRows[index].amount = listPrice; // Update amount based on list price
@@ -285,7 +291,7 @@ function QuotesCreate() {
 
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
-    updatedRows[index].quantity = parseInt(value, 10); // Parse value to integer
+    updatedRows[index].quantity = value === "" ? 0 : parseInt(value, 10); // Parse value to integer
 
     const listPrice = updatedRows[index].listPrice || 0;
     const quantity = updatedRows[index].quantity || 0;
@@ -305,20 +311,21 @@ function QuotesCreate() {
   const handleDiscountChange = (index, value) => {
     const updatedRows = [...rows];
     updatedRows[index].discount = value;
-  
+
     const listPrice = updatedRows[index].listPrice || 0;
     const quantity = updatedRows[index].quantity || 0;
     const discount = value || 0;
     const tax = updatedRows[index].tax || 0;
-  
+
     updatedRows[index].amount = listPrice * quantity;
-  
+
     // Calculate the total amount considering the discount and tax
-    const totalAmountBeforeTax = updatedRows[index].amount * (1 - discount / 100);
+    const totalAmountBeforeTax =
+      updatedRows[index].amount * (1 - discount / 100);
     const totalAmount = totalAmountBeforeTax * (1 + tax / 100);
-    
+
     updatedRows[index].total = totalAmount;
-  
+
     setRows(updatedRows);
     calculateTotals();
   };
@@ -358,25 +365,19 @@ function QuotesCreate() {
     let grandTotal = 0;
 
     rows.forEach((row) => {
-      subtotal += parseFloat(row.amount);
-      totalDiscount += parseFloat(row.discount);
-      totalTax += parseFloat(row.tax);
-      grandTotal += parseFloat(row.total);
+      subtotal += parseInt(row.amount);
+      totalDiscount += parseInt(row.discount);
+      totalTax += parseInt(row.tax);
+      grandTotal += parseInt(row.total);
     });
 
+    formik.setFieldValue("subTotal", isNaN(subtotal) ? 0 : subtotal);
     formik.setFieldValue(
-      "subTotal",
-      isNaN(subtotal) ? "0.00" : subtotal.toFixed(2)
+      "txnDiscount",
+      isNaN(totalDiscount) ? 0 : totalDiscount
     );
-    formik.setFieldValue(
-      "discount",
-      isNaN(totalDiscount) ? "0.00" : totalDiscount.toFixed(2)
-    );
-    formik.setFieldValue("tax", isNaN(totalTax) ? "0.00" : totalTax.toFixed(2));
-    formik.setFieldValue(
-      "grandTotal",
-      isNaN(grandTotal) ? "0.00" : grandTotal.toFixed(2)
-    );
+    formik.setFieldValue("txnTax", isNaN(totalTax) ? 0 : totalTax);
+    formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
   const handleAdjustmentChange = (e) => {
@@ -1006,7 +1007,7 @@ function QuotesCreate() {
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option value="" selected disabled></option>
+                         <option selected value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
@@ -1086,7 +1087,7 @@ function QuotesCreate() {
                         {...formik.getFieldProps(
                           `quotesItemList[${index}].total`
                         )}
-                        value={row.total ? row.total.toFixed(2) : "0.00"}
+                        value={row.total ? row.total.toFixed(2) : 0}
                         className="form-control"
                         id={`total_${index}`}
                         readOnly
@@ -1127,22 +1128,22 @@ function QuotesCreate() {
                 />
               </div>
               <div className="container-fluid py-2">
-                <label className="text-dark">Discount(Rs.)</label>
+                <label className="text-dark">Discount(%)</label>
                 <input
                   className="form-control p-1"
                   type="text"
-                  {...formik.getFieldProps("discount")}
-                  name="discount"
+                  {...formik.getFieldProps("txnDiscount")}
+                  name="txnDiscount"
                   readOnly
                 />
               </div>
               <div className="container-fluid py-2">
-                <label className="text-dark">Tax(Rs.)</label>
+                <label className="text-dark">Tax(%)</label>
                 <input
                   className="form-control p-1"
                   type="text"
-                  {...formik.getFieldProps("tax")}
-                  name="tax"
+                  {...formik.getFieldProps("txnTax")}
+                  name="txnTax"
                   readOnly
                 />
               </div>
