@@ -13,6 +13,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import SendEmail from "../Email/SendEmail";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function QuotesShow() {
@@ -118,15 +119,14 @@ function QuotesShow() {
   const handleEdit = () => {
     navigate(`/quotes/edit/${id}`);
   };
+ 
   // console.log("CompanyLogo:", CompanyLogo);
-  const generatePDF = (action = "open") => {
+  const generatePDF = (action = "open", CompanyLogo) => {
     const docDefinition = {
-     
       header: {
         canvas: [
           {
             image: CompanyLogo,
-           
           },
           {
             type: "rect",
@@ -139,7 +139,6 @@ function QuotesShow() {
       },
 
       content: [
-      
         {
           text: "TAX INVOICE",
           fontSize: 25,
@@ -797,27 +796,71 @@ function QuotesShow() {
                 {/* Quotes Items List */}
                 <div className="container-fluid">
                   <div className="container-fluid row mt-5 mx-2">
-                    <div className="container-fluid p-3 col-md-8"></div>
-                    <div className="container-fluid p-3 col-md-4 col-12 border rounded">
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">Sub Total(Rs.)</label>
-                        <span>: {quoteData.subTotal}</span>
+                    <div className="container-fluid p-3 col-md-7"></div>
+                    <div className="container-fluid p-3 col-md-5 col-12 border rounded">
+                      <div className="container-fluid py-2">
+                        <div className="row">
+                          <div className="col-md-8 col-12">
+                            {" "}
+                            <label className="text-dark ">Sub Total(Rs.)</label>
+                          </div>
+                          <div className="col-md-4 col-12">
+                            {" "}
+                            <span>: {quoteData.subTotal || "0"}.00</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">Discount(Rs.)</label>
-                        <span>: {quoteData.txnDiscount}</span>
+                      <div className="container-fluid py-2">
+                        <div className="row">
+                          <div className="col-md-8 col-12">
+                            {" "}
+                            <label className="text-dark ">Discount(Rs.)</label>
+                          </div>
+                          <div className="col-md-4 col-12">
+                            {" "}
+                            <span>: {quoteData.txnDiscount || "0"}.00</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">Tax(Rs.)</label>
-                        <span>: {quoteData.txnTax}</span>
+                      <div className="container-fluid py-2">
+                        <div className="row">
+                          <div className="col-md-8 col-12">
+                            {" "}
+                            <label className="text-dark ">Tax(Rs.)</label>
+                          </div>
+                          <div className="col-md-4 col-12">
+                            {" "}
+                            <span>: {quoteData.txnTax || "0"}.00</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">Adjustment(Rs.)</label>
-                        <span>: {quoteData.adjustment || "0"}</span>
+                      <div className="container-fluid py-2">
+                        <div className="row">
+                          <div className="col-md-8 col-12">
+                            
+                            <label className="text-dark ">
+                              Adjustment(Rs.)
+                            </label>
+                          </div>
+                          <div className="col-md-4 col-12">
+                            
+                            <span>: {quoteData.adjustment || "0"}.00</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">Grand Total(Rs.)</label>
-                        <span>: {quoteData.grandTotal}</span>
+                      <div className="container-fluid py-2">
+                        <div className="row">
+                          <div className="col-md-8 col-12">
+                            
+                            <label className="text-dark ">
+                              Grand Total(Rs.)
+                            </label>
+                          </div>
+                          <div className="col-md-4 col-12">
+                           
+                            <span>: {quoteData.grandTotal || "0"}.00</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
