@@ -1007,7 +1007,7 @@ function QuotesCreate() {
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                         <option selected value=""></option>
+                        <option selected value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
