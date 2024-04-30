@@ -8,17 +8,18 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
+import CompanyLogo from "../../assets/Logo.png";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import SendEmail from "../Email/SendEmail";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function QuotesShow() {
   const { id } = useParams();
   const [quoteData, setQuoteData] = useState({});
-  console.log(quoteData);
-  const token = sessionStorage.getItem("token");
+  const [quotesItemList, setQuotesItemsList] = useState({});
+  // console.log("Quote Item list", quotesItemList);
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
@@ -65,7 +66,6 @@ function QuotesShow() {
     ));
   };
 
-  // const { id } = useParams();
   // const [clientData, setClientData] = useState({});
   // const navigate = useNavigate();
 
@@ -118,10 +118,28 @@ function QuotesShow() {
   const handleEdit = () => {
     navigate(`/quotes/edit/${id}`);
   };
-
+  // console.log("CompanyLogo:", CompanyLogo);
   const generatePDF = (action = "open") => {
     const docDefinition = {
+     
+      header: {
+        canvas: [
+          {
+            image: CompanyLogo,
+           
+          },
+          {
+            type: "rect",
+            x: 0,
+            y: 0,
+            w: 850, // landscape
+            h: 120,
+          },
+        ],
+      },
+
       content: [
+      
         {
           text: "TAX INVOICE",
           fontSize: 25,
@@ -135,16 +153,22 @@ function QuotesShow() {
           columns: [
             [
               {
-                text: `CloudECS Infotech Pvt Ltd
-                No.766, Anna Salai, 
-                Shakti Towers, Tower-2 6th floor
-                Chennai Tamil Nadu 600 002
-                India`,
+                text: `ECS Cloud Infotech pte ltd
+                 The Alexcier,
+                 237 Alexandra Road, 
+                 #04-10, Singapore-159929.`,
               },
             ],
             [
               {
-                text: `Date: ${new Date().toLocaleString()}`,
+                text: `Date: ${new Date().toLocaleDateString()}`,
+                alignment: "right",
+              },
+              {
+                text: `Time: ${new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`,
                 alignment: "right",
               },
             ],
@@ -189,8 +213,7 @@ function QuotesShow() {
         {
           text: "Billing Details",
           bold: true,
-          alignment: "center",
-          margin: [38, 10, 0, 20],
+          style: "sectionHeader",
         },
 
         {
@@ -216,8 +239,7 @@ function QuotesShow() {
         {
           text: "Shipping Details",
           bold: true,
-          alignment: "center",
-          margin: [30, 15, 0, 20],
+          style: "sectionHeader",
         },
 
         {
@@ -250,27 +272,73 @@ function QuotesShow() {
           table: {
             headerRows: 1,
             widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
+
             body: [
               [
-                "Product Name",
-                "Price",
-                "Quantity",
-                "Amount",
-                "Discount",
-                "Tax",
-                "Total Amount",
+                { text: "Product Name", bold: true, fillColor: "#dedede" },
+                { text: "Price", bold: true, fillColor: "#dedede" },
+                { text: "Quantity", bold: true, fillColor: "#dedede" },
+                { text: "Amount", bold: true, fillColor: "#dedede" },
+                { text: "Discount", bold: true, fillColor: "#dedede" },
+                { text: "Tax", bold: true, fillColor: "#dedede" },
+                { text: "Total Amount", bold: true, fillColor: "#dedede" },
               ],
-              ...quotedItems.map((item) => [
-                item.productName,
-                item.price,
+              ...(quoteData.quotesItemList || []).map((item) => [
+                item.productName || "--",
+                item.listPrice,
                 item.quantity,
-                item.totalAmount,
+                item.amount,
                 `${item.discount} %`,
                 `${item.tax} %`,
-                item.totalAmount,
+                item.total,
               ]),
             ],
           },
+        },
+        {
+          columns: [
+            [
+              { text: `Sub Total(Rs.) `, style: ["column"] },
+              { text: `Discount(Rs.) `, style: ["column"] },
+              { text: `Tax(Rs.) `, style: ["column"] },
+              { text: `Adjustment(Rs.) `, style: ["column"] },
+              { text: `Grand Total(Rs.) `, style: ["column"] },
+
+              //  { text: `Sub Total(Rs.) ` },
+              // { text: `Discount(Rs.) ` },
+              // { text: `Tax(Rs.) ` },
+              // { text: `Adjustment(Rs.)  ` },
+              // { text: `Grand Total(Rs.) ` },
+            ],
+
+            [
+              {
+                text: `: ${quoteData.subTotal || "--"}`,
+                style: ["column"],
+              },
+              {
+                text: `: ${quoteData.txnDiscount || "--"} `,
+                style: ["column"],
+              },
+              {
+                text: `: ${quoteData.txnTax || "--"} `,
+                style: ["column"],
+              },
+              {
+                text: `: ${quoteData.adjustment || "--"}`,
+                style: ["column"],
+              },
+              {
+                text: `: ${quoteData.grandTotal || "--"}`,
+                style: ["column"],
+              },
+              // { text: `: ${quoteData.subTotal || "--"}` style: ['column'] } },
+              // { text: `: ${quoteData.discount || "--"}` },
+              // { text: `: ${quoteData.tax || "--"}` },
+              // { text: `: ${quoteData.adjustment || "--"}` },
+              // { text: `: ${quoteData.grandTotal || "--"}` },
+            ],
+          ],
         },
 
         // 4 ,Terms and Conditions
@@ -316,6 +384,10 @@ function QuotesShow() {
           fontSize: 14,
           margin: [0, 25, 0, 15],
         },
+        column: {
+          margin: [0, 10, 0, 0], // Margin top is set to 10
+          border: "1px solid black", // Border style
+        },
       },
     };
 
@@ -338,7 +410,7 @@ function QuotesShow() {
           <div className="container">
             <div className="container-fluid row image-container">
               <div className="image-container">
-              <OverlayTrigger
+                <OverlayTrigger
                   placement="bottom"
                   overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
                 >
@@ -558,8 +630,6 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              
-
               <div>
                 <label className="text-dark Label">Deal Name</label>
                 <span className="text-dark">
@@ -687,34 +757,70 @@ function QuotesShow() {
                 </div>
 
                 <div className="container  col-12">
-                  {quoteData.productsWithQuote ? (
+                  {quoteData?.quotesItemList?.length > 0 ? (
                     <div className="table-responsive">
                       <table className="table">
+                        {/* Table header */}
                         <thead>
                           <tr>
                             <th scope="col">S.No</th>
                             <th scope="col">Product Name</th>
+                            <th scope="col">Quantity</th>
                             <th scope="col">Price</th>
-                            <th scope="col">Quantity in Stock</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Discount</th>
                             <th scope="col">Tax</th>
+                            <th scope="col">Total</th>
                           </tr>
                         </thead>
+                        {/* Table body */}
                         <tbody>
-                          {quoteData.productsWithQuote.map((product, index) => (
+                          {quoteData?.quotesItemList.map((product, index) => (
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
-                              <td>{product.unitPrice || "--"}</td>
-                              <td>{product.quantityInStock || "--"}</td>
+                              <td>{product.quantity || "--"}</td>
+                              <td>{product.listPrice || "--"}</td>
+                              <td>{product.amount || "--"}</td>
+                              <td>{product.discount || "--"}</td>
                               <td>{product.tax || "--"}</td>
+                              <td>{product.total || "--"}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
                   ) : (
-                    <p>No Produce available.</p>
+                    <p>No Product available.</p>
                   )}
+                </div>
+                {/* Quotes Items List */}
+                <div className="container-fluid">
+                  <div className="container-fluid row mt-5 mx-2">
+                    <div className="container-fluid p-3 col-md-8"></div>
+                    <div className="container-fluid p-3 col-md-4 col-12 border rounded">
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">Sub Total(Rs.)</label>
+                        <span>: {quoteData.subTotal}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">Discount(Rs.)</label>
+                        <span>: {quoteData.txnDiscount}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">Tax(Rs.)</label>
+                        <span>: {quoteData.txnTax}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">Adjustment(Rs.)</label>
+                        <span>: {quoteData.adjustment || "0"}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">Grand Total(Rs.)</label>
+                        <span>: {quoteData.grandTotal}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
