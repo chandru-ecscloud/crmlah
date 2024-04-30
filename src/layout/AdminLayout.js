@@ -1,5 +1,5 @@
 // Import necessary dependencies
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import AdminHeader from "../components/common/AdminHeader";
@@ -8,7 +8,7 @@ import Leads from "../pages/Leads/Leads";
 import LeadsCreate from "../pages/Leads/LeadsCreate";
 import LeadsEdit from "../pages/Leads/LeadsEdit";
 import LeadsShow from "../pages/Leads/LeadsShow";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import ContactsCreate from "../pages/Contact/ContactsCreate";
 import ContactShow from "../pages/Contact/ContactShow";
 import ContactEdit from "../pages/Contact/ContactEdit";
@@ -43,7 +43,6 @@ import Services from "../pages/Services/Services";
 import ServicesCreate from "../pages/Services/ServicesCreate";
 import ServicesEdit from "../pages/Services/ServicesEdit";
 import ServicesShow from "../pages/Services/ServicesShow";
-import axios from "axios";
 import Invoice from "../components/common/Invoice";
 import ChangeRole from "../pages/Change_Role/ChangeRole";
 import ChangeRoleShow from "../pages/Change_Role/ChangeRoleShow";
@@ -57,7 +56,7 @@ import User from "../pages/User/User";
 import UserCreate from "../pages/User/UserCreate";
 import UserEdit from "../pages/User/UserEdit";
 import UserShow from "../pages/User/UserShow";
-import Calender from "../pages/Calender";
+import Calender from "../pages/Calendar/Calender";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -66,8 +65,8 @@ function AdminLayout({ handleLogout }) {
       <ScrollToTop />
       <ToastContainer position="top-center" />
       <Routes>
-        {/*  Other Modules  */}
-        <Route path="/calender" element={<Calender />} />
+        {/*  Calendar  */}
+        <Route path="/calendar" element={<Calender />} />
 
         <Route path="/dragable" element={<Dragable />} />
         {/* Lead   */}
