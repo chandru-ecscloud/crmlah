@@ -47,18 +47,22 @@ const validationSchema = yup.object({
 });
 function InvoicesCreate() {
   const [rows, setRows] = useState([{}]);
-  const owner = sessionStorage.getItem("user_name");
-  const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
-  const role = sessionStorage.getItem("role");
-  const companyId = sessionStorage.getItem("companyId");
-  const [accountOption, setAccountOption] = useState([]);
-  const [dealOption, setDealOption] = useState([]);
-  const [contactOption, setContactOption] = useState([]);
-  const [productOptions, setProductOptions] = useState([]);
+  console.log(rows);
   const [adjustment, setAdjustment] = React.useState(0);
   const [grandTotal, setGrandTotal] = React.useState(0);
-  console.log("productOptions:", productOptions);
+  const owner = sessionStorage.getItem("user_name");
+  const token = sessionStorage.getItem("token");
+  const role = sessionStorage.getItem("role");
+  const companyId = sessionStorage.getItem("companyId");
+  const [productOptions, setProductOptions] = useState([]);
+  // console.log("productOptions:", productOptions);
+  const [accountOption, setAccountOption] = useState([]);
+  // console.log(accountOption);
+  const [dealOption, setDealOption] = useState([]);
+  // console.log(dealOption);/
+  const [contactOption, setContactOption] = useState([]);
+  // console.log(contactOption);
+  const [userImage, setUserImage] = useState(User);
   const navigate = useNavigate();
 
   const addRow = () => {
@@ -145,6 +149,8 @@ function InvoicesCreate() {
             salesOrder: values.salesOrder,
             subject: values.subject,
             purchaseOrder: values.purchaseOrder,
+            description: values.description,
+            termsAndConditions: values.termsAndConditions,
             invoiceDate: values.invoiceDate,
             status: values.status,
             dueDate: values.dueDate,
@@ -166,7 +172,7 @@ function InvoicesCreate() {
             grandTotal: values.grandTotal,
           },
           invoiceItemList: rows.map((item) => ({
-            productName: item.selectedOption,
+            productName: item.productName,
             quantity: item.quantity,
             listPrice: item.listPrice,
             amount: item.amount,
@@ -279,8 +285,10 @@ function InvoicesCreate() {
           //Authorization: `Bearer ${token}`,
         },
       });
+      const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
+      updatedRows[index].ProductName = productName;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
       updatedRows[index].amount = listPrice; // Update amount based on list price
@@ -295,7 +303,7 @@ function InvoicesCreate() {
 
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
-    updatedRows[index].quantity = parseInt(value, 10); // Parse value to integer
+    updatedRows[index].quantity = value === "" ? 0 : parseInt(value, 10); // Parse value to integer
 
     const listPrice = updatedRows[index].listPrice || 0;
     const quantity = updatedRows[index].quantity || 0;
@@ -386,9 +394,7 @@ function InvoicesCreate() {
 
   const handleAdjustmentChange = (e) => {
     const adjustmentValue = parseFloat(e.target.value);
-    const newGrandTotal = (
-      parseFloat(formik.values.grandTotal) - adjustmentValue
-    ).toFixed(2);
+    const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
     setAdjustment(adjustmentValue);
     formik.setFieldValue("grandTotal", newGrandTotal);
   };
