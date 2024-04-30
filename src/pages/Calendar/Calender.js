@@ -8,7 +8,7 @@ import { Modal, Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
-import { API_URL } from "../Config/URL";
+import { API_URL } from "../../Config/URL";
 import axios from "axios";
 
 function Calendar() {
@@ -54,6 +54,27 @@ function Calendar() {
     const { event } = eventAddInfo;
     const newEventWithId = { ...event, id: uuidv4() };
     setEvents([...events, newEventWithId]);
+    console.log(
+      `Added event: ID - ${newEventWithId.id}, Title - ${newEventWithId.title}, Start - ${newEventWithId.start}, End - ${newEventWithId.end}`
+    );
+  };
+
+  const handleEventUpdate = (eventUpdateInfo) => {
+    const { event } = eventUpdateInfo;
+    const updatedEvent = { ...event, id: event.id };
+    console.log(
+      `Updated event: ID - ${updatedEvent.id}, Title - ${updatedEvent.title}, Start - ${updatedEvent.start}, End - ${updatedEvent.end}`
+    );
+    setEvents(events.map((e) => (e.id === updatedEvent.id ? updatedEvent : e)));
+  };
+
+  const handleEventDelete = (eventDeleteInfo) => {
+    const { event } = eventDeleteInfo;
+    const filteredEvents = events.filter((e) => e.id !== event.id);
+    setEvents(filteredEvents);
+    console.log(
+      `Deleted event: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
+    );
   };
 
   const handleEventClick = (eventClickInfo) => {
@@ -63,22 +84,19 @@ function Calendar() {
 
   const handleModalSave = () => {
     if (newEvent && newEvent.title) {
-      const eventToAdd = { ...newEvent, id: uuidv4() };
+      const eventToAdd = {
+        ...newEvent,
+        id: uuidv4(),
+        start: newEvent.start.toISOString(), // Convert to ISO string
+        end: newEvent.end.toISOString(), // Convert to ISO string
+      };
       setEvents([...events, eventToAdd]);
       setShowModal(false);
       setNewEvent(null);
-    }
-  };
-
-  const handleDeleteEvent = () => {
-    if (selectedEvent) {
-      const filteredEvents = events.filter(
-        (event) => event.id !== selectedEvent.id
+      console.log(
+        `Added event: ID - ${eventToAdd.id}, Title - ${eventToAdd.title}, Start - ${eventToAdd.start}, End - ${eventToAdd.end}`
       );
-      setEvents(filteredEvents);
-      setSelectedEvent(null);
     }
-    setShowDeleteModal(false);
   };
 
   const handleEditModalSave = () => {
@@ -91,6 +109,23 @@ function Calendar() {
       setEvents(updatedEvents);
       setShowEditModal(false);
       setSelectedEvent(null);
+      console.log(
+        `Updated event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
+      );
+    }
+  };
+
+  const handleDeleteEvent = () => {
+    if (selectedEvent) {
+      const filteredEvents = events.filter(
+        (event) => event.id !== selectedEvent.id
+      );
+      setEvents(filteredEvents);
+      setSelectedEvent(null);
+      setShowDeleteModal(false);
+      console.log(
+        `Deleted event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
+      );
     }
   };
 
@@ -102,6 +137,20 @@ function Calendar() {
   const handleDeleteClick = () => {
     setShowViewModal(false);
     setShowDeleteModal(true);
+  };
+
+  const handleEventDrop = (eventDropInfo) => {
+    const { event } = eventDropInfo;
+    console.log(
+      `Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
+    );
+  };
+
+  const handleEventResize = (eventResizeInfo) => {
+    const { event } = eventResizeInfo;
+    console.log(
+      `Event resized: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
+    );
   };
 
   return (
@@ -145,16 +194,21 @@ function Calendar() {
           },
         }}
         select={(info) => {
+          console.log("Whole Info", info);
           setNewEvent({
             title: "",
-            start: info.startStr,
-            end: info.endStr,
+            start: info.startStr, // Use startStr instead of start
+            end: info.endStr, // Use endStr instead of end
             allDay: info.allDay,
           });
           setShowModal(true);
         }}
         eventAdd={handleEventAdd}
         eventClick={handleEventClick}
+        eventChange={handleEventUpdate}
+        eventRemove={handleEventDelete}
+        eventDrop={handleEventDrop} // Handle event drop
+        eventResize={handleEventResize} // Attach event resize callback
       />
 
       {/* Add Event Modal */}
