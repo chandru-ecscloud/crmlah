@@ -192,7 +192,8 @@ function QuotesEdit() {
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
-    },
+
+    }
   });
 
   const handleImageUpload = (event) => {
@@ -265,9 +266,33 @@ function QuotesEdit() {
     }
   };
 
+  // const handleSelectChange = async (index, value) => {
+  //   const updatedRows = [...rows];
+  //   updatedRows[index].selectedOption = value;
+  //   try {
+  //     const response = await axios.get(`${API_URL}allProducts/${value}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         //Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const productName = response.data.productName;
+  //     const listPrice = response.data.unitPrice;
+  //     const tax = response.data.tax;
+  //     updatedRows[index].ProductName = productName;
+  //     updatedRows[index].listPrice = listPrice;
+  //     updatedRows[index].quantity = 1;
+  //     updatedRows[index].amount = listPrice; // Update amount based on list price
+  //     updatedRows[index].tax = tax;
+  //     updatedRows[index].discount = 0;
+  //     updatedRows[index].total = listPrice; // Update total based on list price
+  //     setRows(updatedRows);
+  //   } catch (error) {
+  //     console.error("Error fetching product details:", error);
+  //   }
+  // };
+
   const handleSelectChange = async (index, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index].selectedOption = value;
     try {
       const response = await axios.get(`${API_URL}allProducts/${value}`, {
         headers: {
@@ -278,19 +303,26 @@ function QuotesEdit() {
       const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
-      updatedRows[index].ProductName = productName;
-      updatedRows[index].listPrice = listPrice;
-      updatedRows[index].quantity = 1;
-      updatedRows[index].amount = listPrice; // Update amount based on list price
-      updatedRows[index].tax = tax;
-      updatedRows[index].discount = 0;
-      updatedRows[index].total = listPrice; // Update total based on list price
+  
+      const updatedRows = [...rows];
+      updatedRows[index] = {
+        ...updatedRows[index],
+        selectedOption: value,
+        productName: productName,
+        listPrice: listPrice,
+        quantity: 1,
+        amount: listPrice,
+        tax: tax,
+        discount: 0,
+        total: listPrice,
+      };
       setRows(updatedRows);
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
   };
 
+  
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
     updatedRows[index].quantity = value === "" ? 0 : parseInt(value, 10); // Parse value to integer
@@ -406,15 +438,29 @@ function QuotesEdit() {
         };
         formik.setValues(formattedResponseData);
         // setRows(response.data.quotesItemList);
+
+        // setRows(
+        //   response.data.quotesItemList.map((item) => ({
+        //     ...item,
+        //     productName:
+        //       productOptions.find((option) => option.id === item.selectedOption)
+        //         ?.productName || "No Name Found",
+        //   }))
+        // );
+
+        // setRows(
+        //   response.data.quotesItemList.map((item) => ({
+        //     ...item,
+        //     productName: productOptions.find((option) => option.id === item.selectedOption)?.productName || "No Name Found",
+        //   }))
+        // );
+
         setRows(
-          response.data.quotesItemList.map((item) => ({
+          response.data.quotesItemList.map((item, index) => ({
             ...item,
-            productName:
-              productOptions.find((option) => option.id === item.selectedOption)
-                ?.productName || "No Name Found",
+            productName: productOptions[index]?.productName || "No Name Found",
           }))
         );
-
         console.log("Set Row DATA", response.data.quotesItemList);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -1062,13 +1108,12 @@ function QuotesEdit() {
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option selected value=""></option>
+                        <option value="" selected disabled></option>
                         {productOptions.map((option) => (
                           <option
                             key={option.id}
                             value={option.id}
-                            // selected={option.productName === row.productName}
-                            selected={option.id === option.productName}
+                            selected={row.selectedOption === option.id}
                           >
                             {option.productName}
                           </option>

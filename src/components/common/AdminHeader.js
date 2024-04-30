@@ -18,14 +18,14 @@ import { FiPlus } from "react-icons/fi";
 import { IoSettings } from "react-icons/io5";
 import { BsBuildingAdd } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
-import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 
 const menuItems = [
   // { to: "/calls", label: "calls" },
   // { to: "/meeting", label: "meeting" },
   // { to: "/report", label: "report" },
   // { to: "/task", label: "task" },
-  { to: "/calender", label: "Calender" },
+  { to: "/calendar", label: "Calender" },
   // { to: "/projects", label: "projects" },
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },
@@ -190,7 +190,9 @@ function AdminHeader({ handleLogout }) {
       </Navbar>
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton className="d-flex align-items-center ">
-          {(role === "CRM_SUPERADMIN" || role === "CMP_OWNER" || role === "CRM_ADMIN") && (
+          {(role === "CRM_SUPERADMIN" ||
+            role === "CMP_OWNER" ||
+            role === "CRM_ADMIN") && (
             <div>
               <button className="btn" onClick={handelNavigate}>
                 <IoPersonAdd /> User
