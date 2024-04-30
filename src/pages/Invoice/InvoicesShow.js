@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
+import CompanyLogo from "../../assets/Logo.png";
 import { IoArrowBack } from "react-icons/io5";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -16,19 +17,56 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function InvoiceShow() {
-  // const tableData = [
-  //   { id: 1, productName: "", quantity: "", price: "", discount: "", tax: "" },
-  // ];
-
   const { id } = useParams();
   const [invoiceData, setInvoiceData] = useState({});
-  console.log("Invoice Data", invoiceData);
-  const [productTotal, setProductTotal] = useState(0);
-  const [dealTotal, setDealTotal] = useState(0);
-  const token = sessionStorage.getItem("token");
+  const [invoiceItemList, setInvoiceItemsList] = useState({});
+  // console.log("Invoice Item list", InvoiceItemList);
+  const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
+
+  const invoiceItems= [
+    {
+      productName: "Product Name",
+      itemDescription: "Item Description",
+      quantity: "2",
+      price: "1000",
+      discount: "5%",
+      tax: "5%",
+      totalAmount: "850",
+    },
+  ];
+
+  const renderInvoiceItems = () => {
+    return invoiceItems.map((item, index) => (
+      <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
+        <td className="px-5 py-2">
+          <span>{index + 1}</span>
+        </td>
+        <td className="px-5 py-2">
+          <span className="text-primary">
+            {item.productName || "--"} <br />
+          </span>
+        </td>
+        <td className="px-5 py-2">
+          <span>{item.quantity || "--"}</span>
+        </td>
+        <td className="px-5 py-2">
+          <span>{item.price || "--"}</span>
+        </td>
+        <td className="px-5 py-2">
+          <span>{item.discount || "--"}</span>
+        </td>
+        <td className="px-5 py-2">
+          <span>{item.tax || "--"}</span>
+        </td>
+        <td className="px-5 py-2">
+          <span>{item.totalAmount || "--"}</span>
+        </td>
+      </tr>
+    ));
+  };
   useEffect(() => {
     const userData = async () => {
       try {
@@ -42,7 +80,7 @@ function InvoiceShow() {
           (acc, key) => {
             let value = response.data[key];
 
-            if (key === "invoiceDate" || (key === "dueDate" && value)) {
+            if (key === "validUntil" && value) {
               const date = new Date(value);
 
               value = date.toLocaleDateString("en-GB", {
@@ -50,6 +88,7 @@ function InvoiceShow() {
                 month: "2-digit",
                 day: "2-digit",
               });
+
               value = value.replace(/\d{4}$/, "2024");
             }
 
@@ -59,18 +98,13 @@ function InvoiceShow() {
           {}
         );
         setInvoiceData(transformedData);
-        setProductTotal(
-          response.data.productsWithInvoice
-            ? response.data.productsWithInvoice.length
-            : 0
-        );
-        setDealTotal(
-          response.data.dealsWithInvoice
-            ? response.data.dealsWithInvoice.length
+        setTotal(
+          response.data.productsWithQuote
+            ? response.data.productsWithQuote.length
             : 0
         );
       } catch (error) {
-        toast.error("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -80,11 +114,29 @@ function InvoiceShow() {
   const handelEdit = () => {
     navigate(`/invoices/edit/${id}`);
   };
-
+    // console.log("CompanyLogo:", CompanyLogo);
   //  PDF Generate
   const generatePDF = (action = "open") => {
     const docDefinition = {
+     
+      header: {
+        canvas: [
+          {
+            image: CompanyLogo,
+           
+          },
+          {
+            type: "rect",
+            x: 0,
+            y: 0,
+            w: 850, // landscape
+            h: 120,
+          },
+        ],
+      },
+
       content: [
+      
         {
           text: "TAX INVOICE",
           fontSize: 25,
@@ -98,21 +150,28 @@ function InvoiceShow() {
           columns: [
             [
               {
-                text: `CloudECS Infotech Pvt Ltd
-                No.766, Anna Salai, 
-                Shakti Towers, Tower-2 6th floor
-                Chennai Tamil Nadu 600 002
-                India`,
+                text: `ECS Cloud Infotech pte ltd
+                 The Alexcier,
+                 237 Alexandra Road, 
+                 #04-10, Singapore-159929.`,
               },
             ],
             [
               {
-                text: `Date: ${new Date().toLocaleString()}`,
+                text: `Date: ${new Date().toLocaleDateString()}`,
+                alignment: "right",
+              },
+              {
+                text: `Time: ${new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`,
                 alignment: "right",
               },
             ],
           ],
         },
+
 
         // 1, Invoice Information
         {
@@ -160,8 +219,7 @@ function InvoiceShow() {
         {
           text: "Billing Details",
           bold: true,
-          alignment: "center",
-          margin: [38, 10, 0, 20],
+          style: "sectionHeader",
         },
 
         {
@@ -187,8 +245,7 @@ function InvoiceShow() {
         {
           text: "Shipping Details",
           bold: true,
-          alignment: "center",
-          margin: [30, 15, 0, 20],
+          style: "sectionHeader",
         },
 
         {
@@ -220,68 +277,68 @@ function InvoiceShow() {
         {
           table: {
             headerRows: 1,
-            widths: ["*", "*", "*", "*", "*", "*", "*",],
+            widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
             body: [
               [
-                "Product Name",
-                "Price",
-                "Quantity",
-                "Amount",
-                "Discount",
-                "Tax",
-                "Total Amount",
+                { text: "Product Name", bold: true, fillColor: "#dedede" },
+                { text: "Price", bold: true, fillColor: "#dedede" },
+                { text: "Quantity", bold: true, fillColor: "#dedede" },
+                { text: "Amount", bold: true, fillColor: "#dedede" },
+                { text: "Discount", bold: true, fillColor: "#dedede" },
+                { text: "Tax", bold: true, fillColor: "#dedede" },
+                { text: "Total Amount", bold: true, fillColor: "#dedede" },
               ],
-              ...invoiceData.productsWithInvoice.map((product) => {
-                const amount = product.unitPrice * product.quantityInStock;
-                const totalAmount = (amount + (product.tax * amount) / 100).toFixed(2);
-                const discount = product.discount || 0;
-                return [
-                  product.productName || "--",
-                  product.quantityInStock || "--",
-                  product.unitPrice || "--",
-                  // product.amount || "--",
-                  amount,
-                  // `${product.discount} %` || "--",
-                  discount || "--",
-                  `${product.tax} %` || "--",
-                  // product.total || "--",
-                  totalAmount,
-                ]
-              }),
+              ...(invoiceData.invoiceItemList || []).map((item)=> [
+                item.productName || "--",
+                item.listPrice,
+                item.quantity,
+                item.total,
+                `${item.discount} %`,
+                `${item.tax} %`,
+                item.amount,
+              ]),
             ],
           },
         },
-
         {
           columns: [
             [
-              { text: `sub total ` },
-              { text: `tax total ` },
-              { text: `grand total ` }, // Correcting spelling to "grand total"
+              { text: `Sub Total(Rs.) `, style: ["column"] },
+              { text: `Discount(Rs.) `, style: ["column"] },
+              { text: `Tax(Rs.) `, style: ["column"] },
+              { text: `Adjustment(Rs.) `, style: ["column"] },
+              { text: `Grand Total(Rs.) `, style: ["column"] },
             ],
             [
               {
-                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
-                  return acc + parseFloat(product.unitPrice * product.quantityInStock);
-                }, 0).toFixed(2)}`,
+                text: `: ${invoiceData.subTotal || "--"}`,
+                style: ["column"],
               },
-
               {
-                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
-                  return acc + ((product.tax || 0) * (product.unitPrice * product.quantityInStock)) / 100;
-                }, 0).toFixed(2)}`, // Corrected tax total calculation
+                text: `: ${invoiceData.txnDiscount || "--"} `,
+                style: ["column"],
               },
-
               {
-                text: `: ${invoiceData.productsWithInvoice.reduce((acc, product) => {
-                  const amount = product.unitPrice * product.quantityInStock;
-                  const taxAmount = (product.tax * amount) / 100;
-                  return acc + amount + taxAmount;
-                }, 0).toFixed(2)}`, // Corrected grand total calculation
+                text: `: ${invoiceData.txnTax || "--"} `,
+                style: ["column"],
               },
+              {
+                text: `: ${invoiceData.adjustment || "--"}`,
+                style: ["column"],
+              },
+              {
+                text: `: ${invoiceData.grandTotal || "--"}`,
+                style: ["column"],
+              },
+              // { text: `: ${quoteData.subTotal || "--"}` style: ['column'] } },
+              // { text: `: ${quoteData.discount || "--"}` },
+              // { text: `: ${quoteData.tax || "--"}` },
+              // { text: `: ${quoteData.adjustment || "--"}` },
+              // { text: `: ${quoteData.grandTotal || "--"}` },
             ],
           ],
         },
+
 
         // 4 ,Terms and Conditions
         {
@@ -325,6 +382,10 @@ function InvoiceShow() {
           decoration: "underline",
           fontSize: 14,
           margin: [0, 25, 0, 15],
+        },
+        column: {
+          margin: [0, 10, 0, 0], // Margin top is set to 10
+          border: "1px solid black", // Border style
         },
       },
     };
@@ -602,7 +663,7 @@ function InvoiceShow() {
               </div>
 
               <div>
-                <label className="text-dark Label">Purchas Order</label>
+                <label className="text-dark Label">Purchase Order</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.purchasOrder || "--"}
                 </span>
@@ -721,39 +782,83 @@ function InvoiceShow() {
                 </div>
 
                 <div className="container  col-12">
-                  {invoiceData.productsWithInvoice ? (
+                  {invoiceData?.invoiceItemList?.length > 0 ? (
                     <div className="table-responsive">
                       <table className="table">
+                        {/* Table header */}
                         <thead>
                           <tr>
                             <th scope="col">S.No</th>
                             <th scope="col">Product Name</th>
+                            <th scope="col">Quantity</th>
                             <th scope="col">Price</th>
-                            <th scope="col">Quantity in Stock</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Discount</th>
                             <th scope="col">Tax</th>
+                            <th scope="col">Total</th>
                           </tr>
                         </thead>
+                        {/* Table body */}
                         <tbody>
-                          {invoiceData.productsWithInvoice.map(
-                            (product, index) => (
-                              <tr key={product.id}>
-                                <td>{index + 1}</td>
-                                <td>{product.productName || "--"}</td>
-                                <td>{product.unitPrice || "--"}</td>
-                                <td>{product.quantityInStock || "--"}</td>
-                                <td>{product.tax || "--"}</td>
-                              </tr>
-                            )
-                          )}
+                          {invoiceData?.invoiceItemList.map((product, index) => (
+                            <tr key={product.id}>
+                              <td>{index + 1}</td>
+                              <td>{product.productName || "--"}</td>
+                              <td>{product.quantity || "--"}</td>
+                              <td>{product.listPrice || "--"}</td>
+                              <td>{product.amount || "--"}</td>
+                              <td>{product.discount || "--"}</td>
+                              <td>{product.tax || "--"}</td>
+                              <td>{product.total || "--"}</td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
                   ) : (
-                    <p>No Invoice available.</p>
+                    <p>No Product available.</p>
                   )}
                 </div>
               </div>
 
+               {/*Invoice Items List */}
+               <div className="container-fluid">
+                  <div className="container-fluid row mt-5 mx-2">
+                    <div className="container-fluid p-3 col-md-8"></div>
+                    <div className="container-fluid p-3 col-md-4 col-12 border rounded">
+                    <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">
+                        Sub Total(Rs.)
+                        </label>
+                        <span>: {invoiceData.subTotal}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">
+                          Discount(Rs.)
+                        </label>
+                        <span>: {invoiceData.txnDiscount}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">
+                          Tax(Rs.) 
+                        </label>
+                        <span>: {invoiceData.txnTax}</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">
+                          Adjustment(Rs.) 
+                        </label>
+                        <span>: {invoiceData.adjustment || "0" }</span>
+                      </div>
+                      <div className="container-fluid d-flex justify-content-between py-2">
+                        <label className="text-dark ">
+                          Grand Total(Rs.) 
+                        </label>
+                        <span>: {invoiceData.grandTotal}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               {/* Quotes Information Table*/}
               <div className="container-fluid row" id="Details">
                 <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
