@@ -319,9 +319,9 @@ function CompanyCreate() {
                   id="role"
                 >
                   <option value=""></option>
-                  <option value="ceo">CEO</option>
-                  <option value="manager">Manager</option>
-                  <option value="others">Others</option>
+                  <option value="company_Owner">CEO</option>
+                  <option value="company_Owner">Manager</option>
+                  <option value="company_Owner">Others</option>
                 </select>
               </div>
               <div className="row sm-device">
