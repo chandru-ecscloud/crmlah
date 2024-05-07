@@ -18,23 +18,23 @@ function AppointmentsShow() {
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
+  const userData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}allAppointments/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setClientData(response.data);
+      // console.log("clientData",clientData)
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+
+    }
+  };
+
   useEffect(() => {
-    const userData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}allAppointments/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        setClientData(response.data);
-        // console.log("clientData",clientData)
-      } catch (error) {
-        toast.error("Error fetching data:", error);
-
-      }
-    };
-
     userData();
   }, [id]);
 
@@ -82,7 +82,7 @@ function AppointmentsShow() {
             </OverlayTrigger>
           )}
 
-          <AppointmentsEdit id={id} name="Edit " />
+          <AppointmentsEdit id={id} name="Edit" getData={userData}  />
 
           {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
@@ -147,10 +147,10 @@ function AppointmentsShow() {
           {/* Details */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3"> Details</span>
+              <span className="fs-6 fw-bold my-3">Details</span>
             </div>
 
-            <div className="container-fluid col-md-6">
+            <div className="container-fluid col-md-6 mt-3">
               <div>
                 <label className="text-dark Label">Appointment For</label>
                 <span className="text-dark">
@@ -216,9 +216,16 @@ function AppointmentsShow() {
               </div>
 
               <div>
-                <label className="text-dark Label">Location</label>
+                <label className="text-dark Label">Start Time</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.location || "--"}
+                  &nbsp; : &nbsp;{clientData.appointmentStartTime || "--"}
+                </span>
+              </div>
+
+              <div>
+                <label className="text-dark Label">Member</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.member || "--"}
                 </span>
               </div>
 
@@ -253,9 +260,9 @@ function AppointmentsShow() {
               </div>
 
               <div>
-                <label className="text-dark Label">Member</label>
+                <label className="text-dark Label">Location</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.member || "--"}
+                  &nbsp; : &nbsp;{clientData.location || "--"}
                 </span>
               </div>
 
@@ -382,7 +389,7 @@ function AppointmentsShow() {
               <div>
                 <label className="text-dark Label">Description</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.description_info || "--"}
+                  &nbsp; : &nbsp;{clientData.additionalInformation || "--"}
                 </span>
               </div>
             </div>

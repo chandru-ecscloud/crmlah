@@ -24,9 +24,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     serviceId: Yup.string().required("*Service is required"),
     duration: Yup.string().required("*Duration is required"),
     appointmentName: Yup.string().required("*Name is required"),
-    appointmentStartDate: Yup.date()
-    .required("*Start date is required")
-    .min(new Date(), "*Start date cannot be in the past"),
+    appointmentStartDate: Yup.date().required("*Start date is required"),
     timeSlotId: Yup.string().required("*Start Time is required"),
     location: Yup.string().required("*Location is required"),
     member: Yup.string().required("*Member is required"),
@@ -369,7 +367,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
-    
   }
 
   return (

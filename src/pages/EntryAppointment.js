@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
 });
 const EntryAppointment = () => {
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [appointmentTime, setAppointmentTime] = useState([]);
+
   const formik = useFormik({
     initialValues: {
       appointmentFor: "",
@@ -32,6 +34,12 @@ const EntryAppointment = () => {
       data.typeOfAppointment = "website";
       data.appointmentName = "General Enquiry";
       console.log(data);
+      let selectedTimeSlot = "";
+      appointmentTime.forEach((time) => {
+        if (parseInt(data.timeSlotId) === time.id) {
+          selectedTimeSlot = time.slotTime || "--";
+        }
+      });
       setLoadIndicator(true)
       const payload = {
         first_name :data.appointmentFor,
@@ -41,7 +49,6 @@ const EntryAppointment = () => {
         lead_status:"Processed",
         description_info: data.additionalInformation,
         phone: data.phone,
-        
       }
       try {
         const response = await axios.post(`${API_URL}newClient`,payload ,{
@@ -235,6 +242,31 @@ const EntryAppointment = () => {
     },
 
   });
+
+  const fetchAppointmentTime = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getTodayAvailableSlotsByCompanyId/${2}?date=${formik.values.appointmentStartDate}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setAppointmentTime(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(()=>{
+    formik.setFieldValue("appointmentStartDate", new Date().toISOString().split('T')[0])
+  }, [])
+
+  useEffect(() => {
+    fetchAppointmentTime();
+  }, [formik.values.appointmentStartDate]);
+
   return (
     <section className="signIn">
       <div style={{ backgroundColor: "#ecfafe" }}>
@@ -307,19 +339,24 @@ const EntryAppointment = () => {
                         <div className="col-6">
                         <div className="">
                         <lable className="form-label">Prefer Time</lable>
-                        <input
-                          type="time"
-                          //className="form-size form-control"
-                          name="appointmentStartTime"
-                          id="appointmentStartTime"
-                          {...formik.getFieldProps("appointmentStartTime")}
-                          className={`form-size form-control mt-1  ${
-                            formik.touched.appointmentStartTime &&
-                            formik.errors.appointmentStartTime
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        />
+                        <select
+                        type="text"
+                        name="timeSlotId"
+                        className="form-select form-size"
+                        {...formik.getFieldProps("timeSlotId")}
+                        id="timeSlotId"
+                      >
+                        <option value="">Select a start time</option>
+                        {appointmentTime.map((option) => (
+                          <option
+                            key={option.id}
+                            value={option.id}
+                            disabled={option.allocated}
+                          >
+                            {option.slotTime} {option.allocated ? "" : ""}
+                          </option>
+                        ))}
+                      </select>
                       </div>
                       {formik.touched.appointmentStartTime &&
                         formik.errors.appointmentStartTime && (
