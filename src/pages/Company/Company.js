@@ -4,15 +4,15 @@ import {
 } from "material-react-table";
 import { Box, LinearProgress, ThemeProvider, createTheme } from "@mui/material";
 import { mkConfig, generateCsv, download } from "export-to-csv";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import axios from "axios";
-// import { API_URL } from "../../Config/URL";
-// import { FaSortDown } from "react-icons/fa";
-// import { toast } from "react-toastify";
-// import { BsFiletypeCsv } from "react-icons/bs";
-// import { FaRegFilePdf } from "react-icons/fa";
-// import { ImQuotesRight } from "react-icons/im";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { FaSortDown } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { BsFiletypeCsv } from "react-icons/bs";
+import { FaRegFilePdf } from "react-icons/fa";
+import { ImQuotesRight } from "react-icons/im";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
@@ -27,16 +27,12 @@ const csvConfig = mkConfig({
 });
 
 const Company = () => {
-  const [data, setData] = useState([
-    {
-      userName: "Chandru",
-    },
-  ]);
-  // const [rowId, setRowId] = useState("");
+  const [data, setData] = useState([]);
+  const [rowId, setRowId] = useState("");
   const [loading, setLoading] = useState(true);
-  // const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
-  // const userId = sessionStorage.getItem("userId");
+  const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
 
   const columns = useMemo(
@@ -72,14 +68,14 @@ const Company = () => {
         ),
       },
       {
-        accessorKey: "status",
+        accessorKey: "registrationStatus",
         enableHiding: false,
         header: "Status",
       },
       {
-        accessorKey: "roll",
+        accessorKey: "role",
         enableHiding: false,
-        header: "Roll",
+        header: "Role",
       },
 
       {
@@ -132,25 +128,22 @@ const Company = () => {
     []
   );
 
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios(
-  //       `${API_URL}allAccountsByCompanyId/${userId}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           //Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios(`${API_URL}getCompanyOwnerList`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -183,8 +176,8 @@ const Company = () => {
         row.original.companyName,
         row.original.email,
         row.original.phone,
-        row.original.status,
-        row.original.roll,
+        row.original.registrationStatus,
+        row.original.role,
       ];
     });
 
@@ -342,31 +335,33 @@ const Company = () => {
       </Box>
     ),
   });
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <section>
-      {/* {loading && <LinearProgress />}
-        {!loading && ( */}
-      <>
-        <div className="d-flex align-items-center justify-content-end py-4 px-3">
-          <div style={{ paddingRight: "10px" }}>
-            <button
-              className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
-              disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
-              onClick={handelNavigateClick}
-            >
-              Create Company
-            </button>
+      {loading && <LinearProgress />}
+      {!loading && (
+        <>
+          <div className="d-flex align-items-center justify-content-end py-4 px-3">
+            <div style={{ paddingRight: "10px" }}>
+              <button
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
+                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                onClick={handelNavigateClick}
+              >
+                Create Company
+              </button>
+            </div>
           </div>
-        </div>
-        <ThemeProvider theme={theme}>
-          <MaterialReactTable table={table} />
-        </ThemeProvider>
-      </>
-      {/* )} */}
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable table={table} />
+          </ThemeProvider>
+        </>
+      )}
     </section>
   );
 };
