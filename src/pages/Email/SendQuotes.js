@@ -120,22 +120,28 @@ function SendQuotes({ accountData }) {
               <tr class="heading">
                 <td style="white-space: nowrap;">S No</td>
                 <td style="white-space: nowrap;">Product Name</td>
-                <td style="white-space: nowrap;">Product Code</td>
-                <td style="white-space: nowrap;">QuantityInStock</td>
+                <td style="white-space: nowrap;">Quantity</td>
+                <td style="white-space: nowrap;">List Price</td>
+                <td style="white-space: nowrap;">Amount</td>
+                <td style="white-space: nowrap;">Discount</td>
                 <td style="white-space: nowrap;">Tax</td>
+                <td style="white-space: nowrap;">Total</td>
               </tr>
               
               ${
-                row.productsWithQuote &&
-                row.productsWithQuote
+                row.quotesItemList &&
+                row.quotesItemList
                   .map(
                     (product, productIndex) => `
                   <tr class="item">
                     <td>${productIndex + 1}</td>
                     <td>${product.productName || "--"}</td>
-                    <td>${product.productCode || "--"}</td>
-                    <td>${product.quantityInStock || "--"}</td>
+                    <td>${product.quantity || "--"}</td>
+                    <td>${product.listPrice || "--"}</td>
+                    <td>${product.amount || "--"}</td>
+                    <td>${product.discount || 0}</td>
                     <td>${product.tax || "--"}</td>
+                    <td>${product.total || "--"}</td>
                   </tr>
                 `
                   )
@@ -356,12 +362,15 @@ function SendQuotes({ accountData }) {
                         <div className="table-responsive">
                           <table className="table table-bordered">
                             <thead className="table-secondary">
-                              <tr>
-                                <th scope="col">S.No</th>
-                                <th scope="col">product Name dd</th>
-                                <th scope="col">product Code</th>
-                                <th scope="col">QuantityInStock</th>
-                                <th scope="col">Tax</th>
+                            <tr>
+                              <th scope="col">S.No</th>
+                              <th scope="col">Product Name</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">List Price</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Discount</th>
+                              <th scope="col">Tax</th>
+                              <th scope="col">Total</th>
                               </tr>
                             </thead>
                             {/* <tbody>
@@ -375,18 +384,21 @@ function SendQuotes({ accountData }) {
                             </tr>
                           ))}
                         </tbody> */}
-                            <tbody>
-                              {quote.productsWithQuote &&
-                                quote.productsWithQuote.map((item, index) => (
-                                  <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.productName || "--"}</td>
-                                    <td>{item.productCode || "--"}</td>
-                                    <td>{item.quantityInStock || "--"}</td>
-                                    <td>{item.tax || "--"}</td>
-                                  </tr>
-                                ))}
-                            </tbody>
+                           <tbody>
+                            {quote.quotesItemList &&
+                              quote.quotesItemList.map((item, index) => (
+                                <tr key={item.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{item.productName || "--"}</td>
+                                  <td>{item.quantity || "--"}</td>
+                                  <td>{item.listPrice || "--"}</td>
+                                  <td>{item.amount || "--"}</td>
+                                  <td>{item.discount || 0}</td>
+                                  <td>{item.tax || "--"}</td>
+                                  <td>{item.total || "--"}</td>
+                                </tr>
+                              ))}
+                          </tbody>
                           </table>
                         </div>
                       </div>

@@ -111,6 +111,7 @@ function InvoicesCreate() {
       dueDate: "",
       salesCommission: "",
       dealName: "",
+      accountName: "",
       contactName: "",
       shippingStreet: "",
       billingStreet: "",
@@ -125,7 +126,10 @@ function InvoicesCreate() {
       termsAndConditions: "",
       description: "",
       adjustment: "",
+      subTotal: "",
       grandTotal: "",
+      txnDiscount: "",
+      txnTax: "",
       invoiceItemList: [
         {
           productName: "",
@@ -169,7 +173,10 @@ function InvoicesCreate() {
             shippingCode: values.shippingCode,
             shippingCountry: values.shippingCountry,
             adjustment: values.adjustment,
+            subTotal: values.subTotal,
             grandTotal: values.grandTotal,
+            txnDiscount: values.txnDiscount,
+            txnTax: values.txnTax,
           },
           invoiceItemList: rows.map((item) => ({
             productName: item.productName,
@@ -288,7 +295,7 @@ function InvoicesCreate() {
       const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
-      updatedRows[index].ProductName = productName;
+      updatedRows[index].productName = productName;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
       updatedRows[index].amount = listPrice; // Update amount based on list price
@@ -667,7 +674,7 @@ function InvoicesCreate() {
                 <lable>Due Date</lable> &nbsp;&nbsp;
                 <input
                   type="date"
-                  name="dueDate"
+                  name="dueDate.substring(0,10)"
                   className={`form-control form-size  ${
                     formik.touched.dueDate && formik.errors.dueDate
                       ? "is-invalid"
@@ -759,13 +766,13 @@ function InvoicesCreate() {
                 <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
-                  name="account_name"
+                  name="accountName"
                   className={`form-select form-size  ${
-                    formik.touched.account_name && formik.errors.account_name
+                    formik.touched.accountName && formik.errors.accountName
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("account_name")}
+                  {...formik.getFieldProps("accountName")}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(accountOption) &&
@@ -780,10 +787,10 @@ function InvoicesCreate() {
                 <div className="col-5"></div>
                 <div className="col-6  sm-device">
                   {" "}
-                  {formik.touched.account_name &&
-                    formik.errors.account_name && (
+                  {formik.touched.accountName &&
+                    formik.errors.accountName && (
                       <div className="text-danger">
-                        {formik.errors.account_name}
+                        {formik.errors.accountName}
                       </div>
                     )}
                 </div>
@@ -1254,7 +1261,6 @@ function InvoicesCreate() {
                   name="subTotal"
                   className="form-control p-1"
                   type="text"
-                  placeholder="--"
                 />
               </div>
               <div className="container-fluid py-2">

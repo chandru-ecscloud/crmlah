@@ -161,13 +161,13 @@ function InvoiceShow() {
                 text: `Date: ${new Date().toLocaleDateString()}`,
                 alignment: "right",
               },
-              {
-                text: `Time: ${new Date().toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}`,
-                alignment: "right",
-              },
+              // {
+              //   text: `Time: ${new Date().toLocaleTimeString([], {
+              //     hour: "2-digit",
+              //     minute: "2-digit",
+              //   })}`,
+              //   alignment: "right",
+              // },
             ],
           ],
         },
@@ -201,7 +201,7 @@ function InvoiceShow() {
               { text: `: ${invoiceData.dueDate || "--"}` },
               { text: `: ${invoiceData.salesCommission || "--"}` },
               { text: `: ${invoiceData.salesOrder || "--"}` },
-              { text: `: ${invoiceData.purchasOrder || "--"}` },
+              { text: `: ${invoiceData.purchaseOrder || "--"}` },
               { text: `: ${invoiceData.status || "--"}` },
               { text: `: ${invoiceData.accountName || "--"}` },
               { text: `: ${invoiceData.dealName || "--"}` },
@@ -291,11 +291,13 @@ function InvoiceShow() {
               ...(invoiceData.invoiceItemList || []).map((item)=> [
                 item.productName || "--",
                 item.listPrice,
+                item.quantity ,
+                item.productName,
+                item.amount,
                 item.quantity,
                 item.total,
                 `${item.discount} %`,
                 `${item.tax} %`,
-                item.amount,
               ]),
             ],
           },
@@ -558,12 +560,12 @@ function InvoiceShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Invoice Number</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.invoiceNumber || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Invoice Date</label>
@@ -586,12 +588,12 @@ function InvoiceShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.leadName || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6"></div>
@@ -648,12 +650,12 @@ function InvoiceShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Invoice Number</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.invoiceNumber || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Sales Order</label>
@@ -665,7 +667,7 @@ function InvoiceShow() {
               <div>
                 <label className="text-dark Label">Purchase Order</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{invoiceData.purchasOrder || "--"}
+                  &nbsp; : &nbsp;{invoiceData.purchaseOrder || "--"}
                 </span>
               </div>
 
@@ -683,12 +685,12 @@ function InvoiceShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Modified By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.modifiedBy || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Address Information */}
@@ -848,7 +850,7 @@ function InvoiceShow() {
                         <label className="text-dark ">
                           Adjustment(Rs.) 
                         </label>
-                        <span>: {invoiceData.adjustment || "0" }</span>
+                        <span>: {invoiceData.adjustment || "0" }.00</span>
                       </div>
                       <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">

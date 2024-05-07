@@ -15,6 +15,7 @@ function Calendar() {
   const [data, setData] = useState([]);
   const [events, setEvents] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
+  console.log(data);
 
   const [showModal, setShowModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -43,8 +44,8 @@ function Calendar() {
     const formattedEvents = data.map((item) => ({
       id: item.id,
       title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
-      start: `${item.appointmentStartDate}T${item.appointmentStartTime}`,
-      end: `${item.appointmentStartDate}T${item.appointmentStartTime}`,
+      start: `${item.appointmentStartDate}`,
+      end: `${item.appointmentStartDate}`,
       allDay: false, // Assuming appointments are not all-day events
     }));
     setEvents(formattedEvents);

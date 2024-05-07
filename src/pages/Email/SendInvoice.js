@@ -218,23 +218,28 @@ function SendInvoice({ invoiceData, id }) {
                     <tr class="heading">
                       <td style="white-space: nowrap">S No</td>
                       <td style="white-space: nowrap">Product Name</td>
-                      <td style="white-space: nowrap">Price</td>
                       <td style="white-space: nowrap">Quantity</td>
+                      <td style="white-space: nowrap">Price</td>
                       <td style="white-space: nowrap">Amount</td>
+                      <td style="white-space: nowrap">Discount</td>
                       <td style="white-space: nowrap">Tax</td>
                       <td style="white-space: nowrap">Total Amount</td>
                     </tr>
-                    ${invoiceData.productsWithInvoice
+                    ${invoiceData.invoiceItemList
                 .map(
                   (product, index) => `
                             <tr>
-                            <td>${index + 1 || "--"}</td>
+                            <td>${index + 1}</td>
                             <td>${product.productName || "--"}</td>
-                            <td>${product.unitPrice || "--"}</td>
-                            <td>${product.quantityInStock || "--"}</td>
-                            <td>${((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
-                            <td>${product.tax || "--"} %</td>
-                            <td>${((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
+                            <td>${product.quantity || "--"}</td>
+                            <td>${product.listPrice || "--"}</td>
+                            <td>${product.amount || "--"}</td>
+                            <td>${product.discount || "--"}</td>
+                            <td>${product.tax || "--"}</td>
+                            <td>${product.total || "--"}</td>
+                            // <td>${((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
+                            // <td>${product.tax || "--"} %</td>
+                            // <td>${((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
                             </tr>
                             `
                 )
@@ -473,8 +478,8 @@ function SendInvoice({ invoiceData, id }) {
                 placeholder="Subject"
                 style={{ border: "none" }}
                 className={`form-control  ${formik.touched.subject && formik.errors.subject
-                    ? "is-invalid"
-                    : ""
+                  ? "is-invalid"
+                  : ""
                   }`}
                 {...formik.getFieldProps("subject")}
               />
@@ -611,13 +616,16 @@ function SendInvoice({ invoiceData, id }) {
                             Product Name
                           </th>
                           <th scope="col" className="bg-secondary text-white">
-                            Unit Price
+                            Quantity
                           </th>
                           <th scope="col" className="bg-secondary text-white">
-                            Quantity In Stock
+                            Price
                           </th>
                           <th scope="col" className="bg-secondary text-white">
                             Amount
+                          </th>
+                          <th scope="col" className="bg-secondary text-white">
+                            Discount
                           </th>
                           <th scope="col" className="bg-secondary text-white">
                             Tax
@@ -628,16 +636,17 @@ function SendInvoice({ invoiceData, id }) {
                         </tr>
                       </thead>
                       <tbody className="text-center">
-                        {invoiceData.productsWithInvoice.map(
+                        {invoiceData.invoiceItemList.map(
                           (product, index) => (
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
-                              <td>{product.unitPrice || "--"}</td>
-                              <td>{product.quantityInStock || "--"}</td>
-                              <td>{((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
-                              <td>{product.tax || "--"} %</td>
-                              <td>{((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
+                              <td>{product.quantity || "--"}</td>
+                              <td>{product.listPrice || "--"}</td>
+                              <td>{product.amount || "--"}</td>
+                              <td>{product.discount || "--"}</td>
+                              <td>{product.tax || "--"}</td>
+                              <td>{product.total || "--"}</td>
                             </tr>
                           )
                         )}

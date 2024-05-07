@@ -506,11 +506,14 @@ function AccountsShow() {
                           <thead className="table-secondary">
                             <tr>
                               <th scope="col">S.No</th>
-                              <th scope="col">product Name</th>
-                              <th scope="col">product Code</th>
-                              <th scope="col">QuantityInStock</th>
+                              <th scope="col">Product Name</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">List Price</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Discount</th>
                               <th scope="col">Tax</th>
-                            </tr>
+                              <th scope="col">Total</th>
+                              </tr>
                           </thead>
                           {/* <tbody>
                             {quote.map((quote, index) => (
@@ -524,14 +527,17 @@ function AccountsShow() {
                             ))}
                           </tbody> */}
                           <tbody>
-                            {quote.productsWithQuote &&
-                              quote.productsWithQuote.map((item, index) => (
+                            {quote.quotesItemList &&
+                              quote.quotesItemList.map((item, index) => (
                                 <tr key={item.id}>
                                   <td>{index + 1}</td>
                                   <td>{item.productName || "--"}</td>
-                                  <td>{item.productCode || "--"}</td>
-                                  <td>{item.quantityInStock || "--"}</td>
+                                  <td>{item.quantity || "--"}</td>
+                                  <td>{item.listPrice || "--"}</td>
+                                  <td>{item.amount || "--"}</td>
+                                  <td>{item.discount || 0}</td>
                                   <td>{item.tax || "--"}</td>
+                                  <td>{item.total || "--"}</td>
                                 </tr>
                               ))}
                           </tbody>
