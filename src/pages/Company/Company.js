@@ -71,6 +71,23 @@ const Company = () => {
         accessorKey: "registrationStatus",
         enableHiding: false,
         header: "Status",
+        Cell: ({ row }) =>
+          row.original.registrationStatus === "Processed" ? (
+            <span
+              className="badge bg-info py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
+              Processed
+            </span>
+          ) : row.original.registrationStatus === "Analysed" ? (
+            <span className="badge bg-primary py-2 ">Analysed</span>
+          ) : row.original.registrationStatus === "Rejected" ? (
+            <span className="badge bg-danger py-2">REJECTED</span>
+          ) : row.original.registrationStatus === "Intermediated" ? (
+            <span className="badge bg-warning py-2">Intermediated</span>
+          ) : (
+            <span className="badge bg-success  py-2">APPROVED</span>
+          ),
       },
       {
         accessorKey: "role",
