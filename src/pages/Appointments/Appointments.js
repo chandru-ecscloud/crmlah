@@ -378,7 +378,7 @@ const Appointments = () => {
         <>
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
-              <AppointmentsCreate name="Create Appointment" />
+              <AppointmentsCreate name="Create Appointment" getData={fetchData} />
             </div>
             <div class="dropdown-center">
               <button
