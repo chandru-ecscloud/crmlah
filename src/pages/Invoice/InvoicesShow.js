@@ -80,7 +80,18 @@ function InvoiceShow() {
           (acc, key) => {
             let value = response.data[key];
 
-            if (key === "validUntil" && value) {
+            if (key === "invoiceDate" && value) {
+              const date = new Date(value);
+
+              value = date.toLocaleDateString("en-GB", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              });
+
+              value = value.replace(/\d{4}$/, "2024");
+            }
+            if (key === "dueDate" && value) {
               const date = new Date(value);
 
               value = date.toLocaleDateString("en-GB", {
