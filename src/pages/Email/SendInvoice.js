@@ -16,14 +16,13 @@ function SendInvoice({ invoiceData, id }) {
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
-  const [subtotal, setSubtotal] = useState(0);
-  const [taxTotal, setTaxTotal] = useState(0);
-  const [grandTotal, setGrandTotal] = useState(0);
+  // const [subtotal, setSubtotal] = useState(0);
+  // const [taxTotal, setTaxTotal] = useState(0);
+  // const [grandTotal, setGrandTotal] = useState(0);
   const [subject, setSubject] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       subject: "",
@@ -134,13 +133,10 @@ function SendInvoice({ invoiceData, id }) {
                     <td colspan="2">
                       <table>
                         <tr>
-                          <td class="title">
-                            <img
-                              src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
-                              style="width: 75%; max-width: 180px"
-                              alt="Logo"
-                            />
-                          </td>
+                        <td class="title">
+                        <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
+                          style="width: 75%; max-width: 180px;" alt="Logo">
+                      </td>
                           <td class="third">
                             <b>Date:</b> 24-01-2024<br />
                             The Alexcier, 237 Alexandra Road,<br />
@@ -237,9 +233,6 @@ function SendInvoice({ invoiceData, id }) {
                             <td>${product.discount || "--"}</td>
                             <td>${product.tax || "--"}</td>
                             <td>${product.total || "--"}</td>
-                            // <td>${((product.unitPrice || 0) * (product.quantityInStock || 0)).toFixed(2)}</td>
-                            // <td>${product.tax || "--"} %</td>
-                            // <td>${((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)).toFixed(2)}</td>
                             </tr>
                             `
                 )
@@ -252,7 +245,7 @@ function SendInvoice({ invoiceData, id }) {
                     <td style="width: 75%">
                       <b>Sub Total</b>
                     </td>
-                    <td>${subtotal || "--"}
+                    <td>${invoiceData.subTotal || "--"}
                     </td>
                   </tr>
                 </table>
@@ -262,7 +255,7 @@ function SendInvoice({ invoiceData, id }) {
                     <td style="width: 75%">
                       <b>Tax Total</b>
                     </td>
-                    <td>${taxTotal || "--"}</td>
+                    <td> ${invoiceData.txnTax || "--"}</td>
                   </tr>
                 </table>
     
@@ -271,7 +264,7 @@ function SendInvoice({ invoiceData, id }) {
                     <td style="width: 75%">
                       <b>Grand Total</b>
                     </td>
-                    <td>${grandTotal || "--"}</td>
+                    <td>${invoiceData.grandTotal || "--"}</td>
                   </tr>
                 </table>
     
@@ -341,11 +334,11 @@ function SendInvoice({ invoiceData, id }) {
     setSubject("");
   };
 
-  useEffect(() => {
-    // This calculates totals whenever invoiceData changes.
-    calculateTotals();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [invoiceData]);
+  // useEffect(() => {
+  //   // This calculates totals whenever invoiceData changes.
+  //   calculateTotals();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [invoiceData]);
 
   useEffect(() => {
     // This effect triggers the email sending process when HTML content is set and we're ready to send.
@@ -355,36 +348,34 @@ function SendInvoice({ invoiceData, id }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [htmlContent, isSendingEmail]);
 
-  const calculateTotals = () => {
-    if (invoiceData && invoiceData.productsWithInvoice) {
-      const totalAmount = invoiceData.productsWithInvoice.reduce(
-        (total, product) =>
-          total +
-          ((product.unitPrice || 0) * (product.quantityInStock || 0) * (1 + (product.tax || 0) / 100)),
-        0
-      ).toFixed(2);
+  // const calculateTotals = () => {
+  //   if (invoiceData && invoiceData.invoiceItemList) {
+  //     const totalAmount = invoiceData.invoiceItemList.reduce(
+  //       (total, product) =>
+  //         total +
+  //         ((product.listPrice || 0) * (product.quantity || 0) * (1 + (product.tax || 0) / 100)),
+  //       0
+  //     ).toFixed(2);
 
-      const totalUnitPrice = invoiceData.productsWithInvoice.reduce(
-        (total, product) => total + ((product.unitPrice || 0) * (product.quantityInStock || 0)),
-        0
-      ).toFixed(2);
+  //     const totalUnitPrice = invoiceData.invoiceItemList.reduce(
+  //       (total, product) => total + ((product.listPrice || 0) * (product.quantity || 0)),
+  //       0
+  //     ).toFixed(2);
+  //    const totalTax = (totalAmount - totalUnitPrice).toFixed(2);
 
-      const totalTax = (totalAmount - totalUnitPrice).toFixed(2);
-
-      setSubtotal(totalUnitPrice);
-      setTaxTotal(totalTax);
-      setGrandTotal(totalAmount);
-    } else {
-      setSubtotal(0);
-      setTaxTotal(0);
-      setGrandTotal(0);
-    }
-  };
-  let values = {
-    total: parseInt(subtotal),
-    grand_total: parseInt(grandTotal),
-  }
-  console.log(values)
+  //     setSubtotal(totalUnitPrice);
+  //     setTaxTotal(totalTax);
+  //     setGrandTotal(totalAmount);
+  //   } else {
+  //     setSubtotal(0);
+  //     setTaxTotal(0);
+  //     setGrandTotal(0);
+  //   }
+  // };
+  // let values = {
+  //   total: parseInt(subtotal),
+  //   grand_total: parseInt(grandTotal),
+  // }
   const sendEmail = async () => {
     try {
       const response = await axios.post(`${API_URL}sendMail`, {
@@ -402,20 +393,20 @@ function SendInvoice({ invoiceData, id }) {
         toast.error(response.data.message);
       }
       // Update invoice
-      const updateResponse = await axios.put(`${API_URL}updateInvoice/${id}`, values, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      }
-      );
+      // const updateResponse = await axios.put(`${API_URL}updateInvoice/${id}`, values, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     //Authorization: `Bearer ${token}`,
+      //   },
+      // }
+      // );
 
-      if (updateResponse.status === 200) {
-        console.log(updateResponse.data.message);
+      // if (updateResponse.status === 200) {
+      //   console.log(updateResponse.data.message);
 
-      } else {
-        toast.error(updateResponse.data.message);
-      }
+      // } else {
+      //   toast.error(updateResponse.data.message);
+      // }
       setIsSendingEmail(false);
     } catch (error) {
       toast.error("Mail Not Send");
@@ -650,7 +641,9 @@ function SendInvoice({ invoiceData, id }) {
                             </tr>
                           )
                         )}
+
                       </tbody>
+
                     </table>
                   </div>
                 ) : (
@@ -671,7 +664,7 @@ function SendInvoice({ invoiceData, id }) {
                       <p style={{ marginBottom: "0px" }}>Sub Total </p>
                       <p style={{ marginBottom: "0px" }}>:</p>
                     </div>
-                    <div className="col-6"> {subtotal}</div>
+                    <div className="col-6">  {invoiceData.subTotal}</div>
                   </div>
                 </div>
               </div>
@@ -689,7 +682,7 @@ function SendInvoice({ invoiceData, id }) {
                       <p style={{ marginBottom: "0px" }}>Tax Total </p>
                       <p style={{ marginBottom: "0px" }}>:</p>
                     </div>
-                    <div className="col-6"> {taxTotal}</div>
+                    <div className="col-6"> {invoiceData.txnTax}</div>
                   </div>
                 </div>
               </div>
@@ -707,7 +700,7 @@ function SendInvoice({ invoiceData, id }) {
                       <p style={{ marginBottom: "0px" }}>Grand Total </p>
                       <p style={{ marginBottom: "0px" }}>:</p>
                     </div>
-                    <div className="col-6"> {grandTotal}</div>
+                    <div className="col-6"> {invoiceData.grandTotal}</div>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,10 +11,9 @@ const validationSchema = Yup.object().shape({
   serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Name is required"),
-  appointmentStartDate: Yup.string().required(
-    "*Start date is required"
-  ),
-  appointmentStartTime: Yup.string().required(
+  appointmentStartDate: Yup.date()
+  .required("*Start date is required"),
+  timeSlotId: Yup.string().required(
     "*Start Time is required"
   ),
   location: Yup.string().required("*Location is required"),
@@ -32,12 +30,13 @@ const validationSchema = Yup.object().shape({
 
 function AppointmentsCreate({name,id}) {
   const [lgShow, setLgShow] = useState(false);
-  const [ServiceData, setServiceData] = useState([]);
+  const [serviceData, setServiceData] = useState([]);
   const [leadData, setleadData] = useState([]);
   const [apidata, setApiData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
-  const userName=sessionStorage.getItem("user_name")
+  const userName=sessionStorage.getItem("user_name");
+  const [appointmentTime, setAppointmentTime] = useState([]);
  
  
   const formik = useFormik({
@@ -46,7 +45,7 @@ function AppointmentsCreate({name,id}) {
       leadId: "",
       serviceId: "",
       appointmentStartDate: "",
-      appointmentStartTime: "",
+      timeSlotId: "",
       duration: "",
       appointmentName: "",
       location: "",
@@ -61,12 +60,35 @@ function AppointmentsCreate({name,id}) {
     validationSchema: validationSchema,
    
     onSubmit: async (data) => {
-      const lead = leadData.find((user) => user.id == data.leadId);
-      const service = ServiceData.find((user) => user.id == data.serviceId);
+      let selectedLeadName = "";
+      let selectedServiceName = "";
+
+
+      leadData.forEach((lead) => {
+        if (parseInt(data.leadId) === lead.id) {
+          selectedLeadName = lead || "--";
+        }
+      });
+
+
+
+      serviceData.forEach((service) => {
+        if (parseInt(data.serviceId) === service.id) {
+          selectedServiceName = service.serviceName || "--";
+        }
+      });
+
+      let selectedTimeSlot = "";
+      appointmentTime.forEach((time) => {
+        if (parseInt(data.timeSlotId) === time.id) {
+          selectedTimeSlot = time.slotTime || "--";
+        }
+      });
       
-      data.appointmentFor = lead.name;
-      data.email = lead.email;
-      data.serviceName = service.serviceName;
+      data.appointmentFor = selectedLeadName.name;
+      data.appointmentStartTime = selectedTimeSlot
+      data.email = selectedLeadName.email;
+      data.serviceName = selectedServiceName;
       data.appointmentOwner=userName;
       data.reminder=2
       // console.log(data)
@@ -123,6 +145,22 @@ function AppointmentsCreate({name,id}) {
     }
   };
 
+  const fetchAppointmentTime = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getTodayAvailableSlotsByCompanyId/${companyId}?date=${formik.values.appointmentStartDate}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setAppointmentTime(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   const fetchLeadData = async () => {
     try {
@@ -145,6 +183,10 @@ function AppointmentsCreate({name,id}) {
     fetchLeadData();
     findDataById();
   }, []);
+
+  useEffect(() => {
+    fetchAppointmentTime();
+  }, [formik.values.appointmentStartDate]);
 
   return (
     <>
@@ -247,7 +289,7 @@ function AppointmentsCreate({name,id}) {
                         }`}
                       >
                         <option value=""></option>
-                        {ServiceData.map((option) => (
+                        {serviceData.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.serviceName}
                           </option>
@@ -300,19 +342,24 @@ function AppointmentsCreate({name,id}) {
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Time</lable> &nbsp;&nbsp;
-                      <input
-                        type="time"
-                        //className="form-size form-control"
-                        name="appointmentStartTime"
-                        id="appointmentStartTime"
-                        {...formik.getFieldProps("appointmentStartTime")}
-                        className={`form-size form-control   ${
-                          formik.touched.appointmentStartTime &&
-                          formik.errors.appointmentStartTime
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      />
+                      <select
+                        type="text"
+                        name="timeSlotId"
+                        className="form-select form-size"
+                        {...formik.getFieldProps("timeSlotId")}
+                        id="timeSlotId"
+                      >
+                        <option value="">Select a start time</option>
+                        {appointmentTime.map((option) => (
+                          <option
+                            key={option.id}
+                            value={option.id}
+                            disabled={option.allocated}
+                          >
+                            {option.slotTime} {option.allocated ? "" : ""}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
