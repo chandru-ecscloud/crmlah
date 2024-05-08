@@ -316,11 +316,11 @@ function InvoiceShow() {
         {
           columns: [
             [
-              { text: `Sub Total(Rs.) `, style: ["column"] },
-              { text: `Discount(Rs.) `, style: ["column"] },
-              { text: `Tax(Rs.) `, style: ["column"] },
-              { text: `Adjustment(Rs.) `, style: ["column"] },
-              { text: `Grand Total(Rs.) `, style: ["column"] },
+              { text: `Sub Total(SGT) `, style: ["column"] },
+              { text: `Discount(%) `, style: ["column"] },
+              { text: `Tax(%) `, style: ["column"] },
+              // { text: `Adjustment(Rs.) `, style: ["column"] },
+              { text: `Grand Total(SGT) `, style: ["column"] },
             ],
             [
               {
@@ -841,31 +841,31 @@ function InvoiceShow() {
                     <div className="container-fluid p-3 col-md-4 col-12 border rounded">
                     <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
-                        Sub Total(Rs.)
+                        Sub Total(SGT)
                         </label>
                         <span>: {invoiceData.subTotal}</span>
                       </div>
                       <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
-                          Discount(Rs.)
+                          Discount(%)
                         </label>
                         <span>: {invoiceData.txnDiscount}</span>
                       </div>
                       <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
-                          Tax(Rs.) 
+                          Tax(%) 
                         </label>
                         <span>: {invoiceData.txnTax}</span>
                       </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
+                      {/* <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
                           Adjustment(Rs.) 
                         </label>
                         <span>: {invoiceData.adjustment || "0" }.00</span>
-                      </div>
+                      </div> */}
                       <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
-                          Grand Total(Rs.) 
+                          Grand Total(SGT) 
                         </label>
                         <span>: {invoiceData.grandTotal}</span>
                       </div>

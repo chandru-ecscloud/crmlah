@@ -385,6 +385,49 @@ const Example = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
+    const keyMapping = {
+      product: "product",
+      quantity: "quantity",
+      price: "price",
+      discount: "discount",
+      totalAmount: "total_amount",
+      itemDescription: "item_description",
+      description: "description",
+      termsAndConditions: "terms_and_conditions",
+      tax: "tax",
+      adjustment: "adjustment",
+      grandTotal: "grand_total",
+      quoteOwner: "quote_owner",
+      subject: "subject",
+      quoteStage: "quote_stage",
+      dealName: "deal_name",
+      validUntil: "valid_until",
+      contactName: "contact_name",
+      accountName: "account_name",
+      billingStreet: "billing_street",
+      billingCity: "billing_city",
+      billingState: "billing_state",
+      billingCode: "billing_code",
+      billingCountry: "billing_country",
+      shippingStreet: "shipping_street",
+      shippingCity: "shipping_city",
+      shippingState: "shipping_state",
+      shippingCode: "shipping_code",
+      shippingCountry: "shipping_country",
+      createdAt: "created_at",
+      createdBy: "created_by",
+      updatedAt: "updated_at",
+      updatedBy: "updated_by",
+      companyId: "company_id",
+    };
+
+    const transformedData = rowData.map((data) => {
+      return Object.keys(data).reduce((acc, key) => {
+        const newKey = keyMapping[key] || key;
+        acc[newKey] = data[key];
+        return acc;
+      }, {});
+    });
     try {
       const response = await axios.post(
         `${API_URL}deleteMultipleInvoiceData`,
@@ -399,7 +442,6 @@ const Example = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/invoices");
-        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }

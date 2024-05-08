@@ -482,6 +482,7 @@ function InvoicesCreate() {
                       : ""
                   }`}
                   {...formik.getFieldProps("invoiceOwner")}
+                  id="invoiceOwner"
                 >
                   <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>
@@ -516,6 +517,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="salesOrder"
+                  id="salesOrder"
                   className={`form-control form-size  ${
                     formik.touched.salesOrder && formik.errors.salesOrder
                       ? "is-invalid"
@@ -542,6 +544,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="subject"
+                  id="subject"
                   className={`form-control form-size  ${
                     formik.touched.subject && formik.errors.subject
                       ? "is-invalid"
@@ -590,6 +593,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="purchaseOrder"
+                  id="purchaseOrder"
                   className={`form-control form-size  ${
                     formik.touched.purchaseOrder && formik.errors.purchaseOrder
                       ? "is-invalid"
@@ -617,6 +621,7 @@ function InvoicesCreate() {
                 <input
                   type="date"
                   name="invoiceDate"
+                  id="invoiceDate"
                   className={`form-control form-size  ${
                     formik.touched.invoiceDate && formik.errors.invoiceDate
                       ? "is-invalid"
@@ -643,6 +648,7 @@ function InvoicesCreate() {
                 <select
                   type="text"
                   name="status"
+                  id="status"
                   className={`form-select form-size  ${
                     formik.touched.status && formik.errors.status
                       ? "is-invalid"
@@ -675,6 +681,7 @@ function InvoicesCreate() {
                 <input
                   type="date"
                   name="dueDate.substring(0,10)"
+                  id="dueDate"
                   className={`form-control form-size  ${
                     formik.touched.dueDate && formik.errors.dueDate
                       ? "is-invalid"
@@ -699,6 +706,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="salesCommission"
+                  id="salesCommission"
                   className={`form-control form-size  ${
                     formik.touched.salesCommission &&
                     formik.errors.salesCommission
@@ -846,6 +854,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="shippingStreet"
+                  id="shippingStreet"
                   className={`form-control form-size  ${
                     formik.touched.shippingStreet &&
                     formik.errors.shippingStreet
@@ -873,6 +882,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="billingStreet"
+                  id="billingStreet"
                   className={`form-control form-size  ${
                     formik.touched.billingStreet && formik.errors.billingStreet
                       ? "is-invalid"
@@ -899,6 +909,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="shippingCity"
+                  id="shippingCity"
                   className={`form-control form-size  ${
                     formik.touched.shippingCity && formik.errors.shippingCity
                       ? "is-invalid"
@@ -925,6 +936,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="billingCity"
+                  id="billingCity"
                   className={`form-control form-size  ${
                     formik.touched.billingCity && formik.errors.billingCity
                       ? "is-invalid"
@@ -950,6 +962,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="shippingState"
+                  id="shippingState"
                   className={`form-control form-size  ${
                     formik.touched.shippingState && formik.errors.shippingState
                       ? "is-invalid"
@@ -977,6 +990,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="billingState"
+                  id="billingState"
                   className={`form-control form-size  ${
                     formik.touched.billingState && formik.errors.billingState
                       ? "is-invalid"
@@ -1003,6 +1017,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="shippingCode"
+                  id="shippingCode"
                   className={`form-control form-size  ${
                     formik.touched.shippingCode && formik.errors.shippingCode
                       ? "is-invalid"
@@ -1029,6 +1044,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="billingCode"
+                  id="billingCode"
                   className={`form-control form-size  ${
                     formik.touched.billingCode && formik.errors.billingCode
                       ? "is-invalid"
@@ -1054,6 +1070,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="shippingCountry"
+                  id="shippingCountry"
                   className={`form-control form-size  ${
                     formik.touched.shippingCountry &&
                     formik.errors.shippingCountry
@@ -1081,6 +1098,7 @@ function InvoicesCreate() {
                 <input
                   type="text"
                   name="billingCountry"
+                  id="billingCountry"
                   className={`form-control form-size  ${
                     formik.touched.billingCountry &&
                     formik.errors.billingCountry
@@ -1146,7 +1164,7 @@ function InvoicesCreate() {
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option value="" selected disabled></option>
+                        <option value="" selected></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
@@ -1255,12 +1273,13 @@ function InvoicesCreate() {
             <div className="container-fluid p-3 col-md-8"></div>
             <div className="container-fluid p-3 col-md-4 col-12 border rounded">
               <div className="container-fluid py-2">
-                <label className="text-dark text-end">Sub Total(Rs.)</label>
+                <label className="text-dark text-end">Sub Total(SGT)</label>
                 <input
                   {...formik.getFieldProps("subTotal")}
                   name="subTotal"
                   className="form-control p-1"
                   type="text"
+                  readOnly
                 />
               </div>
               <div className="container-fluid py-2">
@@ -1271,6 +1290,7 @@ function InvoicesCreate() {
                     type="text"
                     {...formik.getFieldProps("txnDiscount")}
                     name="txnDiscount"
+                    readOnly
                   />
                 </div>
               </div>
@@ -1282,11 +1302,12 @@ function InvoicesCreate() {
                     type="text"
                     {...formik.getFieldProps("txnTax")}
                     name="txnTax"
+                    readOnly
                   />
                 </div>
               </div>
-              <div className="container-fluid py-2">
-                <label className="text-dark">Adjustment(Rs.)</label>
+              {/* <div className="container-fluid py-2">
+                <label className="text-dark">Adjustment(SGT)</label>
                 <input
                   className="form-control p-1"
                   type="text"
@@ -1294,14 +1315,15 @@ function InvoicesCreate() {
                   name="adjustment"
                   onChange={handleAdjustmentChange}
                 />
-              </div>
+              </div> */}
               <div className="container-fluid py-2">
-                <label className="text-dark">Grand Total(Rs.)</label>
+                <label className="text-dark">Grand Total(SGT)</label>
                 <input
                   className="form-control p-1"
                   type="text"
                   {...formik.getFieldProps("grandTotal")}
                   name="grandTotal"
+                  readOnly
                 />
               </div>
             </div>

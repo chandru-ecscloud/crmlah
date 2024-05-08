@@ -53,6 +53,7 @@ function LeadsCreate() {
       first_name: "",
       last_name: "",
       phone: "",
+      countryCode: "",
       email: "",
       landLine: "",
       lead_source: "",
@@ -260,8 +261,10 @@ function LeadsCreate() {
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
+                      {...formik.getFieldProps("countryCode")}
+                      id="countryCode"
                       className={`form-size form-control  ${
-                        formik.touched.phone && formik.errors.phone
+                        formik.touched.countryCode && formik.errors.countryCode
                           ? "is-invalid"
                           : ""
                       }`}
@@ -275,7 +278,6 @@ function LeadsCreate() {
                       <option value="+91">+91</option>
                     </select>
                   </div>
-
                   <input
                     type="tel"
                     name="phone"

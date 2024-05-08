@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
       "actualPassword must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
     )
     .max(10, "*Enter upto 15 chars only"),
-  confirm_Password: Yup.string()
+  cpassword: Yup.string()
     .oneOf([Yup.ref("actualPassword"), null], "Passwords must match")
     .required("*Confirm actualPassword is required"),
   address: Yup.string().required("*Enter Your Address"),
@@ -48,6 +48,7 @@ function CompanyCreate() {
   const userId = sessionStorage.getItem("userId");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [userNameAvailable, setUserNameAvailable] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -68,7 +69,7 @@ function CompanyCreate() {
       registrationStatus: "",
       role: "",
       actualPassword: "",
-      confirm_Password: "",
+      cpassword: "",
       address: "",
       city: "",
       state: "",
@@ -83,13 +84,12 @@ function CompanyCreate() {
         const response = await axios.post(`${API_URL}newUserRegister`, data, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         });
         if (response.registrationStatus === 201) {
           toast.success(response.data.message);
           navigate("/company");
-          console.log("company data:", response.data);
+          // console.log("company data:", response.data);
         } else {
           toast.error(response.data.message);
         }
@@ -98,6 +98,37 @@ function CompanyCreate() {
       }
     },
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (formik.values.userName.length >= 4) {
+          const response = await axios.get(
+            `${API_URL}checkUserName?userName=${formik.values.userName}`
+          );
+          if (response.status === 200) {
+            console.log(response.data);
+            setUserNameAvailable(true);
+          }
+        }
+        // setUserNameAvailable()
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          // Check for response status
+          setUserNameAvailable(false);
+        } else {
+          toast.error(
+            "Error Fetching User Name",
+            error?.response?.data?.message
+          );
+        }
+      }
+    };
+
+    if (formik.values.userName) {
+      fetchUserData();
+    }
+  }, [formik.values.userName]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -172,45 +203,71 @@ function CompanyCreate() {
               name="companyId"
             />
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>User Name</lable> &nbsp;&nbsp;
-                <input
-                  {...formik.getFieldProps("userName")}
-                  type="text"
-                  className="form-size form-control"
-                  id="userName"
-                  name="userName"
-                />
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.userName && formik.errors.userName && (
-                    <div className="text-danger ">{formik.errors.userName}</div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Company Name</lable> &nbsp;&nbsp;
-                <input
-                  {...formik.getFieldProps("companyName")}
-                  type="text"
-                  className="form-size form-control"
-                  id="companyName"
-                  name="companyName"
-                />
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.companyName && formik.errors.companyName && (
-                    <div className="text-danger ">
-                      {formik.errors.companyName}
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="d-flex align-items-center justify-content-end sm-device">
+                    <lable>User Name</lable> &nbsp;&nbsp;
+                    <input
+                      type="text"
+                      className={`form-size form-control  ${
+                        formik.touched.userName && formik.errors.userName
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("userName")}
+                      name="userName"
+                      id="userName"
+                    />
+                  </div>
+                  <div className="row sm-device">
+                    <div className="col-5"></div>
+                    <div className="col-6 sm-device">
+                      {formik.touched.userName && formik.errors.userName && (
+                        <p className="text-danger text-start">
+                          {formik.errors.userName}
+                        </p>
+                      )}
+                      {formik.values.userName.length >= 4 &&
+                        (userNameAvailable ? (
+                          <p className="text-success text-start">
+                            User Name is available!
+                          </p>
+                        ) : (
+                          <p className="text-danger text-start">
+                            *User Name is already taken. Please try another.
+                          </p>
+                        ))}
                     </div>
-                  )}
+                  </div>
+                </div>
+
+                <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="d-flex align-items-center justify-content-end sm-device">
+                    <lable>Company Name</lable> &nbsp;&nbsp;
+                    <input
+                      type="text"
+                      className={`form-size form-control  ${
+                        formik.touched.companyName && formik.errors.companyName
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("companyName")}
+                      name="companyName"
+                      id="companyName"
+                    />
+                  </div>
+                  <div className="row sm-device">
+                    <div className="col-5"></div>
+                    <div className="col-6 sm-device">
+                      {formik.touched.companyName &&
+                        formik.errors.companyName && (
+                          <p className="text-danger">
+                            {formik.errors.companyName}
+                          </p>
+                        )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -281,6 +338,7 @@ function CompanyCreate() {
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Status</label>&nbsp;&nbsp;
                 <select
+                  {...formik.getFieldProps("registrationStatus")}
                   id="registrationStatus"
                   className="form-size form-select"
                   name="registrationStatus"
@@ -319,9 +377,9 @@ function CompanyCreate() {
                   id="role"
                 >
                   <option value=""></option>
-                  <option value="company_Owner">CEO</option>
-                  <option value="company_Owner">Manager</option>
-                  <option value="company_Owner">Others</option>
+                  <option value="CMP_CEO">CEO</option>
+                  <option value="CMP_MANAGER">Manager</option>
+                  <option value="CMP_OTHERS">Others</option>
                 </select>
               </div>
               <div className="row sm-device">
@@ -367,34 +425,32 @@ function CompanyCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>Confirm actualPassword</label>&nbsp;&nbsp;
-                <div className="input-group" style={{ width: "60%" }}>
+                <label>Confrim Password</label>&nbsp;&nbsp;
+                <div className="input-group " style={{ width: "60%" }}>
                   <input
-                    {...formik.getFieldProps("confirm_Password")}
-                    type={showConfirmPassword ? "text" : "actualPassword"}
+                    {...formik.getFieldProps("cpassword")}
+                    type={showConfirmPassword ? "text" : "password"}
                     className="form-size form-control"
-                    id="confirm_Password"
-                    name="confirm_Password"
+                    id="cpassword"
+                    name="cpassword"
                   />
-                  <button
-                    type="button"
+                  <span
                     className="btn"
                     style={{ borderColor: "#E5E4E2" }}
                     onClick={toggleConfirmPasswordVisibility}
                   >
                     {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                  </span>
                 </div>
               </div>
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.confirm_Password &&
-                    formik.errors.confirm_Password && (
-                      <div className="text-danger ">
-                        {formik.errors.confirm_Password}
-                      </div>
-                    )}
+                  {formik.touched.cpassword && formik.errors.cpassword && (
+                    <div className="text-danger ">
+                      {formik.errors.cpassword}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

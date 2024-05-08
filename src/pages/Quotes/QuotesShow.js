@@ -297,11 +297,11 @@ function QuotesShow() {
         {
           columns: [
             [
-              { text: `Sub Total(Rs.) `, style: ["column"] },
-              { text: `Discount(Rs.) `, style: ["column"] },
-              { text: `Tax(Rs.) `, style: ["column"] },
-              { text: `Adjustment(Rs.) `, style: ["column"] },
-              { text: `Grand Total(Rs.) `, style: ["column"] },
+              { text: `Sub Total(SGT) `, style: ["column"] },
+              { text: `Discount(%) `, style: ["column"] },
+              { text: `Tax(%) `, style: ["column"] },
+              // { text: `Adjustment(Rs.) `, style: ["column"] },
+              { text: `Grand Total(SGT) `, style: ["column"] },
 
               //  { text: `Sub Total(Rs.) ` },
               // { text: `Discount(Rs.) ` },
@@ -323,10 +323,10 @@ function QuotesShow() {
                 text: `: ${quoteData.txnTax || "--"} `,
                 style: ["column"],
               },
-              {
-                text: `: ${quoteData.adjustment || "--"}`,
-                style: ["column"],
-              },
+              // {
+              //   text: `: ${quoteData.adjustment || "--"}`,
+              //   style: ["column"],
+              // },
               {
                 text: `: ${quoteData.grandTotal || "--"}`,
                 style: ["column"],
@@ -802,7 +802,7 @@ function QuotesShow() {
                         <div className="row">
                           <div className="col-md-8 col-12">
                             {" "}
-                            <label className="text-dark ">Sub Total(Rs.)</label>
+                            <label className="text-dark ">Sub Total(SGT)</label>
                           </div>
                           <div className="col-md-4 col-12">
                             {" "}
@@ -814,7 +814,7 @@ function QuotesShow() {
                         <div className="row">
                           <div className="col-md-8 col-12">
                             {" "}
-                            <label className="text-dark ">Discount(Rs.)</label>
+                            <label className="text-dark ">Discount(%)</label>
                           </div>
                           <div className="col-md-4 col-12">
                             {" "}
@@ -826,7 +826,7 @@ function QuotesShow() {
                         <div className="row">
                           <div className="col-md-8 col-12">
                             {" "}
-                            <label className="text-dark ">Tax(Rs.)</label>
+                            <label className="text-dark ">Tax(%)</label>
                           </div>
                           <div className="col-md-4 col-12">
                             {" "}
@@ -834,7 +834,7 @@ function QuotesShow() {
                           </div>
                         </div>
                       </div>
-                      <div className="container-fluid py-2">
+                      {/* <div className="container-fluid py-2">
                         <div className="row">
                           <div className="col-md-8 col-12">
                             
@@ -847,13 +847,13 @@ function QuotesShow() {
                             <span>: {quoteData.adjustment || "0"}.00</span>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="container-fluid py-2">
                         <div className="row">
                           <div className="col-md-8 col-12">
                             
                             <label className="text-dark ">
-                              Grand Total(Rs.)
+                              Grand Total(SGT)
                             </label>
                           </div>
                           <div className="col-md-4 col-12">
