@@ -1223,7 +1223,7 @@ function QuotesEdit() {
             <div className="container-fluid p-3 col-md-8"></div>
             <div className="container-fluid p-3 col-md-4 col-12 border rounded">
               <div className="container-fluid py-2">
-                <label className="text-dark text-end">Sub Total(Rs.)</label>
+                <label className="text-dark text-end">Sub Total(SGT)</label>
                 <input
                   {...formik.getFieldProps("subTotal")}
                   name="subTotal"
@@ -1252,7 +1252,7 @@ function QuotesEdit() {
                   readOnly
                 />
               </div>
-              <div className="container-fluid py-2">
+              {/* <div className="container-fluid py-2">
                 <label className="text-dark">Adjustment(Rs.)</label>
                 <input
                   className="form-control p-1"
@@ -1260,9 +1260,9 @@ function QuotesEdit() {
                   {...formik.getFieldProps("adjustment")}
                   value={adjustment}
                 />
-              </div>
+              </div> */}
               <div className="container-fluid py-2">
-                <label className="text-dark">Grand Total(Rs.)</label>
+                <label className="text-dark">Grand Total(SGT)</label>
                 <input
                   className="form-control p-1"
                   type="text"
