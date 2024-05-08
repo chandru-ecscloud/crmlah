@@ -1,78 +1,87 @@
 import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 // import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 // import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
-import { Password } from "@mui/icons-material";
-import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCamera } from "react-icons/fa";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  user_name: Yup.string().required("*User Name is required"),
-  company_name: Yup.string().required("*Company Name is required"),
+  name: Yup.string().required("*User Name is required"),
+  companyName: Yup.string().required("*Company Name is required"),
   phone: Yup.string()
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
     .max(10)
     .required("*Phone Number is required is required"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
-  status: Yup.string().required("*Status is required"),
+  registrationStatus: Yup.string().required("*Status is required"),
   role: Yup.string().required("*Role is required"),
-  Password: Yup.string()
-    .required("*Enter the valid Password")
-    .min(4, "*min length of 4 chars")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-    )
-    .max(10, "*Enter upto 15 chars only"),
-  confirm_Password: Yup.string()
-    .oneOf([Yup.ref("Password"), null], "Passwords must match")
-    .required("*Confirm Password is required"),
+  // Password: Yup.string()
+  //   .required("*Enter the valid Password")
+  //   .min(4, "*min length of 4 chars")
+  //   .matches(
+  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+  //     "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+  //   )
+  //   .max(10, "*Enter upto 15 chars only"),
+  // confirm_Password: Yup.string()
+  //   .oneOf([Yup.ref("Password"), null], "Passwords must match")
+  //   .required("*Confirm Password is required"),
   address: Yup.string().required("*Enter Your Address"),
   city: Yup.string().required("*Enter Your City"),
   state: Yup.string().required("*Enter Your State"),
-  zip_code: Yup.string().required("*Enter Country Code Number"),
+  zipCode: Yup.string().required("*Enter Country Code Number"),
   country: Yup.string().required("*Enter Your Country "),
+  licenseLimit: Yup.number()
+    .required("*License Limit is required")
+    .positive("*License Limit must be positive")
+    .integer("*License Limit must be an integer"),
 });
 
 function CompanyEdit() {
   // const navigate = useNavigate();
   // const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
+  const { id } = useParams();
+  // console.log("Edit Id is ", id);
+  // const [userImage, setUserImage] = useState(User);
   const userId = sessionStorage.getItem("userId");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  // const togglePasswordVisibility = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  // const toggleConfirmPasswordVisibility = () => {
+  //   setShowConfirmPassword(!showConfirmPassword);
+  // };
 
   const formik = useFormik({
     initialValues: {
       company_id: userId,
       // company_owner: owner,
-      user_name: "",
-      company_name: "",
+      name: "",
+      companyName: "",
       phone: "",
       email: "",
-      status: "",
+      registrationStatus: "",
       role: "",
-      Password: "",
-      confirm_Password: "",
+      // Password: "",
+      // confirm_Password: "",
       address: "",
       city: "",
       state: "",
-      zip_code: "",
+      zipCode: "",
       country: "",
+      licenseLimit: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -84,7 +93,7 @@ function CompanyEdit() {
       //         //Authorization: `Bearer ${token}`,
       //       },
       //     });
-      //     if (response.status === 201) {
+      //     if (response.registrationStatus === 201) {
       //       toast.success(response.data.message);
       //       navigate("/accounts");
       //     } else {
@@ -96,17 +105,39 @@ function CompanyEdit() {
     },
   });
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}allUserRegistrations/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        formik.setValues(response.data);
+        console.log("userData", response.data);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    userData();
+  }, []);
+
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setUserImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   return (
     <section className="createLead">
@@ -117,7 +148,7 @@ function CompanyEdit() {
               <h4>
                 <b>Edit Company</b>
                 <br></br>
-                <img
+                {/* <img
                   src={userImage}
                   className="img-fluid mt-3"
                   style={{
@@ -128,16 +159,16 @@ function CompanyEdit() {
                   }}
                   alt="user"
                   onClick={() => document.getElementById("imageInput").click()}
-                />
+                /> */}
                 {/* Input for image upload */}
-                <input
+                {/* <input
                   type="file"
                   id="imageInput"
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleImageUpload}
                 />
-                <FaCamera className="cameraIcon" />
+                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -156,9 +187,9 @@ function CompanyEdit() {
           </div>
         </div>
         <div className="container-fluid my-5">
-          <h4>
+          {/* <h4>
             <b>Company Information</b>
-          </h4>
+          </h4> */}
         </div>
         <div className="container">
           <div className="row">
@@ -171,22 +202,20 @@ function CompanyEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>User Name</lable> &nbsp;&nbsp;
+                <lable>Name</lable> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("user_name")}
+                  {...formik.getFieldProps("name")}
                   type="text"
                   className="form-size form-control"
-                  id="user_name"
-                  name="user_name"
+                  id="name"
+                  name="name"
                 />
               </div>
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.user_name && formik.errors.user_name && (
-                    <div className="text-danger ">
-                      {formik.errors.user_name}
-                    </div>
+                  {formik.touched.name && formik.errors.name && (
+                    <div className="text-danger ">{formik.errors.name}</div>
                   )}
                 </div>
               </div>
@@ -195,22 +224,21 @@ function CompanyEdit() {
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Company Name</lable> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("company_name")}
+                  {...formik.getFieldProps("companyName")}
                   type="text"
                   className="form-size form-control"
-                  id="company_name"
-                  name="company_name"
+                  id="companyName"
+                  name="companyName"
                 />
               </div>
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.company_name &&
-                    formik.errors.company_name && (
-                      <div className="text-danger ">
-                        {formik.errors.company_name}
-                      </div>
-                    )}
+                  {formik.touched.companyName && formik.errors.companyName && (
+                    <div className="text-danger ">
+                      {formik.errors.companyName}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -277,13 +305,13 @@ function CompanyEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Status</label>&nbsp;&nbsp;
                 <select
-                  id="status"
+                  id="registrationStatus"
                   className="form-size form-select"
-                  name="status"
+                  name="registrationStatus"
                 >
                   <option value="--"></option>
                   <option value="approved">Approved</option>
@@ -296,21 +324,73 @@ function CompanyEdit() {
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.status && formik.errors.status && (
-                    <div className="text-danger ">{formik.errors.status}</div>
+                  {formik.touched.registrationStatus && formik.errors.registrationStatus && (
+                    <div className="text-danger ">{formik.errors.registrationStatus}</div>
                   )}
                 </div>
               </div>
+            </div> */}
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <label>Registration Status</label>&nbsp;&nbsp;
+                <select
+                  id="registrationStatus"
+                  className="form-size form-select"
+                  {...formik.getFieldProps("registrationStatus")}
+                >
+                  {/* <option value=""></option> */}
+                  <option value="APPROVED">APPROVED</option>
+                  <option value="PENDING">PENDING</option>
+                  <option value="REJECTED">REJECTED</option>
+                </select>
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.registrationStatus &&
+                    formik.errors.registrationStatus && (
+                      <div className="text-danger ">
+                        {formik.errors.registrationStatus}
+                      </div>
+                    )}
+                </div>
+              </div>
             </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <label>License Limit</label> &nbsp;&nbsp;
+                <input
+                  {...formik.getFieldProps("licenseLimit")}
+                  type="text"
+                  className="form-size form-control"
+                  id="licenseLimit"
+                  name="licenseLimit"
+                />
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.licenseLimit &&
+                    formik.errors.licenseLimit && (
+                      <div className="text-danger ">
+                        {formik.errors.licenseLimit}
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Role</label>&nbsp;&nbsp;
-                <select id="roll" className="form-size form-select" name="role">
-                  <option value="--"></option>
-                  <option value="ceo">CEO</option>
-                  <option value="manager">Manager</option>
-                  <option value="others">Others</option>
-                </select>
+                <input
+                  {...formik.getFieldProps("role")}
+                  type="text"
+                  className="form-size form-control"
+                  id="role"
+                  name="role"
+                />
               </div>
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
@@ -321,7 +401,7 @@ function CompanyEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <label>Password</label>&nbsp;&nbsp;
                 <div className="input-group " style={{ width: "60%" }}>
@@ -380,7 +460,7 @@ function CompanyEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Address</lable> &nbsp;&nbsp;
@@ -445,18 +525,18 @@ function CompanyEdit() {
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("zip_code")}
+                  {...formik.getFieldProps("zipCode")}
                   type="text"
                   className="form-size form-control"
-                  id="zip_code"
-                  name="zip_code"
+                  id="zipCode"
+                  name="zipCode"
                 />
               </div>
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.zip_code && formik.errors.zip_code && (
-                    <div className="text-danger ">{formik.errors.zip_code}</div>
+                  {formik.touched.zipCode && formik.errors.zipCode && (
+                    <div className="text-danger ">{formik.errors.zipCode}</div>
                   )}
                 </div>
               </div>

@@ -119,8 +119,8 @@ function AdminLayout({ handleLogout }) {
         {/* Company */}
         <Route path="/company" element={<Company />} />
         <Route path="/company/create" element={<CompanyCreate />} />
-        <Route path="/company/edit" element={<CompanyEdit />} />
-        <Route path="/company/show" element={<CompanyShow />} />
+        <Route path="/company/edit/:id" element={<CompanyEdit />} />
+        <Route path="/company/show/:id" element={<CompanyShow />} />
 
         {/* User */}
         <Route path="/users" element={<User />} />

@@ -42,7 +42,7 @@ const Company = () => {
         enableHiding: false,
         header: "User Name",
         Cell: ({ row }) => (
-          <Link to={`/company/show`} className="rowName">
+          <Link to={`/company/show/${row.original.id}`} className="rowName">
             {row.original.userName}
           </Link>
         ),

@@ -11,6 +11,9 @@ import { useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import { Tooltip, Zoom } from "@mui/material";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
 function CompanyShow() {
   const { id } = useParams();
@@ -19,30 +22,36 @@ function CompanyShow() {
   // const [total, setTotal] = useState(0);
   // const [selectedFile, setSelectedFile] = useState(null);
   // const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState({});
+  console.log(userData);
+
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const userData = async () => {
-  //     try {
-  //       const response = await axios(`${API_URL}allAccounts/${id}`, {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           //Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       setAccountData(response.data);
-  //       // console.log("Account Show :",response.data);
-  //       setTotal(response.data.quotes ? response.data.quotes.length : 0);
-  //     } catch (error) {
-  //       toast.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}allUserRegistrations/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //   userData();
-  // }, [id]);
+        setUserData(response.data);
+        console.log("userData", userData);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
+
+    userData();
+  }, []);
 
   const handelEdit = () => {
-    navigate(`/company/edit`);
+    navigate(`/company/edit/${id}`);
   };
 
   return (
@@ -103,25 +112,29 @@ function CompanyShow() {
             <div className="container-fluid col-md-6">
               <div>
                 <label className="text-dark Label">User Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Sakthivel</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.userName || "--"}
+                </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Company Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Cloud ECS</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.companyName || "--"}
+                </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;sakthivel23@gmail.com
+                  &nbsp; : &nbsp;{userData.email || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;6354647382
+                  &nbsp; : &nbsp;&nbsp;{userData.phone || "--"}
                 </span>
               </div>
             </div>
@@ -141,25 +154,29 @@ function CompanyShow() {
             <div className="container-fluid col-md-12">
               <div>
                 <label className="text-dark Label">User Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Sakthivel</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.userName || "--"}
+                </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Company Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Cloud ECS</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.companyName || "--"}
+                </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;sakthivel23@gmail.com
+                  &nbsp; : &nbsp;{userData.email || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;6354647382
+                  &nbsp; : &nbsp;&nbsp;{userData.phone || "--"}
                 </span>
               </div>
               <div className="container-fluid col-md-6"></div>
@@ -169,29 +186,36 @@ function CompanyShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information
                 </span>
-                <button className="btn bg-info col-2 text-white">
-                  Locate Map
-                </button>
               </div>
               <div>
                 <label className="text-dark Label">Address</label>
-                <span className="text-dark">&nbsp; : &nbsp; Chennai</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp; {userData.address || "--"}
+                </span>
               </div>
               <div>
                 <label className="text-dark Label">City</label>
-                <span className="text-dark">&nbsp; : &nbsp;Chennai</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.city || "--"}
+                </span>
               </div>
               <div>
                 <label className="text-dark Label">State</label>
-                <span className="text-dark">&nbsp; : &nbsp;Tamil Nadu</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.state || "--"}
+                </span>
               </div>
               <div>
                 <label className="text-dark Label">Zip Code</label>
-                <span className="text-dark">&nbsp; : &nbsp;600002</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.zipCode || "--"}
+                </span>
               </div>
               <div>
                 <label className="text-dark Label">Country</label>
-                <span className="text-dark">&nbsp; : &nbsp;India</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.country || "--"}
+                </span>
               </div>
             </div>
 
