@@ -57,28 +57,47 @@ const UserActivation = () => {
         header: "Email-Address",
       },
       {
+        accessorKey: "registrationStatus",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.registrationStatus === "APPROVED" ? (
+            <span
+              className="badge bg-success py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
+              Approved
+            </span>
+          ) : row.original.registrationStatus === "REJECTED" ? (
+            <span className="badge bg-danger py-2 ">Rejected</span>
+          ) : (
+            <span className="badge bg-warning  py-2">Pending</span>
+          ),
+      },
+      {
         accessorKey: "role",
         enableHiding: false,
         header: "Role",
-        Cell:({row})=>(
+        Cell: ({ row }) =>
           row.original.role === "CRM_SUPERADMIN" ? (
-            <span className="badge bg-info py-2 " style={{color:"#1f1f1f !important"}}>
+            <span
+              className="badge bg-info py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
               Super Admin
             </span>
-          ) : row.original.role ==="CMP_OWNER"? (
-            <span className="badge bg-primary py-2 " >Company Owner</span>
-          ): row.original.role ==="CRM_ADMIN"?(
+          ) : row.original.role === "CMP_OWNER" ? (
+            <span className="badge bg-primary py-2 ">Company Owner</span>
+          ) : row.original.role === "CRM_ADMIN" ? (
             <span className="badge bg-warning py-2">Admin</span>
-          ): row.original.role ==="CMP_ADMIN"?(
+          ) : row.original.role === "CMP_ADMIN" ? (
             <span className="badge bg-success py-2">Company Admin</span>
-          ): (
+          ) : (
             <span className="badge bg-danger  py-2">Company User</span>
-          )
-        )
+          ),
       },
       {
         accessorKey: "phone",
-        enableHiding: false,
         header: "Phone Number",
         Cell: ({ row }) => (
           <span>
@@ -113,12 +132,15 @@ const UserActivation = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}getAllUserRegistrationsByCompanyId/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getAllUserRegistrationsByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setData(response.data);
       console.log("Api data:", data);
@@ -279,6 +301,7 @@ const UserActivation = () => {
     initialState: {
       columnVisibility: {
         city: false,
+        phone: false,
         street: false,
         country: false,
         zipCode: false,

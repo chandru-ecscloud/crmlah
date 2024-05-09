@@ -12,8 +12,9 @@ import { Link } from "react-router-dom";
 function UserShow() {
   const { id } = useParams();
   const [userData, setUserData] = useState({});
-
-  console.log("id", id);
+  const role = sessionStorage.getItem("role");
+  const navigate = useNavigate();
+  // console.log("id", id);
 
   useEffect(() => {
     const userData = async () => {
@@ -38,19 +39,32 @@ function UserShow() {
     userData();
   }, []);
 
+  const handelEdit = () => {
+    navigate(`/users/edit/${id}`);
+  };
+
   return (
     <>
       <section className="container-fluid row section1 m-0 p-0 ">
-         {/* <Tooltip TransitionComponent={Zoom} title="Back"> */}
-            <Link to="/users">
-              <button className="btn fs-4 border-white">
-                <IoArrowBack className="back_arrow" />
-              </button>
-            </Link>
-          {/* </Tooltip> */}
-        
+        <div className="d-flex justify-content-between align-items-center">
+          <Link to="/users">
+            <button className="btn fs-4 border-white">
+              <IoArrowBack className="back_arrow" />
+            </button>
+          </Link>
+          <button
+            className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+            disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+            onClick={handelEdit}
+          >
+            Edit
+          </button>
+        </div>
       </section>
-      <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center" style={{minHeight:"90vh"}}>
+      <section
+        className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center"
+        style={{ minHeight: "90vh" }}
+      >
         {/* Right Side Content */}
         <div
           className="container-fluid col-md-9 m-0"

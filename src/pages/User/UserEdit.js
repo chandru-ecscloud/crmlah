@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import User from "../../assets/user.png";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -11,7 +10,6 @@ import "../../styles/dummy.css";
 // import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const validationSchema = yup.object().shape({
-  userName: yup.string().required("*Enter the User Name"),
   name: yup.string().required("*Enter the Name"),
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
@@ -20,20 +18,7 @@ const validationSchema = yup.object().shape({
     .required("*Enter the Email"),
 
   role: yup.string().required("*Select the Role"),
-  password: yup
-    .string()
-    .required("*Enter the valid Password")
-    .min(4, "*min length of 4 chars")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-    )
-    .max(10, "*Enter upto 15 chars only"),
-  cpassword: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match")
-    .required("*Confirm Password is required"),
-  country_code: yup.string().required("*Enter Country Code Number"),
+  countryCode: yup.string().required("*Enter Country Code Number"),
   phone: yup
     .string()
     .required("*Phone number is required")
@@ -47,35 +32,26 @@ const validationSchema = yup.object().shape({
     .required("*Enter zipcode")
     .matches(/^\d+$/, "Must be only digits"),
   country: yup.string().required("*Enter contry"),
+  registrationStatus: yup.string().required("*Status is required"),
 });
 function UserEdit() {
   const companyId = sessionStorage.getItem("companyId");
-  const owner = sessionStorage.getItem("user_name");
-  const role = sessionStorage.getItem("role");
-  const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
-
+  // const owner = sessionStorage.getItem("user_name");
+  // const role = sessionStorage.getItem("role");
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCPassword, setShowCPasword] = useState(false);
   const formik = useFormik({
     initialValues: {
-      companyId:companyId,
-      userName: "",
+      companyId: companyId,
+      registrationStatus: "",
       name: "",
       companyName: "",
       email: "",
       role: "",
-      password: "",
-      cpassword: "",
-      country_code: "",
+      countryCode: "",
       phone: "",
       address: "",
       city: "",
-      minutes: "",
-      time: "",
-      hour: "",
-      none: "",
       street: "",
       state: "",
       zipCode: "",
@@ -83,34 +59,51 @@ function UserEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("User Datas:", data);
-      data.role = "CMP_USER";
-      data.jwtRole = "CMP_USER";
-      // try {
-      //     const response = await axios.post(``, data, {
-      //         headers: {
-      //             "Content-Type": "application/json",
-      //         },
-      //     });
-      //     if (response.status === 201) {
-      //         toast.success(response.data.message);
-      //         navigate("/emailsuccess");
-      //     } else {
-      //         toast.error(response.data.message);
-      //     }
-      // } catch (error) {
-      //     toast.error("Failed: " + error.message);
-      // }
+      try {
+        const response = await axios.put(
+          `${API_URL}updateUserRegister/${id}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/users");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error?.response?.data?.message);
+      }
     },
   });
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}allUserRegistrations/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  const toggleCPasswordVisibility = () => {
-    setShowCPasword((prevShowConfirmPassword) => !prevShowConfirmPassword);
-  };
+        formik.setValues(response.data);
+        console.log("userData", userData);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
+
+    userData();
+  }, []);
 
   return (
     <section className="createLead">
@@ -144,32 +137,6 @@ function UserEdit() {
 
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>User Name</lable> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.userName && formik.errors.userName
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("userName")}
-                  name="userName"
-                  id="userName"
-                  value={"Harishragavendhar B"}
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.userName && formik.errors.userName && (
-                    <p className="text-danger">{formik.errors.userName}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Name</lable> &nbsp;&nbsp;
@@ -208,7 +175,6 @@ function UserEdit() {
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
-                  value={"ECS"}
                 />
               </div>
               <div className="row sm-device">
@@ -233,7 +199,6 @@ function UserEdit() {
                   }`}
                   {...formik.getFieldProps("email")}
                   id="email"
-                  value={"harish@gmail.com"}
                 />
               </div>
               <div className="row sm-device">
@@ -259,9 +224,9 @@ function UserEdit() {
                   {...formik.getFieldProps("role")}
                   id="role"
                 >
-                  <option value=""></option>
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
+                  <option></option>
+                  <option value="CMP_ADMIN">Admin</option>
+                  <option value="CMP_USER">User</option>
                 </select>
               </div>
               <div className="row sm-device">
@@ -276,62 +241,12 @@ function UserEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Password</lable> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("password")}
-                  id="password"
-                  value={"Harish@123"}
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.password && formik.errors.password && (
-                    <p className="text-danger">{formik.errors.password}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Confirm Password</lable> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.cpassword && formik.errors.cpassword
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("cpassword")}
-                  id="cpassword"
-                  value={"Harish@123"}
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.cpassword && formik.errors.cpassword && (
-                    <p className="text-danger">{formik.errors.cpassword}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Phone</lable> &nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
                       className="form-select"
-                      {...formik.getFieldProps("country_code")}
+                      {...formik.getFieldProps("countryCode")}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
@@ -353,7 +268,6 @@ function UserEdit() {
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
-                    value={"6385921325"}
                   />
                 </div>
               </div>
@@ -363,6 +277,33 @@ function UserEdit() {
                   {formik.touched.phone && formik.errors.phone && (
                     <p className="text-danger">{formik.errors.phone}</p>
                   )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <label>Registration Status</label>&nbsp;&nbsp;
+                <select
+                  id="registrationStatus"
+                  className="form-size form-select"
+                  {...formik.getFieldProps("registrationStatus")}
+                >
+                  {/* <option value=""></option> */}
+                  <option value="PENDING">PENDING</option>
+                  <option value="APPROVED">APPROVED</option>
+                  <option value="REJECTED">REJECTED</option>
+                </select>
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.registrationStatus &&
+                    formik.errors.registrationStatus && (
+                      <div className="text-danger ">
+                        {formik.errors.registrationStatus}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -390,7 +331,6 @@ function UserEdit() {
                   {...formik.getFieldProps("address")}
                   name="address"
                   id="address"
-                  value={"1/234, north street, pinnathur"}
                 />
               </div>
               <div className="row sm-device">
@@ -415,7 +355,6 @@ function UserEdit() {
                   {...formik.getFieldProps("city")}
                   name="city"
                   id="city"
-                  value={"Thiruvarur"}
                 />
               </div>
               <div className="row sm-device">
@@ -440,7 +379,6 @@ function UserEdit() {
                   {...formik.getFieldProps("state")}
                   name="state"
                   id="state"
-                  value={"Tamil Nadu"}
                 />
               </div>
               <div className="row sm-device">
@@ -465,7 +403,6 @@ function UserEdit() {
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
-                  value={"614706"}
                 />
               </div>
               <div className="row sm-device">
@@ -491,7 +428,6 @@ function UserEdit() {
                   {...formik.getFieldProps("country")}
                   name="country"
                   id="country"
-                  value={"India"}
                 />
               </div>
               <div className="row sm-device">

@@ -32,7 +32,7 @@ const validationSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("*Confirm Password is required"),
-  country_code: yup.string().required("*Enter Country Code Number"),
+  countryCode: yup.string().required("*Enter Country Code Number"),
   phone: yup
     .string()
     .required("*Phone number is required")
@@ -46,14 +46,15 @@ const validationSchema = yup.object().shape({
     .required("*Enter zipcode")
     .matches(/^\d+$/, "Must be only digits"),
   country: yup.string().required("*Enter contry"),
+  registrationStatus: yup.string().required("*Status is required"),
 });
 function UserCreate() {
   const companyId = sessionStorage.getItem("companyId");
-  const userId = sessionStorage.getItem("userId");
-  const owner = sessionStorage.getItem("user_name");
-  const role = sessionStorage.getItem("role");
-  const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
+  // const userId = sessionStorage.getItem("userId");
+  // const owner = sessionStorage.getItem("user_name");
+  // const role = sessionStorage.getItem("role");
+  // const token = sessionStorage.getItem("token");
+  // const [userImage, setUserImage] = useState(User);
   const [userNameAvailable, setUserNameAvailable] = useState(false);
 
   const navigate = useNavigate();
@@ -70,10 +71,11 @@ function UserCreate() {
       role: "",
       password: "",
       cpassword: "",
-      country_code: "",
+      countryCode: "",
       phone: "",
       address: "",
       city: "",
+      registrationStatus: "",
       // minutes: "",
       // time: "",
       // hour: "",
@@ -100,7 +102,7 @@ function UserCreate() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        toast.error("Failed: " + error?.response?.data?.message);
       }
     },
   });
@@ -113,17 +115,17 @@ function UserCreate() {
     setShowCPasword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setUserImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -348,6 +350,34 @@ function UserCreate() {
             </div>
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <label>Registration Status</label>&nbsp;&nbsp;
+                <select
+                  id="registrationStatus"
+                  className="form-size form-select"
+                  {...formik.getFieldProps("registrationStatus")}
+                >
+                  {/* <option value=""></option> */}
+                  <option></option>
+                  <option value="PENDING">PENDING</option>
+                  <option value="APPROVED">APPROVED</option>
+                  <option value="REJECTED">REJECTED</option>
+                </select>
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.registrationStatus &&
+                    formik.errors.registrationStatus && (
+                      <div className="text-danger ">
+                        {formik.errors.registrationStatus}
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Password</lable> &nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
@@ -422,7 +452,7 @@ function UserCreate() {
                   <div>
                     <select
                       className="form-select"
-                      {...formik.getFieldProps("country_code")}
+                      {...formik.getFieldProps("countryCode")}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",

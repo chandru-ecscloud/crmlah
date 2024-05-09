@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import User from "../../assets/user.png";
+import React, { useEffect } from "react";
 // import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import { toast } from "react-toastify";
 // import { useNavigate } from "react-router-dom";
 // import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
-import { FaCamera } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
@@ -24,17 +22,6 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("*Email is required"),
   registrationStatus: Yup.string().required("*Status is required"),
   role: Yup.string().required("*Role is required"),
-  // Password: Yup.string()
-  //   .required("*Enter the valid Password")
-  //   .min(4, "*min length of 4 chars")
-  //   .matches(
-  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-  //     "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
-  //   )
-  //   .max(10, "*Enter upto 15 chars only"),
-  // confirm_Password: Yup.string()
-  //   .oneOf([Yup.ref("Password"), null], "Passwords must match")
-  //   .required("*Confirm Password is required"),
   address: Yup.string().required("*Enter Your Address"),
   city: Yup.string().required("*Enter Your City"),
   state: Yup.string().required("*Enter Your State"),
@@ -47,35 +34,19 @@ const validationSchema = Yup.object().shape({
 });
 
 function CompanyEdit() {
-  // const navigate = useNavigate();
-  // const token = sessionStorage.getItem("token");
   const { id } = useParams();
-  // console.log("Edit Id is ", id);
-  // const [userImage, setUserImage] = useState(User);
-  const userId = sessionStorage.getItem("userId");
-  // const [showPassword, setShowPassword] = useState(false);
-  // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // const togglePasswordVisibility = () => {
-  //   setShowPassword(!showPassword);
-  // };
-
-  // const toggleConfirmPasswordVisibility = () => {
-  //   setShowConfirmPassword(!showConfirmPassword);
-  // };
+  const navigate = useNavigate();
+  const companyId = sessionStorage.getItem("companyId");
 
   const formik = useFormik({
     initialValues: {
-      company_id: userId,
-      // company_owner: owner,
+      company_id: companyId,
       name: "",
       companyName: "",
       phone: "",
       email: "",
       registrationStatus: "",
       role: "",
-      // Password: "",
-      // confirm_Password: "",
       address: "",
       city: "",
       state: "",
@@ -85,23 +56,38 @@ function CompanyEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Company Datas:", data);
-      //   try {
-      //     const response = await axios.post(`${API_URL}newAccount`, data, {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         //Authorization: `Bearer ${token}`,
-      //       },
-      //     });
-      //     if (response.registrationStatus === 201) {
-      //       toast.success(response.data.message);
-      //       navigate("/accounts");
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error("Failed: " + error.message);
-      //   }
+      try {
+        // Make both API calls simultaneously
+        const [userResponse, companyResponse] = await Promise.all([
+          axios.put(`${API_URL}updateUserRegister/${id}`, data, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }),
+          axios.put(
+            `${API_URL}updateCompanyRegister/${companyId}`,
+            {
+              licenseLimit: data.licenseLimit,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          ),
+        ]);
+
+        // Check responses and handle accordingly
+        if (userResponse.status === 200 && companyResponse.status === 200) {
+          // Assuming both APIs return status 200 on success
+          toast.success(companyResponse.data.message);
+          navigate("/company");
+        } else {
+          toast.error(companyResponse.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error?.response?.data.message);
+      }
     },
   });
 
@@ -196,7 +182,7 @@ function CompanyEdit() {
             <input
               type="hidden"
               {...formik.getFieldProps("company_id")}
-              value={userId}
+              value={companyId}
               name="company_id"
             />
 
@@ -258,7 +244,9 @@ function CompanyEdit() {
                       }}
                       name="country_code"
                     >
-                      <option value="+65">+65</option>
+                      <option value="+65" selected>
+                        +65
+                      </option>
                       <option value="+91">+91</option>
                     </select>
                   </div>
@@ -339,8 +327,8 @@ function CompanyEdit() {
                   {...formik.getFieldProps("registrationStatus")}
                 >
                   {/* <option value=""></option> */}
-                  <option value="APPROVED">APPROVED</option>
                   <option value="PENDING">PENDING</option>
+                  <option value="APPROVED">APPROVED</option>
                   <option value="REJECTED">REJECTED</option>
                 </select>
               </div>

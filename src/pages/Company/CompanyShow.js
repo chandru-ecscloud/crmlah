@@ -23,7 +23,7 @@ function CompanyShow() {
   // const [selectedFile, setSelectedFile] = useState(null);
   // const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState({});
-  console.log(userData);
+  // console.log(userData);
 
   const navigate = useNavigate();
 

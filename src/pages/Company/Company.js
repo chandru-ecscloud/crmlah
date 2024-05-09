@@ -72,21 +72,17 @@ const Company = () => {
         enableHiding: false,
         header: "Status",
         Cell: ({ row }) =>
-          row.original.registrationStatus === "Processed" ? (
+          row.original.registrationStatus === "APPROVED" ? (
             <span
-              className="badge bg-info py-2 "
+              className="badge bg-success py-2 "
               style={{ color: "#1f1f1f !important" }}
             >
-              Processed
+              Approved
             </span>
-          ) : row.original.registrationStatus === "Analysed" ? (
-            <span className="badge bg-primary py-2 ">Analysed</span>
-          ) : row.original.registrationStatus === "Rejected" ? (
-            <span className="badge bg-danger py-2">REJECTED</span>
-          ) : row.original.registrationStatus === "Intermediated" ? (
-            <span className="badge bg-warning py-2">Intermediated</span>
+          ) : row.original.registrationStatus === "REJECTED" ? (
+            <span className="badge bg-danger py-2 ">Rejected</span>
           ) : (
-            <span className="badge bg-success  py-2">APPROVED</span>
+            <span className="badge bg-warning  py-2">Pending</span>
           ),
       },
       {

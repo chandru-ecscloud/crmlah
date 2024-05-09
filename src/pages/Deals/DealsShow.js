@@ -9,8 +9,8 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Appointment from '../Appointments/AppointmentsCreate';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Appointment from "../Appointments/AppointmentsCreate";
 function DealsShow() {
   const { id } = useParams();
   const [dealData, setdealData] = useState({});
@@ -21,44 +21,42 @@ function DealsShow() {
     model: "Deals",
     id: id,
     appointmentName: dealData.dealName,
-    email: dealData.email
-  }
+    email: dealData.email,
+  };
+
+  const userData = async () => {
+    try {
+      const response = await axios(`${API_URL}allDeals/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      const transformedData = Object.keys(response.data).reduce((acc, key) => {
+        let value = response.data[key];
+
+        if (key === "closingDate" && value) {
+          const date = new Date(value);
+
+          value = date.toLocaleDateString("en-GB", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          });
+          value = value.replace(/\d{4}$/, "2024");
+        }
+
+        acc[key] = value;
+        return acc;
+      }, {});
+      setdealData(transformedData);
+      console.log("Account Show :", dealData);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const userData = async () => {
-      try {
-        const response = await axios(`${API_URL}allDeals/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        const transformedData = Object.keys(response.data).reduce(
-          (acc, key) => {
-            let value = response.data[key];
-
-            if (key === "closingDate" && value) {
-              const date = new Date(value);
-
-              value = date.toLocaleDateString("en-GB", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              });
-              value = value.replace(/\d{4}$/, "2024");
-            }
-
-            acc[key] = value;
-            return acc;
-          },
-          {}
-        );
-        setdealData(transformedData);
-        console.log("Account Show :", dealData);
-      } catch (error) {
-        toast.error("Error fetching data:", error);
-      }
-    };
-
     userData();
   }, [id]);
 
@@ -107,9 +105,15 @@ function DealsShow() {
               </span>
             </OverlayTrigger>
           )}
-          <Appointment name={"schedule"} schedule={scheduleData} />
+          <Appointment
+            name={"schedule"}
+            schedule={scheduleData}
+            getData={userData}
+          />
           <button
-            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
+            className={`btn btn-warning ms-2 ${
+              role === "CMP_USER" && "disabled"
+            }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >

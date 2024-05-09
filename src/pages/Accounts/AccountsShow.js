@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 import SendQuotes from "../Email/SendQuotes";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 
 function AccountsShow() {
@@ -36,25 +36,23 @@ function AccountsShow() {
     appointmentName: accountData.accountName,
     email: accountData.email,
   };
-
+  const userData = async () => {
+    try {
+      const response = await axios(`${API_URL}allAccounts/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setAccountData(response.data);
+      console.log(accountData.quotes);
+      // console.log("Account Show :",response.data.quotes.productsWithQuote      );
+      setTotal(response.data.quotes ? response.data.quotes.length : 0);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-    const userData = async () => {
-      try {
-        const response = await axios(`${API_URL}allAccounts/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        setAccountData(response.data);
-        console.log(accountData.quotes);
-        // console.log("Account Show :",response.data.quotes.productsWithQuote      );
-        setTotal(response.data.quotes ? response.data.quotes.length : 0);
-      } catch (error) {
-        toast.error("Error fetching data:", error);
-      }
-    };
-
     userData();
   }, [id]);
 
@@ -107,7 +105,11 @@ function AccountsShow() {
 
         <div className="col-9 mt-1" id="buttons-container">
           <SendQuotes accountData={accountData} />
-          <Appointment name={"schedule"} schedule={scheduleData} />
+          <Appointment
+            name={"schedule"}
+            schedule={scheduleData}
+            getData={userData}
+          />
           {accountData.email && (
             <OverlayTrigger
               placement="bottom"
@@ -119,8 +121,9 @@ function AccountsShow() {
             </OverlayTrigger>
           )}
           <button
-            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"
-              }`}
+            className={`btn btn-warning ms-2 ${
+              role === "CMP_USER" && "disabled"
+            }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
@@ -489,13 +492,17 @@ function AccountsShow() {
                   {accountData.quotes.map((quote) => (
                     <div key={quote.id} className="row mt-4">
                       <div className="col-md-6 col-12">
-                        <label className="text-dark"><b>Quote Name</b></label>
+                        <label className="text-dark">
+                          <b>Quote Name</b>
+                        </label>
                         <span className="text-dark">
                           &nbsp; : &nbsp;{quote.dealName || "--"}
                         </span>
                       </div>
                       <div className="col-md-6 col-12">
-                        <label className="text-dark Label"><b>Subject</b></label>
+                        <label className="text-dark Label">
+                          <b>Subject</b>
+                        </label>
                         <span className="text-dark">
                           &nbsp; : &nbsp;{quote.subject || "--"}
                         </span>
@@ -513,7 +520,7 @@ function AccountsShow() {
                               <th scope="col">Discount</th>
                               <th scope="col">Tax</th>
                               <th scope="col">Total</th>
-                              </tr>
+                            </tr>
                           </thead>
                           {/* <tbody>
                             {quote.map((quote, index) => (

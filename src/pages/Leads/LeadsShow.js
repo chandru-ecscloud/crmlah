@@ -9,7 +9,7 @@ import { API_URL } from "../../Config/URL";
 // import BookAppointment from "../Appointments/BookAppointment";
 // import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SendEmail from "../Email/SendEmail";
 import Appointment from "../Appointments/AppointmentsCreate";
 
@@ -38,22 +38,23 @@ function LeadsShow() {
     appointmentName: clientData.first_name,
     email: clientData.email,
   };
-  useEffect(() => {
-    const userData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}allClients/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        setClientData(response.data);
-        console.log("Lead Show :", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
+  const userData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}allClients/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setClientData(response.data);
+      console.log("Lead Show :", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     userData();
   }, [id]);
 
@@ -125,10 +126,15 @@ function LeadsShow() {
           >
             Send Email
           </button> */}
-          <Appointment name={"schedule"} schedule={scheduleData} />
+          <Appointment
+            name={"schedule"}
+            schedule={scheduleData}
+            getData={userData}
+          />
           <button
-            className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"
-              }`}
+            className={`btn btn-warning ms-2 ${
+              role === "CMP_USER" && "disabled"
+            }`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
             onClick={handelEdit}
           >
