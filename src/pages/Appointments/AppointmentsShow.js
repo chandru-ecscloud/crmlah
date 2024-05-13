@@ -8,7 +8,7 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import AppointmentsEdit from "./AppointmentsEdit";
 import { toast } from "react-toastify";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";
 function AppointmentsShow() {
@@ -30,7 +30,6 @@ function AppointmentsShow() {
       // console.log("clientData",clientData)
     } catch (error) {
       toast.error("Error fetching data:", error);
-
     }
   };
 
@@ -68,7 +67,7 @@ function AppointmentsShow() {
           </div>
         </div>
 
-        <div className="col-9 mt-1" id="buttons-container">
+        <div className="col-md-9 mt-1" id="buttons-container">
           {/* <BookAppointment /> */}
 
           {clientData.email && (
@@ -82,12 +81,11 @@ function AppointmentsShow() {
             </OverlayTrigger>
           )}
 
-          <AppointmentsEdit id={id} name="Edit" getData={userData}  />
+          <AppointmentsEdit id={id} name="Edit" getData={userData} />
 
           {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
             <BsThreeDots />
           </button> */}
-
         </div>
       </section>
 
@@ -140,6 +138,7 @@ function AppointmentsShow() {
         </div> */}
 
         {/* Right Side Content */}
+        <div className=" container-fluid row justify-content-center ">
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
@@ -169,6 +168,13 @@ function AppointmentsShow() {
                 <label className="text-dark Label">Duration</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.duration || "--"}
+                </span>
+              </div>
+              
+              <div>
+                <label className="text-dark Label">Appointment Mode</label>
+                <span className="text-dark">
+                &nbsp;&nbsp;&nbsp; : &nbsp;{clientData.appointmentMode || "--"}
                 </span>
               </div>
 
@@ -423,6 +429,7 @@ function AppointmentsShow() {
               ></textarea>
             </div>
           </div> */}
+        </div>
         </div>
       </section>
     </>
