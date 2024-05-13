@@ -813,18 +813,20 @@ function InvoiceShow() {
                         </thead>
                         {/* Table body */}
                         <tbody>
-                          {invoiceData?.invoiceItemList.map((product, index) => (
+                          {invoiceData?.invoiceItemList.map((product, index) =>{ 
+                            console.log("object",product)
+                            return(
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
                               <td>{product.quantity || "--"}</td>
-                              <td>{product.listPrice || "--"}</td>
-                              <td>{product.amount || "--"}</td>
-                              <td>{product.discount || "--"}</td>
-                              <td>{product.tax || "--"}</td>
-                              <td>{product.total || "--"}</td>
+                              <td>{product.listPrice || "0"}</td>
+                              <td>{product.amount || "0"}</td>
+                              <td>{product.discount || "0"}</td>
+                              <td>{product.tax || "0"}</td>
+                              <td>{product.total || "0"}</td>
                             </tr>
-                          ))}
+                          )})}
                         </tbody>
                       </table>
                     </div>

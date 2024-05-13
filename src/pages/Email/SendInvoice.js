@@ -632,12 +632,12 @@ function SendInvoice({ invoiceData, id }) {
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
-                              <td>{product.quantity || "--"}</td>
-                              <td>{product.listPrice || "--"}</td>
-                              <td>{product.amount || "--"}</td>
-                              <td>{product.discount || "--"}</td>
-                              <td>{product.tax || "--"}</td>
-                              <td>{product.total || "--"}</td>
+                              <td>{product.quantity || "0"}</td>
+                              <td>{product.listPrice || "0"}</td>
+                              <td>{product.amount || "0"}</td>
+                              <td>{product.discount || "0"}</td>
+                              <td>{product.tax || "0"}</td>
+                              <td>{product.total || "0"}</td>
                             </tr>
                           )
                         )}
