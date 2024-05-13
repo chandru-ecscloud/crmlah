@@ -119,6 +119,13 @@ function UserShow() {
                 </span>
               </div>
 
+              <div>
+                <label className="text-dark Label">Appointment Role</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{userData.appointmentRoleType || "--"}
+                </span>
+              </div>
+
               {/* <div>
                 <label className="text-dark Label">Confrim Password</label>
                 <span className="text-dark">

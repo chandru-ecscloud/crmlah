@@ -97,6 +97,11 @@ const UserActivation = () => {
           ),
       },
       {
+        accessorKey: "appointmentRoleType",
+        enableHiding: false,
+        header: "Appointment Role",
+      },
+      {
         accessorKey: "phone",
         header: "Phone Number",
         Cell: ({ row }) => (

@@ -20,6 +20,7 @@ const validationSchema = yup.object().shape({
     .required("*Enter the Email"),
 
   role: yup.string().required("*Select the Role"),
+  appointmentRoleType: yup.string().required("*Select the Appointment Role"),
   password: yup
     .string()
     .required("*Enter the valid Password")
@@ -69,6 +70,7 @@ function UserCreate() {
       companyName: "",
       email: "",
       role: "",
+      appointmentRoleType: "",
       password: "",
       cpassword: "",
       countryCode: "",
@@ -215,11 +217,10 @@ function UserCreate() {
                 <lable>User Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.userName && formik.errors.userName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("userName")}
                   name="userName"
                   id="userName"
@@ -252,11 +253,10 @@ function UserCreate() {
                 <lable>Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.name && formik.errors.name
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.name && formik.errors.name
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("name")}
                   name="name"
                   id="name"
@@ -277,11 +277,10 @@ function UserCreate() {
                 <lable>Company Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.companyName && formik.errors.companyName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -302,11 +301,10 @@ function UserCreate() {
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -326,11 +324,10 @@ function UserCreate() {
                 <lable>Role</lable> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.role && formik.errors.role
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select  ${formik.touched.role && formik.errors.role
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("role")}
                   id="role"
                 >
@@ -344,6 +341,35 @@ function UserCreate() {
                 <div className="col-6 sm-device">
                   {formik.touched.role && formik.errors.role && (
                     <p className="text-danger">{formik.errors.role}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Appointment Role</lable> &nbsp;&nbsp;
+                <select
+                  type="text"
+                  className={`form-size form-select  ${formik.touched.appointmentRoleType && formik.errors.appointmentRoleType
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("appointmentRoleType")}
+                  id="appointmentRoleType"
+                >
+                  <option value=""></option>
+                  <option value="OWNER">OWNER</option>
+                  <option value="SALES MANAGER">SALES MANAGER</option>
+                  <option value="SALES EXECUTIVE">SALES EXECUTIVE</option>
+                  <option value="FREELANCERS">FREELANCERS</option>
+                </select>
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.appointmentRoleType && formik.errors.appointmentRoleType && (
+                    <p className="text-danger">{formik.errors.appointmentRoleType}</p>
                   )}
                 </div>
               </div>
@@ -379,15 +405,56 @@ function UserCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Phone</lable> &nbsp;&nbsp;
+                <div className="input-group" style={{ width: "60%" }}>
+                  <div>
+                    <select
+                      className="form-select"
+                      {...formik.getFieldProps("countryCode")}
+                      style={{
+                        width: "80px",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                    >
+                      <option></option>
+                      <option value="+65">+65</option>
+                      <option value="+91">+91</option>
+                    </select>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("phone")}
+                    id="phone"
+                    aria-label="Text input with checkbox"
+                  />
+                </div>
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-danger">{formik.errors.phone}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Password</lable> &nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <input
                     type={showPassword ? "text" : "password"}
-                    className={`form-size form-control  ${
-                      formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-size form-control  ${formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("password")}
                     name="password"
                     id="password"
@@ -417,11 +484,10 @@ function UserCreate() {
                 <div className="input-group" style={{ width: "60%" }}>
                   <input
                     type={showCPassword ? "text" : "password"}
-                    className={`form-size form-control  ${
-                      formik.touched.cpassword && formik.errors.cpassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-size form-control  ${formik.touched.cpassword && formik.errors.cpassword
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("cpassword")}
                     name="cpassword"
                     id="cpassword"
@@ -445,47 +511,6 @@ function UserCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
-                <div className="input-group" style={{ width: "60%" }}>
-                  <div>
-                    <select
-                      className="form-select"
-                      {...formik.getFieldProps("countryCode")}
-                      style={{
-                        width: "80px",
-                        borderTopRightRadius: "0px",
-                        borderBottomRightRadius: "0px",
-                      }}
-                    >
-                      <option value="+65">+65</option>
-                      <option value="+91">+91</option>
-                    </select>
-                  </div>
-                  <input
-                    type="tel"
-                    name="phone"
-                    className={`form-size form-control  ${
-                      formik.touched.phone && formik.errors.phone
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("phone")}
-                    id="phone"
-                    aria-label="Text input with checkbox"
-                  />
-                </div>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.phone && formik.errors.phone && (
-                    <p className="text-danger">{formik.errors.phone}</p>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -502,11 +527,10 @@ function UserCreate() {
                 <lable>Address</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.address && formik.errors.address
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.address && formik.errors.address
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("address")}
                   name="address"
                   id="address"
@@ -526,11 +550,10 @@ function UserCreate() {
                 <lable>City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.city && formik.errors.city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.city && formik.errors.city
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("city")}
                   name="city"
                   id="city"
@@ -550,11 +573,10 @@ function UserCreate() {
                 <lable>State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.state && formik.errors.state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.state && formik.errors.state
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("state")}
                   name="state"
                   id="state"
@@ -574,11 +596,10 @@ function UserCreate() {
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.zipCode && formik.errors.zipCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
@@ -599,11 +620,10 @@ function UserCreate() {
                 <lable>Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.country && formik.errors.country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.country && formik.errors.country
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("country")}
                   name="country"
                   id="country"

@@ -18,6 +18,7 @@ const validationSchema = yup.object().shape({
     .required("*Enter the Email"),
 
   role: yup.string().required("*Select the Role"),
+  appointmentRoleType: yup.string().required("*Select the Appointment Role"),
   countryCode: yup.string().required("*Enter Country Code Number"),
   phone: yup
     .string()
@@ -48,6 +49,7 @@ function UserEdit() {
       companyName: "",
       email: "",
       role: "",
+      appointmentRoleType: "",
       countryCode: "",
       phone: "",
       address: "",
@@ -142,11 +144,10 @@ function UserEdit() {
                 <lable>Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.name && formik.errors.name
+                  className={`form-size form-control  ${formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("name")}
                   name="name"
                   id="name"
@@ -167,11 +168,10 @@ function UserEdit() {
                 <lable>Company Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.companyName && formik.errors.companyName
+                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -192,11 +192,10 @@ function UserEdit() {
                 <lable>Email</lable> &nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
+                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -216,11 +215,10 @@ function UserEdit() {
                 <lable>Role</lable> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.role && formik.errors.role
+                  className={`form-size form-select  ${formik.touched.role && formik.errors.role
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("role")}
                   id="role"
                 >
@@ -234,6 +232,35 @@ function UserEdit() {
                 <div className="col-6 sm-device">
                   {formik.touched.role && formik.errors.role && (
                     <p className="text-danger">{formik.errors.role}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Appointment Role</lable> &nbsp;&nbsp;
+                <select
+                  type="text"
+                  className={`form-size form-select  ${formik.touched.appointmentRoleType && formik.errors.appointmentRoleType
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("appointmentRoleType")}
+                  id="appointmentRoleType"
+                >
+                  <option></option>
+                  <option value="OWNER">OWNER</option>
+                  <option value="SALES_MANAGER">SALES MANAGER</option>
+                  <option value="SALES_EXECUTIVE">SALES EXECUTIVE</option>
+                  <option value="FREELANCERS">FREELANCERS</option>
+                </select>
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.appointmentRoleType && formik.errors.appointmentRoleType && (
+                    <p className="text-danger">{formik.errors.appointmentRoleType}</p>
                   )}
                 </div>
               </div>
@@ -260,11 +287,10 @@ function UserEdit() {
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${
-                      formik.touched.phone && formik.errors.phone
+                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -323,11 +349,10 @@ function UserEdit() {
                 <lable>Address</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.address && formik.errors.address
+                  className={`form-size form-control  ${formik.touched.address && formik.errors.address
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("address")}
                   name="address"
                   id="address"
@@ -347,11 +372,10 @@ function UserEdit() {
                 <lable>City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.city && formik.errors.city
+                  className={`form-size form-control  ${formik.touched.city && formik.errors.city
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("city")}
                   name="city"
                   id="city"
@@ -371,11 +395,10 @@ function UserEdit() {
                 <lable>State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.state && formik.errors.state
+                  className={`form-size form-control  ${formik.touched.state && formik.errors.state
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("state")}
                   name="state"
                   id="state"
@@ -395,11 +418,10 @@ function UserEdit() {
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.zipCode && formik.errors.zipCode
+                  className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
@@ -420,11 +442,10 @@ function UserEdit() {
                 <lable>Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.country && formik.errors.country
+                  className={`form-size form-control  ${formik.touched.country && formik.errors.country
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("country")}
                   name="country"
                   id="country"
