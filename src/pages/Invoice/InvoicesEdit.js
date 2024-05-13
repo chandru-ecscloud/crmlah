@@ -45,10 +45,11 @@ const validationSchema = yup.object({
   termsAndConditions: yup.string().required("*Enter The termsAndConditions "),
   description: yup.string().required("*Enter The Description "),
 });
+
 function InvoicesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
-  console.log(rows);
+  console.log("row",rows);
   const [adjustment, setAdjustment] = React.useState(0);
   const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
@@ -84,7 +85,7 @@ function InvoicesEdit() {
     ];
 
     formik.setFieldValue("invoiceItemList", updatedInvoiceItemList);
-    console.log(formik.values.invoiceItemList);
+    console.log("ss", formik.values.invoiceItemList);
   };
 
   const deleteRow = () => {
@@ -165,64 +166,63 @@ function InvoicesEdit() {
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
-      }  
-        const payload = {
-          transactionInvoice: {
-            companyId: companyId,
-            invoiceOwner: values.invoiceOwner,
-            salesOrder: values.salesOrder,
-            subject: values.subject,
-            purchaseOrder: values.purchaseOrder,
-            description: values.description,
-            termsAndConditions: values.termsAndConditions,
-            invoiceDate: values.invoiceDate,
-            status: values.status,
-            dueDate: values.dueDate,
-            salesCommission: values.salesCommission,
-            dealName: values.dealName,
-            accountName: values.accountName,
-            contactName: values.contactName,
-            billingStreet: values.billingStreet,
-            billingCity: values.billingCity,
-            billingState: values.billingState,
-            billingCode: values.billingCode,
-            billingCountry: values.billingCountry,
-            shippingStreet: values.shippingStreet,
-            shippingCity: values.shippingCity,
-            shippingState: values.shippingState,
-            shippingCode: values.shippingCode,
-            shippingCountry: values.shippingCountry,
-            adjustment: values.adjustment,
-            subTotal: values.subTotal,
-            grandTotal: values.grandTotal,
-            txnDiscount: values.txnDiscount,
-            txnTax: values.txnTax,
-          },
-          invoiceItemList: rows.map((item) => ({
-            productName: item.productName,
-            quantity: item.quantity,
-            listPrice: item.listPrice,
-            amount: item.amount,
-            discount: parseInt(item.discount),
-            tax: parseInt(item.tax),
-            total: parseInt(item.total),
-          })),
-        };
-        console.log("Payload:", payload);
-
-}
-});
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserImage(reader.result);
+      }
+      const payload = {
+        transactionInvoice: {
+          companyId: companyId,
+          invoiceOwner: values.invoiceOwner,
+          salesOrder: values.salesOrder,
+          subject: values.subject,
+          purchaseOrder: values.purchaseOrder,
+          description: values.description,
+          termsAndConditions: values.termsAndConditions,
+          invoiceDate: values.invoiceDate,
+          status: values.status,
+          dueDate: values.dueDate,
+          salesCommission: values.salesCommission,
+          dealName: values.dealName,
+          accountName: values.accountName,
+          contactName: values.contactName,
+          billingStreet: values.billingStreet,
+          billingCity: values.billingCity,
+          billingState: values.billingState,
+          billingCode: values.billingCode,
+          billingCountry: values.billingCountry,
+          shippingStreet: values.shippingStreet,
+          shippingCity: values.shippingCity,
+          shippingState: values.shippingState,
+          shippingCode: values.shippingCode,
+          shippingCountry: values.shippingCountry,
+          adjustment: values.adjustment,
+          subTotal: values.subTotal,
+          grandTotal: values.grandTotal,
+          txnDiscount: values.txnDiscount,
+          txnTax: values.txnTax,
+        },
+        invoiceItemList: rows.map((item) => ({
+          productName: item.productName,
+          quantity: item.quantity,
+          listPrice: item.listPrice,
+          amount: item.amount,
+          discount: parseInt(item.discount),
+          tax: parseInt(item.tax),
+          total: parseInt(item.total),
+        })),
       };
-      reader.readAsDataURL(file);
-    }
-  };
+      console.log("Payload:", payload);
+    },
+  });
+
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setUserImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const AccountList = async () => {
     try {
@@ -295,7 +295,6 @@ function InvoicesEdit() {
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
 
-      
       const updatedRows = [...rows];
       updatedRows[index] = {
         ...updatedRows[index],
@@ -421,43 +420,46 @@ function InvoicesEdit() {
             //Authorization: `Bearer ${token}`,
           },
         });
-        const getData = response.data;
-        console.log("Invoice Data:", getData);
-        const formattedResponseData = {
-          ...getData,
-          validUntil: getData.validUntil.substring(0, 10),
-        };
-        formik.setValues(formattedResponseData);
-        // setRows(response.data.quotesItemList);
+        if (response.status === 200) {
+          const getData = response.data;
+          console.log("Invoice Data:", response.data);
+          const formattedResponseData = {
+            ...getData,
+            validUntil: getData.validUntil.substring(0, 10),
+          };
+          console.log("formattedResponseData", formattedResponseData);
+          formik.setValues({ ...response.data });
+          // setRows(response.data.quotesItemList);
 
-        // setRows(
-        //   response.data.quotesItemList.map((item) => ({
-        //     ...item,
-        //     productName:
-        //       productOptions.find((option) => option.id === item.selectedOption)
-        //         ?.productName || "No Name Found",
-        //   }))
-        // );
+          // setRows(
+          //   response.data.quotesItemList.map((item) => ({
+          //     ...item,
+          //     productName:
+          //       productOptions.find((option) => option.id === item.selectedOption)
+          //         ?.productName || "No Name Found",
+          //   }))
+          // );
 
-        // setRows(
-        //   response.data.quotesItemList.map((item) => ({
-        //     ...item,
-        //     productName: productOptions.find((option) => option.id === item.selectedOption)?.productName || "No Name Found",
-        //   }))
-        // );
+          // setRows(
+          //   response.data.quotesItemList.map((item) => ({
+          //     ...item,
+          //     productName: productOptions.find((option) => option.id === item.selectedOption)?.productName || "No Name Found",
+          //   }))
+          // );
 
-        setRows(
-          response.data.invoiceItemList.map((item, index) => ({
-            ...item,
-            productName: productOptions[index]?.productName || "No Name Found",
-          }))
-        );
-        console.log("Set Row DATA", response.data.invoiceItemList);
+          setRows(
+            response.data.invoiceItemList.map((item, index) => ({
+              ...item,
+              productName:
+                productOptions[index]?.productName || "No Name Found",
+            }))
+          );
+          console.log("Set Row DATA", response.data.invoiceItemList);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     userData();
   }, [id]);
 
@@ -511,7 +513,7 @@ function InvoicesEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                 Update
+                  Update
                 </button>
               </span>
             </div>
@@ -805,8 +807,8 @@ function InvoicesEdit() {
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(dealOption) &&
-                    dealOption.map((option) => (
-                      <option key={option} value={option}>
+                    dealOption.map((option,i) => (
+                      <option key={i} value={option}>
                         {option}
                       </option>
                     ))}
@@ -839,8 +841,8 @@ function InvoicesEdit() {
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(accountOption) &&
-                    accountOption.map((option) => (
-                      <option key={option} value={option}>
+                    accountOption.map((option,i) => (
+                      <option key={i} value={option}>
                         {option}
                       </option>
                     ))}
@@ -850,12 +852,11 @@ function InvoicesEdit() {
                 <div className="col-5"></div>
                 <div className="col-6  sm-device">
                   {" "}
-                  {formik.touched.accountName &&
-                    formik.errors.accountName && (
-                      <div className="text-danger">
-                        {formik.errors.accountName}
-                      </div>
-                    )}
+                  {formik.touched.accountName && formik.errors.accountName && (
+                    <div className="text-danger">
+                      {formik.errors.accountName}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -875,8 +876,8 @@ function InvoicesEdit() {
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(contactOption) &&
-                    contactOption.map((option) => (
-                      <option key={option} value={option}>
+                    contactOption.map((option,i) => (
+                      <option key={i} value={option}>
                         {option}
                       </option>
                     ))}

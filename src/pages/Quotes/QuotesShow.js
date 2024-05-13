@@ -20,7 +20,7 @@ function QuotesShow() {
   const { id } = useParams();
   const [quoteData, setQuoteData] = useState({});
   const [quotesItemList, setQuotesItemsList] = useState({});
-  // console.log("Quote Item list", quotesItemList);
+  console.log("Quote Item list", quoteData);
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ function QuotesShow() {
           <span>{item.price || "--"}</span>
         </td>
         <td className="px-5 py-2">
-          <span>{item.discount || "--"}</span>
+          <span>{item.discount || "0"}</span>
         </td>
         <td className="px-5 py-2">
           <span>{item.tax || "--"}</span>
@@ -774,7 +774,7 @@ function QuotesShow() {
                         </thead>
                         {/* Table body */}
                         <tbody>
-                          {quoteData?.quotesItemList.map((product, index) => (
+                          {quoteData?.quotesItemList.map((product, index) =>(
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>

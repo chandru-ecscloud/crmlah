@@ -24,7 +24,7 @@ const validationSchema = yup.object({
     .matches(/^\d+$/, "Must be only digits")
     .required("*Enter The Sales Commission"),
   dealName: yup.string().required("*Select The Deal Name "),
-  account_name: yup.string().required("*Select The Account Name "),
+  accountName: yup.string().required("*Select The Account Name "),
   contactName: yup.string().required("*Select The Contact Name "),
   shippingStreet: yup.string().required("*Enter The Shipping Street "),
   billingStreet: yup.string().required("*Enter The Billing Street "),
@@ -47,7 +47,7 @@ const validationSchema = yup.object({
 });
 function InvoicesCreate() {
   const [rows, setRows] = useState([{}]);
-  console.log(rows);
+  console.log("rows",rows);
   const [adjustment, setAdjustment] = React.useState(0);
   const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
@@ -72,6 +72,7 @@ function InvoicesCreate() {
     const updatedInvoiceItemList = [
       ...formik.values.invoiceItemList,
       {
+        productId: "",
         productName: "",
         quantity: "",
         listPrice: "",
@@ -142,7 +143,7 @@ function InvoicesCreate() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Invoice Create:", values);
       try {
@@ -179,6 +180,7 @@ function InvoicesCreate() {
             txnTax: values.txnTax,
           },
           invoiceItemList: rows.map((item) => ({
+            productId: item.selectedOption,
             productName: item.productName,
             quantity: item.quantity,
             listPrice: item.listPrice,
@@ -399,12 +401,12 @@ function InvoicesCreate() {
     formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
-  const handleAdjustmentChange = (e) => {
-    const adjustmentValue = parseFloat(e.target.value);
-    const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
-    setAdjustment(adjustmentValue);
-    formik.setFieldValue("grandTotal", newGrandTotal);
-  };
+  // const handleAdjustmentChange = (e) => {
+  //   const adjustmentValue = parseFloat(e.target.value);
+  //   const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
+  //   setAdjustment(adjustmentValue);
+  //   formik.setFieldValue("grandTotal", newGrandTotal);
+  // };
 
   useEffect(() => {
     calculateTotals();
@@ -416,7 +418,7 @@ function InvoicesCreate() {
     DealList();
     ContactList();
   }, []);
-
+  
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
@@ -1149,7 +1151,7 @@ function InvoicesCreate() {
                 </tr>
               </thead>
               <tbody className="table-secondary">
-                {rows.map((row, index) => (
+              {rows.map((row, index) => (
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>
@@ -1159,12 +1161,12 @@ function InvoicesCreate() {
                         {...formik.getFieldProps(
                           `invoiceItemList[${index}].productName`
                         )}
-                        value={row.productName}
+                        value={row.selectedOption}
                         onChange={(e) =>
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option value="" selected></option>
+                        <option selected value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
@@ -1232,6 +1234,7 @@ function InvoicesCreate() {
                           `invoiceItemList[${index}].tax`
                         )}
                         value={row.tax}
+                        readOnly
                         className="form-control"
                         onChange={(e) => handleTaxChange(index, e.target.value)}
                       />
@@ -1246,6 +1249,7 @@ function InvoicesCreate() {
                         value={row.total ? row.total.toFixed(2) : 0}
                         className="form-control"
                         id={`total_${index}`}
+                        readOnly
                       />
                     </td>
                   </tr>
