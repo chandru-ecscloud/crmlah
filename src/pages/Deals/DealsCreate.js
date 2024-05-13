@@ -298,7 +298,7 @@ function DealsCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Deal Name</lable> &nbsp;&nbsp;
-                <select
+                {/* <select
                   style={{ width: "60%" }}
                   className="form-size form-select"
                   {...formik.getFieldProps("deal_name")}
@@ -310,7 +310,18 @@ function DealsCreate() {
                         {option}
                       </option>
                     ))}
-                </select>
+                </select> */}
+                <input
+                  type="text"
+                  id="deal_name"
+                  name="deal_name"
+                  className={`form-size form-control  ${
+                    formik.touched.deal_name && formik.errors.deal_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deal_name")}
+                />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
@@ -445,7 +456,7 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>stage</lable> &nbsp;&nbsp;
+                <lable>Stage</lable> &nbsp;&nbsp;
                 <select
                   type="text"
                   className={`form-size form-select  ${
@@ -885,19 +896,19 @@ function DealsCreate() {
         </div>
         <div className="container-fluid my-5">
           <h4>
-            <b>Description Information</b>
+            <b>Discription Information</b>
           </h4>
         </div>
         <div className="container">
           <div className="row">
             <div className="col-12 mb-3 ">
               <div className="d-flex align-items-start justify-content-center sm-device">
-                <lable>Description</lable> &nbsp;&nbsp;
+                <lable>Discription</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
                   className="form-size form-control"
-                  // {...formik.getFieldProps("description_info")}
+                  {...formik.getFieldProps("description_info")}
                   name="description_info"
                   id="description_info"
                 />

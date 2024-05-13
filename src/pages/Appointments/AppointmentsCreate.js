@@ -14,6 +14,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
+  const userId = sessionStorage.getItem("userId");
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
   // console.log("appointmentTime", appointmentTime);
@@ -38,6 +39,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       .matches(/^\d+$/, "Must be only digits")
       .required("*Zip code is required"),
     country: Yup.string().required("*Country is required"),
+    appointmentMode: Yup.string().required("*Appointment Mode is required"),
     // appointmentFor: Yup.string().required("*Description is required"),
     // leadId: Yup.string().when('name', {
     //   is: 'Create Appointment',
@@ -69,6 +71,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       country: "",
       typeOfAppointment: "",
       additionalInformation: "",
+      appointmentMode: "",
     },
     validationSchema: validationSchema,
 
@@ -106,6 +109,9 @@ function AppointmentsCreate({ name, schedule, getData }) {
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
+      data.appointmentRoleType = "OWNER";
+      data.userId = userId;
+
       // console.log("Add appointment", data);
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
@@ -119,7 +125,20 @@ function AppointmentsCreate({ name, schedule, getData }) {
           resetForm();
           toast.success(response.data.message);
           setShow(false);
-          const mailContent = `
+
+          try {
+            const response = await axios.post(
+              `${API_URL}GenerateSingaporeZoomMeetingLink`,
+              {
+                meetingTitle: data.typeOfAppointment,
+                startDate: data.appointmentStartDate,
+                startTime: data.appointmentStartTime.split(" ")[0],
+                duration: data.duration.split(" ")[0],
+              }
+            );
+
+            if (response.status === 200) {
+              const mailContent = `
               <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -205,7 +224,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           <tr>
                             <td class="title">
                               <img
-                                src="https://ecscloudinfotech.com/ecs/static/media/logo1.9c3a01a2a3d275bf1c44.png"
+                                src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
                                 style="width: 75%; max-width: 180px"
                                 alt="Logo"
                               />
@@ -234,7 +253,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <p style="margin: 1.5rem 0px 2rem 0px;"
                   >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment</p>
                   <hr />
-
+                    <p>${response.data.message}</p>
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
                   <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
                   <p style=" margin: 0 ; ">ECS Cloud</p>
@@ -244,18 +263,24 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 </div>
               </body>
               </html>`;
-          console.log(response.data);
-          try {
-            const response = await axios.post(`${API_URL}sendMail`, {
-              toMail: data.email,
-              fromMail: data.email,
-              subject: data.appointmentName,
-              htmlContent: mailContent,
-            });
+              try {
+                const response = await axios.post(`${API_URL}sendMail`, {
+                  toMail: data.email,
+                  fromMail: data.email,
+                  subject: data.appointmentName,
+                  htmlContent: mailContent,
+                });
 
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              toast.success("Mail Send Successfully");
+                if (response.status === 200) {
+                  toast.success(response.data.message);
+                  toast.success("Mail Send Successfully");
+                } else {
+                  toast.error(response.data.message);
+                }
+              } catch (error) {
+                toast.error("Mail Not Send");
+                // console.error("Failed to send email:", error);
+              }
             } else {
               toast.error(response.data.message);
             }
@@ -630,7 +655,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Name</lable> &nbsp;&nbsp;
+                      <lable>Appointment Name</lable> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -712,6 +737,39 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         {formik.touched.member && formik.errors.member && (
                           <p className="text-danger">{formik.errors.member}</p>
                         )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <label htmlFor="leadowner">Appointment Mode</label>
+                      &nbsp;&nbsp;
+                      <select
+                        id="appointmentMode"
+                        //className="form-size form-select"
+                        name="appointmentMode"
+                        {...formik.getFieldProps("appointmentMode")}
+                        className={`form-size form-select   ${
+                          formik.touched.appointmentMode &&
+                          formik.errors.appointmentMode
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value=""></option>
+                        <option value="ONLINE">ONLINE</option>
+                        <option value="OFFLINE">OFFLINE</option>
+                      </select>
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.appointmentMode &&
+                          formik.errors.appointmentMode && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentMode}
+                            </p>
+                          )}
                       </div>
                     </div>
                   </div>

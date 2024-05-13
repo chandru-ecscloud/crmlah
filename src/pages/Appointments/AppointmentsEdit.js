@@ -26,6 +26,7 @@ const validationSchema = Yup.object().shape({
     .required("*Zip code is required"),
   country: Yup.string().required("*Country is required"),
   additionalInformation: Yup.string().required("*Description is required"),
+  appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
 function AppointmentsCreate({ name, id, getData }) {
@@ -56,6 +57,7 @@ function AppointmentsCreate({ name, id, getData }) {
       zipCode: "",
       country: "",
       additionalInformation: "",
+      appointmentMode:"",
     },
     validationSchema: validationSchema,
 
@@ -408,7 +410,7 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Name</lable> &nbsp;&nbsp;
+                      <lable>Appoint Name</lable> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -494,6 +496,37 @@ function AppointmentsCreate({ name, id, getData }) {
                       </div>
                     </div>
 
+                  </div>
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <label htmlFor="leadowner">Appointment Mode</label>&nbsp;&nbsp;
+                      <select
+                        id="appointmentMode"
+                        //className="form-size form-select"
+                        name="appointmentMode"
+                        {...formik.getFieldProps("appointmentMode")}
+                        className={`form-size form-select   ${
+                          formik.touched.appointmentMode && formik.errors.appointmentMode
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value=""></option>
+                        <option value="ONLINE">ONLINE</option>
+                        <option value="OFFLINE">OFFLINE</option>
+                        
+                      </select>
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.appointmentMode && formik.errors.appointmentMode && (
+                          <p className="text-danger">
+                            {formik.errors.appointmentMode}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

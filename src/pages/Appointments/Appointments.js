@@ -16,7 +16,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import AppointmentsCreate from "./AppointmentsCreate";
 import WebSocketService from "../../Config/WebSocketService";
 const csvConfig = mkConfig({
@@ -59,10 +59,25 @@ const Appointments = () => {
         enableHiding: false,
         header: "Appointment Name",
       },
+      // {
+      //   accessorKey: "email",
+      //   enableHiding: false,
+      //   header: "Email",
+      // },
       {
-        accessorKey: "email",
+        accessorKey: "appointmentMode",
         enableHiding: false,
-        header: "Email",
+        header: "Appointment Mode",
+        Cell :({row}) =>
+          row.original.appointmentMode ==="ONLINE" ? (
+            <span className="badge bg-success py-2 ">
+              {row.original.appointmentMode}
+            </span>
+          ) : (
+            <span className="badge bg-danger py-2 ">
+              {row.original.appointmentMode}
+            </span>
+          )
       },
       {
         accessorKey: "appointmentStartDate",
@@ -89,8 +104,12 @@ const Appointments = () => {
             <span className="badge bg-warning py-2">
               {row.original.typeOfAppointment}
             </span>
-          ) : (
+          ) : row.original.typeOfAppointment === "Deals" ? (
             <span className="badge bg-success py-2">
+              {row.original.typeOfAppointment}
+            </span>
+          ) : (
+            <span className="badge bg-info py-2">
               {row.original.typeOfAppointment}
             </span>
           ),
@@ -329,7 +348,8 @@ const Appointments = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -352,7 +372,8 @@ const Appointments = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -378,7 +399,10 @@ const Appointments = () => {
         <>
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
-              <AppointmentsCreate name="Create Appointment" getData={fetchData} />
+              <AppointmentsCreate
+                name="Create Appointment"
+                getData={fetchData}
+              />
             </div>
             <div class="dropdown-center">
               <button

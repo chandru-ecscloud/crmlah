@@ -38,7 +38,7 @@ const validationSchema = yup.object().shape({
 function QuotesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
-  console.log(rows);
+  console.log("Row Value is ", rows);
   const [adjustment, setAdjustment] = React.useState(0);
   const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
@@ -46,7 +46,7 @@ function QuotesEdit() {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [productOptions, setProductOptions] = useState([]);
-  // console.log("productOptions:", productOptions);
+  console.log("productOptions:", productOptions);
   const [accountOption, setAccountOption] = useState([]);
   // console.log(accountOption);
   const [dealOption, setDealOption] = useState([]);
@@ -60,10 +60,11 @@ function QuotesEdit() {
     const updatedRows = [...rows, {}];
     setRows(updatedRows);
 
+
     const updatedQuotesItemList = [
       ...formik.values.quotesItemList,
       {
-        productName: "",
+        productId: "",
         quantity: "",
         listPrice: "",
         amount: "",
@@ -98,7 +99,7 @@ function QuotesEdit() {
       subTotal: "",
       txnDiscount: "",
       txnTax: "",
-      adjustment: "",
+      adjustment: 0,
       grandTotal: "",
       subject: "",
       quoteStage: "",
@@ -119,6 +120,7 @@ function QuotesEdit() {
       quotesItemList: [
         {
           productName: "",
+          productId: "",
           quantity: "",
           listPrice: "",
           amount: "",
@@ -127,55 +129,57 @@ function QuotesEdit() {
           total: "",
         },
       ],
+      deletedQuotesItemIds:[],
     },
     // validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("User Datas:", data);
+      const payload = {
+        transactionQuotes: {
+          companyId: companyId,
+          itemDescription: values.itemDescription,
+          description: values.description,
+          termsAndConditions: values.termsAndConditions,
+          subTotal: values.subTotal,
+          txnDiscount: values.txnDiscount,
+          txnTax: values.txnTax,
+          adjustment: values.adjustment,
+          grandTotal: values.grandTotal,
+          quoteOwner: values.quoteOwner,
+          subject: values.subject,
+          quoteStage: values.quoteStage,
+          dealName: values.dealName,
+          validUntil: values.validUntil,
+          contactName: values.contactName,
+          accountName: values.accountName,
+          billingStreet: values.billingStreet,
+          billingCity: values.billingCity,
+          billingState: values.billingState,
+          billingCode: values.billingCode,
+          billingCountry: values.billingCountry,
+          shippingStreet: values.shippingStreet,
+          shippingCity: values.shippingCity,
+          shippingState: values.shippingState,
+          shippingCode: values.shippingCode,
+          shippingCountry: values.shippingCountry,
+        },
+        quotesItemList: rows.map((item) => ({
+          productName: item.ProductName,
+          productId : item.selectedOption,
+          quantity: item.quantity,
+          listPrice: item.listPrice,
+          amount: item.amount,
+          discount: parseInt(item.discount),
+          tax: parseInt(item.tax),
+          total: parseInt(item.total),
+        })),
+        deletedQuotesItemIds: []
+      };
 
-      // const payload = {
-      //   transactionQuotes: {
-      //     companyId: companyId,
-      //     itemDescription: values.itemDescription,
-      //     description: values.description,
-      //     termsAndConditions: values.termsAndConditions,
-      //     subTotal: values.subTotal,
-      //     txnDiscount: values.txnDiscount,
-      //     txnTax: values.txnTax,
-      //     adjustment: values.adjustment,
-      //     grandTotal: values.grandTotal,
-      //     quoteOwner: values.quoteOwner,
-      //     subject: values.subject,
-      //     quoteStage: values.quoteStage,
-      //     dealName: values.dealName,
-      //     validUntil: values.validUntil,
-      //     contactName: values.contactName,
-      //     accountName: values.accountName,
-      //     billingStreet: values.billingStreet,
-      //     billingCity: values.billingCity,
-      //     billingState: values.billingState,
-      //     billingCode: values.billingCode,
-      //     billingCountry: values.billingCountry,
-      //     shippingStreet: values.shippingStreet,
-      //     shippingCity: values.shippingCity,
-      //     shippingState: values.shippingState,
-      //     shippingCode: values.shippingCode,
-      //     shippingCountry: values.shippingCountry,
-      //   },
-      //   quotesItemList: rows.map((item) => ({
-      //     productName: item.ProductName,
-      //     quantity: item.quantity,
-      //     listPrice: item.listPrice,
-      //     amount: item.amount,
-      //     discount: parseInt(item.discount),
-      //     tax: parseInt(item.tax),
-      //     total: parseInt(item.total),
-      //   })),
-      // };
-      // console.log("Payload:", payload);
+      // console.log("Payload is ", payload);
       try {
         const response = await axios.put(
           `${API_URL}updateTransactionQuotesAndQuoteItems/${id}`,
-          values,
+          payload,
           {
             headers: {
               "Content-Type": "application/json",
@@ -185,7 +189,7 @@ function QuotesEdit() {
         );
         if (response.status === 200) {
           toast.success(response.data.message);
-          // navigate("/quotes");
+          navigate("/quotes");
         } else {
           toast.error(response.data.message);
         }
@@ -309,6 +313,7 @@ function QuotesEdit() {
         ...updatedRows[index],
         selectedOption: value,
         productName: productName,
+        productId : response.data.id,
         listPrice: listPrice,
         quantity: 1,
         amount: listPrice,
@@ -435,30 +440,13 @@ function QuotesEdit() {
         const formattedResponseData = {
           ...getData,
           validUntil: getData.validUntil.substring(0, 10),
+          deletedQuotesItemIds: [],
         };
         formik.setValues(formattedResponseData);
-        // setRows(response.data.quotesItemList);
-
-        // setRows(
-        //   response.data.quotesItemList.map((item) => ({
-        //     ...item,
-        //     productName:
-        //       productOptions.find((option) => option.id === item.selectedOption)
-        //         ?.productName || "No Name Found",
-        //   }))
-        // );
-
-        // setRows(
-        //   response.data.quotesItemList.map((item) => ({
-        //     ...item,
-        //     productName: productOptions.find((option) => option.id === item.selectedOption)?.productName || "No Name Found",
-        //   }))
-        // );
-
         setRows(
           response.data.quotesItemList.map((item, index) => ({
             ...item,
-            productName: productOptions[index]?.productName || "No Name Found",
+            selectedOption: parseInt(item.productId),
           }))
         );
         console.log("Set Row DATA", response.data.quotesItemList);
@@ -1079,41 +1067,22 @@ function QuotesEdit() {
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>
-                      {/* <select
-                        className="form-select"
-                        name={`quotesItemList[${index}].productName`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].productName`
-                        )}
-                        value={row.productName}
-                        onChange={(e) =>
-                          handleSelectChange(index, e.target.value)
-                        }
-                      >
-                        <option value="" selected disabled></option>
-                        {productOptions.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.productName}
-                          </option>
-                        ))}
-                      </select> */}
                       <select
                         className="form-select"
-                        name={`quotesItemList[${index}].productName`}
+                        name={`quotesItemList[${index}].productId`}
                         {...formik.getFieldProps(
-                          `quotesItemList[${index}].productName`
+                          `quotesItemList[${index}].productId`
                         )}
-                        value={row.productName}
+                        value={row.productId}
                         onChange={(e) =>
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option value="" selected disabled></option>
+                        <option></option>
                         {productOptions.map((option) => (
                           <option
                             key={option.id}
                             value={option.id}
-                            selected={row.selectedOption === option.id}
                           >
                             {option.productName}
                           </option>
