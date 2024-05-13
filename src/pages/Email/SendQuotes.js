@@ -98,23 +98,17 @@ function SendQuotes({ accountData }) {
     }
     const tableRows = quotes.map(
       (row, index) => `
-      <div id="LABEL1" id="LABEL2" style="width: 150% !important">
-      <br />
-      <div style="display: flex">
-        <label><b>Quote Name</b></label>
-        <span>:&nbsp;&nbsp;${row.dealName || "--"}</span>
+        <div id="LABEL1" id="LABEL2" style="width: 150% !important">
+          <br />
+          <div style="display: flex">
+            <label><b>Quote Name</b></label>
+            <span>:&nbsp;&nbsp;${row.dealName || "--"}</span>
 
-        <label><b>Subject</b></label>
-        <span>:&nbsp;&nbsp;${row.subject || "--"}</span>
-      </div>
-    </div>
-        
-    
-
-
-
-
-    
+            <label><b>Subject</b></label>
+            <span>:&nbsp;&nbsp;${row.subject || "--"}</span>
+          </div>
+        </div>
+      
        <div style="max-width: 590px; overflow: auto; justify-content: space-around;">
             <table>
               <tr class="heading">
@@ -149,6 +143,36 @@ function SendQuotes({ accountData }) {
               }
             </table>
           </div>
+
+
+      <div class="totals-div">
+        <div class="totals-container">
+          <div style="text-align: end">
+            <label style="width: 40%; margin-right: 5px">Sub Total(SGT)</label>
+            <span style="width: 23%; text-align: start"
+              >&nbsp;:&nbsp; ${row.subTotal}</span
+            >
+          </div>
+          <div style="text-align: end">
+            <label style="width: 40%; margin-right: 5px">Discount(%)</label>
+            <span style="width: 23%; text-align: start"
+              >&nbsp;:&nbsp; ${row.txnDiscount}</span
+            >
+          </div>
+          <div style="text-align: end">
+            <label style="width: 40%; margin-right: 5px">Tax(%)</label>
+            <span style="width: 23%; text-align: start"
+              >&nbsp;:&nbsp; ${row.txnTax}</span
+            >
+          </div>
+          <div style="text-align: end">
+            <label style="width: 40%; margin-right: 5px">Grand Total(SGT)</label>
+            <span style="width: 23%; text-align: start"
+              >&nbsp;:&nbsp; ${row.grandTotal}</span
+            >
+          </div>
+        </div>
+      </div>
       
     `
     );
@@ -240,6 +264,24 @@ function SendQuotes({ accountData }) {
             display: inline-block;
             width: 20%;
             padding: 5px;
+          }
+
+          .totals-div{
+            text-align: end;
+            margin-left: 60%;
+            padding: 10px 0px;
+           }
+
+          .totals-container {
+            max-width: 590px;
+            overflow: auto;
+            justify-content: end;
+          }
+      
+          .totals-container div {
+            display: flex;
+            justify-content: end;
+            align-items: center;
           }
           </style>
         </head>
@@ -362,15 +404,15 @@ function SendQuotes({ accountData }) {
                         <div className="table-responsive">
                           <table className="table table-bordered">
                             <thead className="table-secondary">
-                            <tr>
-                              <th scope="col">S.No</th>
-                              <th scope="col">Product Name</th>
-                              <th scope="col">Quantity</th>
-                              <th scope="col">List Price</th>
-                              <th scope="col">Amount</th>
-                              <th scope="col">Discount</th>
-                              <th scope="col">Tax</th>
-                              <th scope="col">Total</th>
+                              <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">List Price</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Discount</th>
+                                <th scope="col">Tax</th>
+                                <th scope="col">Total</th>
                               </tr>
                             </thead>
                             {/* <tbody>
@@ -384,22 +426,82 @@ function SendQuotes({ accountData }) {
                             </tr>
                           ))}
                         </tbody> */}
-                           <tbody>
-                            {quote.quotesItemList &&
-                              quote.quotesItemList.map((item, index) => (
-                                <tr key={item.id}>
-                                  <td>{index + 1}</td>
-                                  <td>{item.productName || "--"}</td>
-                                  <td>{item.quantity || "--"}</td>
-                                  <td>{item.listPrice || "--"}</td>
-                                  <td>{item.amount || "--"}</td>
-                                  <td>{item.discount || 0}</td>
-                                  <td>{item.tax || "--"}</td>
-                                  <td>{item.total || "--"}</td>
-                                </tr>
-                              ))}
-                          </tbody>
+                            <tbody>
+                              {quote.quotesItemList &&
+                                quote.quotesItemList.map((item, index) => (
+                                  <tr key={item.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.productName || "--"}</td>
+                                    <td>{item.quantity || "--"}</td>
+                                    <td>{item.listPrice || "--"}</td>
+                                    <td>{item.amount || "--"}</td>
+                                    <td>{item.discount || 0}</td>
+                                    <td>{item.tax || "--"}</td>
+                                    <td>{item.total || "--"}</td>
+                                  </tr>
+                                ))}
+                            </tbody>
                           </table>
+                        </div>
+
+                        <div className="container-fluid p-3">
+                          <div className="row">
+                            <div className="col-md-7 col-12"></div>
+                            <div className="col-md-5 col-12 border rounded">
+                              <div className="container-fluid py-2">
+                                <div className="row">
+                                  <div className="col-md-8 col-12">
+                                    {" "}
+                                    <label className="text-dark ">
+                                      Sub Total(SGT)
+                                    </label>
+                                  </div>
+                                  <div className="col-md-4 col-12">
+                                    {" "}
+                                    <span>: {quote.subTotal || "0"}.00</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="container-fluid py-2">
+                                <div className="row">
+                                  <div className="col-md-8 col-12">
+                                    {" "}
+                                    <label className="text-dark ">
+                                      Discount(%)
+                                    </label>
+                                  </div>
+                                  <div className="col-md-4 col-12">
+                                    {" "}
+                                    <span>: {quote.txnDiscount || "0"}.00</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="container-fluid py-2">
+                                <div className="row">
+                                  <div className="col-md-8 col-12">
+                                    {" "}
+                                    <label className="text-dark ">Tax(%)</label>
+                                  </div>
+                                  <div className="col-md-4 col-12">
+                                    {" "}
+                                    <span>: {quote.txnTax || "0"}.00</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="container-fluid py-2">
+                                <div className="row">
+                                  <div className="col-md-8 col-12">
+                                    <label className="text-dark ">
+                                      Grand Total(SGT)
+                                    </label>
+                                  </div>
+                                  <div className="col-md-4 col-12">
+                                    <span>: {quote.grandTotal || "0"}.00</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
