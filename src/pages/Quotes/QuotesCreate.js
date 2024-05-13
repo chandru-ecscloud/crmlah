@@ -62,7 +62,7 @@ function QuotesCreate() {
     const updatedQuotesItemList = [
       ...formik.values.quotesItemList,
       {
-        productName: "",
+        productId: "",
         quantity: "",
         listPrice: "",
         amount: "",
@@ -118,6 +118,7 @@ function QuotesCreate() {
       quotesItemList: [
         {
           productName: "",
+          productId:"",
           quantity: "",
           listPrice: "",
           amount: "",
@@ -162,6 +163,7 @@ function QuotesCreate() {
           },
           quotesItemList: rows.map((item) => ({
             productName: item.ProductName,
+            productId : item.selectedOption,
             quantity: item.quantity,
             listPrice: item.listPrice,
             amount: item.amount,
@@ -277,13 +279,15 @@ function QuotesCreate() {
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
       updatedRows[index].ProductName = productName;
+      updatedRows[index].productId = response.data.id;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
       updatedRows[index].amount = listPrice; // Update amount based on list price
       updatedRows[index].tax = tax;
       updatedRows[index].discount = 0;
-      updatedRows[index].total = listPrice; // Update total based on list price
+      updatedRows[index].total = parseInt(listPrice * (1 + tax / 100), 10);
       setRows(updatedRows);
+      calculateTotals();
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
@@ -358,6 +362,7 @@ function QuotesCreate() {
     calculateTotals();
   };
 
+  
   const calculateTotals = () => {
     let subtotal = 0;
     let totalDiscount = 0;
@@ -390,6 +395,7 @@ function QuotesCreate() {
   useEffect(() => {
     calculateTotals();
   }, [rows]);
+
 
   useEffect(() => {
     ProductList();

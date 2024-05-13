@@ -28,6 +28,8 @@ function AccountsShow() {
   // const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
 
+  console.log("Account Datas:", accountData.quotes);
+
   const navigate = useNavigate();
 
   const scheduleData = {
@@ -59,19 +61,6 @@ function AccountsShow() {
   const handelEdit = () => {
     navigate(`/accounts/edit/${id}`);
   };
-
-  // const openEmailPopup = () => {
-  //   setShowModal(true);
-  // };
-
-  // const closeEmailPopup = () => {
-  //   setShowModal(false);
-  // };
-
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  // };
 
   return (
     <>
@@ -138,58 +127,6 @@ function AccountsShow() {
 
       {/* Accounts Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content */}
-        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
-          <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-2">
-              <Link className="py-3">Notes</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Products</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">
-                <span>Quotes </span>
-                <span class="badge text-bg-danger">{total}</span>
-              </Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Attachments</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Open Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Closed Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Invited Meeting</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Emails</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Campaigns</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Social</Link>
-            </li>
-
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">
-                Add Related List
-              </Link>
-            </li>
-          </ul>
-          <h3 className="text-start ms-4 mt-4 fw-bold">Links</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">Add Links</Link>
-            </li>
-          </ul>
-        </div> */}
-
         {/* Right Side Content */}
         <div
           className="container-fluid col-md-9 m-0"
@@ -522,17 +459,6 @@ function AccountsShow() {
                               <th scope="col">Total</th>
                             </tr>
                           </thead>
-                          {/* <tbody>
-                            {quote.map((quote, index) => (
-                              <tr key={quote.id}>
-                                <td>{index + 1}</td>
-                                <td>{quote.dealName || "--"}</td>
-                                <td>{quote.subject || "--"}</td>
-                                <td>{quote.quoteStage || "--"}</td>
-                                <td>{quote.quoteOwner || "--"}</td>
-                              </tr>
-                            ))}
-                          </tbody> */}
                           <tbody>
                             {quote.quotesItemList &&
                               quote.quotesItemList.map((item, index) => (
@@ -550,43 +476,77 @@ function AccountsShow() {
                           </tbody>
                         </table>
                       </div>
+
+                      <div className="container-fluid p-3">
+                        <div className="row">
+                          <div className="col-md-7 col-12"></div>
+                          <div className="col-md-5 col-12 border rounded">
+                            <div className="container-fluid py-2">
+                              <div className="row">
+                                <div className="col-md-8 col-12">
+                                  {" "}
+                                  <label className="text-dark ">
+                                    Sub Total(SGT)
+                                  </label>
+                                </div>
+                                <div className="col-md-4 col-12">
+                                  {" "}
+                                  <span>: {quote.subTotal || "0"}.00</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="container-fluid py-2">
+                              <div className="row">
+                                <div className="col-md-8 col-12">
+                                  {" "}
+                                  <label className="text-dark ">
+                                    Discount(%)
+                                  </label>
+                                </div>
+                                <div className="col-md-4 col-12">
+                                  {" "}
+                                  <span>: {quote.txnDiscount || "0"}.00</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="container-fluid py-2">
+                              <div className="row">
+                                <div className="col-md-8 col-12">
+                                  {" "}
+                                  <label className="text-dark ">Tax(%)</label>
+                                </div>
+                                <div className="col-md-4 col-12">
+                                  {" "}
+                                  <span>: {quote.txnTax || "0"}.00</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="container-fluid py-2">
+                              <div className="row">
+                                <div className="col-md-8 col-12">
+                                  <label className="text-dark ">
+                                    Grand Total(SGT)
+                                  </label>
+                                </div>
+                                <div className="col-md-4 col-12">
+                                  <span>: {quote.grandTotal || "0"}.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
+                // <div></div>
                 <p>No quotes available.</p>
               )}
             </div>
           </div>
 
-          {/* Notes */}
-          {/* <div className="container-fluid row" id="Details">
-            <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
-              <div>
-                <span className="my-3 fs-6 fw-bold my-3">Notes</span>
-              </div>
-              <div className="dropdown">
-                <Link
-                  className="btn border border-primary text-primary dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Recent Last
-                </Link>
-                <ul className="dropdown-menu">
-                  <li className="mt-2"></li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="container  col-12">
-              <textarea
-                className="form-control py-2 m-3 textarea"
-                placeholder="'Add note...'"
-              ></textarea>
-            </div>
-          </div> */}
+          {/* Notes -- */}
         </div>
       </section>
     </>
