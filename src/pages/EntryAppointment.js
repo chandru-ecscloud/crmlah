@@ -9,7 +9,7 @@ import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   appointmentFor: Yup.string().required("*Appointment for is required"),
   appointmentStartDate: Yup.string().required("*Prefer Date is required"),
-  appointmentStartTime: Yup.string().required("*Prefer Time is required"),
+  timeSlotId: Yup.string().required("*Prefer Time is required"),
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   phone: Yup.string().required("*Phone Number is required")
   .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
@@ -25,7 +25,7 @@ const EntryAppointment = () => {
       email: "",
       appointmentStartDate: "",
       phone:"",
-      appointmentStartTime: "",
+      timeSlotId: "",
       additionalInformation: "",
     },
     validationSchema: validationSchema,
@@ -40,6 +40,7 @@ const EntryAppointment = () => {
           selectedTimeSlot = time.slotTime || "--";
         }
       });
+      data.appointmentStartTime = selectedTimeSlot;
       setLoadIndicator(true)
       const payload = {
         first_name :data.appointmentFor,
@@ -49,6 +50,8 @@ const EntryAppointment = () => {
         lead_status:"Processed",
         description_info: data.additionalInformation,
         phone: data.phone,
+     
+        
       }
       try {
         const response = await axios.post(`${API_URL}newClient`,payload ,{
@@ -70,7 +73,8 @@ const EntryAppointment = () => {
   
 
       try {
-        const response = await axios.post(`${API_URL}book-appointment`,data, {
+
+          const response = await axios.post(`${API_URL}book-appointment`,data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -237,6 +241,8 @@ const EntryAppointment = () => {
         } else {
           toast.error(error.response?.data.message);
         }
+      }finally{
+        setLoadIndicator(false)
       }
       resetForm();
     },
@@ -254,6 +260,7 @@ const EntryAppointment = () => {
         }
       );
       setAppointmentTime(response.data);
+     
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -266,6 +273,8 @@ const EntryAppointment = () => {
   useEffect(() => {
     fetchAppointmentTime();
   }, [formik.values.appointmentStartDate]);
+
+  console.log("appointmentTime",appointmentTime)
 
   return (
     <section className="signIn">
@@ -358,10 +367,10 @@ const EntryAppointment = () => {
                         ))}
                       </select>
                       </div>
-                      {formik.touched.appointmentStartTime &&
-                        formik.errors.appointmentStartTime && (
+                      {formik.touched.timeSlotId &&
+                        formik.errors.timeSlotId && (
                           <p className="text-danger">
-                            {formik.errors.appointmentStartTime}
+                            {formik.errors.timeSlotId}
                           </p>
                         )}
                         </div>

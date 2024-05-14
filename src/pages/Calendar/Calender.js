@@ -10,19 +10,21 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
+import CalenderEdit from "./CalenderEdit";
+import CalenderAdd from "./CalenderAdd";
 
 function Calendar() {
   const [data, setData] = useState([]);
+  console.log("data:", data);
   const [events, setEvents] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
-  console.log(data);
-
   const [showModal, setShowModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [newEvent, setNewEvent] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedId, setSelectedId] = useState();
 
   const fetchData = async () => {
     try {
@@ -78,11 +80,25 @@ function Calendar() {
     );
   };
 
+  // const handleEventClick = (eventClickInfo) => {
+  //   setSelectedEvent(eventClickInfo.event);
+  //   setShowViewModal(true);
+  // };
+
   const handleEventClick = (eventClickInfo) => {
     setSelectedEvent(eventClickInfo.event);
+    const { event } = eventClickInfo;
+    const filteredEvents = events.filter((e) => e.id !== event.id);
+    setSelectedId(event.id);
+
+    setEvents(filteredEvents);
+    console.log(
+      `View event: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
+    );
     setShowViewModal(true);
   };
 
+  console.log("selectid", selectedId);
   const handleModalSave = () => {
     if (newEvent && newEvent.title) {
       const eventToAdd = {
@@ -198,8 +214,8 @@ function Calendar() {
           console.log("Whole Info", info);
           setNewEvent({
             title: "",
-            start: info.startStr, // Use startStr instead of start
-            end: info.endStr, // Use endStr instead of end
+            start: info.start, // Use startStr instead of start
+            end: info.end, // Use endStr instead of end
             allDay: info.allDay,
           });
           setShowModal(true);
@@ -213,7 +229,14 @@ function Calendar() {
       />
 
       {/* Add Event Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <CalenderAdd
+        showModal={showModal}
+        getData={fetchData}
+        setShowModal={setShowModal}
+        name={"Create Appointment"}
+        eventData={newEvent}
+      />
+      {/* <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <Form.Control
@@ -241,27 +264,52 @@ function Calendar() {
             Save
           </button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       {/* View Event Modal */}
-      <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
-        <Modal.Header closeButton>
-          <div className="d-flex justify-content-between align-items-center w-100">
-            <div>
+      <Modal
+        show={showViewModal}
+        size="lg"
+        onHide={() => setShowViewModal(false)}
+        centered
+        scrollable
+      >
+        <Modal.Header className="custom-modal-header">
+          <div>
+            <b>
               <h5 className="modal-title">View Event Details</h5>
-            </div>
-            <div className="d-flex">
-              <button className="btn" onClick={handleEditClick}>
-                <MdEdit size={25} />
-              </button>
-              <button className="btn" onClick={handleDeleteClick}>
-                <MdDelete size={25} />
-              </button>
-            </div>
+            </b>
           </div>
+          <button className="btn close" onClick={() => setShowViewModal(false)}>
+            <span className="text-light">X</span>
+          </button>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="custom-modal-body">
           <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Event Title</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">
+                : {selectedEvent ? selectedEvent.title : ""}
+              </p>
+            </div>
+            <div className="col-6">
+              <p className="fw-medium">Event Title</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">
+                : {selectedEvent ? selectedEvent.title : ""}
+              </p>
+            </div>
+            <div className="col-6">
+              <p className="fw-medium">Event Title</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">
+                : {selectedEvent ? selectedEvent.title : ""}
+              </p>
+            </div>
             <div className="col-6">
               <p className="fw-medium">Event Title</p>
             </div>
@@ -275,7 +323,8 @@ function Calendar() {
       </Modal>
 
       {/* Edit Event Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+
+      {/* <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Event Title</Modal.Title>
         </Modal.Header>
@@ -305,7 +354,7 @@ function Calendar() {
             Update
           </button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       {/* Delete Event Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
