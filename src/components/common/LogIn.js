@@ -55,6 +55,10 @@ function LogIn({ handleLogin }) {
         sessionStorage.setItem("role", response.data.role);
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem(
+          "appointmentRole",
+          response.data.appointmentRole
+        );
         handleLogin();
         navigate("/dashboard");
       } else {

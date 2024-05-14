@@ -83,6 +83,7 @@ const CompanyRegistrationForm = () => {
       console.log("User Datas:", data);
       data.role = "CMP_OWNER";
       data.jwtRole = "CMP_OWNER";
+      data.appointmentRoleType = "OWNER";
       try {
         let response;
         if (userNameAvailable) {

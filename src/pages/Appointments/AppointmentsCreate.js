@@ -8,9 +8,9 @@ import * as Yup from "yup";
 
 function AppointmentsCreate({ name, schedule, getData }) {
   const [show, setShow] = useState(false);
-  const owner = sessionStorage.getItem("user_time");
+  const appointmentRole = sessionStorage.getItem("appointmentRole");
   const [serviceData, setserviceData] = useState([]);
-  console.log(serviceData);
+  // console.log(serviceData);
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
@@ -109,7 +109,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      data.appointmentRoleType = "OWNER";
+      data.appointmentRoleType = appointmentRole;
       data.userId = userId;
 
       // console.log("Add appointment", data);
@@ -139,8 +139,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
             if (response.status === 200) {
               let mailContent;
-              if(data.appointmentMode==="ONLINE"){
-                 mailContent =  `
+              if (data.appointmentMode === "ONLINE") {
+                mailContent = `
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -264,8 +264,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   </div>
                 </body>
                 </html>`;
-              }else{
-               mailContent =  `
+              } else {
+                mailContent = `
               <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -390,7 +390,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 </div>
               </body>
               </html>`;
-            }
+              }
               try {
                 const response = await axios.post(`${API_URL}sendMail`, {
                   toMail: data.email,

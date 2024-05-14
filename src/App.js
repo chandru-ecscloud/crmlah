@@ -25,6 +25,7 @@ function App() {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("appointmentRole");
     setIsAdmin(false);
   };
 

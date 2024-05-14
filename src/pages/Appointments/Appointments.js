@@ -29,7 +29,7 @@ const Appointments = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
-  const companyId = sessionStorage.getItem("companyId");
+  const userId = sessionStorage.getItem("userId");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
@@ -68,8 +68,8 @@ const Appointments = () => {
         accessorKey: "appointmentMode",
         enableHiding: false,
         header: "Appointment Mode",
-        Cell :({row}) =>
-          row.original.appointmentMode ==="ONLINE" ? (
+        Cell: ({ row }) =>
+          row.original.appointmentMode === "ONLINE" ? (
             <span className="badge bg-success py-2 ">
               {row.original.appointmentMode}
             </span>
@@ -77,7 +77,7 @@ const Appointments = () => {
             <span className="badge bg-danger py-2 ">
               {row.original.appointmentMode}
             </span>
-          )
+          ),
       },
       {
         accessorKey: "appointmentStartDate",
@@ -170,7 +170,7 @@ const Appointments = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}getAllAppointmentsByCompanyId/${companyId}`,
+        `${API_URL}getAppointmentDetailsByUserId/${userId}`,
         {
           headers: {
             "Content-Type": "application/json",
