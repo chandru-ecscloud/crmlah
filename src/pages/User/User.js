@@ -91,9 +91,9 @@ const UserActivation = () => {
           ) : row.original.role === "CRM_ADMIN" ? (
             <span className="badge bg-warning py-2">Admin</span>
           ) : row.original.role === "CMP_ADMIN" ? (
-            <span className="badge bg-success py-2">Company Admin</span>
+            <span className="badge bg-warning py-2">Company Admin</span>
           ) : (
-            <span className="badge bg-danger  py-2">Company User</span>
+            <span className="badge bg-secondary  py-2">Company User</span>
           ),
       },
       {

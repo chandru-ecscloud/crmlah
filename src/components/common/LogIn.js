@@ -65,7 +65,12 @@ function LogIn({ handleLogin }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed: " + error.message);
+      if(error?.response?.status === 404){
+        toast.warning("User not verified")
+      }else{
+        toast.warning("Invalid Username or Password")
+      }
+      // toast.error("Failed: " + error.message);
     }
   };
 

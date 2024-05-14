@@ -56,6 +56,7 @@ function CompanyEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      console.log("Company Edit Data:",data);
       try {
         // Make both API calls simultaneously
         const [userResponse, companyResponse] = await Promise.all([
@@ -327,7 +328,7 @@ function CompanyEdit() {
                   {...formik.getFieldProps("registrationStatus")}
                 >
                   {/* <option value=""></option> */}
-                  <option value="PENDING">PENDING</option>
+                  <option selected value="PENDING">PENDING</option>
                   <option value="APPROVED">APPROVED</option>
                   <option value="REJECTED">REJECTED</option>
                 </select>
