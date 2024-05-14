@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
   companyName: yup.string().required("*Enter the Company Name"),
   email: yup
     .string()
-    .email("*Pls Enter valid email")
+    .email("*Please Enter valid email")
     .required("*Enter the Email"),
 
   role: yup.string().required("*Select the Role"),
@@ -366,8 +366,8 @@ function UserCreate() {
                   id="appointmentRoleType"
                 >
                   <option></option>
-                  <option value="SALES MANAGER">SALES MANAGER</option>
-                  <option value="SALES EXECUTIVE">SALES EXECUTIVE</option>
+                  <option value="SALES_MANAGER">SALES MANAGER</option>
+                  <option value="SALES_EXECUTIVE">SALES EXECUTIVE</option>
                   <option value="FREELANCERS">FREELANCERS</option>
                 </select>
               </div>
@@ -469,13 +469,14 @@ function UserCreate() {
                     {...formik.getFieldProps("password")}
                     name="password"
                     id="password"
-                    style={{ margin: "0px" }}
+                    style={{ margin: "0px" ,borderRight:"none"}}
                   />
                   <span
-                    className="btn btn-outline-secondary"
+                    className="btn border"
                     onClick={togglePasswordVisibility}
+                    style={{ borderLeft:"none !important"}}
                   >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    {showPassword ? <FaEyeSlash className="text-secondary"/> : <FaEye className="text-secondary"/>}
                   </span>
                 </div>
               </div>
@@ -503,13 +504,14 @@ function UserCreate() {
                     {...formik.getFieldProps("cpassword")}
                     name="cpassword"
                     id="cpassword"
-                    style={{ margin: "0px" }}
+                    style={{ margin: "0px" ,borderRight:"none"}}
                   />
                   <span
-                    className="btn btn-outline-secondary"
+                    className="btn border"
                     onClick={toggleCPasswordVisibility}
+                    style={{ borderLeft:"none !important"}}
                   >
-                    {showCPassword ? <FaEyeSlash /> : <FaEye />}
+                    {showCPassword ? <FaEyeSlash className="text-secondary"/> : <FaEye className="text-secondary"/>}
                   </span>
                 </div>
               </div>
