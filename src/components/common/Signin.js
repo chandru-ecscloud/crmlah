@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
     .email("*Pls Enter valid email")
     .required("*Enter the Email"),
 
-  role: yup.string().required("*Select the Role"),
+  // role: yup.string().required("*Select the Role"),
   password: yup.string().required("*Enter the valid Password"),
   // .min(4, "*min length of 4 chars")
   // .matches(
@@ -55,6 +55,7 @@ const CompanyRegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPasword] = useState(false);
   const [userNameAvailable, setUserNameAvailable] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -84,9 +85,11 @@ const CompanyRegistrationForm = () => {
       data.role = "CMP_OWNER";
       data.jwtRole = "CMP_OWNER";
       data.appointmentRoleType = "OWNER";
+     
       try {
         let response;
         if (userNameAvailable) {
+          setLoadIndicator(true);
           response = await axios.post(`${API_URL}newUserRegister`, data, {
             headers: {
               "Content-Type": "application/json",
@@ -98,10 +101,14 @@ const CompanyRegistrationForm = () => {
           sessionStorage.setItem("companyId", response.data.companyId);
           navigate("/emailsuccess");
         } else {
+          // toast.error("Email is already in use!");
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        // toast.error("Failed: " + error.message);
+        toast.warning("Email is already in use!");
+      }finally {
+        setLoadIndicator(false); // Set loading indicator back to false after request completes
       }
     },
   });
@@ -251,7 +258,7 @@ const CompanyRegistrationForm = () => {
         )}
       </div> */}
 
-      <div className="mb-3 ">
+      {/* <div className="mb-3 ">
         <label className="form-label">Role :</label>
         <select
           type="text"
@@ -269,7 +276,7 @@ const CompanyRegistrationForm = () => {
         {formik.touched.role && formik.errors.role && (
           <p className="text-danger text-start">{formik.errors.role}</p>
         )}
-      </div>
+      </div> */}
 
       {/* password */}
       <div className="form-group mb-3">
@@ -480,7 +487,14 @@ const CompanyRegistrationForm = () => {
           // className="donateBtn btn btn-primary mx-auto"
           className="btn donateBtn "
           type="submit"
+          disabled={loadIndicator}
         >
+          {loadIndicator && (
+            <span
+              class="spinner-border spinner-border-sm me-2 "
+              aria-hidden="true"
+            ></span>
+          )}
           Register
         </button>
       </div>
