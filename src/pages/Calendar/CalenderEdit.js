@@ -11,9 +11,9 @@ const validationSchema = Yup.object().shape({
   leadId: Yup.string().required("*Appointment for is required"),
   serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
-  appointmentName: Yup.string().required("*Name is required"),
-  appointmentStartDate: Yup.date().required("*Start date is required"),
-  timeSlotId: Yup.string().required("*Start Time is required"),
+  // appointmentName: Yup.string().required("*Name is required"),
+  // appointmentStartDate: Yup.date().required("*Start date is required"),
+  // timeSlotId: Yup.string().required("*Start Time is required"),
   location: Yup.string().required("*Location is required"),
   member: Yup.string().required("*Member is required"),
   street: Yup.string().required("*Street is required"),
@@ -27,12 +27,25 @@ const validationSchema = Yup.object().shape({
   appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
-function CalenderEdit({ id }) {
-  
+function CalenderEdit({ id,setShowViewModal }) {
   const companyId = sessionStorage.getItem("companyId");
   const [showEditModal, setShowEditModal] = useState(false);
   const [serviceData, setServiceData] = useState([]);
   const [leadData, setleadData] = useState([]);
+  // const formattedTimeRange = data.appointmentStartTime
+  //   ? data.appointmentStartTime
+  //       .split(" - ")
+  //       .map((time) =>
+  //         new Date(`2024-05-20T${time}:00`).toLocaleString("en-US", {
+  //           hour: "numeric",
+  //           minute: "numeric",
+  //           hour12: true,
+  //         })
+  //       )
+  //       .join(" - ")
+  //   : "";
+
+  // console.log("Formatted time range:", formattedTimeRange);
   // const role = sessionStorage.getItem("role");
   const formik = useFormik({
     initialValues: {
@@ -57,8 +70,26 @@ function CalenderEdit({ id }) {
 
     onSubmit: async (data) => {
       console.log("calenderData", data);
+
+      // data.appointmentStartTime = formattedTimeRange;
+      const payload = {
+        companyId :data.companyId,
+        leadId : data.leadId,
+        serviceId:data.serviceId,
+        duration :data.duration,
+        location:data.location,
+        member:data.member,
+        street:data.street,
+        city:data.city,
+        state:data.state,
+        zipCode:data.zipCode,
+        country:data.country,
+        additionalInformation:data.additionalInformation,
+        appointmentMode:data.appointmentMode,
+      }
+
       try {
-        const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
+       const response = await axios.put(`${API_URL}updateAppointment/${id}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -75,30 +106,31 @@ function CalenderEdit({ id }) {
         } else {
           toast.error(error.response?.data.message);
         }
-
       }
     },
   });
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}allAppointments/${id}`
-      );
-      formik.setValues({...response.data});
+      const response = await axios.get(`${API_URL}allAppointments/${id}`);
+      formik.setValues({ ...response.data });
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
   };
   const fetchLeadData = async () => {
     try {
-      const response = await axios(`${API_URL}getLeadBasicDetails/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getLeadBasicDetails/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // console.log(response.data)
+
       setleadData(response.data);
       console.log("userid", leadData);
     } catch (error) {
@@ -131,13 +163,14 @@ function CalenderEdit({ id }) {
   };
   const handleEditClick = () => {
     setShowEditModal(true);
+    // setShowViewModal(false)
   };
 
   return (
     <>
       {" "}
       <button className="btn" onClick={handleEditClick}>
-        <MdEdit size={25} style={{color:"white"}} />
+        <MdEdit size={25} style={{ color: "white" }} />
       </button>
       <Modal
         show={showEditModal}
@@ -196,10 +229,10 @@ function CalenderEdit({ id }) {
                       >
                         <option value=" "></option>
                         {leadData.map((option) => (
-                              <option key={option.id} value={option.id}>
-                                {option.name}
-                              </option>
-                            ))}
+                          <option key={option.id} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="row sm-device">
@@ -227,10 +260,10 @@ function CalenderEdit({ id }) {
                       >
                         <option value=""></option>
                         {serviceData.map((option) => (
-                              <option key={option.id} value={option.id}>
-                                {option.serviceName}
-                              </option>
-                            ))}
+                          <option key={option.id} value={option.id}>
+                            {option.serviceName}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="row sm-device">
