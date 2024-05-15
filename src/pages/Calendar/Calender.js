@@ -43,15 +43,25 @@ function Calendar() {
 
   useEffect(() => {
     // Transform data into FullCalendar event format
-    const formattedEvents = data.map((item) => ({
-      id: item.id,
-      title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
-      start: `${item.appointmentStartDate}`,
-      end: `${item.appointmentStartDate}`,
-      allDay: false, // Assuming appointments are not all-day events
-    }));
+    const formattedEvents = data.map((item) => {
+      const [startTime, endTime] = item.appointmentStartTime.split(' - ');
+  
+      const startDateTime = new Date(`${item.appointmentStartDate}T${startTime}`);
+  
+      const endDateTime = new Date(`${item.appointmentStartDate}T${endTime}`);
+  
+      return {
+        id: item.id,
+        title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
+        start: startDateTime,
+        end: endDateTime,
+        allDay: false,  
+      };
+    });
+  
     setEvents(formattedEvents);
   }, [data]);
+  
 
   const handleEventAdd = (eventAddInfo) => {
     const { event } = eventAddInfo;
@@ -98,48 +108,68 @@ function Calendar() {
     setShowViewModal(true);
   };
 
-  console.log("selectid", selectedId);
-  const handleModalSave = () => {
-    if (newEvent && newEvent.title) {
-      const eventToAdd = {
-        ...newEvent,
-        id: uuidv4(),
-        start: newEvent.start.toISOString(), // Convert to ISO string
-        end: newEvent.end.toISOString(), // Convert to ISO string
-      };
-      setEvents([...events, eventToAdd]);
-      setShowModal(false);
-      setNewEvent(null);
-      console.log(
-        `Added event: ID - ${eventToAdd.id}, Title - ${eventToAdd.title}, Start - ${eventToAdd.start}, End - ${eventToAdd.end}`
-      );
-    }
-  };
+  // console.log("selectid", selectedId);
+  // const handleModalSave = () => {
+  //   if (newEvent && newEvent.title) {
+  //     const eventToAdd = {
+  //       ...newEvent,
+  //       id: uuidv4(),
+  //       start: newEvent.start.toISOString(), // Convert to ISO string
+  //       end: newEvent.end.toISOString(), // Convert to ISO string
+  //     };
+  //     setEvents([...events, eventToAdd]);
+  //     setShowModal(false);
+  //     setNewEvent(null);
+  //     console.log(
+  //       `Added event: ID - ${eventToAdd.id}, Title - ${eventToAdd.title}, Start - ${eventToAdd.start}, End - ${eventToAdd.end}`
+  //     );
+  //   }
+  // };
 
-  const handleEditModalSave = () => {
-    if (selectedEvent && selectedEvent.title) {
-      const updatedEvents = events.map((event) =>
-        event.id === selectedEvent.id
-          ? { ...event, title: selectedEvent.title }
-          : event
-      );
-      setEvents(updatedEvents);
-      setShowEditModal(false);
-      setSelectedEvent(null);
-      console.log(
-        `Updated event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
-      );
-    }
-  };
+  // const handleEditModalSave = () => {
+  //   if (selectedEvent && selectedEvent.title) {
+  //     const updatedEvents = events.map((event) =>
+  //       event.id === selectedEvent.id
+  //         ? { ...event, title: selectedEvent.title }
+  //         : event
+  //     );
+  //     setEvents(updatedEvents);
+  //     setShowEditModal(false);
+  //     setSelectedEvent(null);
+  //     console.log(
+  //       `Updated event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
+  //     );
+  //   }
+  // };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async() => {
     if (selectedEvent) {
       const filteredEvents = events.filter(
         (event) => event.id !== selectedEvent.id
       );
       setEvents(filteredEvents);
+      try {
+        const response = await axios.delete(
+          `${API_URL}cancelAppointment/${selectedEvent.id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
       setSelectedEvent(null);
       setShowDeleteModal(false);
+      fetchData();
+      setShowViewModal(false)
       console.log(
         `Deleted event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
       );
@@ -156,77 +186,189 @@ function Calendar() {
     setShowDeleteModal(true);
   };
 
-  const handleEventDrop = (eventDropInfo) => {
+  const handleEventDrop = async(eventDropInfo) => {
     const { event } = eventDropInfo;
+    const StartDate = new Date(event.start).toISOString().slice(0, 10);
+    const startTime = new Date(event.start).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true 
+    });
+    const endTime = new Date(event.end).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true 
+    });
+    
+      try {
+        const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if(response.status ===200){
+          const payload={
+            ...response.data,
+            appointmentStartDate:StartDate,
+            appointmentStartTime: `${startTime} - ${endTime}`,
+          }
+          try {
+            const response = await axios.put(`${API_URL}updateAppointment/${event.id}`, payload, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (response.status === 200) {
+              // getData();
+              toast.success(response.data.message);
+              // handleClose();
+            } else {
+              toast.error("Appointment Created Unsuccessful.");
+            }
+          } catch (error) {
+            if (error.response?.status === 400) {
+              toast.warning(error.response?.data.message);
+            } else {
+              toast.error(error.response?.data.message);
+            }
+          }
+        }
+        // console.log("response.data", response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     console.log(
       `Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
   };
 
-  const handleEventResize = (eventResizeInfo) => {
+  const handleEventResize = async(eventResizeInfo) => {
     const { event } = eventResizeInfo;
+    const StartDate = new Date(event.start).toISOString().slice(0, 10);
+    const startTime = new Date(event.start).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true 
+    });
+    const endTime = new Date(event.end).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true 
+    });
+    
+      try {
+        const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if(response.status ===200){
+          const payload={
+            ...response.data,
+            appointmentStartDate:StartDate,
+            appointmentStartTime: `${startTime} - ${endTime}`,
+          }
+          try {
+            const response = await axios.put(`${API_URL}updateAppointment/${event.id}`, payload, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (response.status === 200) {
+              // getData();
+              toast.success(response.data.message);
+              // handleClose();
+            } else {
+              toast.error("Appointment Created Unsuccessful.");
+            }
+          } catch (error) {
+            if (error.response?.status === 400) {
+              toast.warning(error.response?.data.message);
+            } else {
+              toast.error(error.response?.data.message);
+            }
+          }
+        }
+        // console.log("response.data", response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     console.log(
       `Event resized: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
   };
-
+  const renderEventContent = (eventInfo) => {
+    console.log("object",eventInfo)
+    return (
+      <>
+        <strong>{eventInfo.timeText}</strong>
+        <span>{eventInfo.event.title}</span>
+      </>
+    );
+  };
   return (
     <div className="calender">
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-        initialView={"dayGridMonth"}
-        headerToolbar={{
-          start: "today,prev,next",
-          center: "title",
-          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
-        }}
-        height={"90vh"}
-        events={events}
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={true}
-        views={{
-          customWorkWeek: {
-            type: "timeGridWeek",
-            duration: { weeks: 1 },
-            buttonText: "Work Week",
-            hiddenDays: [0, 6],
-          },
-          customAgenda: {
-            type: "listWeek",
-            buttonText: "Agenda",
-          },
-          customDay: {
-            type: "timeGridDay",
-            buttonText: "Day",
-          },
-          customWeek: {
-            type: "timeGridWeek",
-            buttonText: "Week",
-          },
-          customMonth: {
-            type: "dayGridMonth",
-            buttonText: "Month",
-          },
-        }}
-        select={(info) => {
-          console.log("Whole Info", info);
-          setNewEvent({
-            title: "",
-            start: info.start, // Use startStr instead of start
-            end: info.end, // Use endStr instead of end
-            allDay: info.allDay,
-          });
-          setShowModal(true);
-        }}
-        eventAdd={handleEventAdd}
-        eventClick={handleEventClick}
-        eventChange={handleEventUpdate}
-        eventRemove={handleEventDelete}
-        eventDrop={handleEventDrop} // Handle event drop
-        eventResize={handleEventResize} // Attach event resize callback
-      />
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+          initialView={"dayGridMonth"}
+          headerToolbar={{
+            start: "today,prev,next",
+            center: "title",
+            end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
+          }}
+          height={"90vh"}
+          events={events}
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          views={{
+            customWorkWeek: {
+              type: "timeGridWeek",
+              duration: { weeks: 1 },
+              buttonText: "Work Week",
+              hiddenDays: [0, 6],
+            },
+            customAgenda: {
+              type: "listWeek",
+              buttonText: "Agenda",
+            },
+            customDay: {
+              type: "timeGridDay",
+              buttonText: "Day",
+            },
+            customWeek: {
+              type: "timeGridWeek",
+              buttonText: "Week",
+            },
+            customMonth: {
+              type: "dayGridMonth",
+              buttonText: "Month",
+            },
+          }}
+          select={(info) => {
+            console.log("Whole Info", info);
+            setNewEvent({
+              title: "",
+              start: info.start, // Use startStr instead of start
+              end: info.end, // Use endStr instead of end
+              allDay: info.allDay,
+            });
+            setShowModal(true);
+          }}
+          eventAdd={handleEventAdd}
+          eventClick={handleEventClick}
+          eventChange={handleEventUpdate}
+          eventRemove={handleEventDelete}
+          eventDrop={handleEventDrop} // Handle event drop
+          eventResize={handleEventResize} // Attach event resize callback
+        />
 
       {/* Add Event Modal */}
       <CalenderAdd
@@ -282,7 +424,7 @@ function Calendar() {
           </div>
           <span className="calenderEdit-icon">
             <CalenderEdit id={selectedId} />
-            <MdDelete size={23}/>
+            <button className="btn" onClick={() => setShowDeleteModal(true)}> <MdDelete size={23}/></button>
           </span>
           <span>
          
@@ -376,7 +518,7 @@ function Calendar() {
           >
             Yes
           </button>
-          <button type="button" className="btn btn-sm btn-light">
+          <button type="button" className="btn btn-sm btn-light" onClick={()=>setShowDeleteModal(false)}>
             No
           </button>
         </Modal.Footer>

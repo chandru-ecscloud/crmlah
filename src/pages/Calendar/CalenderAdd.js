@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
- 
+  const appointmentRole = sessionStorage.getItem("appointmentRole");
   const owner = sessionStorage.getItem("user_time");
   const [serviceData, setserviceData] = useState([]);
   console.log(serviceData);
@@ -41,8 +41,9 @@ function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
   const userId = sessionStorage.getItem("userId");
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
+  
+  console.log("eventData",eventData)
 
-  // console.log("eventData",eventData)
   const formik = useFormik({
     initialValues: {
       serviceId: "",
@@ -107,13 +108,12 @@ function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
         minute: 'numeric',
         hour12: true 
       });
-       const date =
-      data.appointmentStartDate = eventData.start
+      const StartDate = new Date(eventData.start).toISOString().slice(0, 10);
       data.appointmentStartTime = `${startTime} - ${endTime}`;
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      data.appointmentRoleType = "OWNER";
+      data.appointmentRoleType = appointmentRole;
       data.userId = userId;
 
       // console.log("Add appointment", data);
@@ -125,29 +125,26 @@ function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
         });
         if (response.status === 201) {
           console.log(response.data.appointmentId);
-         if (response.data.appointmentId){ 
-          setShowModal(false);
           getData();
           resetForm();
           toast.success(response.data.message);
-          
-         }
+          setShowModal(false);
+
           try {
             const response = await axios.post(
               `${API_URL}GenerateSingaporeZoomMeetingLink`,
               {
                 meetingTitle: data.typeOfAppointment,
-                startDate: data.appointmentStartDate.split(" ")[0],
+                startDate: StartDate,
                 startTime: data.appointmentStartTime.split(" ")[0],
                 duration: data.duration.split(" ")[0],
               }
             );
-            console.log("GenerateSingaporeZoomMeetingLink 1") 
+
             if (response.status === 200) {
-              console.log("GenerateSingaporeZoomMeetingLink 2")
               let mailContent;
-              if(data.appointmentMode==="ONLINE"){
-                 mailContent =  `
+              if (data.appointmentMode === "ONLINE") {
+                mailContent = `
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -271,8 +268,8 @@ function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
                   </div>
                 </body>
                 </html>`;
-              }else{
-               mailContent =  `
+              } else {
+                mailContent = `
               <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -397,7 +394,7 @@ function CalenderAdd( {name,showModal,getData,setShowModal,eventData}) {
                 </div>
               </body>
               </html>`;
-            }
+              }
               try {
                 const response = await axios.post(`${API_URL}sendMail`, {
                   toMail: data.email,
