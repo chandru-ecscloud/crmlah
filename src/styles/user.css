@@ -117,3 +117,16 @@
 .my-float {
   margin-top: 16px;
 }
+.Calenderview {
+  background-color: #007bff; 
+  color: #ffffff; 
+  font-family: Arial, sans-serif; 
+  font-weight: bold; 
+  height: 3rem;
+}
+.calenderEdit-icon{
+  position: absolute;
+  right: 60px;
+  top: 4px;
+
+ }

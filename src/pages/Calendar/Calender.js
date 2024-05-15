@@ -6,12 +6,12 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { Modal, Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
-import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
 import CalenderEdit from "./CalenderEdit";
 import CalenderAdd from "./CalenderAdd";
+import { MdDelete } from "react-icons/md";
 
 function Calendar() {
   const [data, setData] = useState([]);
@@ -274,14 +274,22 @@ function Calendar() {
         centered
         scrollable
       >
-        <Modal.Header className="custom-modal-header">
-          <div>
+        <Modal.Header className="Calenderview">
+          <div className="">
             <b>
               <h5 className="modal-title">View Event Details</h5>
             </b>
           </div>
+          <span className="calenderEdit-icon">
+            <CalenderEdit id={selectedId} />
+            <MdDelete size={23}/>
+          </span>
+          <span>
+         
+          </span>
+
           <button className="btn close" onClick={() => setShowViewModal(false)}>
-            <span className="text-light">X</span>
+            <span className="text-light fs-4">X</span>
           </button>
         </Modal.Header>
         <Modal.Body className="custom-modal-body">

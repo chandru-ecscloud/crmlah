@@ -31,6 +31,8 @@ function CalenderEdit({ id }) {
   
   const companyId = sessionStorage.getItem("companyId");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [serviceData, setServiceData] = useState([]);
+  const [leadData, setleadData] = useState([]);
   // const role = sessionStorage.getItem("role");
   const formik = useFormik({
     initialValues: {
@@ -55,6 +57,26 @@ function CalenderEdit({ id }) {
 
     onSubmit: async (data) => {
       console.log("calenderData", data);
+      try {
+        const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          handleClose();
+        } else {
+          toast.error("Appointment Created Unsuccessful.");
+        }
+      } catch (error) {
+        if (error.response?.status === 400) {
+          toast.warning(error.response?.data.message);
+        } else {
+          toast.error(error.response?.data.message);
+        }
+
+      }
     },
   });
 
@@ -68,9 +90,40 @@ function CalenderEdit({ id }) {
       toast.error("Error fetching data:", error);
     }
   };
+  const fetchLeadData = async () => {
+    try {
+      const response = await axios(`${API_URL}getLeadBasicDetails/${companyId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data)
+      setleadData(response.data);
+      console.log("userid", leadData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchServiceData = async () => {
+    try {
+      const response = await axios(`${API_URL}getAllIdAndServiceName`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setServiceData(response.data);
+      // console.log("idAndName", ServiceData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     fetchData();
+    fetchServiceData();
+    fetchLeadData();
   }, []);
 
   const handleClose = () => {
@@ -84,7 +137,7 @@ function CalenderEdit({ id }) {
     <>
       {" "}
       <button className="btn" onClick={handleEditClick}>
-        <MdEdit size={25} />
+        <MdEdit size={25} style={{color:"white"}} />
       </button>
       <Modal
         show={showEditModal}
@@ -142,11 +195,11 @@ function CalenderEdit({ id }) {
                         {...formik.getFieldProps("leadId")}
                       >
                         <option value=" "></option>
-                        {/* {leadData.map((option) => (
+                        {leadData.map((option) => (
                               <option key={option.id} value={option.id}>
                                 {option.name}
                               </option>
-                            ))} */}
+                            ))}
                       </select>
                     </div>
                     <div className="row sm-device">
@@ -173,11 +226,11 @@ function CalenderEdit({ id }) {
                         }`}
                       >
                         <option value=""></option>
-                        {/* {serviceData.map((option) => (
+                        {serviceData.map((option) => (
                               <option key={option.id} value={option.id}>
                                 {option.serviceName}
                               </option>
-                            ))} */}
+                            ))}
                       </select>
                     </div>
                     <div className="row sm-device">

@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import EntryAppointment from "../pages/EntryAppointment";
 import Page404 from "../components/common/404";
 import { FaWhatsapp } from "react-icons/fa";
+import PrivacyAndPolicy from "../pages/PrivacyAndPolicy";
 
 function UserLayout({ handleLogin }) {
   return (
@@ -41,6 +42,7 @@ function UserLayout({ handleLogin }) {
           />
           <Route path="/entryappointment" element={<EntryAppointment />} />
           <Route path="*" element={<Page404 />} />
+          <Route path="/privacyandpolicy" element={<PrivacyAndPolicy/>} />
         </Routes>
         <a
           href="https://api.whatsapp.com/send/?phone=916379086118&text=Hello! I visited your website.&type=phone_number&app_absent=0"

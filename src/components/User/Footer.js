@@ -86,7 +86,9 @@ function Footer() {
             <div>
               <h6 className="mt-3 fw-bold">Others</h6>
               <span className="d-flex flex-column my-2 ">
-                <span className="footerContent mb-2 ">Privacy Policy</span>
+              <Link className="nav-link footerContent mt-2 " to="/privacyandpolicy">
+                  Privacy Policy
+                </Link>
                 <span className="footerContent mb-2 ">Terms & Conditions</span>
                 <span className="footerContent mb-2 ">Support</span>
               </span>
