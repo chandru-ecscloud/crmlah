@@ -70,11 +70,10 @@ function InvoicesEdit() {
   const addRow = () => {
     const updatedRows = [...rows, {}];
     setRows(updatedRows);
-
     const updatedInvoiceItemList = [
       ...formik.values.invoiceItemList,
       {
-        productName: "",
+        productId: "",
         quantity: "",
         listPrice: "",
         amount: "",
@@ -135,6 +134,7 @@ function InvoicesEdit() {
       invoiceItemList: [
         {
           productName: "",
+          productId: "",
           quantity: "",
           listPrice: "",
           amount: "",
@@ -144,29 +144,9 @@ function InvoicesEdit() {
         },
       ],
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Invoice Create:", values);
-      try {
-        const response = await axios.put(
-          `${API_URL}updateTransactionInvoiceAndInvoiceItems/${id}`,
-          values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              //Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.success(response.data.message);
-          // navigate("/invoice");
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
-      }
+      // console.log("Invoice Edit:", values);
       const payload = {
         transactionInvoice: {
           companyId: companyId,
@@ -200,7 +180,9 @@ function InvoicesEdit() {
           txnTax: values.txnTax,
         },
         invoiceItemList: rows.map((item) => ({
+          id: item.id,
           productName: item.productName,
+          productId: item.selectedOption ? item.selectedOption : undefined, 
           quantity: item.quantity,
           listPrice: item.listPrice,
           amount: item.amount,
@@ -208,8 +190,29 @@ function InvoicesEdit() {
           tax: parseInt(item.tax),
           total: parseInt(item.total),
         })),
+        deletedInvoiceItemIds: []
       };
       console.log("Payload:", payload);
+      try {
+        const response = await axios.put(
+          `${API_URL}updateTransactionInvoiceAndInvoiceItems/${id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/invoices");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
     },
   });
 
@@ -300,6 +303,7 @@ function InvoicesEdit() {
         ...updatedRows[index],
         selectedOption: value,
         productName: productName,
+        productId : response.data.id,
         listPrice: listPrice,
         quantity: 1,
         amount: listPrice,
@@ -404,12 +408,12 @@ function InvoicesEdit() {
     formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
-  const handleAdjustmentChange = (e) => {
-    const adjustmentValue = parseFloat(e.target.value);
-    const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
-    setAdjustment(adjustmentValue);
-    formik.setFieldValue("grandTotal", newGrandTotal);
-  };
+  // const handleAdjustmentChange = (e) => {
+  //   const adjustmentValue = parseFloat(e.target.value);
+  //   const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
+  //   setAdjustment(adjustmentValue);
+  //   formik.setFieldValue("grandTotal", newGrandTotal);
+  // };
 
   useEffect(() => {
     const userData = async () => {
@@ -420,42 +424,23 @@ function InvoicesEdit() {
             //Authorization: `Bearer ${token}`,
           },
         });
-        if (response.status === 200) {
           const getData = response.data;
           console.log("Invoice Data:", response.data);
           const formattedResponseData = {
             ...getData,
-            validUntil: getData.validUntil.substring(0, 10),
+            invoiceDate : getData.invoiceDate.substring(0, 10),
+            dueDate :getData.dueDate.substring(0, 10),
+            deletedInvoiceItemIds : []
           };
           console.log("formattedResponseData", formattedResponseData);
-          formik.setValues({ ...response.data });
-          // setRows(response.data.quotesItemList);
-
-          // setRows(
-          //   response.data.quotesItemList.map((item) => ({
-          //     ...item,
-          //     productName:
-          //       productOptions.find((option) => option.id === item.selectedOption)
-          //         ?.productName || "No Name Found",
-          //   }))
-          // );
-
-          // setRows(
-          //   response.data.quotesItemList.map((item) => ({
-          //     ...item,
-          //     productName: productOptions.find((option) => option.id === item.selectedOption)?.productName || "No Name Found",
-          //   }))
-          // );
-
+          formik.setValues(formattedResponseData);
           setRows(
             response.data.invoiceItemList.map((item, index) => ({
               ...item,
-              productName:
-                productOptions[index]?.productName || "No Name Found",
+              selectedOption: parseInt(item.productId),
             }))
           );
           console.log("Set Row DATA", response.data.invoiceItemList);
-        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -737,7 +722,7 @@ function InvoicesEdit() {
                 <lable>Due Date</lable> &nbsp;&nbsp;
                 <input
                   type="date"
-                  name="dueDate.substring(0,10)"
+                  name="dueDate"
                   className={`form-control form-size  ${
                     formik.touched.dueDate && formik.errors.dueDate
                       ? "is-invalid"
@@ -1211,21 +1196,20 @@ function InvoicesEdit() {
                     <td>
                       <select
                         className="form-select"
-                        name={`invoiceItemList[${index}].productName`}
+                        name={`invoiceItemList[${index}].productId`}
                         {...formik.getFieldProps(
-                          `invoiceItemList[${index}].productName`
+                          `invoiceItemList[${index}].productId`
                         )}
-                        value={row.productName}
+                        value={row.productId}
                         onChange={(e) =>
                           handleSelectChange(index, e.target.value)
                         }
                       >
-                        <option value="" selected disabled></option>
+                        <option></option>
                         {productOptions.map((option) => (
                           <option
                             key={option.id}
                             value={option.id}
-                            selected={row.selectedOption === option.id}
                           >
                             {option.productName}
                           </option>

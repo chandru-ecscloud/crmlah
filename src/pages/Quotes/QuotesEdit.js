@@ -59,8 +59,6 @@ function QuotesEdit() {
   const addRow = () => {
     const updatedRows = [...rows, {}];
     setRows(updatedRows);
-
-
     const updatedQuotesItemList = [
       ...formik.values.quotesItemList,
       {
@@ -131,8 +129,9 @@ function QuotesEdit() {
       ],
       deletedQuotesItemIds:[],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
+      // console.log("Quotes Edit:",values);
       const payload = {
         transactionQuotes: {
           companyId: companyId,
@@ -163,8 +162,9 @@ function QuotesEdit() {
           shippingCountry: values.shippingCountry,
         },
         quotesItemList: rows.map((item) => ({
-          productName: item.ProductName,
-          productId : item.selectedOption,
+          id: item.id,
+          productName: item.productName,
+          productId: item.selectedOption ? item.selectedOption : undefined, 
           quantity: item.quantity,
           listPrice: item.listPrice,
           amount: item.amount,
@@ -174,8 +174,8 @@ function QuotesEdit() {
         })),
         deletedQuotesItemIds: []
       };
+      console.log("Payload is ", payload);
 
-      // console.log("Payload is ", payload);
       try {
         const response = await axios.put(
           `${API_URL}updateTransactionQuotesAndQuoteItems/${id}`,
@@ -270,32 +270,6 @@ function QuotesEdit() {
     }
   };
 
-  // const handleSelectChange = async (index, value) => {
-  //   const updatedRows = [...rows];
-  //   updatedRows[index].selectedOption = value;
-  //   try {
-  //     const response = await axios.get(`${API_URL}allProducts/${value}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         //Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const productName = response.data.productName;
-  //     const listPrice = response.data.unitPrice;
-  //     const tax = response.data.tax;
-  //     updatedRows[index].ProductName = productName;
-  //     updatedRows[index].listPrice = listPrice;
-  //     updatedRows[index].quantity = 1;
-  //     updatedRows[index].amount = listPrice; // Update amount based on list price
-  //     updatedRows[index].tax = tax;
-  //     updatedRows[index].discount = 0;
-  //     updatedRows[index].total = listPrice; // Update total based on list price
-  //     setRows(updatedRows);
-  //   } catch (error) {
-  //     console.error("Error fetching product details:", error);
-  //   }
-  // };
-
   const handleSelectChange = async (index, value) => {
     try {
       const response = await axios.get(`${API_URL}allProducts/${value}`, {
@@ -327,7 +301,6 @@ function QuotesEdit() {
     }
   };
 
-  
   const handleQuantityChange = (index, value) => {
     const updatedRows = [...rows];
     updatedRows[index].quantity = value === "" ? 0 : parseInt(value, 10); // Parse value to integer
@@ -419,12 +392,12 @@ function QuotesEdit() {
     formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
-  const handleAdjustmentChange = (e) => {
-    const adjustmentValue = parseFloat(e.target.value);
-    const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
-    setAdjustment(adjustmentValue);
-    formik.setFieldValue("grandTotal", newGrandTotal);
-  };
+  // const handleAdjustmentChange = (e) => {
+  //   const adjustmentValue = parseFloat(e.target.value);
+  //   const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
+  //   setAdjustment(adjustmentValue);
+  //   formik.setFieldValue("grandTotal", newGrandTotal);
+  // };
 
   useEffect(() => {
     const userData = async () => {

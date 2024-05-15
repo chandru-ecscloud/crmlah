@@ -58,6 +58,7 @@ import UserEdit from "../pages/User/UserEdit";
 import UserShow from "../pages/User/UserShow";
 import Calender from "../pages/Calendar/Calender";
 import CalenderEdit from "../pages/Calendar/CalenderEdit";
+import CalenderShow from "../pages/Calendar/CalenderShow";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -69,6 +70,7 @@ function AdminLayout({ handleLogout }) {
         {/*  Calendar  */}
         <Route path="/calendar" element={<Calender />} />
         <Route path="/calender/calenderedit/:id" element={<CalenderEdit />} />
+        <Route path="/calender/calendershow/:id" element={<CalenderShow />} />
 
         <Route path="/dragable" element={<Dragable />} />
         {/* Lead   */}

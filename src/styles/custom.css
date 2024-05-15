@@ -621,5 +621,22 @@ nav .nav-link Link {
 
 .fc-daygrid-dot-event.fc-event-mirror,
 .fc-daygrid-dot-event:hover {
-  background: rgb(239 255 0 / 10%);
+  background: #6f96f8;
+}
+
+
+/* Define styles for different appointmentRoleType */
+/* .fc-direction-ltr .fc-list-table .fc-list-event-graphic {
+  visibility: hidden;
+} */
+.fc-theme-standard .fc-popover{
+  z-index: 1 !important;
+}
+.fc .fc-list-event-dot{
+  border: calc(var(--fc-list-event-dot-width) / 2) solid #5dd61d;
+  border-radius: calc(var(--fc-list-event-dot-width) / 2);
+  box-sizing: content-box;
+  display: inline-block;
+  height: 0px;
+  width: 0px;
 }
