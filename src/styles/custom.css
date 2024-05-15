@@ -633,10 +633,14 @@ nav .nav-link Link {
   z-index: 1 !important;
 }
 .fc .fc-list-event-dot{
-  border: calc(var(--fc-list-event-dot-width) / 2) solid #5dd61d;
+  border: calc(var(--fc-list-event-dot-width) / 2) solid #0077ff;
   border-radius: calc(var(--fc-list-event-dot-width) / 2);
   box-sizing: content-box;
   display: inline-block;
   height: 0px;
   width: 0px;
+}
+
+.fc-theme-standard td, .fc-theme-standard th{
+  overflow: hidden;
 }

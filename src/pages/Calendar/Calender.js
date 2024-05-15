@@ -12,6 +12,7 @@ import axios from "axios";
 import CalenderEdit from "./CalenderEdit";
 import CalenderAdd from "./CalenderAdd";
 import { MdDelete } from "react-icons/md";
+import CalenderShow from "./CalenderShow";
 
 function Calendar() {
   const [data, setData] = useState([]);
@@ -44,24 +45,26 @@ function Calendar() {
   useEffect(() => {
     // Transform data into FullCalendar event format
     const formattedEvents = data.map((item) => {
-      const [startTime, endTime] = item.appointmentStartTime.split(' - ');
-  
-      const startDateTime = new Date(`${item.appointmentStartDate}T${startTime}`);
-  
+      const [startTime, endTime] = item.appointmentStartTime.split(" - ");
+
+      const startDateTime = new Date(
+        `${item.appointmentStartDate}T${startTime}`
+      );
+
       const endDateTime = new Date(`${item.appointmentStartDate}T${endTime}`);
-  
+
       return {
         id: item.id,
         title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
         start: startDateTime,
         end: endDateTime,
-        allDay: false,  
+        allDay: false,
+        role: item.appointmentRoleType,
       };
     });
-  
+
     setEvents(formattedEvents);
   }, [data]);
-  
 
   const handleEventAdd = (eventAddInfo) => {
     const { event } = eventAddInfo;
@@ -142,7 +145,7 @@ function Calendar() {
   //   }
   // };
 
-  const handleDeleteEvent = async() => {
+  const handleDeleteEvent = async () => {
     if (selectedEvent) {
       const filteredEvents = events.filter(
         (event) => event.id !== selectedEvent.id
@@ -169,7 +172,7 @@ function Calendar() {
       setSelectedEvent(null);
       setShowDeleteModal(false);
       fetchData();
-      setShowViewModal(false)
+      setShowViewModal(false);
       console.log(
         `Deleted event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
       );
@@ -186,125 +189,133 @@ function Calendar() {
     setShowDeleteModal(true);
   };
 
-  const handleEventDrop = async(eventDropInfo) => {
+  const handleEventDrop = async (eventDropInfo) => {
     const { event } = eventDropInfo;
     const StartDate = new Date(event.start).toISOString().slice(0, 10);
-    const startTime = new Date(event.start).toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true 
+    const startTime = new Date(event.start).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
     });
-    const endTime = new Date(event.end).toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true 
+    const endTime = new Date(event.end).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
     });
-    
-      try {
-        const response = await axios(`${API_URL}allAppointments/${event.id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        if(response.status ===200){
-          const payload={
-            ...response.data,
-            appointmentStartDate:StartDate,
-            appointmentStartTime: `${startTime} - ${endTime}`,
-          }
-          try {
-            const response = await axios.put(`${API_URL}updateAppointment/${event.id}`, payload, {
+
+    try {
+      const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        const payload = {
+          ...response.data,
+          appointmentStartDate: StartDate,
+          appointmentStartTime: `${startTime} - ${endTime}`,
+        };
+        try {
+          const response = await axios.put(
+            `${API_URL}updateAppointment/${event.id}`,
+            payload,
+            {
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            if (response.status === 200) {
-              // getData();
-              toast.success(response.data.message);
-              // handleClose();
-            } else {
-              toast.error("Appointment Created Unsuccessful.");
             }
-          } catch (error) {
-            if (error.response?.status === 400) {
-              toast.warning(error.response?.data.message);
-            } else {
-              toast.error(error.response?.data.message);
-            }
+          );
+          if (response.status === 200) {
+            // getData();
+            toast.success(response.data.message);
+            // handleClose();
+          } else {
+            toast.error("Appointment Created Unsuccessful.");
+          }
+        } catch (error) {
+          if (error.response?.status === 400) {
+            toast.warning(error.response?.data.message);
+          } else {
+            toast.error(error.response?.data.message);
           }
         }
-        // console.log("response.data", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
+      // console.log("response.data", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
     console.log(
       `Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
   };
 
-  const handleEventResize = async(eventResizeInfo) => {
+  const handleEventResize = async (eventResizeInfo) => {
     const { event } = eventResizeInfo;
     const StartDate = new Date(event.start).toISOString().slice(0, 10);
-    const startTime = new Date(event.start).toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true 
+    const startTime = new Date(event.start).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
     });
-    const endTime = new Date(event.end).toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true 
+    const endTime = new Date(event.end).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
     });
-    
-      try {
-        const response = await axios(`${API_URL}allAppointments/${event.id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
-        if(response.status ===200){
-          const payload={
-            ...response.data,
-            appointmentStartDate:StartDate,
-            appointmentStartTime: `${startTime} - ${endTime}`,
-          }
-          try {
-            const response = await axios.put(`${API_URL}updateAppointment/${event.id}`, payload, {
+
+    try {
+      const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        const payload = {
+          ...response.data,
+          appointmentStartDate: StartDate,
+          appointmentStartTime: `${startTime} - ${endTime}`,
+        };
+        try {
+          const response = await axios.put(
+            `${API_URL}updateAppointment/${event.id}`,
+            payload,
+            {
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            if (response.status === 200) {
-              // getData();
-              toast.success(response.data.message);
-              // handleClose();
-            } else {
-              toast.error("Appointment Created Unsuccessful.");
             }
-          } catch (error) {
-            if (error.response?.status === 400) {
-              toast.warning(error.response?.data.message);
-            } else {
-              toast.error(error.response?.data.message);
-            }
+          );
+          if (response.status === 200) {
+            // getData();
+            toast.success(response.data.message);
+            // handleClose();
+          } else {
+            toast.error("Appointment Created Unsuccessful.");
+          }
+        } catch (error) {
+          if (error.response?.status === 400) {
+            toast.warning(error.response?.data.message);
+          } else {
+            toast.error(error.response?.data.message);
           }
         }
-        // console.log("response.data", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
+      // console.log("response.data", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
     console.log(
       `Event resized: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
   };
   const renderEventContent = (eventInfo) => {
-    console.log("object",eventInfo)
+    console.log("object", eventInfo);
     return (
       <>
         <strong>{eventInfo.timeText}</strong>
@@ -314,61 +325,98 @@ function Calendar() {
   };
   return (
     <div className="calender">
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-          initialView={"dayGridMonth"}
-          headerToolbar={{
-            start: "today,prev,next",
-            center: "title",
-            end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
-          }}
-          height={"90vh"}
-          events={events}
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          views={{
-            customWorkWeek: {
-              type: "timeGridWeek",
-              duration: { weeks: 1 },
-              buttonText: "Work Week",
-              hiddenDays: [0, 6],
-            },
-            customAgenda: {
-              type: "listWeek",
-              buttonText: "Agenda",
-            },
-            customDay: {
-              type: "timeGridDay",
-              buttonText: "Day",
-            },
-            customWeek: {
-              type: "timeGridWeek",
-              buttonText: "Week",
-            },
-            customMonth: {
-              type: "dayGridMonth",
-              buttonText: "Month",
-            },
-          }}
-          select={(info) => {
-            console.log("Whole Info", info);
-            setNewEvent({
-              title: "",
-              start: info.start, // Use startStr instead of start
-              end: info.end, // Use endStr instead of end
-              allDay: info.allDay,
-            });
-            setShowModal(true);
-          }}
-          eventAdd={handleEventAdd}
-          eventClick={handleEventClick}
-          eventChange={handleEventUpdate}
-          eventRemove={handleEventDelete}
-          eventDrop={handleEventDrop} // Handle event drop
-          eventResize={handleEventResize} // Attach event resize callback
-        />
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        initialView={"dayGridMonth"}
+        headerToolbar={{
+          start: "today,prev,next",
+          center: "title",
+          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
+        }}
+        height={"90vh"}
+        events={events}
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        views={{
+          customWorkWeek: {
+            type: "timeGridWeek",
+            duration: { weeks: 1 },
+            buttonText: "Work Week",
+            hiddenDays: [0, 6],
+          },
+          customAgenda: {
+            type: "listWeek",
+            buttonText: "Agenda",
+          },
+          customDay: {
+            type: "timeGridDay",
+            buttonText: "Day",
+          },
+          customWeek: {
+            type: "timeGridWeek",
+            buttonText: "Week",
+          },
+          customMonth: {
+            type: "dayGridMonth",
+            buttonText: "Month",
+          },
+        }}
+        select={(info) => {
+          console.log("Whole Info", info);
+          setNewEvent({
+            title: "",
+            start: info.start, // Use startStr instead of start
+            end: info.end, // Use endStr instead of end
+            allDay: info.allDay,
+          });
+          setShowModal(true);
+        }}
+        eventAdd={handleEventAdd}
+        eventClick={handleEventClick}
+        eventChange={handleEventUpdate}
+        eventRemove={handleEventDelete}
+        eventDrop={handleEventDrop} // Handle event drop
+        eventResize={handleEventResize} // Attach event resize callback
+        eventContent={(eventInfo) => {
+          const { event } = eventInfo;
+          const role = event.extendedProps.role;
+          let backgroundColor;
+          let borderLeft;
+          if (role === "OWNER") {
+            backgroundColor = "#BFF6C3";
+            borderLeft = "4px solid #40A578";
+          } else if (role === "SALES_MANAGER") {
+            backgroundColor = "#FFD1E3";
+            borderLeft = "4px solid #9F0D7F";
+          } else if (role === "SALES_EXECUTIVE") {
+            backgroundColor = "#FFDDCC";
+            borderLeft = "4px solid #C51605";
+          } else if (role === "FREELANCERS") {
+            backgroundColor = "#FFE79B";
+            borderLeft = "4px solid #E7B10A";
+          } else {
+            backgroundColor = "transparent";
+          }
+
+          return (
+            <>
+              <div
+              className="fc-v-event"
+                style={{
+                  backgroundColor,
+                  borderLeft,
+                  padding: "5px",
+                  borderRadius: "5px",
+                }}
+              >
+                {event.title}
+              </div>
+            </>
+          );
+        }}
+      />
 
       {/* Add Event Modal */}
       <CalenderAdd
@@ -378,6 +426,13 @@ function Calendar() {
         name={"Create Appointment"}
         eventData={newEvent}
       />
+
+      <CalenderShow
+        id={selectedId}
+        showViewModal={showViewModal}
+        setShowViewModal={setShowViewModal}
+      />
+
       {/* <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
@@ -409,7 +464,7 @@ function Calendar() {
       </Modal> */}
 
       {/* View Event Modal */}
-      <Modal
+      {/* <Modal
         show={showViewModal}
         size="lg"
         onHide={() => setShowViewModal(false)}
@@ -470,7 +525,7 @@ function Calendar() {
             </div>
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* Edit Event Modal */}
 
@@ -518,7 +573,11 @@ function Calendar() {
           >
             Yes
           </button>
-          <button type="button" className="btn btn-sm btn-light" onClick={()=>setShowDeleteModal(false)}>
+          <button
+            type="button"
+            className="btn btn-sm btn-light"
+            onClick={() => setShowDeleteModal(false)}
+          >
             No
           </button>
         </Modal.Footer>
