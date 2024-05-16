@@ -12,7 +12,7 @@ import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
   account_name: Yup.string().required("*Account Name is required"),
-  country_code: Yup.string().required("*Country Code is required"),
+  country_code: Yup.number().required("*Country Code is required"),
   phone: Yup.string()
     .matches(/^\d+$/, "Must be only digits")
     .min(8)
@@ -21,17 +21,17 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("*Email is required"),
   parent_account: Yup.string().required("*Parent Account is required"),
   account_number: Yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Account Number is required"),
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Account Number is required"),
   account_type: Yup.string().required("*Account Type is required"),
   shipping_street: Yup.string().required("*Shipping Street is required"),
   billing_street: Yup.string().required("*Billing Street is required"),
   shipping_city: Yup.string().required("*Shipping City is required"),
   billing_city: Yup.string().required("*Billing City is required"),
   shipping_code: Yup.string().matches(/^\d+$/, "Must be only digits")
-  .required("*Shipping Code is required"),
+    .required("*Shipping Code is required"),
   billing_code: Yup.string().matches(/^\d+$/, "Must be only digits")
- .required("*Billing Code is required"),
+    .required("*Billing Code is required"),
   shipping_state: Yup.string().required("*Shipping State is required"),
   billing_state: Yup.string().required("*Billing State is required"),
   shipping_country: Yup.string().required("*Shipping Country is required"),
@@ -315,12 +315,13 @@ function AccountsEdit() {
                         borderBottomRightRadius: "0px",
                       }}
                       name="country_code"
+                      id="country_code"
                     >
+                      <option value=""></option>
                       <option value="+65">+65</option>
                       <option value="+91">+91</option>
                     </select>
                   </div>
-
                   <input
                     {...formik.getFieldProps("phone")}
                     type="tel"
@@ -335,6 +336,9 @@ function AccountsEdit() {
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
+                  {formik.touched.country_code && formik.errors.country_code && (
+                    <div className="text-danger ">{formik.errors.country_code}</div>
+                  )}
                   {formik.touched.phone && formik.errors.phone && (
                     <div className="text-danger ">{formik.errors.phone}</div>
                   )}
@@ -498,9 +502,9 @@ function AccountsEdit() {
                   placeholder="--"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <label htmlFor="accountOwner">Industry</label>&nbsp;&nbsp;
                 <select
@@ -513,9 +517,9 @@ function AccountsEdit() {
                   <option value="option1">Option 2</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>Employees</lable> &nbsp;&nbsp;
                 <input
@@ -527,8 +531,8 @@ function AccountsEdit() {
                 />
               </div>
             </div> */}
-{/* 
-            <div className="col-lg-6 col-md-6 col-12 ">
+
+            {/* <div className="col-lg-6 col-md-6 col-12 ">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
                 <lable>SIC Code</lable> &nbsp;&nbsp;
                 <input
@@ -803,7 +807,7 @@ function AccountsEdit() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center sm-device">
+              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"

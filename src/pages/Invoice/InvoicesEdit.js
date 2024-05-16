@@ -24,7 +24,7 @@ const validationSchema = yup.object({
     .matches(/^\d+$/, "Must be only digits")
     .required("*Enter The Sales Commission"),
   dealName: yup.string().required("*Select The Deal Name "),
-  account_name: yup.string().required("*Select The Account Name "),
+  accountName: yup.string().required("*Select The Account Name "),
   contactName: yup.string().required("*Select The Contact Name "),
   shippingStreet: yup.string().required("*Enter The Shipping Street "),
   billingStreet: yup.string().required("*Enter The Billing Street "),
@@ -45,7 +45,6 @@ const validationSchema = yup.object({
   termsAndConditions: yup.string().required("*Enter The termsAndConditions "),
   description: yup.string().required("*Enter The Description "),
 });
-
 function InvoicesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
@@ -144,7 +143,7 @@ function InvoicesEdit() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log("Invoice Edit:", values);
       const payload = {

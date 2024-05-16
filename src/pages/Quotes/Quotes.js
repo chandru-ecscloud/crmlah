@@ -542,7 +542,7 @@ const Quotes = () => {
               <ul class="dropdown-menu">
                 {role === "CRM_SUPERADMIN" ? (
                   <>
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -560,21 +560,6 @@ const Quotes = () => {
                           // onSuccess={refreshData}
                           path={`associateProductsWithQuote/${rowId}`}
                         />
-                      </button>
-                    </li>
-                    {/* <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleSendQuote(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Send Account
                       </button>
                     </li> */}
                     <li>

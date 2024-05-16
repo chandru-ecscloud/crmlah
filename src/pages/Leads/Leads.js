@@ -336,6 +336,7 @@ const Lead = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/leads");
+        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }
