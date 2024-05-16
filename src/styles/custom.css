@@ -549,6 +549,8 @@ nav .nav-link Link {
 .fc .fc-button-primary:disabled {
   background-color: #ffffff;
   color: #e3165b !important;
+  font-weight: bold;
+  text-transform: capitalize;
   border: none;
 }
 .fc .fc-button-primary:hover {
@@ -624,15 +626,14 @@ nav .nav-link Link {
   background: #6f96f8;
 }
 
-
 /* Define styles for different appointmentRoleType */
 /* .fc-direction-ltr .fc-list-table .fc-list-event-graphic {
   visibility: hidden;
 } */
-.fc-theme-standard .fc-popover{
+.fc-theme-standard .fc-popover {
   z-index: 1 !important;
 }
-.fc .fc-list-event-dot{
+.fc .fc-list-event-dot {
   border: calc(var(--fc-list-event-dot-width) / 2) solid #0077ff;
   border-radius: calc(var(--fc-list-event-dot-width) / 2);
   box-sizing: content-box;
@@ -641,6 +642,27 @@ nav .nav-link Link {
   width: 0px;
 }
 
-.fc-theme-standard td, .fc-theme-standard th{
+.fc-theme-standard td,
+.fc-theme-standard th {
   overflow: hidden;
+}
+
+.fc .fc-event {
+  background-color: transparent !important;
+  border: none !important;
+  color: #000 !important;
+}
+
+.fc-v-event {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.color-circle {
+  padding: 0px 8px;
+  border-radius: 3px;
 }

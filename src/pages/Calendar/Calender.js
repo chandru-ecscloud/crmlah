@@ -4,19 +4,17 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
-import CalenderEdit from "./CalenderEdit";
 import CalenderAdd from "./CalenderAdd";
-import { MdDelete } from "react-icons/md";
 import CalenderShow from "./CalenderShow";
 
 function Calendar() {
   const [data, setData] = useState([]);
-  console.log("data:", data);
+  // console.log("data:", data);
   const [events, setEvents] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
   const [showModal, setShowModal] = useState(false);
@@ -93,11 +91,6 @@ function Calendar() {
     );
   };
 
-  // const handleEventClick = (eventClickInfo) => {
-  //   setSelectedEvent(eventClickInfo.event);
-  //   setShowViewModal(true);
-  // };
-
   const handleEventClick = (eventClickInfo) => {
     setSelectedEvent(eventClickInfo.event);
     const { event } = eventClickInfo;
@@ -111,40 +104,6 @@ function Calendar() {
     setShowViewModal(true);
   };
 
-  // console.log("selectid", selectedId);
-  // const handleModalSave = () => {
-  //   if (newEvent && newEvent.title) {
-  //     const eventToAdd = {
-  //       ...newEvent,
-  //       id: uuidv4(),
-  //       start: newEvent.start.toISOString(), // Convert to ISO string
-  //       end: newEvent.end.toISOString(), // Convert to ISO string
-  //     };
-  //     setEvents([...events, eventToAdd]);
-  //     setShowModal(false);
-  //     setNewEvent(null);
-  //     console.log(
-  //       `Added event: ID - ${eventToAdd.id}, Title - ${eventToAdd.title}, Start - ${eventToAdd.start}, End - ${eventToAdd.end}`
-  //     );
-  //   }
-  // };
-
-  // const handleEditModalSave = () => {
-  //   if (selectedEvent && selectedEvent.title) {
-  //     const updatedEvents = events.map((event) =>
-  //       event.id === selectedEvent.id
-  //         ? { ...event, title: selectedEvent.title }
-  //         : event
-  //     );
-  //     setEvents(updatedEvents);
-  //     setShowEditModal(false);
-  //     setSelectedEvent(null);
-  //     console.log(
-  //       `Updated event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
-  //     );
-  //   }
-  // };
-
   const handleDeleteEvent = async () => {
     if (selectedEvent) {
       const filteredEvents = events.filter(
@@ -153,40 +112,27 @@ function Calendar() {
       setEvents(filteredEvents);
       try {
         const response = await axios.delete(
-          `${API_URL}cancelAppointment/${selectedEvent.id}`,
+          `${API_URL}deleteAppointment/${selectedEvent.id}`,
           {
             headers: {
               "Content-Type": "application/json",
-              //Authorization: `Bearer ${token}`,
             },
           }
         );
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success(response.data.message);
+          setSelectedEvent(null);
+          setShowDeleteModal(false);
+          fetchData();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+      } finally {
+        setShowDeleteModal(false);
       }
-      setSelectedEvent(null);
-      setShowDeleteModal(false);
-      fetchData();
-      setShowViewModal(false);
-      console.log(
-        `Deleted event: ID - ${selectedEvent.id}, Title - ${selectedEvent.title}, Start - ${selectedEvent.start}, End - ${selectedEvent.end}`
-      );
     }
-  };
-
-  const handleEditClick = () => {
-    setShowViewModal(false);
-    setShowEditModal(true);
-  };
-
-  const handleDeleteClick = () => {
-    setShowViewModal(false);
-    setShowDeleteModal(true);
   };
 
   const handleEventDrop = async (eventDropInfo) => {
@@ -209,7 +155,6 @@ function Calendar() {
       const response = await axios(`${API_URL}allAppointments/${event.id}`, {
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
@@ -229,9 +174,7 @@ function Calendar() {
             }
           );
           if (response.status === 200) {
-            // getData();
             toast.success(response.data.message);
-            // handleClose();
           } else {
             toast.error("Appointment Created Unsuccessful.");
           }
@@ -315,16 +258,85 @@ function Calendar() {
     );
   };
   const renderEventContent = (eventInfo) => {
-    console.log("object", eventInfo);
+    const { event } = eventInfo;
+    const role = event.extendedProps.role;
+
+    let backgroundColor;
+    let borderLeft;
+
+    if (role === "OWNER") {
+      backgroundColor = "#BFF6C3";
+      borderLeft = "4px solid #40A578";
+    } else if (role === "SALES_MANAGER") {
+      backgroundColor = "#FFD1E3";
+      borderLeft = "4px solid #9F0D7F";
+    } else if (role === "SALES_EXECUTIVE") {
+      backgroundColor = "#FFDDCC";
+      borderLeft = "4px solid #C51605";
+    } else if (role === "FREELANCERS") {
+      backgroundColor = "#FFE79B";
+      borderLeft = "4px solid #E7B10A";
+    } else {
+      backgroundColor = "#F8F4E1";
+      borderLeft = "4px solid #AF8F6F";
+    }
+
     return (
-      <>
-        <strong>{eventInfo.timeText}</strong>
-        <span>{eventInfo.event.title}</span>
-      </>
+      <div
+        className="fc-v-event"
+        style={{
+          backgroundColor,
+          borderLeft,
+          height: "100%",
+          padding: "5px",
+          borderRadius: "5px",
+          color: "black",
+        }}
+      >
+        {/* {/ <strong>{eventInfo.timeText}</strong> /} */}
+        <span>{event.title}</span>
+      </div>
     );
   };
   return (
     <div className="calender">
+      <div className="d-flex justify-content-center align-items-center py-2">
+        <div className="px-2">
+          <span
+            className="color-circle"
+            style={{ backgroundColor: "#BFF6C3" }}
+          ></span>
+          &nbsp;Owner
+        </div>
+        <div className="px-2">
+          <span
+            className="color-circle"
+            style={{ backgroundColor: "#FFD1E3" }}
+          ></span>
+          &nbsp;Sales Manager
+        </div>
+        <div className="px-2">
+          <span
+            className="color-circle"
+            style={{ backgroundColor: "#FFDDCC" }}
+          ></span>
+          &nbsp;Sales Executive
+        </div>
+        <div className="px-2">
+          <span
+            className="color-circle"
+            style={{ backgroundColor: "#FFE79B" }}
+          ></span>
+          &nbsp;Freelancers
+        </div>
+        <div className="px-2">
+          <span
+            className="color-circle"
+            style={{ backgroundColor: "#F8F4E1" }}
+          ></span>
+          &nbsp;General
+        </div>
+      </div>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
         initialView={"dayGridMonth"}
@@ -379,43 +391,7 @@ function Calendar() {
         eventRemove={handleEventDelete}
         eventDrop={handleEventDrop} // Handle event drop
         eventResize={handleEventResize} // Attach event resize callback
-        eventContent={(eventInfo) => {
-          const { event } = eventInfo;
-          const role = event.extendedProps.role;
-          let backgroundColor;
-          let borderLeft;
-          if (role === "OWNER") {
-            backgroundColor = "#BFF6C3";
-            borderLeft = "4px solid #40A578";
-          } else if (role === "SALES_MANAGER") {
-            backgroundColor = "#FFD1E3";
-            borderLeft = "4px solid #9F0D7F";
-          } else if (role === "SALES_EXECUTIVE") {
-            backgroundColor = "#FFDDCC";
-            borderLeft = "4px solid #C51605";
-          } else if (role === "FREELANCERS") {
-            backgroundColor = "#FFE79B";
-            borderLeft = "4px solid #E7B10A";
-          } else {
-            backgroundColor = "transparent";
-          }
-
-          return (
-            <>
-              <div
-              className="fc-v-event"
-                style={{
-                  backgroundColor,
-                  borderLeft,
-                  padding: "5px",
-                  borderRadius: "5px",
-                }}
-              >
-                {event.title}
-              </div>
-            </>
-          );
-        }}
+        eventContent={renderEventContent}
       />
 
       {/* Add Event Modal */}
@@ -430,156 +406,31 @@ function Calendar() {
       <CalenderShow
         id={selectedId}
         showViewModal={showViewModal}
+        showEditModal={showEditModal}
         setShowViewModal={setShowViewModal}
+        setShowEditModal={setShowEditModal}
+        setShowDeleteModal={setShowDeleteModal}
       />
-
-      {/* <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <Form.Control
-            type="text"
-            placeholder="Add Title"
-            value={newEvent ? newEvent.title : ""}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, title: e.target.value })
-            }
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-sm btn-light"
-            onClick={() => setShowModal(false)}
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            className="btn btn-sm btn-primary"
-            onClick={handleModalSave}
-          >
-            Save
-          </button>
-        </Modal.Footer>
-      </Modal> */}
-
-      {/* View Event Modal */}
-      {/* <Modal
-        show={showViewModal}
-        size="lg"
-        onHide={() => setShowViewModal(false)}
-        centered
-        scrollable
-      >
-        <Modal.Header className="Calenderview">
-          <div className="">
-            <b>
-              <h5 className="modal-title">View Event Details</h5>
-            </b>
-          </div>
-          <span className="calenderEdit-icon">
-            <CalenderEdit id={selectedId} />
-            <button className="btn" onClick={() => setShowDeleteModal(true)}> <MdDelete size={23}/></button>
-          </span>
-          <span>
-         
-          </span>
-
-          <button className="btn close" onClick={() => setShowViewModal(false)}>
-            <span className="text-light fs-4">X</span>
-          </button>
-        </Modal.Header>
-        <Modal.Body className="custom-modal-body">
-          <div className="row">
-            <div className="col-6">
-              <p className="fw-medium">Event Title</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {selectedEvent ? selectedEvent.title : ""}
-              </p>
-            </div>
-            <div className="col-6">
-              <p className="fw-medium">Event Title</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {selectedEvent ? selectedEvent.title : ""}
-              </p>
-            </div>
-            <div className="col-6">
-              <p className="fw-medium">Event Title</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {selectedEvent ? selectedEvent.title : ""}
-              </p>
-            </div>
-            <div className="col-6">
-              <p className="fw-medium">Event Title</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {selectedEvent ? selectedEvent.title : ""}
-              </p>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal> */}
-
-      {/* Edit Event Modal */}
-
-      {/* <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Event Title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Control
-            type="text"
-            placeholder="Event Title"
-            value={selectedEvent ? selectedEvent.title : ""}
-            onChange={(e) =>
-              setSelectedEvent({ ...selectedEvent, title: e.target.value })
-            }
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-sm btn-light"
-            onClick={() => setShowEditModal(false)}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm btn-primary"
-            onClick={handleEditModalSave}
-          >
-            Update
-          </button>
-        </Modal.Footer>
-      </Modal> */}
 
       {/* Delete Event Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>Are you sure you want to delete?</Modal.Body>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <b>Delete</b>
+          </Modal.Title>
+        </Modal.Header>
+        <hr style={{ margin: "0px" }} />
+        <Modal.Body>
+          <b className="text-secondary">Are you sure you want to delete?</b>
+        </Modal.Body>
+        <hr style={{ margin: "0px" }} />
         <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-sm btn-danger"
-            onClick={handleDeleteEvent}
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm btn-light"
-            onClick={() => setShowDeleteModal(false)}
-          >
-            No
-          </button>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleDeleteEvent}>
+            Delete
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
-function CalenderEdit({ id,setShowViewModal }) {
+function CalenderEdit({ id, setShowViewModal }) {
   const companyId = sessionStorage.getItem("companyId");
   const [showEditModal, setShowEditModal] = useState(false);
   const [serviceData, setServiceData] = useState([]);
@@ -73,27 +73,31 @@ function CalenderEdit({ id,setShowViewModal }) {
 
       // data.appointmentStartTime = formattedTimeRange;
       const payload = {
-        companyId :data.companyId,
-        leadId : data.leadId,
-        serviceId:data.serviceId,
-        duration :data.duration,
-        location:data.location,
-        member:data.member,
-        street:data.street,
-        city:data.city,
-        state:data.state,
-        zipCode:data.zipCode,
-        country:data.country,
-        additionalInformation:data.additionalInformation,
-        appointmentMode:data.appointmentMode,
-      }
+        companyId: data.companyId,
+        leadId: data.leadId,
+        serviceId: data.serviceId,
+        duration: data.duration,
+        location: data.location,
+        member: data.member,
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        country: data.country,
+        additionalInformation: data.additionalInformation,
+        appointmentMode: data.appointmentMode,
+      };
 
       try {
-       const response = await axios.put(`${API_URL}updateAppointment/${id}`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.put(
+          `${API_URL}updateAppointment/${id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           handleClose();
@@ -118,6 +122,7 @@ function CalenderEdit({ id,setShowViewModal }) {
       toast.error("Error fetching data:", error);
     }
   };
+
   const fetchLeadData = async () => {
     try {
       const response = await axios(
@@ -129,14 +134,13 @@ function CalenderEdit({ id,setShowViewModal }) {
           },
         }
       );
-      // console.log(response.data)
-
       setleadData(response.data);
       console.log("userid", leadData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
@@ -160,24 +164,25 @@ function CalenderEdit({ id,setShowViewModal }) {
 
   const handleClose = () => {
     setShowEditModal(false);
+    setShowViewModal(false);
   };
+
   const handleEditClick = () => {
     setShowEditModal(true);
-    // setShowViewModal(false)
+    // setShowViewModal(false);
   };
 
   return (
     <>
-      {" "}
-      <button className="btn" onClick={handleEditClick}>
-        <MdEdit size={25} style={{ color: "white" }} />
+      <button className="btn" type="button" onClick={handleEditClick}>
+        <MdEdit size={20} style={{ color: "white" }} />
       </button>
       <Modal
         show={showEditModal}
         onHide={() => setShowEditModal(false)}
         size="xl"
       >
-        <Modal.Header closeButton>
+        <Modal.Header className="Calenderview" closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">Edit</Modal.Title>
         </Modal.Header>
         <Modal.Body>
