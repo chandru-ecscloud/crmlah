@@ -180,7 +180,8 @@ const Appointments = () => {
       );
       setData(response.data);
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      // toast.error("Error fetching data:", error);
+      console.log("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
