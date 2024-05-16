@@ -520,11 +520,11 @@ nav .nav-link Link {
 }
 
 /* Calender CSS */
-.calender {
+.calendar {
   font-size: small;
 }
 
-.calender a {
+.calendar a {
   text-decoration: none !important;
   color: black !important;
   font-size: 14px !important;
@@ -586,11 +586,11 @@ nav .nav-link Link {
 .fc .fc-button-primary:focus {
   box-shadow: rgba(250, 250, 250, 0.5) 0px 0px 0px 0.2rem !important;
 }
-.calender tbody {
+.calendar tbody {
   background-color: #ffffff;
 }
 
-.calender thead {
+.calendar thead {
   background-color: #ffffff;
 }
 .fc-direction-ltr .fc-timegrid-slot-label-frame {
@@ -665,4 +665,8 @@ nav .nav-link Link {
 .color-circle {
   padding: 0px 8px;
   border-radius: 3px;
+}
+
+.fc-license-message {
+  display: none;
 }

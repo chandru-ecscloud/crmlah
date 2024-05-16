@@ -299,7 +299,7 @@ function Calendar() {
     );
   };
   return (
-    <div className="calender">
+    <div className="calendar">
       <div className="d-flex justify-content-center align-items-center py-2">
         <div className="px-2">
           <span
@@ -332,7 +332,7 @@ function Calendar() {
         <div className="px-2">
           <span
             className="color-circle"
-            style={{ backgroundColor: "#F8F4E1" }}
+            style={{ backgroundColor: "#BFF6C3" }}
           ></span>
           &nbsp;General
         </div>
