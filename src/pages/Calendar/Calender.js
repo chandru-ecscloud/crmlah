@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline"; // Import the resource timeline plugin
 import { Modal, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
@@ -14,7 +15,6 @@ import CalenderShow from "./CalenderShow";
 
 function Calendar() {
   const [data, setData] = useState([]);
-  // console.log("data:", data);
   const [events, setEvents] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
   const [showModal, setShowModal] = useState(false);
@@ -41,23 +41,21 @@ function Calendar() {
   }, []);
 
   useEffect(() => {
-    // Transform data into FullCalendar event format
     const formattedEvents = data.map((item) => {
       const [startTime, endTime] = item.appointmentStartTime.split(" - ");
-
       const startDateTime = new Date(
         `${item.appointmentStartDate}T${startTime}`
       );
-
       const endDateTime = new Date(`${item.appointmentStartDate}T${endTime}`);
 
       return {
         id: item.id,
-        title: `${item.appointmentName} - ${item.appointmentFor}`, // Concatenate appointmentName and title
+        title: `${item.appointmentName} - ${item.appointmentFor}`,
         start: startDateTime,
         end: endDateTime,
         allDay: false,
         role: item.appointmentRoleType,
+        resourceId: item.userId, // Assume that the data includes an employeeId field
       };
     });
 
@@ -186,7 +184,6 @@ function Calendar() {
           }
         }
       }
-      // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -215,7 +212,6 @@ function Calendar() {
       const response = await axios(`${API_URL}allAppointments/${event.id}`, {
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
@@ -235,9 +231,7 @@ function Calendar() {
             }
           );
           if (response.status === 200) {
-            // getData();
             toast.success(response.data.message);
-            // handleClose();
           } else {
             toast.error("Appointment Created Unsuccessful.");
           }
@@ -249,7 +243,6 @@ function Calendar() {
           }
         }
       }
-      // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -257,6 +250,7 @@ function Calendar() {
       `Event resized: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
   };
+
   const renderEventContent = (eventInfo) => {
     const { event } = eventInfo;
     const role = event.extendedProps.role;
@@ -293,11 +287,11 @@ function Calendar() {
           color: "black",
         }}
       >
-        {/* {/ <strong>{eventInfo.timeText}</strong> /} */}
         <span>{event.title}</span>
       </div>
     );
   };
+
   return (
     <div className="calendar">
       <div className="d-flex justify-content-center align-items-center py-2">
@@ -332,18 +326,24 @@ function Calendar() {
         <div className="px-2">
           <span
             className="color-circle"
-            style={{ backgroundColor: "#BFF6C3" }}
+            style={{ backgroundColor: "#F8F4E1" }}
           ></span>
           &nbsp;General
         </div>
       </div>
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        plugins={[
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin,
+          listPlugin,
+          resourceTimelinePlugin, // Add the resource timeline plugin
+        ]}
         initialView={"dayGridMonth"}
         headerToolbar={{
           start: "today,prev,next",
           center: "title",
-          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda",
+          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline", // Add resourceTimeline button
         }}
         height={"90vh"}
         events={events}
@@ -351,6 +351,12 @@ function Calendar() {
         selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
+        resources={[
+          { id: "26", title: "Nagarajan" },
+          { id: "41", title: "Surendar" },
+          { id: "42", title: "Ragav" },
+          { id: "43", title: "Vendhar" },
+        ]}
         views={{
           customWorkWeek: {
             type: "timeGridWeek",
@@ -374,13 +380,18 @@ function Calendar() {
             type: "dayGridMonth",
             buttonText: "Month",
           },
+          resourceTimeline: {
+            type: "resourceTimeline",
+            buttonText: "Resource Timeline",
+            resources: true, // Show resources in the timeline
+            slotDuration: "01:00", // Adjust slot duration as needed
+          },
         }}
         select={(info) => {
-          console.log("Whole Info", info);
           setNewEvent({
             title: "",
-            start: info.start, // Use startStr instead of start
-            end: info.end, // Use endStr instead of end
+            start: info.start,
+            end: info.end,
             allDay: info.allDay,
           });
           setShowModal(true);
@@ -389,8 +400,8 @@ function Calendar() {
         eventClick={handleEventClick}
         eventChange={handleEventUpdate}
         eventRemove={handleEventDelete}
-        eventDrop={handleEventDrop} // Handle event drop
-        eventResize={handleEventResize} // Attach event resize callback
+        eventDrop={handleEventDrop}
+        eventResize={handleEventResize}
         eventContent={renderEventContent}
       />
 
