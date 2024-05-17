@@ -133,8 +133,68 @@ function Calendar() {
     }
   };
 
+  // const handleEventDrop = async (eventDropInfo) => {
+  //   const { event } = eventDropInfo;
+  //   console.log(event)
+  //   const StartDate = new Date(event.start).toISOString().slice(0, 10);
+  //   const startTime = new Date(event.start).toLocaleString("en-IN", {
+  //     timeZone: "Asia/Kolkata",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: true,
+  //   });
+  //   const endTime = new Date(event.end).toLocaleString("en-IN", {
+  //     timeZone: "Asia/Kolkata",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: true,
+  //   });
+  //   try {
+  //     const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     if (response.status === 200) {
+  //       const payload = {
+  //         ...response.data,
+  //         appointmentStartDate: StartDate,
+  //         appointmentStartTime: `${startTime} - ${endTime}`,
+  //       };
+  //       try {
+  //         const response = await axios.put(
+  //           `${API_URL}updateAppointment/${event.id}`,
+  //           payload,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //           }
+  //         );
+  //         if (response.status === 200) {
+  //           toast.success(response.data.message);
+  //         } else {
+  //           toast.error("Appointment Created Unsuccessful.");
+  //         }
+  //       } catch (error) {
+  //         if (error.response?.status === 400) {
+  //           toast.warning(error.response?.data.message);
+  //         } else {
+  //           toast.error(error.response?.data.message);
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  //   console.log(
+  //     `Event dropped: ID - ${event.id},Event dropped: ID - ${event.id},Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
+  //   );
+  // };
+
   const handleEventDrop = async (eventDropInfo) => {
     const { event } = eventDropInfo;
+  
     const StartDate = new Date(event.start).toISOString().slice(0, 10);
     const startTime = new Date(event.start).toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
@@ -148,21 +208,23 @@ function Calendar() {
       minute: "numeric",
       hour12: true,
     });
-
+  
     try {
-      const response = await axios(`${API_URL}allAppointments/${event.id}`, {
+      const response = await axios.get(`${API_URL}allAppointments/${event.id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
+  
       if (response.status === 200) {
         const payload = {
           ...response.data,
           appointmentStartDate: StartDate,
           appointmentStartTime: `${startTime} - ${endTime}`,
         };
+  
         try {
-          const response = await axios.put(
+          const updateResponse = await axios.put(
             `${API_URL}updateAppointment/${event.id}`,
             payload,
             {
@@ -171,27 +233,36 @@ function Calendar() {
               },
             }
           );
-          if (response.status === 200) {
-            toast.success(response.data.message);
+  
+          if (updateResponse.status === 200) {
+            toast.success(updateResponse.data.message);
+            // Update event in the local state
+            setEvents((prevEvents) =>
+              prevEvents.map((e) =>
+                e.id === event.id
+                  ? {
+                      ...e,
+                      start: event.start,
+                      end: event.end,
+                    }
+                  : e
+              )
+            );
           } else {
-            toast.error("Appointment Created Unsuccessful.");
+            toast.error("Appointment Update Unsuccessful.");
           }
         } catch (error) {
-          if (error.response?.status === 400) {
-            toast.warning(error.response?.data.message);
-          } else {
-            toast.error(error.response?.data.message);
-          }
+          toast.error("Failed to update appointment: " + error.message);
         }
+      } else {
+        toast.error("Failed to fetch appointment details.");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    console.log(
-      `Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
-    );
   };
 
+  
   const handleEventResize = async (eventResizeInfo) => {
     const { event } = eventResizeInfo;
     const StartDate = new Date(event.start).toISOString().slice(0, 10);
@@ -251,6 +322,78 @@ function Calendar() {
     );
   };
 
+
+  // const handleEventResize = async (eventResizeInfo) => {
+  //   const { event } = eventResizeInfo;
+  
+  //   const StartDate = new Date(event.start).toISOString().slice(0, 10);
+  //   const startTime = new Date(event.start).toLocaleString("en-IN", {
+  //     timeZone: "Asia/Kolkata",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: true,
+  //   });
+  //   const endTime = new Date(event.end).toLocaleString("en-IN", {
+  //     timeZone: "Asia/Kolkata",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: true,
+  //   });
+  
+  //   try {
+  //     const response = await axios.get(`${API_URL}allAppointments/${event.id}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       const payload = {
+  //         ...response.data,
+  //         appointmentStartDate: StartDate,
+  //         appointmentStartTime: `${startTime} - ${endTime}`,
+  //       };
+  
+  //       try {
+  //         const updateResponse = await axios.put(
+  //           `${API_URL}updateAppointment/${event.id}`,
+  //           payload,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //           }
+  //         );
+  
+  //         if (updateResponse.status === 200) {
+  //           toast.success(updateResponse.data.message);
+  //           // Update event in the local state
+  //           setEvents((prevEvents) =>
+  //             prevEvents.map((e) =>
+  //               e.id === event.id
+  //                 ? {
+  //                     ...e,
+  //                     start: event.start,
+  //                     end: event.end,
+  //                   }
+  //                 : e
+  //             )
+  //           );
+  //         } else {
+  //           toast.error("Appointment Update Unsuccessful.");
+  //         }
+  //       } catch (error) {
+  //         toast.error("Failed to update appointment: " + error.message);
+  //       }
+  //     } else {
+  //       toast.error("Failed to fetch appointment details.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+
   const renderEventContent = (eventInfo) => {
     const { event } = eventInfo;
     const role = event.extendedProps.role;
@@ -294,41 +437,113 @@ function Calendar() {
 
   return (
     <div className="calendar">
-      <div className="d-flex justify-content-center align-items-center py-2">
-        <div className="px-2">
-          <span
-            className="color-circle"
-            style={{ backgroundColor: "#BFF6C3" }}
-          ></span>
-          &nbsp;Owner
+      <div className="d-flex justify-content-evenly align-items-center py-2">
+        <div className="px-2 d-flex">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <span
+              className="color-circle"
+              style={{ backgroundColor: "#BFF6C3" }}
+            ></span>
+          </div>
+          <button className="btn btn-white shadow-none border-white">
+            Owner
+          </button>
         </div>
-        <div className="px-2">
-          <span
-            className="color-circle"
-            style={{ backgroundColor: "#FFD1E3" }}
-          ></span>
-          &nbsp;Sales Manager
+        <div className="px-2 d-flex">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <span
+              className="color-circle"
+              style={{ backgroundColor: "#FFD1E3" }}
+            ></span>
+          </div>
+          <div className="dropdown">
+            <button
+              className="btn dropdown-toggle p-0 border-white ms-2"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Sales Manager
+            </button>
+            <ul className="dropdown-menu usersCalendor">
+              <li className="dropdown-item">All</li>
+              <li className="dropdown-item">Ragul</li>
+              <li className="dropdown-item">Chandru</li>
+              <li className="dropdown-item">Suriya</li>
+            </ul>
+          </div>
         </div>
-        <div className="px-2">
-          <span
-            className="color-circle"
-            style={{ backgroundColor: "#FFDDCC" }}
-          ></span>
-          &nbsp;Sales Executive
+        <div className="px-2 d-flex">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <span
+              className="color-circle"
+              style={{ backgroundColor: "#FFDDCC" }}
+            ></span>
+          </div>
+          <div className="dropdown">
+            <button
+              className="btn dropdown-toggle p-0 border-white ms-2"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Sales Executive
+            </button>
+            <ul className="dropdown-menu usersCalendor">
+              <li className="dropdown-item">All</li>
+              <li className="dropdown-item">Ragul</li>
+              <li className="dropdown-item">Chandru</li>
+              <li className="dropdown-item">Suriya</li>
+            </ul>
+          </div>
         </div>
-        <div className="px-2">
-          <span
-            className="color-circle"
-            style={{ backgroundColor: "#FFE79B" }}
-          ></span>
-          &nbsp;Freelancers
+        <div className="px-2 d-flex">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <span
+              className="color-circle"
+              style={{ backgroundColor: "#FFE79B" }}
+            ></span>
+          </div>
+          <div className="dropdown">
+            <button
+              className="btn dropdown-toggle p-0 border-white ms-2"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Freelancers
+            </button>
+            <ul className="dropdown-menu usersCalendor">
+              <li className="dropdown-item">All</li>
+              <li className="dropdown-item">Ragul</li>
+              <li className="dropdown-item">Chandru</li>
+              <li className="dropdown-item">Suriya</li>
+            </ul>
+          </div>
         </div>
-        <div className="px-2">
-          <span
-            className="color-circle"
-            style={{ backgroundColor: "#F8F4E1" }}
-          ></span>
-          &nbsp;General
+        <div className="px-2 d-flex">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <span
+              className="color-circle"
+              style={{ backgroundColor: "#F8F4E1" }}
+            ></span>
+          </div>
+          <div className="dropdown">
+            <button
+              className="btn dropdown-toggle p-0 border-white ms-2"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              General
+            </button>
+            <ul className="dropdown-menu usersCalendor">
+              <li className="dropdown-item">All</li>
+              <li className="dropdown-item">Ragul</li>
+              <li className="dropdown-item">Chandru</li>
+              <li className="dropdown-item">Suriya</li>
+            </ul>
+          </div>
         </div>
       </div>
       <FullCalendar
@@ -337,13 +552,13 @@ function Calendar() {
           timeGridPlugin,
           interactionPlugin,
           listPlugin,
-          resourceTimelinePlugin, // Add the resource timeline plugin
+          resourceTimelinePlugin,
         ]}
         initialView={"dayGridMonth"}
         headerToolbar={{
           start: "today,prev,next",
           center: "title",
-          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline", // Add resourceTimeline button
+          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline",
         }}
         height={"90vh"}
         events={events}
@@ -352,10 +567,10 @@ function Calendar() {
         selectMirror={true}
         dayMaxEvents={true}
         resources={[
-          { id: "26", title: "Nagarajan" },
-          { id: "41", title: "Surendar" },
-          { id: "42", title: "Ragav" },
-          { id: "43", title: "Vendhar" },
+          { id: "26", title: "Nagarajan", role: "OWNER" },
+          { id: "41", title: "Surendar", role: "SALES_EXECUTIVE" },
+          { id: "42", title: "Ragav", role: "FREELANCERS" },
+          { id: "43", title: "Vendhar", role: "SALES_MANAGER" },
         ]}
         views={{
           customWorkWeek: {
@@ -382,17 +597,21 @@ function Calendar() {
           },
           resourceTimeline: {
             type: "resourceTimeline",
-            buttonText: "Resource Timeline",
+            buttonText: "Timeline",
             resources: true, // Show resources in the timeline
             slotDuration: "01:00", // Adjust slot duration as needed
           },
         }}
         select={(info) => {
+          const resourceId = info.resource ? info.resource.id : null;
+          const role = info.resource && info.resource.extendedProps ? info.resource.extendedProps.role : null;
           setNewEvent({
             title: "",
             start: info.start,
             end: info.end,
             allDay: info.allDay,
+            resourceId: resourceId,
+            role: role,
           });
           setShowModal(true);
         }}

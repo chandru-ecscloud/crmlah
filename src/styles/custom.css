@@ -665,8 +665,24 @@ nav .nav-link Link {
 .color-circle {
   padding: 0px 8px;
   border-radius: 3px;
+  height: 18px;
 }
 
 .fc-license-message {
   display: none;
+}
+
+
+.no-arrow{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* additional styling to remove the default arrow */
+  background: transparent;
+  outline: none !important;
+  border: none !important;
+}
+
+.usersCalendor li{
+  cursor: pointer;
 }
