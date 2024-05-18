@@ -113,7 +113,9 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      data.appointmentRoleType = eventData.role || appointmentRole;
+      if(eventData.role !== "GENERAL"){
+        data.appointmentRoleType = eventData.role;
+      }
       data.userId = eventData.resourceId || userId;
 
       console.log("Add appointment", data);
@@ -126,7 +128,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
         if (response.status === 201) {
           console.log(response.data.appointmentId);
           getData();
-          resetForm();
+          formik.resetForm();
           toast.success(response.data.message);
           setShowModal(false);
 

@@ -15,6 +15,10 @@ import CalenderShow from "./CalenderShow";
 
 function Calendar() {
   const [data, setData] = useState([]);
+  const [appointmentRoles, setAppointmentRole] = useState([]);
+  // console.log("appointmentRoles:", appointmentRoles);
+  const [companyUser, setCompanyUser] = useState([]);
+  // console.log("companyUser:", companyUser);
   const [events, setEvents] = useState([]);
   const companyId = sessionStorage.getItem("companyId");
   const [showModal, setShowModal] = useState(false);
@@ -24,6 +28,7 @@ function Calendar() {
   const [newEvent, setNewEvent] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedId, setSelectedId] = useState();
+  const ownerRole = "OWNER";
 
   const fetchData = async () => {
     try {
@@ -36,8 +41,59 @@ function Calendar() {
     }
   };
 
+  const fetchRoleBasedAppointment = async (appointmentBasedRole) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllAppointmentsByCompanyIdAndAppointmentRole/${companyId}?roleType=${appointmentBasedRole}`
+      );
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchAppointmentByUserId = async (id) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllAppointmentInfoByUserId/${id}`
+      );
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchAppoitmentData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllAppointmentWithKeyRolesByCompanyId/${companyId}`
+      );
+      setAppointmentRole(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
+  const AppointmentWithOutKeyRolesByCompanyId = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllAppointmentWithOutKeyRolesByCompanyId/${companyId}`
+      );
+      const transformedData = response.data.map((item) => ({
+        id: item.id,
+        title: item.name,
+        role: item.appointmentRoleType,
+      }));
+      setCompanyUser(transformedData);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchAppoitmentData();
+    AppointmentWithOutKeyRolesByCompanyId();
   }, []);
 
   useEffect(() => {
@@ -135,7 +191,7 @@ function Calendar() {
 
   // const handleEventDrop = async (eventDropInfo) => {
   //   const { event } = eventDropInfo;
-  //   console.log(event)
+
   //   const StartDate = new Date(event.start).toISOString().slice(0, 10);
   //   const startTime = new Date(event.start).toLocaleString("en-IN", {
   //     timeZone: "Asia/Kolkata",
@@ -149,20 +205,26 @@ function Calendar() {
   //     minute: "numeric",
   //     hour12: true,
   //   });
+
   //   try {
-  //     const response = await axios(`${API_URL}allAppointments/${event.id}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
+  //     const response = await axios.get(
+  //       `${API_URL}allAppointments/${event.id}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
   //     if (response.status === 200) {
   //       const payload = {
   //         ...response.data,
   //         appointmentStartDate: StartDate,
   //         appointmentStartTime: `${startTime} - ${endTime}`,
   //       };
+
   //       try {
-  //         const response = await axios.put(
+  //         const updateResponse = await axios.put(
   //           `${API_URL}updateAppointment/${event.id}`,
   //           payload,
   //           {
@@ -171,31 +233,52 @@ function Calendar() {
   //             },
   //           }
   //         );
-  //         if (response.status === 200) {
-  //           toast.success(response.data.message);
+
+  //         if (updateResponse.status === 200) {
+  //           toast.success(updateResponse.data.message);
+  //           // Update event in the local state
+  //           setEvents((prevEvents) =>
+  //             prevEvents.map((e) =>
+  //               e.id === event.id
+  //                 ? {
+  //                     ...e,
+  //                     start: event.start,
+  //                     end: event.end,
+  //                   }
+  //                 : e
+  //             )
+  //           );
   //         } else {
-  //           toast.error("Appointment Created Unsuccessful.");
+  //           toast.error("Appointment Update Unsuccessful.");
   //         }
   //       } catch (error) {
-  //         if (error.response?.status === 400) {
-  //           toast.warning(error.response?.data.message);
-  //         } else {
-  //           toast.error(error.response?.data.message);
-  //         }
+  //         toast.error("Failed to update appointment: " + error.message);
   //       }
+  //     } else {
+  //       toast.error("Failed to fetch appointment details.");
   //     }
   //   } catch (error) {
   //     console.error("Error fetching data:", error);
   //   }
-  //   console.log(
-  //     `Event dropped: ID - ${event.id},Event dropped: ID - ${event.id},Event dropped: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
-  //   );
   // };
 
   const handleEventDrop = async (eventDropInfo) => {
     const { event } = eventDropInfo;
-  
-    const StartDate = new Date(event.start).toISOString().slice(0, 10);
+
+    console.log("Event Start Time:", event.start)
+    console.log("Event End Time:", event.end)
+    
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    const StartDate = formatDate(event.start);
+
+    // const StartDate = new Date(event.start).toISOString().slice(0, 10);
     const startTime = new Date(event.start).toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       hour: "numeric",
@@ -208,21 +291,31 @@ function Calendar() {
       minute: "numeric",
       hour12: true,
     });
-  
+
+    // Update events state optimistically
+    setEvents((prevEvents) =>
+      prevEvents.map((e) =>
+        e.id === event.id ? { ...e, start: event.start, end: event.end } : e
+      )
+    );
+
     try {
-      const response = await axios.get(`${API_URL}allAppointments/${event.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
+      const response = await axios.get(
+        `${API_URL}allAppointments/${event.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (response.status === 200) {
         const payload = {
-          ...response.data,
           appointmentStartDate: StartDate,
+          appointmentEndDate: StartDate,
           appointmentStartTime: `${startTime} - ${endTime}`,
         };
-  
+        console.log("Payload is", payload);
         try {
           const updateResponse = await axios.put(
             `${API_URL}updateAppointment/${event.id}`,
@@ -233,36 +326,55 @@ function Calendar() {
               },
             }
           );
-  
+
           if (updateResponse.status === 200) {
             toast.success(updateResponse.data.message);
-            // Update event in the local state
+          } else {
+            toast.error("Appointment Update Unsuccessful.");
+            // Revert state if update fails (optional)
             setEvents((prevEvents) =>
               prevEvents.map((e) =>
                 e.id === event.id
-                  ? {
-                      ...e,
-                      start: event.start,
-                      end: event.end,
-                    }
+                  ? prevEvents.find((prev) => prev.id === event.id)
                   : e
               )
             );
-          } else {
-            toast.error("Appointment Update Unsuccessful.");
           }
         } catch (error) {
           toast.error("Failed to update appointment: " + error.message);
+          // Revert state if update fails (optional)
+          setEvents((prevEvents) =>
+            prevEvents.map((e) =>
+              e.id === event.id
+                ? prevEvents.find((prev) => prev.id === event.id)
+                : e
+            )
+          );
         }
       } else {
         toast.error("Failed to fetch appointment details.");
+        // Revert state if fetching details fails (optional)
+        setEvents((prevEvents) =>
+          prevEvents.map((e) =>
+            e.id === event.id
+              ? prevEvents.find((prev) => prev.id === event.id)
+              : e
+          )
+        );
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      // Revert state if fetching details fails (optional)
+      setEvents((prevEvents) =>
+        prevEvents.map((e) =>
+          e.id === event.id
+            ? prevEvents.find((prev) => prev.id === event.id)
+            : e
+        )
+      );
     }
   };
 
-  
   const handleEventResize = async (eventResizeInfo) => {
     const { event } = eventResizeInfo;
     const StartDate = new Date(event.start).toISOString().slice(0, 10);
@@ -322,78 +434,6 @@ function Calendar() {
     );
   };
 
-
-  // const handleEventResize = async (eventResizeInfo) => {
-  //   const { event } = eventResizeInfo;
-  
-  //   const StartDate = new Date(event.start).toISOString().slice(0, 10);
-  //   const startTime = new Date(event.start).toLocaleString("en-IN", {
-  //     timeZone: "Asia/Kolkata",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     hour12: true,
-  //   });
-  //   const endTime = new Date(event.end).toLocaleString("en-IN", {
-  //     timeZone: "Asia/Kolkata",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     hour12: true,
-  //   });
-  
-  //   try {
-  //     const response = await axios.get(`${API_URL}allAppointments/${event.id}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  
-  //     if (response.status === 200) {
-  //       const payload = {
-  //         ...response.data,
-  //         appointmentStartDate: StartDate,
-  //         appointmentStartTime: `${startTime} - ${endTime}`,
-  //       };
-  
-  //       try {
-  //         const updateResponse = await axios.put(
-  //           `${API_URL}updateAppointment/${event.id}`,
-  //           payload,
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //           }
-  //         );
-  
-  //         if (updateResponse.status === 200) {
-  //           toast.success(updateResponse.data.message);
-  //           // Update event in the local state
-  //           setEvents((prevEvents) =>
-  //             prevEvents.map((e) =>
-  //               e.id === event.id
-  //                 ? {
-  //                     ...e,
-  //                     start: event.start,
-  //                     end: event.end,
-  //                   }
-  //                 : e
-  //             )
-  //           );
-  //         } else {
-  //           toast.error("Appointment Update Unsuccessful.");
-  //         }
-  //       } catch (error) {
-  //         toast.error("Failed to update appointment: " + error.message);
-  //       }
-  //     } else {
-  //       toast.error("Failed to fetch appointment details.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-
   const renderEventContent = (eventInfo) => {
     const { event } = eventInfo;
     const role = event.extendedProps.role;
@@ -445,7 +485,10 @@ function Calendar() {
               style={{ backgroundColor: "#BFF6C3" }}
             ></span>
           </div>
-          <button className="btn btn-white shadow-none border-white">
+          <button
+            onClick={() => fetchRoleBasedAppointment("OWNER")}
+            className="btn btn-white shadow-none border-white"
+          >
             Owner
           </button>
         </div>
@@ -466,10 +509,21 @@ function Calendar() {
               Sales Manager
             </button>
             <ul className="dropdown-menu usersCalendor">
-              <li className="dropdown-item">All</li>
-              <li className="dropdown-item">Ragul</li>
-              <li className="dropdown-item">Chandru</li>
-              <li className="dropdown-item">Suriya</li>
+              <li
+                className="dropdown-item"
+                onClick={() => fetchRoleBasedAppointment("SALES_MANAGER")}
+              >
+                All
+              </li>
+              {appointmentRoles?.SALES_MANAGER?.map((role) => (
+                <li
+                  key={role.id}
+                  className="dropdown-item"
+                  onClick={() => fetchAppointmentByUserId(role.id)}
+                >
+                  {role.name}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -490,10 +544,21 @@ function Calendar() {
               Sales Executive
             </button>
             <ul className="dropdown-menu usersCalendor">
-              <li className="dropdown-item">All</li>
-              <li className="dropdown-item">Ragul</li>
-              <li className="dropdown-item">Chandru</li>
-              <li className="dropdown-item">Suriya</li>
+              <li
+                className="dropdown-item"
+                onClick={() => fetchRoleBasedAppointment("SALES_EXECUTIVE")}
+              >
+                All
+              </li>
+              {appointmentRoles?.SALES_EXECUTIVE?.map((role) => (
+                <li
+                  key={role.id}
+                  className="dropdown-item"
+                  onClick={() => fetchAppointmentByUserId(role.id)}
+                >
+                  {role.name}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -514,10 +579,21 @@ function Calendar() {
               Freelancers
             </button>
             <ul className="dropdown-menu usersCalendor">
-              <li className="dropdown-item">All</li>
-              <li className="dropdown-item">Ragul</li>
-              <li className="dropdown-item">Chandru</li>
-              <li className="dropdown-item">Suriya</li>
+              <li
+                className="dropdown-item"
+                onClick={() => fetchRoleBasedAppointment("FREELANCERS")}
+              >
+                All
+              </li>
+              {appointmentRoles?.FREELANCERS?.map((role) => (
+                <li
+                  key={role.id}
+                  className="dropdown-item"
+                  onClick={() => fetchAppointmentByUserId(role.id)}
+                >
+                  {role.name}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -528,22 +604,12 @@ function Calendar() {
               style={{ backgroundColor: "#F8F4E1" }}
             ></span>
           </div>
-          <div className="dropdown">
-            <button
-              className="btn dropdown-toggle p-0 border-white ms-2"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              General
-            </button>
-            <ul className="dropdown-menu usersCalendor">
-              <li className="dropdown-item">All</li>
-              <li className="dropdown-item">Ragul</li>
-              <li className="dropdown-item">Chandru</li>
-              <li className="dropdown-item">Suriya</li>
-            </ul>
-          </div>
+          <button
+            onClick={() => fetchRoleBasedAppointment("GENERAL")}
+            className="btn btn-white shadow-none border-white"
+          >
+            General
+          </button>
         </div>
       </div>
       <FullCalendar
@@ -566,12 +632,7 @@ function Calendar() {
         selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
-        resources={[
-          { id: "26", title: "Nagarajan", role: "OWNER" },
-          { id: "41", title: "Surendar", role: "SALES_EXECUTIVE" },
-          { id: "42", title: "Ragav", role: "FREELANCERS" },
-          { id: "43", title: "Vendhar", role: "SALES_MANAGER" },
-        ]}
+        resources={companyUser}
         views={{
           customWorkWeek: {
             type: "timeGridWeek",
@@ -604,7 +665,10 @@ function Calendar() {
         }}
         select={(info) => {
           const resourceId = info.resource ? info.resource.id : null;
-          const role = info.resource && info.resource.extendedProps ? info.resource.extendedProps.role : null;
+          const role =
+            info.resource && info.resource.extendedProps
+              ? info.resource.extendedProps.role
+              : null;
           setNewEvent({
             title: "",
             start: info.start,

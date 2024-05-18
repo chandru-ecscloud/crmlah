@@ -101,6 +101,7 @@ function CalenderEdit({ id, setShowViewModal }) {
         if (response.status === 200) {
           toast.success(response.data.message);
           handleClose();
+          formik.resetForm();
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
