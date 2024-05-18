@@ -124,7 +124,7 @@ function Dashboard() {
       <div className="container">
         <div className="row mt-5">
           <div className="col-md-3 mb-3">
-            <div className="card h-100">
+            <div className="card shadow h-100">
               <div className="card-body">
                 <span className="d-flex align-items-center justify-content-between">
                   <p
@@ -154,7 +154,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="col-md-3 mb-3">
-            <div className="card h-100">
+            <div className="card shadow h-100">
               <div className="card-body">
                 <span className="d-flex align-items-center justify-content-between">
                   <p
@@ -182,7 +182,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="col-md-3 mb-3">
-            <div className="card  h-100">
+            <div className="card shadow h-100">
               <div className="card-body">
                 <span className="d-flex align-items-center justify-content-between">
                   <p
@@ -212,7 +212,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="col-md-3 mb-3">
-            <div className="card h-100">
+            <div className="card shadow h-100">
               <div className="card-body">
                 <span className="d-flex align-items-center justify-content-between">
                   <p
@@ -242,7 +242,7 @@ function Dashboard() {
                   {" "}
                   Sales Increase:{" "}
                   {typeof salesIncreasePercentage === "number"
-                    ? salesIncreasePercentage + "%"
+                    ? parseFloat(salesIncreasePercentage).toFixed(2) + "%"
                     : "N/A"}
                 </h6>
               </div>

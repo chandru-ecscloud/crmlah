@@ -9,14 +9,9 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  // company_name: yup.string().required("*please enter the Company Id"),
   username: yup.string().required("*UserName is required."),
   password: yup.string().required("*Enter the valid Password"),
-  // min(4, "*min length of 4 chars").matches(
-  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-  //   'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character'
-  // ).max(10, "*Enter upto 15 chars only"),
-});
+  });
 
 function LogIn({ handleLogin }) {
   const navigate = useNavigate();
