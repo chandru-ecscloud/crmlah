@@ -80,6 +80,24 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
         data.typeOfAppointment = "Leads";
       }
 
+      let selectedTimeSlot = "";
+      appointmentTime.forEach((time) => {
+        if (parseInt(data.timeSlotId) === time.id) {
+          selectedTimeSlot = time.slotTime || "--";
+        }
+      });
+      const startTime = new Date(eventData.start).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+      const endTime = new Date(eventData.end).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
 
       // let selectedTimeSlot = "";
       // appointmentTime.forEach((time) => {
@@ -100,26 +118,6 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       //   hour12: true,
       // });
 
-      const convertTo12Hour = (timeString) => {
-        const [hour, minute] = timeString.split(":");
-        let hour12 = hour % 12 || 12; // Convert hour from 24-hour to 12-hour format
-        hour12 = String(hour12).padStart(2, "0"); // Pad single-digit hours with leading zero
-        const period = hour < 12 ? "AM" : "PM";
-        return `${hour12}:${minute} ${period}`;
-      };
-  
-      const startDateTime = data.startStr;
-      const endDateTime = data.endStr;
-  
-      const startDate = startDateTime.substring(0, 10);
-      const endDate = endDateTime.substring(0, 10);
-  
-      const startTime24 = startDateTime.substring(11, 19);
-      const endTime24 = endDateTime.substring(11, 19);
-  
-      const startTime12 = convertTo12Hour(startTime24);
-      const endTime12 = convertTo12Hour(endTime24);
-
       const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
@@ -129,13 +127,14 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       };
       const StartDate = formatDate(eventData.start);
       const EndDate = formatDate(eventData.end);
-      data.appointmentStartTime = `${startTime12} - ${endTime12}`;
-      data.appointmentStartDate = startDate;
-      data.appointmentEndtDate = endDate;
+      data.appointmentStartTime = `${startTime} - ${endTime}`;
+      data.appointmentStartDate = StartDate;
+      data.appointmentEndtDate = EndDate;
+
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      if(eventData.role !== "GENERAL"){
+      if (eventData.role !== "GENERAL") {
         data.appointmentRoleType = eventData.role;
       }
       data.userId = eventData.resourceId || userId;
