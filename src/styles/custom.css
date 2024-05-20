@@ -686,3 +686,34 @@ nav .nav-link Link {
 .usersCalendor li{
   cursor: pointer;
 }
+
+
+.allrolebox .box-1 {
+  background-color: #40A578;
+  width: 3px;
+  height: 17px;
+}
+
+.allrolebox .box-2 {
+  background-color: #9f7a56;
+  width: 3px;
+  height: 17px;
+}
+
+.allrolebox .box-3 {
+  background-color: #C51605;
+  width: 3px;
+  height: 17px;
+}
+
+.allrolebox .box-4 {
+  background-color: #E7B10A;
+  width: 3px;
+  height: 17px;
+}
+
+.allrolebox .box-5 {
+  background-color: #9F0D7F;
+  width: 3px;
+  height: 17px;
+}

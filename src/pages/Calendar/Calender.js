@@ -28,7 +28,7 @@ function Calendar() {
   const [newEvent, setNewEvent] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedId, setSelectedId] = useState();
-  const ownerRole = "OWNER";
+  const userId = sessionStorage.getItem("userId");
 
   const fetchData = async () => {
     try {
@@ -189,159 +189,64 @@ function Calendar() {
     }
   };
 
-  // const handleEventDrop = async (eventDropInfo) => {
-  //   const { event } = eventDropInfo;
-
-  //   const StartDate = new Date(event.start).toISOString().slice(0, 10);
-  //   const startTime = new Date(event.start).toLocaleString("en-IN", {
-  //     timeZone: "Asia/Kolkata",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     hour12: true,
-  //   });
-  //   const endTime = new Date(event.end).toLocaleString("en-IN", {
-  //     timeZone: "Asia/Kolkata",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     hour12: true,
-  //   });
-
-  //   try {
-  //     const response = await axios.get(
-  //       `${API_URL}allAppointments/${event.id}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       const payload = {
-  //         ...response.data,
-  //         appointmentStartDate: StartDate,
-  //         appointmentStartTime: `${startTime} - ${endTime}`,
-  //       };
-
-  //       try {
-  //         const updateResponse = await axios.put(
-  //           `${API_URL}updateAppointment/${event.id}`,
-  //           payload,
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //           }
-  //         );
-
-  //         if (updateResponse.status === 200) {
-  //           toast.success(updateResponse.data.message);
-  //           // Update event in the local state
-  //           setEvents((prevEvents) =>
-  //             prevEvents.map((e) =>
-  //               e.id === event.id
-  //                 ? {
-  //                     ...e,
-  //                     start: event.start,
-  //                     end: event.end,
-  //                   }
-  //                 : e
-  //             )
-  //           );
-  //         } else {
-  //           toast.error("Appointment Update Unsuccessful.");
-  //         }
-  //       } catch (error) {
-  //         toast.error("Failed to update appointment: " + error.message);
-  //       }
-  //     } else {
-  //       toast.error("Failed to fetch appointment details.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
   const handleEventDrop = async (eventDropInfo) => {
-    const { event } = eventDropInfo;
-
-    console.log("Event Start Time:", event.start)
-    console.log("Event End Time:", event.end)
-    
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
+    const { event, newResource } = eventDropInfo;
+    if (!event.end) {
+      event.setEnd(new Date(event.start.getTime() + (60 * 60 * 1000))); // Default 1 hour duration
+      }
+    console.log("event>=", event);
+    const convertTo12Hour = (timeString) => {
+      const [hour, minute] = timeString.split(":");
+      let hour12 = hour % 12 || 12; // Convert hour from 24-hour to 12-hour format
+      hour12 = String(hour12).padStart(2, "0"); // Pad single-digit hours with leading zero
+      const period = hour < 12 ? "AM" : "PM";
+      return `${hour12}:${minute} ${period}`;
     };
 
-    const StartDate = formatDate(event.start);
+    const startDateTime = event.startStr;
+    const endDateTime = event.endStr;
 
-    // const StartDate = new Date(event.start).toISOString().slice(0, 10);
-    const startTime = new Date(event.start).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
-    const endTime = new Date(event.end).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
+    const startDate = startDateTime.substring(0, 10);
+    const endDate = endDateTime.substring(0, 10);
 
-    // Update events state optimistically
-    setEvents((prevEvents) =>
-      prevEvents.map((e) =>
-        e.id === event.id ? { ...e, start: event.start, end: event.end } : e
-      )
-    );
+    const startTime24 = startDateTime.substring(11, 19);
+    const endTime24 = endDateTime.substring(11, 19);
+
+    const startTime12 = convertTo12Hour(startTime24);
+    const endTime12 = convertTo12Hour(endTime24);
 
     try {
-      const response = await axios.get(
-        `${API_URL}allAppointments/${event.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      let payload = {
+        appointmentStartDate: startDate,
+        appointmentEndDate: endDate,
+        appointmentStartTime: `${startTime12} - ${endTime12}`,
+      };
+  
+      if (newResource) {
+        const updaterole = newResource._resource.extendedProps.role || null;
+        const updateroleId = newResource.id;
+        if (updaterole !== "GENERAL") {
+          payload.appointmentRoleType = updaterole;
+          payload.userId = updateroleId;
         }
-      );
-
-      if (response.status === 200) {
-        const payload = {
-          appointmentStartDate: StartDate,
-          appointmentEndDate: StartDate,
-          appointmentStartTime: `${startTime} - ${endTime}`,
-        };
-        console.log("Payload is", payload);
-        try {
-          const updateResponse = await axios.put(
-            `${API_URL}updateAppointment/${event.id}`,
-            payload,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (updateResponse.status === 200) {
-            toast.success(updateResponse.data.message);
-          } else {
-            toast.error("Appointment Update Unsuccessful.");
-            // Revert state if update fails (optional)
-            setEvents((prevEvents) =>
-              prevEvents.map((e) =>
-                e.id === event.id
-                  ? prevEvents.find((prev) => prev.id === event.id)
-                  : e
-              )
-            );
+      }
+      console.log("Payload is", payload);
+      try {
+        const updateResponse = await axios.put(
+          `${API_URL}updateAppointment/${event.id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        } catch (error) {
-          toast.error("Failed to update appointment: " + error.message);
+        );
+
+        if (updateResponse.status === 200) {
+          toast.success(updateResponse.data.message);
+          fetchData();
+        } else {
+          toast.error("Appointment Update Unsuccessful.");
           // Revert state if update fails (optional)
           setEvents((prevEvents) =>
             prevEvents.map((e) =>
@@ -351,9 +256,9 @@ function Calendar() {
             )
           );
         }
-      } else {
-        toast.error("Failed to fetch appointment details.");
-        // Revert state if fetching details fails (optional)
+      } catch (error) {
+        toast.error("Failed to update appointment: " + error.message);
+        // Revert state if update fails (optional)
         setEvents((prevEvents) =>
           prevEvents.map((e) =>
             e.id === event.id
@@ -364,74 +269,66 @@ function Calendar() {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Revert state if fetching details fails (optional)
-      setEvents((prevEvents) =>
-        prevEvents.map((e) =>
-          e.id === event.id
-            ? prevEvents.find((prev) => prev.id === event.id)
-            : e
-        )
-      );
     }
   };
 
   const handleEventResize = async (eventResizeInfo) => {
     const { event } = eventResizeInfo;
-    const StartDate = new Date(event.start).toISOString().slice(0, 10);
-    const startTime = new Date(event.start).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
-    const endTime = new Date(event.end).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
+
+    const convertTo12Hour = (timeString) => {
+      const [hour, minute] = timeString.split(":");
+      let hour12 = hour % 12 || 12; // Convert hour from 24-hour to 12-hour format
+      hour12 = String(hour12).padStart(2, "0"); // Pad single-digit hours with leading zero
+      const period = hour < 12 ? "AM" : "PM";
+      return `${hour12}:${minute} ${period}`;
+    };
+
+    const startDateTime = event.startStr;
+    const endDateTime = event.endStr;
+
+    const startDate = startDateTime.substring(0, 10);
+    const endDate = endDateTime.substring(0, 10);
+
+    const startTime24 = startDateTime.substring(11, 19);
+    const endTime24 = endDateTime.substring(11, 19);
+
+    const startTime12 = convertTo12Hour(startTime24);
+    const endTime12 = convertTo12Hour(endTime24);
 
     try {
-      const response = await axios(`${API_URL}allAppointments/${event.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 200) {
-        const payload = {
-          ...response.data,
-          appointmentStartDate: StartDate,
-          appointmentStartTime: `${startTime} - ${endTime}`,
-        };
-        try {
-          const response = await axios.put(
-            `${API_URL}updateAppointment/${event.id}`,
-            payload,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-          } else {
-            toast.error("Appointment Created Unsuccessful.");
+      const payload = {
+        appointmentStartDate: startDate,
+        appointmentEndDate: endDate,
+        appointmentStartTime: `${startTime12} - ${endTime12}`,
+      };
+
+      // console.log("Event Resize Payload is", payload);
+      try {
+        const response = await axios.put(
+          `${API_URL}updateAppointment/${event.id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        } catch (error) {
-          if (error.response?.status === 400) {
-            toast.warning(error.response?.data.message);
-          } else {
-            toast.error(error.response?.data.message);
-          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          fetchData();
+        } else {
+          toast.error("Appointment Created Unsuccessful.");
+        }
+      } catch (error) {
+        if (error.response?.status === 400) {
+          toast.warning(error.response?.data.message);
+        } else {
+          toast.error(error.response?.data.message);
         }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    console.log(
-      `Event resized: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
-    );
   };
 
   const renderEventContent = (eventInfo) => {
@@ -457,7 +354,6 @@ function Calendar() {
       backgroundColor = "#F8F4E1";
       borderLeft = "4px solid #AF8F6F";
     }
-
     return (
       <div
         className="fc-v-event"
@@ -478,6 +374,23 @@ function Calendar() {
   return (
     <div className="calendar">
       <div className="d-flex justify-content-evenly align-items-center py-2">
+        <div className="px-2 d-flex">
+          {/* <div className="d-flex justify-content-evenly align-items-center">
+            <span className="color-circle allrolebox d-flex ">
+                <span className="box-1"></span>
+                <span className="box-2"></span>
+                <span className="box-3"></span>
+                <span className="box-4"></span>
+                <span className="box-5"></span>
+            </span>
+          </div> */}
+          <button
+            onClick={() => fetchData()}
+            className="btn btn-white shadow-none border-white"
+          >
+            All
+          </button>
+        </div>
         <div className="px-2 d-flex">
           <div className="d-flex justify-content-evenly align-items-center">
             <span

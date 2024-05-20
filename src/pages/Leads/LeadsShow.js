@@ -10,8 +10,8 @@ import { API_URL } from "../../Config/URL";
 // import { FaArrowAltCircleLeft, FaArrowCircleLeft } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import SendEmail from "../Email/SendEmail";
 import Appointment from "../Appointments/AppointmentsCreate";
+import SendEmailFollowUp from "../Email/SendEmailFollowUp";
 
 function LeadsShow() {
   const { id } = useParams();
@@ -116,7 +116,7 @@ function LeadsShow() {
               overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
             >
               <span>
-                <SendEmail toEmail={clientData.email} />
+                <SendEmailFollowUp toEmail={clientData.email} leadId={id}/>
               </span>
             </OverlayTrigger>
           )}
