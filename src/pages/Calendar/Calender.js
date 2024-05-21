@@ -29,6 +29,9 @@ function Calendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedId, setSelectedId] = useState();
   const userId = sessionStorage.getItem("userId");
+  const role = sessionStorage.getItem("role");
+  const appointmentRole = sessionStorage.getItem("appointmentRole");
+ // console.log(role)
 
   const fetchData = async () => {
     try {
@@ -386,7 +389,10 @@ function Calendar() {
           </div> */}
           <button
             onClick={() => fetchData()}
-            className="btn btn-white shadow-none border-white"
+            className={`btn btn-white shadow-none border-white ${
+              appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+            }`}
+            disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
           >
             All
           </button>
@@ -400,7 +406,10 @@ function Calendar() {
           </div>
           <button
             onClick={() => fetchRoleBasedAppointment("OWNER")}
-            className="btn btn-white shadow-none border-white"
+            className={`btn btn-white shadow-none border-white ${
+              appointmentRole === "SALES_MANAGER" && "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+            }`}
+            disabled={appointmentRole === "SALES_MANAGER" || appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
           >
             Owner
           </button>
@@ -414,10 +423,14 @@ function Calendar() {
           </div>
           <div className="dropdown">
             <button
-              className="btn dropdown-toggle p-0 border-white ms-2"
+              // className="btn dropdown-toggle p-0 border-white ms-2"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              className={`btn dropdown-toggle p-0 border-white ms-2 ${
+                appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+              }`}
+              disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
             >
               Sales Manager
             </button>
@@ -449,10 +462,14 @@ function Calendar() {
           </div>
           <div className="dropdown">
             <button
-              className="btn dropdown-toggle p-0 border-white ms-2"
+              // className="btn dropdown-toggle p-0 border-white ms-2"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              className={`btn dropdown-toggle p-0 border-white ms-2 ${
+                appointmentRole === "GENERAL" && "FREELANCERS" && "disabled"
+              }`}
+              disabled={ appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
             >
               Sales Executive
             </button>
@@ -484,7 +501,11 @@ function Calendar() {
           </div>
           <div className="dropdown">
             <button
-              className="btn dropdown-toggle p-0 border-white ms-2"
+              // className="btn dropdown-toggle p-0 border-white ms-2"
+              className={`btn dropdown-toggle p-0 border-white ms-2 ${
+                appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "disabled"
+              }`}
+              disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL"}
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -519,7 +540,11 @@ function Calendar() {
           </div>
           <button
             onClick={() => fetchRoleBasedAppointment("GENERAL")}
-            className="btn btn-white shadow-none border-white"
+            // className="btn btn-white shadow-none border-white"
+            className={`btn btn-white shadow-none border-white ${
+              appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+            }`}
+            disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
           >
             General
           </button>
@@ -572,8 +597,8 @@ function Calendar() {
           resourceTimeline: {
             type: "resourceTimeline",
             buttonText: "Timeline",
-            resources: true, // Show resources in the timeline
-            slotDuration: "01:00", // Adjust slot duration as needed
+            resources: true,
+            slotDuration: "01:00",
           },
         }}
         select={(info) => {

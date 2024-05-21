@@ -527,7 +527,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       className="btn btn-primary"
                       type="submit"
                       onClick={() => {
-                        formik.handleSubmit();
+                        // formik.handleSubmit();
                         formik.setTouched(
                           Object.keys(formik.initialValues).reduce(
                             (touched, key) => {

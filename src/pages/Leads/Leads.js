@@ -468,7 +468,7 @@ const Lead = () => {
                 className={`btn btn-primary ${
                   role === "CMP_USER" && "disabled"
                 }`}
-                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                disabled={role === "CMP_USER"}
                 onClick={handelNavigateClick}
               >
                 Create Lead
