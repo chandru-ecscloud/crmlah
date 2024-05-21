@@ -31,7 +31,7 @@ function Calendar() {
   const userId = sessionStorage.getItem("userId");
   const role = sessionStorage.getItem("role");
   const appointmentRole = sessionStorage.getItem("appointmentRole");
- // console.log(role)
+  // console.log(role)
 
   const fetchData = async () => {
     try {
@@ -195,8 +195,8 @@ function Calendar() {
   const handleEventDrop = async (eventDropInfo) => {
     const { event, newResource } = eventDropInfo;
     if (!event.end) {
-      event.setEnd(new Date(event.start.getTime() + (60 * 60 * 1000))); // Default 1 hour duration
-      }
+      event.setEnd(new Date(event.start.getTime() + 60 * 60 * 1000)); // Default 1 hour duration
+    }
     console.log("event>=", event);
     const convertTo12Hour = (timeString) => {
       const [hour, minute] = timeString.split(":");
@@ -224,7 +224,7 @@ function Calendar() {
         appointmentEndDate: endDate,
         appointmentStartTime: `${startTime12} - ${endTime12}`,
       };
-  
+
       if (newResource) {
         const updaterole = newResource._resource.extendedProps.role || null;
         const updateroleId = newResource.id;
@@ -390,9 +390,16 @@ function Calendar() {
           <button
             onClick={() => fetchData()}
             className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+              appointmentRole === "SALES_EXECUTIVE" &&
+              "GENERAL" &&
+              "FREELANCERS" &&
+              "disabled"
             }`}
-            disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
+            disabled={
+              appointmentRole === "SALES_EXECUTIVE" ||
+              appointmentRole === "GENERAL" ||
+              appointmentRole === "FREELANCERS"
+            }
           >
             All
           </button>
@@ -407,9 +414,18 @@ function Calendar() {
           <button
             onClick={() => fetchRoleBasedAppointment("OWNER")}
             className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_MANAGER" && "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+              appointmentRole === "SALES_MANAGER" &&
+              "SALES_EXECUTIVE" &&
+              "GENERAL" &&
+              "FREELANCERS" &&
+              "disabled"
             }`}
-            disabled={appointmentRole === "SALES_MANAGER" || appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
+            disabled={
+              appointmentRole === "SALES_MANAGER" ||
+              appointmentRole === "SALES_EXECUTIVE" ||
+              appointmentRole === "GENERAL" ||
+              appointmentRole === "FREELANCERS"
+            }
           >
             Owner
           </button>
@@ -428,9 +444,16 @@ function Calendar() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
               className={`btn dropdown-toggle p-0 border-white ms-2 ${
-                appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+                appointmentRole === "SALES_EXECUTIVE" &&
+                "GENERAL" &&
+                "FREELANCERS" &&
+                "disabled"
               }`}
-              disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
+              disabled={
+                appointmentRole === "SALES_EXECUTIVE" ||
+                appointmentRole === "GENERAL" ||
+                appointmentRole === "FREELANCERS"
+              }
             >
               Sales Manager
             </button>
@@ -469,7 +492,10 @@ function Calendar() {
               className={`btn dropdown-toggle p-0 border-white ms-2 ${
                 appointmentRole === "GENERAL" && "FREELANCERS" && "disabled"
               }`}
-              disabled={ appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
+              disabled={
+                appointmentRole === "GENERAL" ||
+                appointmentRole === "FREELANCERS"
+              }
             >
               Sales Executive
             </button>
@@ -505,7 +531,10 @@ function Calendar() {
               className={`btn dropdown-toggle p-0 border-white ms-2 ${
                 appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "disabled"
               }`}
-              disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL"}
+              disabled={
+                appointmentRole === "SALES_EXECUTIVE" ||
+                appointmentRole === "GENERAL"
+              }
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -542,9 +571,16 @@ function Calendar() {
             onClick={() => fetchRoleBasedAppointment("GENERAL")}
             // className="btn btn-white shadow-none border-white"
             className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "FREELANCERS" && "disabled"
+              appointmentRole === "SALES_EXECUTIVE" &&
+              "GENERAL" &&
+              "FREELANCERS" &&
+              "disabled"
             }`}
-            disabled={appointmentRole === "SALES_EXECUTIVE" || appointmentRole === "GENERAL" || appointmentRole === "FREELANCERS"}
+            disabled={
+              appointmentRole === "SALES_EXECUTIVE" ||
+              appointmentRole === "GENERAL" ||
+              appointmentRole === "FREELANCERS"
+            }
           >
             General
           </button>
@@ -562,7 +598,9 @@ function Calendar() {
         headerToolbar={{
           start: "today,prev,next",
           center: "title",
-          end: "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline",
+          end: `${
+            appointmentRole === "OWNER" ? "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline" : "customMonth,customWeek,customWorkWeek,customDay,customAgenda"
+          }`,
         }}
         height={"90vh"}
         events={events}
