@@ -36,7 +36,7 @@ function Calendar() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}getAllAppointmentsByCompanyId/${companyId}`
+        `${API_URL}getAppointmentDetailsByUserId/${userId}`
       );
       setData(response.data);
     } catch (error) {
@@ -376,17 +376,160 @@ function Calendar() {
 
   return (
     <div className="calendar">
-      <div className="d-flex justify-content-evenly align-items-center py-2">
+      {!(
+        appointmentRole === "SALES_EXECUTIVE" ||
+        appointmentRole === "GENERAL" ||
+        appointmentRole === "FREELANCERS"
+      ) && (
+        <div className="d-flex justify-content-evenly align-items-center py-2">
+          <div className="px-2 d-flex">
+            <button
+              onClick={() => fetchData()}
+              className="btn btn-white shadow-none border-white"
+            >
+              All
+            </button>
+          </div>
+          {appointmentRole !== "SALES_MANAGER" && (
+            <div className="px-2 d-flex">
+              <div className="d-flex justify-content-evenly align-items-center">
+                <span
+                  className="color-circle"
+                  style={{ backgroundColor: "#BFF6C3" }}
+                ></span>
+              </div>
+              <button
+                onClick={() => fetchRoleBasedAppointment("OWNER")}
+                className="btn btn-white shadow-none border-white"
+              >
+                Owner
+              </button>
+            </div>
+          )}
+          <div className="px-2 d-flex">
+            <div className="d-flex justify-content-evenly align-items-center">
+              <span
+                className="color-circle"
+                style={{ backgroundColor: "#FFD1E3" }}
+              ></span>
+            </div>
+            <div className="dropdown">
+              <button
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                className="btn dropdown-toggle p-0 border-white ms-2"
+              >
+                Sales Manager
+              </button>
+              <ul className="dropdown-menu usersCalendor">
+                <li
+                  className="dropdown-item"
+                  onClick={() => fetchRoleBasedAppointment("SALES_MANAGER")}
+                >
+                  All
+                </li>
+                {appointmentRoles?.SALES_MANAGER?.map((role) => (
+                  <li
+                    key={role.id}
+                    className="dropdown-item"
+                    onClick={() => fetchAppointmentByUserId(role.id)}
+                  >
+                    {role.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="px-2 d-flex">
+            <div className="d-flex justify-content-evenly align-items-center">
+              <span
+                className="color-circle"
+                style={{ backgroundColor: "#FFDDCC" }}
+              ></span>
+            </div>
+            <div className="dropdown">
+              <button
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                className="btn dropdown-toggle p-0 border-white ms-2"
+              >
+                Sales Executive
+              </button>
+              <ul className="dropdown-menu usersCalendor">
+                <li
+                  className="dropdown-item"
+                  onClick={() => fetchRoleBasedAppointment("SALES_EXECUTIVE")}
+                >
+                  All
+                </li>
+                {appointmentRoles?.SALES_EXECUTIVE?.map((role) => (
+                  <li
+                    key={role.id}
+                    className="dropdown-item"
+                    onClick={() => fetchAppointmentByUserId(role.id)}
+                  >
+                    {role.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="px-2 d-flex">
+            <div className="d-flex justify-content-evenly align-items-center">
+              <span
+                className="color-circle"
+                style={{ backgroundColor: "#FFE79B" }}
+              ></span>
+            </div>
+            <div className="dropdown">
+              <button
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                className="btn dropdown-toggle p-0 border-white ms-2"
+              >
+                Freelancers
+              </button>
+              <ul className="dropdown-menu usersCalendor">
+                <li
+                  className="dropdown-item"
+                  onClick={() => fetchRoleBasedAppointment("FREELANCERS")}
+                >
+                  All
+                </li>
+                {appointmentRoles?.FREELANCERS?.map((role) => (
+                  <li
+                    key={role.id}
+                    className="dropdown-item"
+                    onClick={() => fetchAppointmentByUserId(role.id)}
+                  >
+                    {role.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="px-2 d-flex">
+            <div className="d-flex justify-content-evenly align-items-center">
+              <span
+                className="color-circle"
+                style={{ backgroundColor: "#F8F4E1" }}
+              ></span>
+            </div>
+            <button
+              onClick={() => fetchRoleBasedAppointment("GENERAL")}
+              className="btn btn-white shadow-none border-white"
+            >
+              General
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* <div className="d-flex justify-content-evenly align-items-center py-2">
         <div className="px-2 d-flex">
-          {/* <div className="d-flex justify-content-evenly align-items-center">
-            <span className="color-circle allrolebox d-flex ">
-                <span className="box-1"></span>
-                <span className="box-2"></span>
-                <span className="box-3"></span>
-                <span className="box-4"></span>
-                <span className="box-5"></span>
-            </span>
-          </div> */}
           <button
             onClick={() => fetchData()}
             className={`btn btn-white shadow-none border-white ${
@@ -585,7 +728,7 @@ function Calendar() {
             General
           </button>
         </div>
-      </div>
+      </div> */}
       <FullCalendar
         plugins={[
           dayGridPlugin,
@@ -599,7 +742,9 @@ function Calendar() {
           start: "today,prev,next",
           center: "title",
           end: `${
-            appointmentRole === "OWNER" ? "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline" : "customMonth,customWeek,customWorkWeek,customDay,customAgenda"
+            appointmentRole === "OWNER"
+              ? "customMonth,customWeek,customWorkWeek,customDay,customAgenda,resourceTimeline"
+              : "customMonth,customWeek,customWorkWeek,customDay,customAgenda"
           }`,
         }}
         height={"90vh"}
