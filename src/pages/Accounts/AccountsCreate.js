@@ -12,30 +12,13 @@ import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
   account_name: Yup.string().required("*Account Name is required"),
-  country_code: Yup.number().required("*Country Code is required"),
-  phone: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .min(8)
-    .max(10)
-    .required("*Phone Number is required"),
+  phone: Yup
+  .string()
+  .required("*Phone is required")
+  .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
-  parent_account: Yup.string().required("*Parent Account is required"),
-  account_number: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Account Number is required"),
+  account_number: Yup.string().required("*Account Number is required"),
   account_type: Yup.string().required("*Account Type is required"),
-  shipping_street: Yup.string().required("*Shipping Street is required"),
-  billing_street: Yup.string().required("*Billing Street is required"),
-  shipping_city: Yup.string().required("*Shipping City is required"),
-  billing_city: Yup.string().required("*Billing City is required"),
-  shipping_code: Yup.string().matches(/^\d+$/, "Must be only digits")
-    .required("*Shipping Code is required"),
-  billing_code: Yup.string().matches(/^\d+$/, "Must be only digits")
-    .required("*Billing Code is required"),
-  shipping_state: Yup.string().required("*Shipping State is required"),
-  billing_state: Yup.string().required("*Billing State is required"),
-  shipping_country: Yup.string().required("*Shipping Country is required"),
-  billing_country: Yup.string().required("*Billing Country is required"),
 });
 
 function AccountsCreate() {
@@ -52,8 +35,10 @@ function AccountsCreate() {
     initialValues: {
       company_id: companyId,
       account_owner: owner,
-      account_name: "",
-      country_code: "",
+      account_name:"",
+      first_name: "",
+      last_name: "",
+      country_code: "+65",
       phone: "",
       email: "",
       parent_account: "",
@@ -73,6 +58,8 @@ function AccountsCreate() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+     data.account_name = `${data.first_name}${data.last_name}`
+
       console.log("Account Datas:", data);
       try {
         const response = await axios.post(`${API_URL}newAccount`, data, {
@@ -121,6 +108,7 @@ function AccountsCreate() {
 
   useEffect(() => {
     AccountList();
+    formik.setFieldValue("country_code", 65);
   }, []);
 
   return (
@@ -228,79 +216,90 @@ function AccountsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Name</lable> &nbsp;&nbsp;
-                <select
-                  style={{ width: "60%" }}
-                  {...formik.getFieldProps("account_name")}
-                  className="form-select form-size"
-                  name="account_name"
-                >
-                  <option value="" selected disabled></option>
-                  {Array.isArray(accountOption) &&
-                    accountOption.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                </select>
+                <lable>first Name</lable> &nbsp;&nbsp;
+                <input
+                  {...formik.getFieldProps("first_name")}
+                  type="text"
+                  className="form-size form-control"
+                  id="first_name"
+                  name="first_name"
+                />
               </div>
-              <div className="row pb-4 sm-device">
+              <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.account_name &&
-                    formik.errors.account_name && (
-                      <div className="text-danger ">
-                        {formik.errors.account_name}
-                      </div>
-                    )}
+                  {formik.touched.first_name && formik.errors.first_name && (
+                    <div className="text-danger ">{formik.errors.first_name}</div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Last Name</lable> &nbsp;&nbsp;
+                <input
+                  {...formik.getFieldProps("last_name")}
+                  type="text"
+                  className="form-size form-control"
+                  id="last_name"
+                  name="last_name"
+                />
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.last_name && formik.errors.last_name && (
+                    <div className="text-danger ">{formik.errors.last_name}</div>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
-                <div className="input-group" style={{ width: "60%" }}>
-                  <div>
-                    <select
-                      className="form-size form-select form-control"
-                      {...formik.getFieldProps("country_code")}
-                      style={{
-                        width: "80px",
-                        borderTopRightRadius: "0px",
-                        borderBottomRightRadius: "0px",
-                      }}
-                      name="country_code"
-                      id="country_code"
-                    >
-                      <option value=""></option>
-                      <option value="+65">+65</option>
-                      <option value="+91">+91</option>
-                    </select>
-                  </div>
-                  <input
-                    {...formik.getFieldProps("phone")}
-                    type="tel"
-                    name="phone"
-                    id="phone"
-                    className="form-control form-size"
-                    aria-label="Text input with checkbox"
-                  />
-                </div>
-              </div>
+      <div className="d-flex align-items-center justify-content-end sm-device">
+        <label>Phone</label> &nbsp;&nbsp;
+        <div className="input-group" style={{ width: "60%" }}>
+          <div>
+            <select
+              className="form-size form-select form-control"
+              {...formik.getFieldProps("country_code")}
+              style={{
+                width: "80px",
+                borderTopRightRadius: "0px",
+                borderBottomRightRadius: "0px",
+              }}
+              name="country_code"
+              id="country_code"
+            >
+              <option value="+65">+65</option>
+              <option value="+91">+91</option>
+            </select>
+          </div>
+          <input
+            {...formik.getFieldProps("phone")}
+            type="tel"
+            name="phone"
+            id="phone"
+            className="form-control form-size"
+            aria-label="Text input with checkbox"
+          />
+        </div>
+      </div>
 
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.country_code && formik.errors.country_code && (
-                    <div className="text-danger ">{formik.errors.country_code}</div>
-                  )}
-                  {formik.touched.phone && formik.errors.phone && (
-                    <div className="text-danger ">{formik.errors.phone}</div>
-                  )}
-                </div>
-              </div>
+      <div className="row sm-device pb-4">
+        <div className="col-5"></div>
+        <div className="col-6 sm-device">
+          {formik.touched.country_code && formik.errors.country_code && (
+            <div className="text-danger ">
+              {formik.errors.country_code}
             </div>
+          )}
+          {formik.touched.phone && formik.errors.phone && (
+            <div className="text-danger ">{formik.errors.phone}</div>
+          )}
+        </div>
+      </div>
+    </div>
 
             {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">

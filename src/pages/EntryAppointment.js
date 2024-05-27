@@ -7,7 +7,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  appointmentFor: Yup.string().required("*Appointment for is required"),
+  // appointmentFor: Yup.string().required("*Appointment for is required"),
+  first_name:Yup.string().required("*First Name is required"),
+  last_name:Yup.string().required("*Last Name is required"),
   appointmentStartDate: Yup.string().required("*Prefer Date is required"),
   timeSlotId: Yup.string().required("*Prefer Time is required"),
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
@@ -21,7 +23,8 @@ const EntryAppointment = () => {
 
   const formik = useFormik({
     initialValues: {
-      appointmentFor: "",
+      first_name: "",
+      last_name: "",
       email: "",
       appointmentStartDate: "",
       phone:"",
@@ -41,9 +44,11 @@ const EntryAppointment = () => {
         }
       });
       data.appointmentStartTime = selectedTimeSlot;
+      data.appointmentFor = `${data.first_name}${data.last_name}`
       setLoadIndicator(true)
       const payload = {
-        first_name :data.appointmentFor,
+        first_name :data.first_name,
+        last_name :data.last_name,
         email: data.email,
         company_id:2,
         company:"ECSCloudInfotech",
@@ -59,7 +64,7 @@ const EntryAppointment = () => {
             "Content-Type": "application/json",
           },
         });
-        // toast.success("Lead Created Successfully");
+        toast.success("Lead Created Successfully");
         console.log(response.data.message);
         // console.log("newclient Id",response.data.leadId);
         data.leadId = response.data.leadId;
@@ -69,11 +74,8 @@ const EntryAppointment = () => {
         // toast.error("Lead Not Create");
         console.log("Error");
       }
-      
-  
-
+     
       try {
-
           const response = await axios.post(`${API_URL}book-appointment`,data, {
           headers: {
             "Content-Type": "application/json",
@@ -224,7 +226,7 @@ const EntryAppointment = () => {
               subject: data.appointmentName,
               htmlContent: mailContent,
             });
-            // toast.success("Mail Send Successfully");
+            toast.success("Mail Send Successfully");
           } catch (error) {
             // toast.error("Mail Not Send");
             console.log("Error");
@@ -300,24 +302,47 @@ const EntryAppointment = () => {
                     </h3>
                     <div className="col-12 mb-3">
                       <div className="">
-                        <lable className="form-label ">Appointment</lable>
+                        <lable className="form-label ">First Name</lable>
                         <input
                           type="text"
-                          name="appointmentFor"
-                          id="appointmentFor"
-                          {...formik.getFieldProps("appointmentFor")}
+                          name="first_name"
+                          id="first_name"
+                          {...formik.getFieldProps("first_name")}
                           className={`form-size form-control mt-1 ${
-                            formik.touched.appointmentFor &&
-                            formik.errors.appointmentFor
+                            formik.touched.first_name &&
+                            formik.errors.first_name
                               ? "is-invalid"
                               : ""
                           }`}
                         />
                       </div>
-                      {formik.touched.appointmentFor &&
-                        formik.errors.appointmentFor && (
+                      {formik.touched.first_name &&
+                        formik.errors.first_name && (
                           <p className="text-danger">
-                            {formik.errors.appointmentFor}
+                            {formik.errors.first_name}
+                          </p>
+                        )}
+                    </div>
+                    <div className="col-12 mb-3">
+                      <div className="">
+                        <lable className="form-label ">Last Name</lable>
+                        <input
+                          type="text"
+                          name="last_name"
+                          id="last_name"
+                          {...formik.getFieldProps("last_name")}
+                          className={`form-size form-control mt-1 ${
+                            formik.touched.last_name &&
+                            formik.errors.last_name
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        />
+                      </div>
+                      {formik.touched.last_name &&
+                        formik.errors.last_name && (
+                          <p className="text-danger">
+                            {formik.errors.last_name}
                           </p>
                         )}
                     </div>

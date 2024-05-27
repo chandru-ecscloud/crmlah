@@ -10,6 +10,7 @@ import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
   first_name: yup.string().required("*First Name is required"),
+  last_name: yup.string().required("*Last Name is required"),
   phone: yup
     .string()
     .required("*Phone is required")
@@ -26,6 +27,7 @@ function Contact() {
     initialValues: {
       company_id: "",
       first_name: "",
+      last_name: "",
       phone: "",
       email: "",
       description_info: "",
@@ -128,7 +130,7 @@ function Contact() {
                 <h3 className=" text-center ">CONTACT</h3>
                 <div className="col-12 mb-3">
                   <label className="contactFields">
-                    Name<span className="text-danger">*</span>
+                   First Name<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -143,6 +145,25 @@ function Contact() {
                   />
                   {formik.touched.first_name && formik.errors.first_name && (
                     <p className="text-danger">{formik.errors.first_name}</p>
+                  )}
+                </div>
+                <div className="col-12 mb-3">
+                  <label className="contactFields">
+                   Last Name<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.last_name && formik.errors.last_name
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("last_name")}
+                    name="last_name"
+                    id="last_name"
+                  />
+                  {formik.touched.last_name && formik.errors.last_name && (
+                    <p className="text-danger">{formik.errors.last_name}</p>
                   )}
                 </div>
                 <div className="col-12 mb-3">

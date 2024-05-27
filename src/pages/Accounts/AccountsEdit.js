@@ -11,11 +11,11 @@ import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
-  account_name: Yup.string().required("*Account Name is required"),
-  phone: Yup
-  .string()
-  .required("*Phone is required")
-  .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
+  first_name: Yup.string().required("*First Name is required"),
+  last_name: Yup.string().required("*Last Name is required"),
+  phone: Yup.string()
+    .required("*Phone is required")
+    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
   account_number: Yup.string().required("*Account Number is required"),
   account_type: Yup.string().required("*Account Type is required"),
@@ -36,7 +36,8 @@ function AccountsEdit() {
     initialValues: {
       account_owner: "",
       company_id: companyId,
-      account_name: "",
+      first_name: "",
+      last_name: "",
       country_code: "",
       phone: "",
       email: "",
@@ -206,7 +207,7 @@ function AccountsEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Owner</lable> 
+                <lable>Account Owner</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   {...formik.getFieldProps("account_owner")}
@@ -256,39 +257,54 @@ function AccountsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Name</lable> 
+                <lable>First Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
-                  style={{ width: "60%" }}
-                  {...formik.getFieldProps("account_name")}
-                  className="form-select form-size"
-                  name="account_name"
-                >
-                  <option value="" selected disabled></option>
-                  {Array.isArray(accountOption) &&
-                    accountOption.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                </select>
+                <input
+                  {...formik.getFieldProps("first_name")}
+                  type="text"
+                  className="form-size form-control"
+                  id="first_name"
+                  name="first_name"
+                />
               </div>
-              <div className="row pb-4 sm-device">
+              <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.account_name &&
-                    formik.errors.account_name && (
-                      <div className="text-danger ">
-                        {formik.errors.account_name}
-                      </div>
-                    )}
+                  {formik.touched.first_name && formik.errors.first_name && (
+                    <div className="text-danger ">
+                      {formik.errors.first_name}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Last Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  {...formik.getFieldProps("last_name")}
+                  type="text"
+                  className="form-size form-control"
+                  id="last_name"
+                  name="last_name"
+                />
+              </div>
+              <div className="row sm-device pb-4">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.last_name && formik.errors.last_name && (
+                    <div className="text-danger ">
+                      {formik.errors.last_name}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone</lable> 
+                <lable>Phone</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
@@ -321,9 +337,12 @@ function AccountsEdit() {
               <div className="row sm-device pb-4">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.country_code && formik.errors.country_code && (
-                    <div className="text-danger ">{formik.errors.country_code}</div>
-                  )}
+                  {formik.touched.country_code &&
+                    formik.errors.country_code && (
+                      <div className="text-danger ">
+                        {formik.errors.country_code}
+                      </div>
+                    )}
                   {formik.touched.phone && formik.errors.phone && (
                     <div className="text-danger ">{formik.errors.phone}</div>
                   )}
@@ -346,7 +365,7 @@ function AccountsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Email</lable> 
+                <lable>Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("email")}
