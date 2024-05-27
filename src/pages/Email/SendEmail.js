@@ -37,11 +37,11 @@ function SendEmail({ toEmail }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("To Mail:", toEmail);
-      console.log("From Mail:", userEmail);
-      console.log("Subject:", values.subject);
-      console.log("Main Body:", values.body);
-      console.log("Files:", values.files);
+      // console.log("To Mail:", toEmail);
+      // console.log("From Mail:", userEmail);
+      // console.log("Subject:", values.subject);
+      // console.log("Main Body:", values.body);
+      // console.log("Files:", values.files);
       setLoadIndicator(true);
 
       try {

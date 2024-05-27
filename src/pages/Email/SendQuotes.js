@@ -293,7 +293,7 @@ function SendQuotes({ accountData }) {
                   <table>
                     <tr>
                       <td class="title">
-                        <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
+                        <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                       <td class="third">

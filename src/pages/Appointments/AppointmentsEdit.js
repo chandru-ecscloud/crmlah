@@ -11,11 +11,8 @@ const validationSchema = Yup.object().shape({
   serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Name is required"),
-  appointmentStartDate: Yup.date()
-    .required("*Start date is required"),
-  timeSlotId: Yup.string().required(
-    "*Start Time is required"
-  ),
+  appointmentStartDate: Yup.date().required("*Start date is required"),
+  timeSlotId: Yup.string().required("*Start Time is required"),
   location: Yup.string().required("*Location is required"),
   member: Yup.string().required("*Member is required"),
   street: Yup.string().required("*Street is required"),
@@ -39,7 +36,6 @@ function AppointmentsCreate({ name, id, getData }) {
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
 
-
   const formik = useFormik({
     initialValues: {
       companyId: companyId,
@@ -57,14 +53,13 @@ function AppointmentsCreate({ name, id, getData }) {
       zipCode: "",
       country: "",
       additionalInformation: "",
-      appointmentMode:"",
+      appointmentMode: "",
     },
     validationSchema: validationSchema,
 
     onSubmit: async (data) => {
       let selectedLeadName = "";
       let selectedServiceName = "";
-
 
       leadData.forEach((lead) => {
         if (parseInt(data.leadId) === lead.id) {
@@ -86,19 +81,23 @@ function AppointmentsCreate({ name, id, getData }) {
       });
 
       data.appointmentFor = selectedLeadName.name;
-      data.appointmentStartTime = selectedTimeSlot
+      data.appointmentStartTime = selectedTimeSlot;
       data.email = selectedLeadName.email;
       data.serviceName = selectedServiceName;
       data.appointmentOwner = userName;
-      data.reminder = 2
+      data.reminder = 2;
       // console.log(data);
 
       try {
-        const response = await axios.put(`${API_URL}updateAppointment/${id}`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.put(
+          `${API_URL}updateAppointment/${id}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           getData();
           toast.success(response.data.message);
@@ -112,7 +111,6 @@ function AppointmentsCreate({ name, id, getData }) {
         } else {
           toast.error(error.response?.data.message);
         }
-
       }
     },
   });
@@ -162,15 +160,17 @@ function AppointmentsCreate({ name, id, getData }) {
     }
   };
 
-
   const fetchLeadData = async () => {
     try {
-      const response = await axios(`${API_URL}getLeadBasicDetails/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getLeadBasicDetails/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // console.log(response.data)
       setleadData(response.data);
       console.log("userid", leadData);
@@ -191,7 +191,7 @@ function AppointmentsCreate({ name, id, getData }) {
 
   const handleClose = () => {
     setLgShow(false);
-  }
+  };
 
   return (
     <>
@@ -209,9 +209,7 @@ function AppointmentsCreate({ name, id, getData }) {
         aria-labelledby="example-modal-sizes-title-lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-lg">
-            {name}
-          </Modal.Title>
+          <Modal.Title id="example-modal-sizes-title-lg">{name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <section className="createLead">
@@ -253,10 +251,11 @@ function AppointmentsCreate({ name, id, getData }) {
                       <lable>Appointment </lable> &nbsp;&nbsp;
                       <select
                         name="leadId"
-                        className={`form-select form-size ${formik.touched.leadId && formik.errors.leadId
+                        className={`form-select form-size ${
+                          formik.touched.leadId && formik.errors.leadId
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                         {...formik.getFieldProps("leadId")}
                       >
                         <option value=" "></option>
@@ -271,13 +270,10 @@ function AppointmentsCreate({ name, id, getData }) {
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
                         {formik.touched.leadId && formik.errors.leadId && (
-                          <p className="text-danger ">
-                            {formik.errors.leadId}
-                          </p>
+                          <p className="text-danger ">{formik.errors.leadId}</p>
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -287,10 +283,11 @@ function AppointmentsCreate({ name, id, getData }) {
                         name="serviceId"
                         id="serviceId"
                         {...formik.getFieldProps("serviceId")}
-                        className={`form-size form-select ${formik.touched.serviceId && formik.errors.serviceId
+                        className={`form-size form-select ${
+                          formik.touched.serviceId && formik.errors.serviceId
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       >
                         <option value=""></option>
                         {serviceData.map((option) => (
@@ -303,14 +300,14 @@ function AppointmentsCreate({ name, id, getData }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                        {formik.touched.serviceId && formik.errors.serviceId && (
-                          <p className="text-danger ">
-                            {formik.errors.serviceId}
-                          </p>
-                        )}
+                        {formik.touched.serviceId &&
+                          formik.errors.serviceId && (
+                            <p className="text-danger ">
+                              {formik.errors.serviceId}
+                            </p>
+                          )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -321,11 +318,12 @@ function AppointmentsCreate({ name, id, getData }) {
                         name="appointmentStartDate"
                         id="appointmentStartDate"
                         {...formik.getFieldProps("appointmentStartDate")}
-                        className={`form-size form-control   ${formik.touched.appointmentStartDate &&
-                            formik.errors.appointmentStartDate
+                        className={`form-size form-control   ${
+                          formik.touched.appointmentStartDate &&
+                          formik.errors.appointmentStartDate
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -339,7 +337,6 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-
                   </div>
 
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
@@ -375,7 +372,6 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -385,10 +381,11 @@ function AppointmentsCreate({ name, id, getData }) {
                         //className="form-size form-select"
                         name="duration"
                         {...formik.getFieldProps("duration")}
-                        className={`form-size form-select   ${formik.touched.duration && formik.errors.duration
+                        className={`form-size form-select   ${
+                          formik.touched.duration && formik.errors.duration
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       >
                         <option value=""></option>
                         <option value="1 Hour">1 Hour</option>
@@ -406,7 +403,6 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -417,11 +413,12 @@ function AppointmentsCreate({ name, id, getData }) {
                         name="appointmentName"
                         id="appointmentName"
                         {...formik.getFieldProps("appointmentName")}
-                        className={`form-size form-control   ${formik.touched.appointmentName &&
-                            formik.errors.appointmentName
+                        className={`form-size form-control   ${
+                          formik.touched.appointmentName &&
+                          formik.errors.appointmentName
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -435,7 +432,6 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -445,10 +441,11 @@ function AppointmentsCreate({ name, id, getData }) {
                         //className="form-size form-select"
                         name="location"
                         {...formik.getFieldProps("location")}
-                        className={`form-size form-select   ${formik.touched.location && formik.errors.location
+                        className={`form-size form-select   ${
+                          formik.touched.location && formik.errors.location
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       >
                         <option value=""></option>
                         <option value="Client Address">Client Address</option>
@@ -468,7 +465,6 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -479,34 +475,34 @@ function AppointmentsCreate({ name, id, getData }) {
                         name="member"
                         id="member"
                         {...formik.getFieldProps("member")}
-                        className={`form-size form-control   ${formik.touched.member && formik.errors.member
+                        className={`form-size form-control   ${
+                          formik.touched.member && formik.errors.member
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
                         {formik.touched.member && formik.errors.member && (
-                          <p className="text-danger ">
-                            {formik.errors.member}
-                          </p>
+                          <p className="text-danger ">{formik.errors.member}</p>
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="leadowner">Appointment Mode</label>&nbsp;&nbsp;
+                      <label htmlFor="leadowner">Appointment Mode</label>
+                      &nbsp;&nbsp;
                       <select
                         id="appointmentMode"
                         //className="form-size form-select"
                         name="appointmentMode"
                         {...formik.getFieldProps("appointmentMode")}
                         className={`form-size form-select   ${
-                          formik.touched.appointmentMode && formik.errors.appointmentMode
+                          formik.touched.appointmentMode &&
+                          formik.errors.appointmentMode
                             ? "is-invalid"
                             : ""
                         }`}
@@ -514,17 +510,17 @@ function AppointmentsCreate({ name, id, getData }) {
                         <option value=""></option>
                         <option value="ONLINE">ONLINE</option>
                         <option value="OFFLINE">OFFLINE</option>
-                        
                       </select>
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                        {formik.touched.appointmentMode && formik.errors.appointmentMode && (
-                          <p className="text-danger">
-                            {formik.errors.appointmentMode}
-                          </p>
-                        )}
+                        {formik.touched.appointmentMode &&
+                          formik.errors.appointmentMode && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentMode}
+                            </p>
+                          )}
                       </div>
                     </div>
                   </div>
@@ -548,23 +544,21 @@ function AppointmentsCreate({ name, id, getData }) {
                         id="street"
                         // value={formData.street || ""}
                         {...formik.getFieldProps("street")}
-                        className={`form-size form-control   ${formik.touched.street && formik.errors.street
+                        className={`form-size form-control   ${
+                          formik.touched.street && formik.errors.street
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
                         {formik.touched.street && formik.errors.street && (
-                          <p className="text-danger ">
-                            {formik.errors.street}
-                          </p>
+                          <p className="text-danger ">{formik.errors.street}</p>
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -576,23 +570,21 @@ function AppointmentsCreate({ name, id, getData }) {
                         id="city"
                         //value={formData.city || ""}
                         {...formik.getFieldProps("city")}
-                        className={`form-size form-control   ${formik.touched.city && formik.errors.city
+                        className={`form-size form-control   ${
+                          formik.touched.city && formik.errors.city
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
                         {formik.touched.city && formik.errors.city && (
-                          <p className="text-danger ">
-                            {formik.errors.city}
-                          </p>
+                          <p className="text-danger ">{formik.errors.city}</p>
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -604,23 +596,21 @@ function AppointmentsCreate({ name, id, getData }) {
                         id="state"
                         // value={formData.state || ""}
                         {...formik.getFieldProps("state")}
-                        className={`form-size form-control   ${formik.touched.state && formik.errors.state
+                        className={`form-size form-control   ${
+                          formik.touched.state && formik.errors.state
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
                         {formik.touched.state && formik.errors.state && (
-                          <p className="text-danger ">
-                            {formik.errors.state}
-                          </p>
+                          <p className="text-danger ">{formik.errors.state}</p>
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -632,10 +622,11 @@ function AppointmentsCreate({ name, id, getData }) {
                         id="zipCode"
                         // value={formData.zipCode || ""}
                         {...formik.getFieldProps("zipCode")}
-                        className={`form-size form-control   ${formik.touched.zipCode && formik.errors.zipCode
+                        className={`form-size form-control   ${
+                          formik.touched.zipCode && formik.errors.zipCode
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -648,7 +639,6 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-
                   </div>
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -660,10 +650,11 @@ function AppointmentsCreate({ name, id, getData }) {
                         id="country"
                         // value={formData.country || ""}
                         {...formik.getFieldProps("country")}
-                        className={`form-size form-control   ${formik.touched.country && formik.errors.country
+                        className={`form-size form-control   ${
+                          formik.touched.country && formik.errors.country
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -676,7 +667,6 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -699,11 +689,12 @@ function AppointmentsCreate({ name, id, getData }) {
                         //value={formData.additionalInformation || ""}
                         id="additionalInformation"
                         {...formik.getFieldProps("additionalInformation")}
-                        className={`form-control  ${formik.touched.additionalInformation &&
-                            formik.errors.additionalInformation
+                        className={`form-control  ${
+                          formik.touched.additionalInformation &&
+                          formik.errors.additionalInformation
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -717,7 +708,6 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>

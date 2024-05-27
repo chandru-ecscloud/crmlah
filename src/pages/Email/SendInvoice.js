@@ -30,8 +30,6 @@ function SendInvoice({ invoiceData, id }) {
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-
-
         const generateHtmlContent = () => {
           setLoadIndicator(true);
           let html = "";
@@ -134,7 +132,7 @@ function SendInvoice({ invoiceData, id }) {
                       <table>
                         <tr>
                         <td class="title">
-                        <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
+                        <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                           <td class="third">
@@ -153,28 +151,33 @@ function SendInvoice({ invoiceData, id }) {
                 <br />
                 <div style="display: flex;">
                   <label>Billing Street</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingStreet || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].billingStreet || "--"
+                  }</span>
           
                   <label>Billing City</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCity || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].billingCity || "--"
+                  }</span>
                 </div>
           
                 <div style="display: flex">
                   <label>Billing State</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingState || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].billingState || "--"
+                  }</span>
           
                   <label>Billing Code</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCode || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].billingCode || "--"
+                  }</span>
                 </div>
                 
                 <div style="display: flex">
                   <label>Billing Country</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].billingCountry || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].billingCountry || "--"
+                  }</span>
                 </div>
               </div>
               <br/>
@@ -182,28 +185,33 @@ function SendInvoice({ invoiceData, id }) {
                
                   <div style="display: flex;">
                   <label>Shipping Street</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingStreet || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].shippingStreet || "--"
+                  }</span>
           
                   <label>Shipping City</label>
-                  <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCity || "--"
-              }</span>
+                  <span>:&nbsp;&nbsp;${
+                    invoiceData.dealsWithInvoice[0].shippingCity || "--"
+                  }</span>
                   </div>
           
                   <div style="display: flex">
                     <label>Shipping State</label>
-                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingState || "--"
-              }</span>
+                    <span>:&nbsp;&nbsp;${
+                      invoiceData.dealsWithInvoice[0].shippingState || "--"
+                    }</span>
           
                     <label>Shipping Code</label>
-                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCode || "--"
-              }</span>
+                    <span>:&nbsp;&nbsp;${
+                      invoiceData.dealsWithInvoice[0].shippingCode || "--"
+                    }</span>
                   </div>
                     
                   <div style="display: flex">
                     <label>Shipping Country</label>
-                    <span>:&nbsp;&nbsp;${invoiceData.dealsWithInvoice[0].shippingCountry || "--"
-              }</span>
+                    <span>:&nbsp;&nbsp;${
+                      invoiceData.dealsWithInvoice[0].shippingCountry || "--"
+                    }</span>
                   </div>
                 </div>
               
@@ -222,8 +230,8 @@ function SendInvoice({ invoiceData, id }) {
                       <td style="white-space: nowrap">Total Amount</td>
                     </tr>
                     ${invoiceData.invoiceItemList
-                .map(
-                  (product, index) => `
+                      .map(
+                        (product, index) => `
                             <tr>
                             <td>${index + 1}</td>
                             <td>${product.productName || "--"}</td>
@@ -235,8 +243,8 @@ function SendInvoice({ invoiceData, id }) {
                             <td>${product.total || "--"}</td>
                             </tr>
                             `
-                )
-                .join("")}
+                      )
+                      .join("")}
                   </table>
                 </div>
     
@@ -468,10 +476,11 @@ function SendInvoice({ invoiceData, id }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control  ${formik.touched.subject && formik.errors.subject
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>
@@ -627,23 +636,19 @@ function SendInvoice({ invoiceData, id }) {
                         </tr>
                       </thead>
                       <tbody className="text-center">
-                        {invoiceData.invoiceItemList.map(
-                          (product, index) => (
-                            <tr key={product.id}>
-                              <td>{index + 1}</td>
-                              <td>{product.productName || "--"}</td>
-                              <td>{product.quantity || "0"}</td>
-                              <td>{product.listPrice || "0"}</td>
-                              <td>{product.amount || "0"}</td>
-                              <td>{product.discount || "0"}</td>
-                              <td>{product.tax || "0"}</td>
-                              <td>{product.total || "0"}</td>
-                            </tr>
-                          )
-                        )}
-
+                        {invoiceData.invoiceItemList.map((product, index) => (
+                          <tr key={product.id}>
+                            <td>{index + 1}</td>
+                            <td>{product.productName || "--"}</td>
+                            <td>{product.quantity || "0"}</td>
+                            <td>{product.listPrice || "0"}</td>
+                            <td>{product.amount || "0"}</td>
+                            <td>{product.discount || "0"}</td>
+                            <td>{product.tax || "0"}</td>
+                            <td>{product.total || "0"}</td>
+                          </tr>
+                        ))}
                       </tbody>
-
                     </table>
                   </div>
                 ) : (
@@ -664,7 +669,7 @@ function SendInvoice({ invoiceData, id }) {
                       <p style={{ marginBottom: "0px" }}>Sub Total </p>
                       <p style={{ marginBottom: "0px" }}>:</p>
                     </div>
-                    <div className="col-6">  {invoiceData.subTotal}</div>
+                    <div className="col-6"> {invoiceData.subTotal}</div>
                   </div>
                 </div>
               </div>
@@ -709,10 +714,12 @@ function SendInvoice({ invoiceData, id }) {
             <div className="d-flex align-items-end justify-content-end">
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button type="submit" className="btn btn-primary mt-4">
-                  {loadIndicator && <span
-                    class="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>}
+                  {loadIndicator && (
+                    <span
+                      class="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   Send
                   <IoMdSend className="ms-2 mb-1" />
                 </button>

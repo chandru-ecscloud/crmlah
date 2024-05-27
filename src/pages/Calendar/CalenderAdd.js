@@ -111,6 +111,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       data.appointmentStartTime = `${startTime} - ${endTime}`;
       data.appointmentStartDate = StartDate;
       data.appointmentEndtDate = EndDate;
+      data.phoneNumber = 9941286931;
+      data.companyName = "ECS";
 
       data.companyId = companyId;
       data.appointmentOwner = userName;
@@ -128,14 +130,14 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
             "Content-Type": "application/json",
           },
         });
-      
+
         if (response.status === 201) {
           console.log(response.data.appointmentId);
           getData();
           formik.resetForm();
           toast.success(response.data.message);
           setShowModal(false);
-      
+
           let mailContent;
           if (data.appointmentMode === "ONLINE") {
             try {
@@ -147,7 +149,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   startTime: data.appointmentStartTime.split(" ")[0],
                   duration: data.duration.split(" ")[0],
                 }
-              );      
+              );
               if (zoomResponse.status === 200) {
                 mailContent = `
                 <!DOCTYPE html>
@@ -223,7 +225,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                           <table>
                             <tr>
                               <td class="title">
-                                <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png" style="width: 75%; max-width: 180px" alt="Logo" />
+                                <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png" style="width: 75%; max-width: 180px" alt="Logo" />
                               </td>
                               <td class="third">
                                 <b>Date:</b> 24-01-2024<br />
@@ -339,7 +341,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       <table>
                         <tr>
                           <td class="title">
-                            <img src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png" style="width: 75%; max-width: 180px" alt="Logo" />
+                            <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png" style="width: 75%; max-width: 180px" alt="Logo" />
                           </td>
                           <td class="third">
                             <b>Date:</b> 24-01-2024<br />

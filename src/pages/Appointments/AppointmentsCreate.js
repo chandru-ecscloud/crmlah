@@ -20,7 +20,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   // console.log("appointmentTime", appointmentTime);
 
   const validationSchema = Yup.object().shape({
-    // appointmentFor: Yup.string().required("*Appointment for is required"),
+    appointmentFor: Yup.string().required("*Appointment for is required"),
     serviceId: Yup.string().required("*Service is required"),
     duration: Yup.string().required("*Duration is required"),
     appointmentName: Yup.string().required("*Name is required"),
@@ -28,29 +28,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     timeSlotId: Yup.string().required("*Start Time is required"),
     location: Yup.string().required("*Location is required"),
     member: Yup.string().required("*Member is required"),
-    // minutes: Yup.string().required("*Minutes is required"),
-    // time: Yup.string().required("*Time is required"),
-    // hour: Yup.string().required("*Hour is required"),
-    // none: Yup.string().required("*None is required"),
-    street: Yup.string().required("*Street is required"),
-    city: Yup.string().required("*City is required"),
-    state: Yup.string().required("*State is required"),
-    zipCode: Yup.string()
-      .matches(/^\d+$/, "Must be only digits")
-      .required("*Zip code is required"),
-    country: Yup.string().required("*Country is required"),
-    appointmentMode: Yup.string().required("*Appointment Mode is required"),
-    // appointmentFor: Yup.string().required("*Description is required"),
-    // leadId: Yup.string().when('name', {
-    //   is: 'Create Appointment',
-    //   then: Yup.string().required("*Appointment for is required"),
-    //   otherwise: Yup.string()
-    // }),
-    // appointmentFor: Yup.string().when('name', {
-    //   is: 'schedule',
-    //   then: Yup.string().required("*Appointment for is required"),
-    //   otherwise: Yup.string()
-    // }),
+    appointmentMode: Yup.string().required("*Appointment mode is required"),
   });
 
   const formik = useFormik({
@@ -111,6 +89,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
       data.reminder = 2;
       data.appointmentRoleType = appointmentRole;
       data.userId = userId;
+      data.phoneNumber = 9941286931;
+      data.companyName = "ECS";
 
       // console.log("Add appointment", data);
       try {
@@ -226,7 +206,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                             <tr>
                               <td class="title">
                                 <img
-                                  src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
+                                  src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
                                   style="width: 75%; max-width: 180px"
                                   alt="Logo"
                                 />
@@ -244,8 +224,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
   
   
                   <div class="invoice" >
-                    <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
-                    <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+                    <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
+                    <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
                       ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
                     </p>
   
@@ -256,7 +236,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment</p>
                     <hr />
                     <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                    <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
+                    <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
                     <p style=" margin: 0 ; ">ECS Cloud</p>
                     <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                     <hr />
@@ -351,7 +331,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           <tr>
                             <td class="title">
                               <img
-                                src="https://ecscloudinfotech.com/ecs/static/media/ecs_logo.592342beab02474edfc6.png"
+                                src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
                                 style="width: 75%; max-width: 180px"
                                 alt="Logo"
                               />
@@ -369,8 +349,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
 
                 <div class="invoice" >
-                  <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
-                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+                  <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
+                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
                     ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
                   </p>
 
@@ -382,7 +362,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <hr />
                   
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
+                  <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
                   <p style=" margin: 0 ; ">ECS Cloud</p>
                   <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                   <hr />
