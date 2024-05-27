@@ -12,30 +12,13 @@ import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
   account_name: Yup.string().required("*Account Name is required"),
-  country_code: Yup.number().required("*Country Code is required"),
-  phone: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .min(8)
-    .max(10)
-    .required("*Phone Number is required"),
+  phone: Yup
+  .string()
+  .required("*Phone is required")
+  .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   email: Yup.string().email("Invalid email").required("*Email is required"),
-  parent_account: Yup.string().required("*Parent Account is required"),
-  account_number: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Account Number is required"),
+  account_number: Yup.string().required("*Account Number is required"),
   account_type: Yup.string().required("*Account Type is required"),
-  shipping_street: Yup.string().required("*Shipping Street is required"),
-  billing_street: Yup.string().required("*Billing Street is required"),
-  shipping_city: Yup.string().required("*Shipping City is required"),
-  billing_city: Yup.string().required("*Billing City is required"),
-  shipping_code: Yup.string().matches(/^\d+$/, "Must be only digits")
-    .required("*Shipping Code is required"),
-  billing_code: Yup.string().matches(/^\d+$/, "Must be only digits")
-    .required("*Billing Code is required"),
-  shipping_state: Yup.string().required("*Shipping State is required"),
-  billing_state: Yup.string().required("*Billing State is required"),
-  shipping_country: Yup.string().required("*Shipping Country is required"),
-  billing_country: Yup.string().required("*Billing Country is required"),
 });
 
 function AccountsEdit() {
@@ -172,9 +155,9 @@ function AccountsEdit() {
       <form onSubmit={formik.handleSubmit}>
         <div className="container-fluid">
           <div className="row mt-3">
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <h4>
-                <b>Edit Account</b>
+                <b>Update Account</b>
                 <br></br>
                 {/* <img
                   src={userImage}
@@ -208,7 +191,7 @@ function AccountsEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Update
+                  Save
                 </button>
               </span>
             </div>
@@ -221,9 +204,10 @@ function AccountsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Owner</lable> &nbsp;&nbsp;
+                <lable>Account Owner</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   {...formik.getFieldProps("account_owner")}
                   type="text"
@@ -270,9 +254,10 @@ function AccountsEdit() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Name</lable> &nbsp;&nbsp;
+                <lable>Account Name</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   {...formik.getFieldProps("account_name")}
@@ -301,9 +286,10 @@ function AccountsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
+                <lable>Phone</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
@@ -317,7 +303,6 @@ function AccountsEdit() {
                       name="country_code"
                       id="country_code"
                     >
-                      <option value=""></option>
                       <option value="+65">+65</option>
                       <option value="+91">+91</option>
                     </select>
@@ -359,9 +344,10 @@ function AccountsEdit() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Email</lable> &nbsp;&nbsp;
+                <lable>Email</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("email")}
                   type="text"
@@ -380,7 +366,7 @@ function AccountsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Parent Account</lable> &nbsp;&nbsp;
                 <input
@@ -390,17 +376,6 @@ function AccountsEdit() {
                   id="parent_account"
                   name="parent_account"
                 />
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.parent_account &&
-                    formik.errors.parent_account && (
-                      <div className="text-danger ">
-                        {formik.errors.parent_account}
-                      </div>
-                    )}
-                </div>
               </div>
             </div>
 
@@ -430,7 +405,7 @@ function AccountsEdit() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Number</lable> &nbsp;&nbsp;
                 <input
@@ -441,7 +416,7 @@ function AccountsEdit() {
                   id="account_number"
                 />
               </div>
-              <div className="row sm-device pb-4">
+              <div className="row pb-4 sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.account_number &&
@@ -467,7 +442,7 @@ function AccountsEdit() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Type</lable> &nbsp;&nbsp;
                 <input
@@ -477,17 +452,6 @@ function AccountsEdit() {
                   name="account_type"
                   id="account_type"
                 />
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.account_type &&
-                    formik.errors.account_type && (
-                      <div className="text-danger ">
-                        {formik.errors.account_type}
-                      </div>
-                    )}
-                </div>
               </div>
             </div>
 
@@ -566,7 +530,7 @@ function AccountsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Street</lable> &nbsp;&nbsp;
                 <input
@@ -577,19 +541,8 @@ function AccountsEdit() {
                   id="shipping_street"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_street &&
-                    formik.errors.shipping_street && (
-                      <div className="text-danger ">
-                        {formik.errors.shipping_street}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
@@ -600,19 +553,8 @@ function AccountsEdit() {
                   id="billing_street"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_street &&
-                    formik.errors.billing_street && (
-                      <div className="text-danger ">
-                        {formik.errors.billing_street}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
@@ -623,19 +565,8 @@ function AccountsEdit() {
                   id="shipping_city"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_city &&
-                    formik.errors.shipping_city && (
-                      <div className="text-danger ">
-                        {formik.errors.shipping_city}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
@@ -646,19 +577,8 @@ function AccountsEdit() {
                   id="billing_city"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_city &&
-                    formik.errors.billing_city && (
-                      <div className="text-danger ">
-                        {formik.errors.billing_city}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping State</lable> &nbsp;&nbsp;
                 <input
@@ -669,19 +589,8 @@ function AccountsEdit() {
                   id="shipping_state"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_state &&
-                    formik.errors.shipping_state && (
-                      <div className="text-danger ">
-                        {formik.errors.shipping_state}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing State</lable> &nbsp;&nbsp;
                 <input
@@ -692,19 +601,8 @@ function AccountsEdit() {
                   id="billing_state"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_state &&
-                    formik.errors.billing_state && (
-                      <div className="text-danger ">
-                        {formik.errors.billing_state}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 ">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Code</lable> &nbsp;&nbsp;
                 <input
@@ -715,19 +613,8 @@ function AccountsEdit() {
                   id="shipping_code"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_code &&
-                    formik.errors.shipping_code && (
-                      <div className="text-danger ">
-                        {formik.errors.shipping_code}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
@@ -738,20 +625,9 @@ function AccountsEdit() {
                   id="billing_code"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_code &&
-                    formik.errors.billing_code && (
-                      <div className="text-danger ">
-                        {formik.errors.billing_code}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Country</lable> &nbsp;&nbsp;
                 <input
@@ -762,19 +638,8 @@ function AccountsEdit() {
                   id="shipping_country"
                 />
               </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_country &&
-                    formik.errors.shipping_country && (
-                      <div className="text-danger ">
-                        {formik.errors.shipping_country}
-                      </div>
-                    )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Country</lable> &nbsp;&nbsp;
                 <input
@@ -784,17 +649,6 @@ function AccountsEdit() {
                   name="billing_country"
                   id="billing_country"
                 />
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_country &&
-                    formik.errors.billing_country && (
-                      <div className="text-danger ">
-                        {formik.errors.billing_country}
-                      </div>
-                    )}
-                </div>
               </div>
             </div>
           </div>

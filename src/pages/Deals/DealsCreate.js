@@ -20,31 +20,6 @@ const validationSchema = yup.object().shape({
   deal_name: yup.string().required("*Deal name is required"),
   contact_name: yup.string().required("*Contact name is required"),
   account_name: yup.string().required("*Account name is required"),
-  closing_date: yup.string().required("*Closing date is required"),
-  stage: yup.string().required("*stage is required"),
-  probability: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Probability is required"),
-  campaign_source: yup.string().required("*Campaign source is required"),
-  lead_source: yup.string().required("*Lead source is required"),
-  shipping_street: yup.string().required("*Shipping street is required"),
-  shipping_city: yup.string().required("*Shipping city is required"),
-  billing_state: yup.string().required("*Billing state is required"),
-  billing_city: yup.string().required("*Billing city is required"),
-  billing_street: yup.string().required("*Billing street is required"),
-  shipping_state: yup.string().required("*Shipping state is required"),
-  shipping_code: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-
-    .required("*Shipping code is required"),
-  billing_code: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-
-    .required("*Billing code is required"),
-  shipping_country: yup.string().required("*Shipping country is required"),
-  billing_country: yup.string().required("*Billing country is required"),
 });
 
 function DealsCreate() {
@@ -220,7 +195,8 @@ function DealsCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Owner</lable> &nbsp;&nbsp;
+                <lable>Deal Owner</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
                   name="deal_owner"
@@ -248,7 +224,8 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Amount</lable> &nbsp;&nbsp;
+                <lable>Amount</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -273,7 +250,8 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable> &nbsp;&nbsp;
+                <lable>Email</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
                   className={`form-size form-control  ${
@@ -297,7 +275,8 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Deal Name</lable> &nbsp;&nbsp;
+                <lable>Deal Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 {/* <select
                   style={{ width: "60%" }}
                   className="form-size form-select"
@@ -335,10 +314,15 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Contact Name</lable> &nbsp;&nbsp;
+                <lable>Contact Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
-                  className="form-size form-select"
+                  className={`form-size form-select  ${
+                    formik.touched.contact_name && formik.errors.contact_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("contact_name")}
                 >
                   <option value="" selected disabled></option>
@@ -365,10 +349,15 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Name</lable> &nbsp;&nbsp;
+                <lable>Account Name</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
-                  className="form-size form-select"
+                  className={`form-size form-select  ${
+                    formik.touched.account_name && formik.errors.account_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("account_name")}
                 >
                   <option value="" selected disabled></option>
@@ -398,26 +387,11 @@ function DealsCreate() {
                 <lable>Closing Date</lable> &nbsp;&nbsp;
                 <input
                   type="date"
-                  className={`form-size form-control  ${
-                    formik.touched.closing_date && formik.errors.closing_date
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("closing_date")}
                   name="closing_date"
                   id="closing_date"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.closing_date &&
-                    formik.errors.closing_date && (
-                      <p className="text-danger">
-                        {formik.errors.closing_date}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
 
@@ -459,11 +433,7 @@ function DealsCreate() {
                 <lable>Stage</lable> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.stage && formik.errors.stage
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select`}
                   {...formik.getFieldProps("stage")}
                   id="stage"
                 >
@@ -472,14 +442,6 @@ function DealsCreate() {
                   <option value="Intermediate">Intermediate</option>
                   <option value="Approved">Approved</option>
                 </select>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.stage && formik.errors.stage && (
-                    <p className="text-danger">{formik.errors.stage}</p>
-                  )}
-                </div>
               </div>
             </div>
 
@@ -499,23 +461,11 @@ function DealsCreate() {
                 <lable>probability(%)</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.probability && formik.errors.probability
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("probability")}
                   name="probability"
                   id="probability"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.probability && formik.errors.probability && (
-                    <p className="text-danger">{formik.errors.probability}</p>
-                  )}
-                </div>
               </div>
             </div>
 
@@ -555,27 +505,11 @@ function DealsCreate() {
                 <lable>Campaign Source</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.campaign_source &&
-                    formik.errors.campaign_source
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("campaign_source")}
                   name="campaign_source"
                   id="campaign_source"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.campaign_source &&
-                    formik.errors.campaign_source && (
-                      <p className="text-danger">
-                        {formik.errors.campaign_source}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
 
@@ -583,11 +517,7 @@ function DealsCreate() {
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <select
-                  className={`form-size form-select  ${
-                    formik.touched.lead_source && formik.errors.lead_source
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select`}
                   {...formik.getFieldProps("lead_source")}
                   id="lead_source"
                   name="lead_source"
@@ -598,14 +528,6 @@ function DealsCreate() {
                   <option value="Facebook">Facebook</option>
                   <option value="Website">Website</option>
                 </select>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.lead_source && formik.errors.lead_source && (
-                    <p className="text-danger">{formik.errors.lead_source}</p>
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -622,27 +544,11 @@ function DealsCreate() {
                 <lable>Shipping Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shipping_street &&
-                    formik.errors.shipping_street
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("shipping_street")}
                   name="shipping_street"
                   id="shipping_street"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_street &&
-                    formik.errors.shipping_street && (
-                      <p className="text-danger">
-                        {formik.errors.shipping_street}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -650,27 +556,11 @@ function DealsCreate() {
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billing_street &&
-                    formik.errors.billing_street
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("billing_street")}
                   name="billing_street"
                   id="billing_street"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_street &&
-                    formik.errors.billing_street && (
-                      <p className="text-danger">
-                        {formik.errors.billing_street}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -678,26 +568,11 @@ function DealsCreate() {
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shipping_city && formik.errors.shipping_city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("shipping_city")}
                   name="shipping_city"
                   id="shipping_city"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_city &&
-                    formik.errors.shipping_city && (
-                      <p className="text-danger">
-                        {formik.errors.shipping_city}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -705,26 +580,11 @@ function DealsCreate() {
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billing_city && formik.errors.billing_city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("billing_city")}
                   name="billing_city"
                   id="billing_city"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_city &&
-                    formik.errors.billing_city && (
-                      <p className="text-danger">
-                        {formik.errors.billing_city}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -732,27 +592,11 @@ function DealsCreate() {
                 <lable>Shipping State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shipping_state &&
-                    formik.errors.shipping_state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("shipping_state")}
                   name="shipping_state"
                   id="shipping_state"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_state &&
-                    formik.errors.shipping_state && (
-                      <p className="text-danger">
-                        {formik.errors.shipping_state}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -760,26 +604,11 @@ function DealsCreate() {
                 <lable>Billing State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billing_state && formik.errors.billing_state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("billing_state")}
                   name="billing_state"
                   id="billing_state"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_state &&
-                    formik.errors.billing_state && (
-                      <p className="text-danger">
-                        {formik.errors.billing_state}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
@@ -787,26 +616,11 @@ function DealsCreate() {
                 <lable>Shipping Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shipping_code && formik.errors.shipping_code
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("shipping_code")}
                   name="shipping_code"
                   id="shipping_code"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_code &&
-                    formik.errors.shipping_code && (
-                      <p className="text-danger">
-                        {formik.errors.shipping_code}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -814,26 +628,11 @@ function DealsCreate() {
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billing_code && formik.errors.billing_code
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control `}
                   {...formik.getFieldProps("billing_code")}
                   name="billing_code"
                   id="billing_code"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_code &&
-                    formik.errors.billing_code && (
-                      <p className="text-danger">
-                        {formik.errors.billing_code}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
@@ -841,27 +640,11 @@ function DealsCreate() {
                 <lable>Shipping Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shipping_country &&
-                    formik.errors.shipping_country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("shipping_country")}
                   name="shipping_country"
                   id="shipping_country"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.shipping_country &&
-                    formik.errors.shipping_country && (
-                      <p className="text-danger">
-                        {formik.errors.shipping_country}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12  mb-3">
@@ -869,34 +652,18 @@ function DealsCreate() {
                 <lable>Billing Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billing_country &&
-                    formik.errors.billing_country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("billing_country")}
                   name="billing_country"
                   id="billing_country"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.billing_country &&
-                    formik.errors.billing_country && (
-                      <p className="text-danger">
-                        {formik.errors.billing_country}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="container-fluid my-5">
           <h4>
-            <b>Discription Information</b>
+            <b>Description Information</b>
           </h4>
         </div>
         <div className="container">

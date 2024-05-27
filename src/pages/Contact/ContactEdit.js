@@ -16,32 +16,10 @@ const validationSchema = yup.object().shape({
   email: yup.string().required("*Email is required"),
   phone: yup
     .string()
-    .matches(/^\d+$/, "Must be only digits")
-    .min(8)
-    .max(10)
-    .required("*Phone Number is required"),
+    .required("*Phone is required")
+    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   account_name: yup.string().required("*Account Name is required"),
-  vendor_name: yup.string().required("*Vendor Name is required"),
-  land_line: yup.string().matches(/^\d+$/, "Must be only digits")
-  .required("*Land Line is required"),
-  skype_id: yup.string().required("*Skype ID is required"),
-  twitter: yup.string().required("*Twitter is required"),
 
-  mailing_street: yup.string().required("*Mailing Street is required"),
-  other_street: yup.string().required("*Other Street is required"),
-  mailing_city: yup.string().required("*Mailing City is required"),
-  other_city: yup.string().required("*Other City is required"),
-  mailing_state: yup.string().required("*Mailing State is required"),
-  other_state: yup.string().required("*Other State is required"),
-  mailing_zip: yup.string().matches(/^\d+$/, "Must be only digits")
-  .required("*Mailing Zip is required"),
-  other_zip: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Other Zip is required"),
-  mailing_country: yup.string().required("*Mailing Country is required"),
-  other_country: yup.string().required("*Other Country is required"),
-
-  description_info: yup.string().required("*Description is required"),
 });
 
 function ContactEdit() {
@@ -224,7 +202,7 @@ function ContactEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Update
+                  Save
                 </button>
               </span>
             </div>
@@ -239,7 +217,8 @@ function ContactEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Contact Owner</lable> &nbsp;&nbsp;
+                <lable>Contact Owner</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <select
                   type="text"
                   className="form-size form-select"
@@ -287,7 +266,8 @@ function ContactEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Firs Name</lable> &nbsp;&nbsp;
+                <lable>First Name</lable> 
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -310,7 +290,8 @@ function ContactEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Last Name</lable> &nbsp;&nbsp;
+                <lable>Last Name</lable> 
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -333,7 +314,8 @@ function ContactEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable> &nbsp;&nbsp;
+                <lable>Email</lable> 
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -354,32 +336,41 @@ function ContactEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Phone</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
-                      className="form-size form-select form-control"
-                      {...formik.getFieldProps("country_code")}
+                      {...formik.getFieldProps("countryCode")}
+                      id="countryCode"
+                      name="countryCode"
+                      className={`form-size form-control  ${
+                        formik.touched.countryCode && formik.errors.countryCode
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
-                      name="country_code"
                     >
                       <option value="+65">+65</option>
                       <option value="+91">+91</option>
                     </select>
                   </div>
-
                   <input
-                    {...formik.getFieldProps("phone")}
                     type="tel"
                     name="phone"
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("phone")}
                     id="phone"
-                    className="form-control form-size"
                     aria-label="Text input with checkbox"
                   />
                 </div>
@@ -389,7 +380,7 @@ function ContactEdit() {
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.phone && formik.errors.phone && (
-                    <div className="text-danger ">{formik.errors.phone}</div>
+                    <p className="text-danger">{formik.errors.phone}</p>
                   )}
                 </div>
               </div>
@@ -406,7 +397,8 @@ function ContactEdit() {
             </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Account Name</lable> &nbsp;&nbsp;
+                <lable>Account Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   className={`form-size form-select  ${
@@ -443,23 +435,11 @@ function ContactEdit() {
                 <lable>Vendor Name</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.vendor_name && formik.errors.vendor_name
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("vendor_name")}
                   name="vendor_name"
                   id="vendor_name"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.vendor_name && formik.errors.vendor_name && (
-                    <p className="text-danger">{formik.errors.vendor_name}</p>
-                  )}
-                </div>
               </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
@@ -471,8 +451,8 @@ function ContactEdit() {
                 id="department"
                 placeholder="--"
               />
-            </div> */}
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <label htmlFor="other_phone">Other phone</label>&nbsp;&nbsp;
               <input
                 type="tel"
@@ -497,23 +477,11 @@ function ContactEdit() {
                 <label>Land Line</label>&nbsp;&nbsp;
                 <input
                   type="tel"
-                  className={`form-size form-control  ${
-                    formik.touched.land_line && formik.errors.land_line
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control `}
                   {...formik.getFieldProps("land_line")}
                   name="land_line"
                   id="land_line"
                 />
-              </div>
-              <div className="row">
-                <div className="col-5"></div>
-                <div className="col-5">
-                  {formik.touched.land_line && formik.errors.land_line && (
-                    <p className="text-danger">{formik.errors.land_line}</p>
-                  )}
-                </div>
               </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
@@ -545,8 +513,8 @@ function ContactEdit() {
                 id="dob"
                 placeholder="--"
               />
-            </div> */}
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Asst Phone</lable> &nbsp;&nbsp;
               <input
                 type="tel"
@@ -555,8 +523,8 @@ function ContactEdit() {
                 id="asst_phone"
                 placeholder="--"
               />
-            </div> */}
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
               <lable>Email Opt Out</lable> &nbsp;&nbsp;
               <input
                 class="form-size form-control"
@@ -571,23 +539,11 @@ function ContactEdit() {
                 <lable>Skype ID</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.skype_id && formik.errors.skype_id
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("skype_id")}
                   name="skype_id"
                   id="skype_id"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.skype_id && formik.errors.skype_id && (
-                    <p className="text-danger">{formik.errors.skype_id}</p>
-                  )}
-                </div>
               </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
@@ -605,23 +561,11 @@ function ContactEdit() {
                 <lable>Twitter</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.twitter && formik.errors.twitter
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("twitter")}
                   name="twitter"
                   id="twitter"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.twitter && formik.errors.twitter && (
-                    <p className="text-danger">{formik.errors.twitter}</p>
-                  )}
-                </div>
               </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
@@ -659,27 +603,11 @@ function ContactEdit() {
                 <lable>Mailing Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.mailing_street &&
-                    formik.errors.mailing_street
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("mailing_street")}
                   name="mailing_street"
                   id="mailing_street"
                 />
-              </div>
-              <div className="row">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.mailing_street &&
-                    formik.errors.mailing_street && (
-                      <p className="text-danger">
-                        {formik.errors.mailing_street}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -687,26 +615,11 @@ function ContactEdit() {
                 <lable>Other Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.other_street && formik.errors.other_street
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("other_street")}
                   name="other_street"
                   id="other_street"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.other_street &&
-                    formik.errors.other_street && (
-                      <p className="text-danger">
-                        {formik.errors.other_street}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -714,26 +627,11 @@ function ContactEdit() {
                 <lable>Mailing City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.mailing_city && formik.errors.mailing_city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("mailing_city")}
                   name="mailing_city"
                   id="mailing_city"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.mailing_city &&
-                    formik.errors.mailing_city && (
-                      <p className="text-danger">
-                        {formik.errors.mailing_city}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -741,23 +639,11 @@ function ContactEdit() {
                 <lable>Other City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.other_city && formik.errors.other_city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control `}
                   {...formik.getFieldProps("other_city")}
                   name="other_city"
                   id="other_city"
                 />
-              </div>
-              <div className="row">
-                <div className="col-5"></div>
-                <div className="col-6">
-                  {formik.touched.other_city && formik.errors.other_city && (
-                    <p className="text-danger">{formik.errors.other_city}</p>
-                  )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -765,26 +651,11 @@ function ContactEdit() {
                 <lable>Mailing State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.mailing_state && formik.errors.mailing_state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("mailing_state")}
                   name="mailing_state"
                   id="mailing_state"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.mailing_state &&
-                    formik.errors.mailing_state && (
-                      <p className="text-danger">
-                        {formik.errors.mailing_state}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -792,23 +663,11 @@ function ContactEdit() {
                 <lable>Other State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.other_state && formik.errors.other_state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("other_state")}
                   name="other_state"
                   id="other_state"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.other_state && formik.errors.other_state && (
-                    <p className="text-danger">{formik.errors.other_state}</p>
-                  )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -816,23 +675,11 @@ function ContactEdit() {
                 <lable>Mailing Zip</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.mailing_zip && formik.errors.mailing_zip
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control }`}
                   {...formik.getFieldProps("mailing_zip")}
                   name="mailing_zip"
                   id="mailing_zip"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.mailing_zip && formik.errors.mailing_zip && (
-                    <p className="text-danger">{formik.errors.mailing_zip}</p>
-                  )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -840,23 +687,11 @@ function ContactEdit() {
                 <lable>Other Zip</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.other_zip && formik.errors.other_zip
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("other_zip")}
                   name="other_zip"
                   id="other_zip"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.other_zip && formik.errors.other_zip && (
-                    <p className="text-danger">{formik.errors.other_zip}</p>
-                  )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -864,27 +699,11 @@ function ContactEdit() {
                 <lable>Mailing Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.mailing_country &&
-                    formik.errors.mailing_country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("mailing_country")}
                   name="mailing_country"
                   id="mailing_country"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.mailing_country &&
-                    formik.errors.mailing_country && (
-                      <p className="text-danger">
-                        {formik.errors.mailing_country}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -892,26 +711,11 @@ function ContactEdit() {
                 <lable>Other Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.other_country && formik.errors.other_country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("other_country")}
                   name="other_country"
                   id="other_country"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.other_country &&
-                    formik.errors.other_country && (
-                      <p className="text-danger">
-                        {formik.errors.other_country}
-                      </p>
-                    )}
-                </div>
               </div>
             </div>
           </div>
