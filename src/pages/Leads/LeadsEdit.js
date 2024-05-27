@@ -16,23 +16,9 @@ const validationSchema = yup.object().shape({
   phone: yup
     .string()
     .required("*Phone is required")
-    .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
-  email: yup.string().required("*Email is required"),
-  landLine: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Land Line is required"),
-  lead_source: yup.string().required("*Lead Source is required"),
-  lead_status: yup.string().required("*Lead Status is required"),
-  skypeId: yup.string().required("*Skype ID is required"),
-  twitter: yup.string().required("*Twitter is required"),
-
-  street: yup.string().required("*Street is required"),
-  city: yup.string().required("*City is required"),
-  state: yup.string().required("*State is required"),
-  zipCode: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Zipcode is required"),
-  country: yup.string().required("*Country is required"),
+    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
+  email: yup.string().email("*Invalid Email").required("*Email is required"),
+  lead_owner: yup.string().required("*Lead owner is required"),
 });
 
 function LeadsEdit() {
@@ -51,6 +37,7 @@ function LeadsEdit() {
       first_name: "",
       last_name: "",
       phone: "",
+      countryCode: "",
       email: "",
       landLine: "",
       lead_source: "",
@@ -101,6 +88,7 @@ function LeadsEdit() {
           company: getData.company,
           first_name: getData.first_name,
           last_name: getData.last_name,
+          countryCode: getData.countryCode,
           phone: getData.phone,
           email: getData.email,
           landLine: getData.land_line,
@@ -176,7 +164,7 @@ function LeadsEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Update
+                  Save
                 </button>
               </span>
             </div>
@@ -189,9 +177,10 @@ function LeadsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Lead Owner</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Lead Owner</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
                   className="form-size form-select"
@@ -216,9 +205,10 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Company</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Company</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -241,9 +231,10 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>First Name</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>First Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -266,9 +257,10 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Last Name</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Last Name</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -290,14 +282,18 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Phone</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
+                      {...formik.getFieldProps("countryCode")}
+                      id="countryCode"
+                      name="countryCode"
                       className={`form-size form-control  ${
-                        formik.touched.phone && formik.errors.phone
+                        formik.touched.countryCode && formik.errors.countryCode
                           ? "is-invalid"
                           : ""
                       }`}
@@ -311,7 +307,6 @@ function LeadsEdit() {
                       <option value="+91">+91</option>
                     </select>
                   </div>
-
                   <input
                     type="tel"
                     name="phone"
@@ -337,9 +332,10 @@ function LeadsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
-                <lable>Email</lable> &nbsp;&nbsp;
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Email</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
                   className={`form-size form-control  ${
@@ -361,7 +357,7 @@ function LeadsEdit() {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Mobile</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -369,9 +365,9 @@ function LeadsEdit() {
                 id="mobile"
                 placeholder="--"
               />
-            </div> */}
+            </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Fax</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -381,32 +377,20 @@ function LeadsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Land Line</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.landLine && formik.errors.landLine
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control `}
                   {...formik.getFieldProps("landLine")}
                   name="landLine"
                   id="landLine"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.landLine && formik.errors.landLine && (
-                    <p className="text-danger">{formik.errors.landLine}</p>
-                  )}
-                </div>
-              </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Website</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -416,16 +400,12 @@ function LeadsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.lead_source && formik.errors.lead_source
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select `}
                   {...formik.getFieldProps("lead_source")}
                   id="lead_source"
                 >
@@ -436,30 +416,16 @@ function LeadsEdit() {
                   <option value="Instagram">Instagram</option>
                 </select>
               </div>
-
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.lead_source && formik.errors.lead_source && (
-                    <p className="text-danger">{formik.errors.lead_source}</p>
-                  )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Status</lable> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.lead_status && formik.errors.lead_status
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select`}
                   {...formik.getFieldProps("lead_status")}
                   id="lead_status"
                 >
-                  <option value=""></option>
                   <option value="Processed" selected>
                     Processed
                   </option>
@@ -469,18 +435,9 @@ function LeadsEdit() {
                   <option value="Terminated">Terminated</option>
                 </select>
               </div>
-
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.lead_status && formik.errors.lead_status && (
-                    <p className="text-danger">{formik.errors.lead_status}</p>
-                  )}
-                </div>
-              </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <label>Industry</label>&nbsp;&nbsp;
               <select
                 type="text"
@@ -494,7 +451,7 @@ function LeadsEdit() {
               </select>
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>No. of Employees</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -504,7 +461,7 @@ function LeadsEdit() {
               />
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Annual Revenue</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -514,7 +471,7 @@ function LeadsEdit() {
               />
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <label htmlFor="lead_owner">Rating</label>&nbsp;&nbsp;
               <select id="rating" className="form-size form-select">
                 <option value="--">--</option>
@@ -531,7 +488,7 @@ function LeadsEdit() {
               </select>
             </div> */}
 
-            {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Email Opt Out</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -541,32 +498,20 @@ function LeadsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Skype ID</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.skypeId && formik.errors.skypeId
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("skypeId")}
                   name="skypeId"
                   id="skypeId"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.skypeId && formik.errors.skypeId && (
-                    <p className="text-danger">{formik.errors.skypeId}</p>
-                  )}
-                </div>
-              </div>
             </div>
             {/* 
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex align-items-center justify-content-end  sm-device">
               <lable>Secondary Email</lable> &nbsp;&nbsp;
               <input
                 type="text"
@@ -577,28 +522,16 @@ function LeadsEdit() {
               />
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Twitter</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.twitter && formik.errors.twitter
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("twitter")}
                   name="twitter"
                   id="twitter"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.twitter && formik.errors.twitter && (
-                    <p className="text-danger">{formik.errors.twitter}</p>
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -611,124 +544,64 @@ function LeadsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Street</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.street && formik.errors.street
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("street")}
                   name="street"
                   id="street"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.street && formik.errors.street && (
-                    <p className="text-danger">{formik.errors.street}</p>
-                  )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>City</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.city && formik.errors.city
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control }`}
                   {...formik.getFieldProps("city")}
                   name="city"
                   id="city"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.city && formik.errors.city && (
-                    <p className="text-danger">{formik.errors.city}</p>
-                  )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>State</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.state && formik.errors.state
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("state")}
                   name="state"
                   id="state"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.state && formik.errors.state && (
-                    <p className="text-danger">{formik.errors.state}</p>
-                  )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.zipCode && formik.errors.zipCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
                 />
               </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.zipCode && formik.errors.zipCode && (
-                    <p className="text-danger">{formik.errors.zipCode}</p>
-                  )}
-                </div>
-              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Country</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.country && formik.errors.country
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control`}
                   {...formik.getFieldProps("country")}
                   name="country"
                   id="country"
                 />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.country && formik.errors.country && (
-                    <p className="text-danger">{formik.errors.country}</p>
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -742,7 +615,7 @@ function LeadsEdit() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
+              <div className="d-flex align-items-start justify-content-center  sm-device">
                 <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
