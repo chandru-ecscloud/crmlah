@@ -48,7 +48,7 @@ const validationSchema = yup.object({
 function InvoicesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
-  console.log("row",rows);
+  console.log("row", rows);
   const [adjustment, setAdjustment] = React.useState(0);
   const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
@@ -181,7 +181,7 @@ function InvoicesEdit() {
         invoiceItemList: rows.map((item) => ({
           id: item.id,
           productName: item.productName,
-          productId: item.selectedOption ? item.selectedOption : undefined, 
+          productId: item.selectedOption ? item.selectedOption : undefined,
           quantity: item.quantity,
           listPrice: item.listPrice,
           amount: item.amount,
@@ -302,7 +302,7 @@ function InvoicesEdit() {
         ...updatedRows[index],
         selectedOption: value,
         productName: productName,
-        productId : response.data.id,
+        productId: response.data.id,
         listPrice: listPrice,
         quantity: 1,
         amount: listPrice,
@@ -423,23 +423,23 @@ function InvoicesEdit() {
             //Authorization: `Bearer ${token}`,
           },
         });
-          const getData = response.data;
-          console.log("Invoice Data:", response.data);
-          const formattedResponseData = {
-            ...getData,
-            invoiceDate : getData.invoiceDate.substring(0, 10),
-            dueDate :getData.dueDate.substring(0, 10),
-            deletedInvoiceItemIds : []
-          };
-          console.log("formattedResponseData", formattedResponseData);
-          formik.setValues(formattedResponseData);
-          setRows(
-            response.data.invoiceItemList.map((item, index) => ({
-              ...item,
-              selectedOption: parseInt(item.productId),
-            }))
-          );
-          console.log("Set Row DATA", response.data.invoiceItemList);
+        const getData = response.data;
+        console.log("Invoice Data:", response.data);
+        const formattedResponseData = {
+          ...getData,
+          invoiceDate: getData.invoiceDate.substring(0, 10),
+          dueDate: getData.dueDate.substring(0, 10),
+          deletedInvoiceItemIds: []
+        };
+        console.log("formattedResponseData", formattedResponseData);
+        formik.setValues(formattedResponseData);
+        setRows(
+          response.data.invoiceItemList.map((item, index) => ({
+            ...item,
+            selectedOption: parseInt(item.productId),
+          }))
+        );
+        console.log("Set Row DATA", response.data.invoiceItemList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -513,31 +513,20 @@ function InvoicesEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Invoice Owner</lable> &nbsp;&nbsp;
-                <select
+                <lable>Invoice Owner</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
                   type="text"
                   name="invoiceOwner"
-                  className={`form-select form-size  ${
-                    formik.touched.invoiceOwner && formik.errors.invoiceOwner
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.invoiceOwner && formik.errors.invoiceOwner
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("invoiceOwner")}
                   id="invoiceOwner"
-                >
-                  <option value={owner}>{owner}</option>
-                  <option value="Vignesh Devan">Vignesh Devan</option>
-                  <option value="Chandru R">Chandru R</option>
-                  <option value="Gayathri M">Gayathri M</option>
-                  <option value="Poongodi K">Poongodi K</option>
-                  <option value="Suriya G">Suriya G</option>
-                  <option value="Leela Prasanna D">Leela Prasanna D</option>
-                  <option value="Saravanan M">Saravanan M</option>
-                  <option value="Nagaraj VR">Nagaraj VR</option>
-                  <option value="Yalini A">Yalini A</option>
-                  <option value="Vishnu Priya">Vishnu Priya</option>
-                  <option value="Kavitha">Kavitha</option>
-                </select>
+                  value={owner}
+                  readOnly
+                />
               </div>
               <div className="row  sm-device">
                 <div className="col-5"></div>
@@ -554,15 +543,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Sales Order</lable> &nbsp;&nbsp;
+                <lable>Sales Order</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="salesOrder"
-                  className={`form-control form-size  ${
-                    formik.touched.salesOrder && formik.errors.salesOrder
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.salesOrder && formik.errors.salesOrder
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("salesOrder")}
                   id="salesOrder"
                 />
@@ -581,15 +570,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Subject</lable> &nbsp;&nbsp;
+                <lable>Subject</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="subject"
-                  className={`form-control form-size  ${
-                    formik.touched.subject && formik.errors.subject
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("subject")}
                   id="subject"
                 />
@@ -630,15 +619,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Purchase Order</lable> &nbsp;&nbsp;
+                <lable>Purchase Order</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="purchaseOrder"
-                  className={`form-control form-size  ${
-                    formik.touched.purchaseOrder && formik.errors.purchaseOrder
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.purchaseOrder && formik.errors.purchaseOrder
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("purchaseOrder")}
                   id="purchaseOrder"
                 />
@@ -658,15 +647,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable> Invoice Date</lable> &nbsp;&nbsp;
+                <lable> Invoice Date</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="date"
                   name="invoiceDate"
-                  className={`form-control form-size  ${
-                    formik.touched.invoiceDate && formik.errors.invoiceDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.invoiceDate && formik.errors.invoiceDate
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("invoiceDate")}
                   id="invoiceDate"
                 />
@@ -685,15 +674,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Status</lable> &nbsp;&nbsp;
+                <lable>Status</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
                   name="status"
-                  className={`form-select form-size  ${
-                    formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size  ${formik.touched.status && formik.errors.status
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("status")}
                   id="status"
                 >
@@ -718,15 +707,15 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Due Date</lable> &nbsp;&nbsp;
+                <lable>Due Date</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="date"
                   name="dueDate"
-                  className={`form-control form-size  ${
-                    formik.touched.dueDate && formik.errors.dueDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.dueDate && formik.errors.dueDate
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("dueDate")}
                   id="dueDate"
                 />
@@ -743,16 +732,16 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Sales Commission</lable> &nbsp;&nbsp;
+                <lable>Sales Commission</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="salesCommission"
-                  className={`form-control form-size  ${
-                    formik.touched.salesCommission &&
+                  className={`form-control form-size  ${formik.touched.salesCommission &&
                     formik.errors.salesCommission
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("salesCommission")}
                   id="salesCommission"
                 />
@@ -772,7 +761,8 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Name</lable> &nbsp;&nbsp;
+                <lable>Deal Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 {/* <input
                
                 type="text"
@@ -782,16 +772,15 @@ function InvoicesEdit() {
                 <select
                   style={{ width: "60%" }}
                   name="dealName"
-                  className={`form-select form-size  ${
-                    formik.touched.dealName && formik.errors.dealName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size  ${formik.touched.dealName && formik.errors.dealName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("dealName")}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(dealOption) &&
-                    dealOption.map((option,i) => (
+                    dealOption.map((option, i) => (
                       <option key={i} value={option}>
                         {option}
                       </option>
@@ -812,20 +801,20 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Account Name</lable> &nbsp;&nbsp;
+                <lable>Account Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   name="accountName"
-                  className={`form-select form-size  ${
-                    formik.touched.accountName && formik.errors.accountName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size  ${formik.touched.accountName && formik.errors.accountName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("accountName")}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(accountOption) &&
-                    accountOption.map((option,i) => (
+                    accountOption.map((option, i) => (
                       <option key={i} value={option}>
                         {option}
                       </option>
@@ -847,20 +836,20 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Contact Name</lable> &nbsp;&nbsp;
+                <lable>Contact Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   name="contactName"
-                  className={`form-select form-size  ${
-                    formik.touched.contactName && formik.errors.contactName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size  ${formik.touched.contactName && formik.errors.contactName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("contactName")}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(contactOption) &&
-                    contactOption.map((option,i) => (
+                    contactOption.map((option, i) => (
                       <option key={i} value={option}>
                         {option}
                       </option>
@@ -890,17 +879,17 @@ function InvoicesEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping Street</lable> &nbsp;&nbsp;
+                <lable>Shipping Street</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingStreet"
                   id="shippingStreet"
-                  className={`form-control form-size  ${
-                    formik.touched.shippingStreet &&
+                  className={`form-control form-size  ${formik.touched.shippingStreet &&
                     formik.errors.shippingStreet
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("shippingStreet")}
                 />
               </div>
@@ -918,16 +907,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing Street</lable> &nbsp;&nbsp;
+                <lable>Billing Street</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingStreet"
                   id="billingStreet"
-                  className={`form-control form-size  ${
-                    formik.touched.billingStreet && formik.errors.billingStreet
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.billingStreet && formik.errors.billingStreet
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("billingStreet")}
                 />
               </div>
@@ -945,16 +934,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping City</lable> &nbsp;&nbsp;
+                <lable>Shipping City</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCity"
                   id="shippingCity"
-                  className={`form-control form-size  ${
-                    formik.touched.shippingCity && formik.errors.shippingCity
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.shippingCity && formik.errors.shippingCity
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("shippingCity")}
                 />
               </div>
@@ -972,16 +961,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing City</lable> &nbsp;&nbsp;
+                <lable>Billing City</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCity"
                   id="billingCity"
-                  className={`form-control form-size  ${
-                    formik.touched.billingCity && formik.errors.billingCity
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.billingCity && formik.errors.billingCity
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("billingCity")}
                 />
               </div>
@@ -998,16 +987,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping State</lable> &nbsp;&nbsp;
+                <lable>Shipping State</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingState"
                   id="shippingState"
-                  className={`form-control form-size  ${
-                    formik.touched.shippingState && formik.errors.shippingState
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.shippingState && formik.errors.shippingState
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("shippingState")}
                 />
               </div>
@@ -1026,16 +1015,16 @@ function InvoicesEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing State</lable> &nbsp;&nbsp;
+                <lable>Billing State</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingState"
                   id="billingState"
-                  className={`form-control form-size  ${
-                    formik.touched.billingState && formik.errors.billingState
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.billingState && formik.errors.billingState
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("billingState")}
                 />
               </div>
@@ -1053,16 +1042,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping Code</lable> &nbsp;&nbsp;
+                <lable>Shipping Code</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCode"
                   id="shippingCode"
-                  className={`form-control form-size  ${
-                    formik.touched.shippingCode && formik.errors.shippingCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.shippingCode && formik.errors.shippingCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("shippingCode")}
                 />
               </div>
@@ -1080,16 +1069,16 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing Code</lable> &nbsp;&nbsp;
+                <lable>Billing Code</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCode"
                   id="billingCode"
-                  className={`form-control form-size  ${
-                    formik.touched.billingCode && formik.errors.billingCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size  ${formik.touched.billingCode && formik.errors.billingCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("billingCode")}
                 />
               </div>
@@ -1106,17 +1095,17 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping Country</lable> &nbsp;&nbsp;
+                <lable>Shipping Country</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCountry"
                   id="shippingCountry"
-                  className={`form-control form-size  ${
-                    formik.touched.shippingCountry &&
+                  className={`form-control form-size  ${formik.touched.shippingCountry &&
                     formik.errors.shippingCountry
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("shippingCountry")}
                 />
               </div>
@@ -1134,17 +1123,17 @@ function InvoicesEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing Country</lable> &nbsp;&nbsp;
+                <lable>Billing Country</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCountry"
                   id="billingCountry"
-                  className={`form-control form-size  ${
-                    formik.touched.billingCountry &&
+                  className={`form-control form-size  ${formik.touched.billingCountry &&
                     formik.errors.billingCountry
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("billingCountry")}
                 />
               </div>
@@ -1372,7 +1361,6 @@ function InvoicesEdit() {
             </div>
           </div>
         </div>
-
         <div className="container-fluid my-5">
           <h4>
             <b>Terms and Conditions</b>
@@ -1382,16 +1370,31 @@ function InvoicesEdit() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
-                <lable>Terms & Conditions</lable> &nbsp;&nbsp;
+                <lable>Terms & Conditions</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   rows="3"
                   type="text"
-                  className="form-size form-control"
+                  className={`form-control form-size  ${formik.touched.termsAndConditions && formik.errors.termsAndConditions
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("termsAndConditions")}
                   name="termsAndConditions"
                   id="termsAndConditions"
                 />
               </div>
+            </div>
+          </div>
+          <div className="row  sm-device">
+            <div className="col-5"></div>
+            <div className="col-6  sm-device">
+              {formik.touched.termsAndConditions &&
+                formik.errors.termsAndConditions && (
+                  <div className="text-danger">
+                    {formik.errors.termsAndConditions}
+                  </div>
+                )}
             </div>
           </div>
         </div>
@@ -1405,16 +1408,31 @@ function InvoicesEdit() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
-                <lable>Description</lable> &nbsp;&nbsp;
+                <lable>Description</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
-                  className="form-size form-control"
+                  className={`form-control form-size  ${formik.touched.description && formik.errors.description
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("description")}
                   name="description"
                   id="description"
                 />
               </div>
+            </div>
+          </div>
+          <div className="row  sm-device">
+            <div className="col-5"></div>
+            <div className="col-6  sm-device">
+              {formik.touched.description &&
+                formik.errors.description && (
+                  <div className="text-danger">
+                    {formik.errors.description}
+                  </div>
+                )}
             </div>
           </div>
         </div>

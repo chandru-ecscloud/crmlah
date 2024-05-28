@@ -136,27 +136,20 @@ function ServicesCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label htmlFor="serviceOwner">Service Owner</label>&nbsp;&nbsp;
-                <select
+                <label htmlFor="serviceOwner">Service Owner</label>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
                   id="serviceOwner"
-                  className=" form-select form-size"
+                  className={`form-size form-control  ${
+                    formik.touched.serviceOwner && formik.errors.serviceOwner
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("serviceOwner")}
                   name="serviceOwner"
-                >
-                  <option selected value={owner}>{owner}</option>
-                  <option value="Suriya">Suriya</option>
-                  <option value="Vignesh Devan">Vignesh Devan</option>
-                  <option value="Chandru R">Chandru R</option>
-                  <option value="Gayathri M">Gayathri M</option>
-                  <option value="Poongodi K">Poongodi K</option>
-                  <option value="Suriya G">Suriya G</option>
-                  <option value="Leela Prasanna D">Leela Prasanna D</option>
-                  <option value="Saravanan M">Saravanan M</option>
-                  <option value="Nagaraj VR">Nagaraj VR</option>
-                  <option value="Yalini A">Yalini A</option>
-                  <option value="Vishnu Priya">Vishnu Priya</option>
-                  <option value="Kavitha">Kavitha</option>
-                </select>
+                  value={owner}
+                  readOnly
+                />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
@@ -169,10 +162,15 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Service Name</lable> &nbsp;&nbsp;
+                <lable>Service Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className=" form-control form-size"
+                  className={`form-size form-control  ${
+                    formik.touched.serviceName && formik.errors.serviceName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("serviceName")}
                   name="serviceName"
                   id="serviceName"
@@ -189,10 +187,15 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Duration</lable> &nbsp;&nbsp;
+                <lable>Duration</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   id="duration"
-                  className=" form-select form-size"
+                  className={`form-size form-select  ${
+                    formik.touched.duration && formik.errors.duration
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("duration")}
                   name="duration"
                 >
@@ -212,10 +215,15 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Location</lable> &nbsp;&nbsp;
+                <lable>Location</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   id="location"
-                  className=" form-select form-size"
+                  className={`form-size form-select  ${
+                    formik.touched.location && formik.errors.location
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("location")}
                   name="location"
                 >
@@ -236,10 +244,15 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Member(s)</lable> &nbsp;&nbsp;
+                <lable>Member(s)</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="tel"
-                  className=" form-control form-size"
+                  className={`form-size form-control  ${
+                    formik.touched.members && formik.errors.members
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("members")}
                   name="members"
                   id="members"
@@ -265,10 +278,15 @@ function ServicesCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Available Day(s)</lable> &nbsp;&nbsp;
+                <lable>Available Day(s)</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   id="availableDays"
-                  className=" form-select form-size"
+                  className={`form-size form-select  ${
+                    formik.touched.availableDays && formik.errors.availableDays
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("availableDays")}
                   name="availableDays"
                 >
@@ -290,10 +308,15 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Available Time</lable> &nbsp;&nbsp;
+                <lable>Available Time</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   id="availableTime"
-                  className=" form-select form-size"
+                  className={`form-size form-select  ${
+                    formik.touched.availableTime && formik.errors.availableTime
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("availableTime")}
                   name="availableTime"
                 >
@@ -324,10 +347,15 @@ function ServicesCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Price</lable> &nbsp;&nbsp;
+                <lable>Price</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className=" form-control form-size"
+                  className={`form-size form-control  ${
+                    formik.touched.price && formik.errors.price
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("price")}
                   name="price"
                   id="price"

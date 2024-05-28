@@ -11,14 +11,25 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   lead_source: yup.string().required("*Lead Source is required"),
+  amount: yup.number()
+      .typeError('Amount must be a number')
+      .integer('Amount must be an integer'),
   first_name: yup.string().required("*First Name is required"),
   last_name: yup.string().required("*Last Name is required"),
   email: yup.string().required("*Email is required"),
-  phone: yup
-    .string()
-    .required("*Phone is required")
-    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
-
+  countryCode: yup.string().required("*Country Code is required"),
+  phone: yup.string()
+      .required('Phone number is required')
+      .test('phone-length', function (value) {
+        const { countryCode } = this.parent;
+        if (countryCode === '+65') {
+          return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+        }
+        if (countryCode === '+91') {
+          return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+        }
+        return true; // Default validation for other country codes
+      }),
 });
 
 function ContactsLead() {
@@ -37,12 +48,13 @@ function ContactsLead() {
     initialValues: {
       contact_owner: owner,
       company_id: companyId,
+      amount: "",
       lead_source: "",
       first_name: "",
       last_name: "",
       email: "",
       phone: "",
-      countryCode: "",
+      countryCode: "+65",
       account_name: "",
       vendor_name: "",
       land_line: "",
@@ -168,13 +180,15 @@ function ContactsLead() {
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Contact Owner</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
-                <select
+                <input
                   type="text"
-                  className="form-size form-select"
+                  className="form-size form-control"
                   {...formik.getFieldProps("contact_owner")}
                   id="contact_owner"
-                >
-                  <option value={owner}>{owner}</option>
+                  value={owner}
+                  readOnly
+               />
+                  {/* <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>
                   <option value="Chandru R">Chandru R</option>
                   <option value="Gayathri M">Gayathri M</option>
@@ -186,12 +200,39 @@ function ContactsLead() {
                   <option value="Yalini A">Yalini A</option>
                   <option value="Vishnu Priya">Vishnu Priya</option>
                   <option value="Kavitha">Kavitha</option>
-                </select>
+                </select> */}
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Lead Source</lable> &nbsp;&nbsp;
+                <lable>Amount</lable> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("amount")}
+                  name="amount"
+                  id="amount"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.amount && formik.errors.amount && (
+                    <p className="text-danger">{formik.errors.amount}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Lead Source</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -306,7 +347,7 @@ function ContactsLead() {
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="+65">+65</option>
+                      <option value="+65" selected>+65</option>
                       <option value="+91">+91</option>
                     </select>
                   </div>
@@ -325,7 +366,7 @@ function ContactsLead() {
                 </div>
               </div>
 
-              <div className="row sm-device pb-4">
+              <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.phone && formik.errors.phone && (
@@ -376,18 +417,6 @@ function ContactsLead() {
                       </p>
                     )}
                 </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Vendor Name</lable> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control`}
-                  {...formik.getFieldProps("vendor_name")}
-                  name="vendor_name"
-                  id="vendor_name"
-                />
               </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device mb-3">
@@ -534,13 +563,6 @@ function ContactsLead() {
               <h4>
                 <b>Address Information</b>
               </h4>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex align-items-center justify-content-end  sm-device">
-              <Link to={"#"}>
-                <button type="button" className="btn btn-light">
-                  Copy Address
-                </button>
-              </Link>
             </div>
           </div>
         </div>

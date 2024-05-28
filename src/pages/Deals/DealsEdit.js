@@ -20,6 +20,10 @@ const validationSchema = yup.object().shape({
   deal_name: yup.string().required("*Deal name is required"),
   contact_name: yup.string().required("*Contact name is required"),
   account_name: yup.string().required("*Account name is required"),
+  stage: yup.string().required("*Stage is required"),
+  phone_number: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .required("*Phone Number is required"),
 });
 
 function DealsEdit() {
@@ -46,6 +50,7 @@ function DealsEdit() {
       closing_date: "",
       stage: "",
       probability: "",
+      phone_number: "",
       campaign_source: "",
       lead_source: "",
       shipping_street: "",
@@ -169,6 +174,7 @@ function DealsEdit() {
           account_name: getData.accountName,
           closing_date: closingDate,
           stage: getData.stage,
+          phone_number: getData.phoneNumber,
           probability: getData.probability,
           campaign_source: getData.campaignSource,
           lead_source: getData.leadSource,
@@ -253,28 +259,15 @@ function DealsEdit() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Deal Owner</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
+                <input
                   type="text"
                   name="deal_owner"
-                  className=" form-select form-size"
+                  className=" form-control form-size"
                   {...formik.getFieldProps("deal_owner")}
                   id="deal_owner"
-                >
-                  <option selected value={owner}>
-                    {owner}
-                  </option>
-                  <option value="Vignesh Devan">Vignesh Devan</option>
-                  <option value="Chandru R">Chandru R</option>
-                  <option value="Gayathri M">Gayathri M</option>
-                  <option value="Poongodi K">Poongodi K</option>
-                  <option value="Suriya G">Suriya G</option>
-                  <option value="Leela Prasanna D">Leela Prasanna D</option>
-                  <option value="Saravanan M">Saravanan M</option>
-                  <option value="Nagaraj VR">Nagaraj VR</option>
-                  <option value="Yalini A">Yalini A</option>
-                  <option value="Vishnu Priya">Vishnu Priya</option>
-                  <option value="Kavitha">Kavitha</option>
-                </select>
+                  value={owner}
+                  readOnly
+                />
               </div>
             </div>
 
@@ -299,6 +292,31 @@ function DealsEdit() {
                 <div className="col-6 sm-device">
                   {formik.touched.amount && formik.errors.amount && (
                     <p className="text-danger">{formik.errors.amount}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12  mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Phone Number</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.phone_number && formik.errors.phone_number
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("phone_number")}
+                  name="phone_number"
+                  id="phone_number"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.phone_number && formik.errors.phone_number && (
+                    <p className="text-danger">{formik.errors.phone_number}</p>
                   )}
                 </div>
               </div>
@@ -486,7 +504,8 @@ function DealsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Stage</lable> &nbsp;&nbsp;
+                <lable>Stage</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
                   className={`form-size form-select`}
