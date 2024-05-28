@@ -46,7 +46,7 @@ function ContactsLead() {
 
   const formik = useFormik({
     initialValues: {
-      contact_owner: owner,
+      contact_owner:owner,
       company_id: companyId,
       amount: "",
       lead_source: "",

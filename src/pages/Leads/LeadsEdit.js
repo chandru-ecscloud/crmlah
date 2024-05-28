@@ -164,7 +164,7 @@ function LeadsEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Save
+                  Update
                 </button>
               </span>
             </div>
@@ -177,31 +177,24 @@ function LeadsEdit() {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+          <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Owner</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
+                <input
                   type="text"
-                  className="form-size form-select"
+                  className="form-size form-control"
                   {...formik.getFieldProps("lead_owner")}
                   id="lead_owner"
-                >
-                  <option selected value={owner}>
-                    {owner}
-                  </option>
-                  <option value="Vignesh Devan">Vignesh Devan</option>
-                  <option value="Chandru R">Chandru R</option>
-                  <option value="Gayathri M">Gayathri M</option>
-                  <option value="Poongodi K">Poongodi K</option>
-                  <option value="Suriya G">Suriya G</option>
-                  <option value="Leela Prasanna D">Leela Prasanna D</option>
-                  <option value="Saravanan M">Saravanan M</option>
-                  <option value="Nagaraj VR">Nagaraj VR</option>
-                  <option value="Yalini A">Yalini A</option>
-                  <option value="Vishnu Priya">Vishnu Priya</option>
-                  <option value="Kavitha">Kavitha</option>
-                </select>
+                />
+                  <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.lead_owner && formik.errors.lead_owner && (
+                    <p className="text-danger">{formik.errors.lead_owner}</p>
+                  )}
+                </div>
+              </div>
               </div>
             </div>
 

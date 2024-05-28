@@ -194,7 +194,7 @@ function AccountsEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Save
+                  Update
                 </button>
               </span>
             </div>

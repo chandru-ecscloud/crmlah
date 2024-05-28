@@ -377,7 +377,14 @@ const Section = ({
         }}
       >
         {filteredTasks(tasksToMap, status).map((task, index) => (
-          <Task key={index} task={task} />
+          <Task key={index} task={task} 
+          tasks={tasks}
+              setTasks={setTasks}
+              fetchLeadData={fetchLeadData}
+              fetchContactData={fetchContactData}
+              fetchAcconutData={fetchAcconutData}
+              fetchDealData={fetchDealData}
+              />
         ))}
       </div>
     </div>

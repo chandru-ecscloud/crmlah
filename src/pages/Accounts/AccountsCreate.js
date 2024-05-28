@@ -169,14 +169,16 @@ function AccountsCreate() {
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Owner</lable> &nbsp;&nbsp;
-                <select
+                <input
                   {...formik.getFieldProps("account_owner")}
                   type="text"
-                  className="form-size form-select"
+                  className="form-size form-control"
                   id="account_owner"
                   name="account_owner"
-                >
-                  <option value={owner}>{owner}</option>
+                  value={owner}
+                  readOnly
+                />
+                  {/* <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>
                   <option value="Chandru R">Chandru R</option>
                   <option value="Gayathri M">Gayathri M</option>
@@ -188,7 +190,7 @@ function AccountsCreate() {
                   <option value="Yalini A">Yalini A</option>
                   <option value="Vishnu Priya">Vishnu Priya</option>
                   <option value="Kavitha">Kavitha</option>
-                </select>
+                </select> */}
               </div>
             </div>
 
