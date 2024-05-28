@@ -30,7 +30,8 @@ const menuItems = [
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },
   { to: "/invoices", label: "Invoices" },
-  { to: "/services", label: "Services" },
+  // { to: "/services", label: "Services" },
+  { to: "/allclient", label: "AllClient" },
   // { to: "/cases", label: "cases" },
   // { to: "/vendor", label: "vendor" },
 ];
@@ -41,7 +42,7 @@ const mainMenu = [
   { to: "/contacts", label: "Contacted" },
   { to: "/accounts", label: "Accounts" },
   { to: "/deals", label: "Deals" },
-  { to: "/dragable", label: "Sales" },
+  { to: "/dragable", label: "PipeLine" },
   { to: "/appointments", label: "Appointments" },
   // { to: "/company", label: "Company" },
 ];
