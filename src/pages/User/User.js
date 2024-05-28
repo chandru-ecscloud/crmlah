@@ -18,6 +18,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { Tooltip, Zoom } from "@mui/material";
+import TimeSlots from "../TimeSlot/TimeSlots";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -371,7 +372,17 @@ const UserActivation = () => {
       {!loading && (
         <>
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
+          <TimeSlots/>
             <div style={{ paddingRight: "10px" }}>
+            {/* <button
+                className={`btn btn-danger mx-2 ${
+                  role === "CMP_USER" && "disabled"
+                }`}
+                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+              >
+                Time Slot
+              </button> */}
+              
               <button
                 className={`btn btn-primary ${
                   role === "CMP_USER" && "disabled"

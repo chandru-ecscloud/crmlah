@@ -11,7 +11,8 @@ import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
-  account_name: Yup.string().required("*Account Name is required"),
+  first_name: Yup.string().required("*First Name is required"),
+  last_name: Yup.string().required("*Last Name is required"),
   phone: Yup
   .string()
   .required("*Phone is required")
@@ -216,7 +217,7 @@ function AccountsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>first Name</lable> &nbsp;&nbsp;
+                <lable>First Name</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("first_name")}
                   type="text"

@@ -717,3 +717,16 @@ nav .nav-link Link {
   width: 3px;
   height: 17px;
 }
+
+.custom-modal .modal-content {
+  box-shadow: 0px 5px 5px 500px #0000004d,
+              0px 20px 5px -15px #00000033,
+              0px -10px 5px -10px #0000004d,
+              0px -10px 6px -15px #00000033;
+}
+
+/* .custom-modal .modal-backdrop.show {
+  opacity: 0.8 !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+} */
+

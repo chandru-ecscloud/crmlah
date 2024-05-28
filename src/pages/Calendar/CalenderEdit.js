@@ -9,13 +9,16 @@ import { API_URL } from "../../Config/URL";
 
 const validationSchema = Yup.object().shape({
   leadId: Yup.string().required("*Appointment for is required"),
-  serviceId: Yup.string().required("*Service is required"),
+  // serviceId: Yup.string().required("*Service is required"),
   duration: Yup.string().required("*Duration is required"),
   // appointmentName: Yup.string().required("*Name is required"),
   // appointmentStartDate: Yup.date().required("*Start date is required"),
   // timeSlotId: Yup.string().required("*Start Time is required"),
+  phoneNumber: Yup.string()
+    .required("*Phone Number is required")
+    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   location: Yup.string().required("*Location is required"),
-  member: Yup.string().required("*Member is required"),
+  // member: Yup.string().required("*Member is required"),
   street: Yup.string().required("*Street is required"),
   city: Yup.string().required("*City is required"),
   state: Yup.string().required("*State is required"),
@@ -51,11 +54,12 @@ function CalenderEdit({ id, setShowViewModal }) {
     initialValues: {
       companyId: companyId,
       leadId: "",
-      serviceId: "",
+      // serviceId: "",
       appointmentStartDate: "",
       timeSlotId: "",
       duration: "",
       appointmentName: "",
+      phoneNumber:"",
       location: "",
       member: "",
       street: "",
@@ -75,7 +79,7 @@ function CalenderEdit({ id, setShowViewModal }) {
       const payload = {
         companyId: data.companyId,
         leadId: data.leadId,
-        serviceId: data.serviceId,
+        // serviceId: data.serviceId,
         duration: data.duration,
         location: data.location,
         member: data.member,
@@ -250,7 +254,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Service Name</lable> &nbsp;&nbsp;
                       <select
@@ -283,7 +287,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                         <div className="d-flex align-items-center justify-content-end sm-device">
                           <lable>Start Date</lable> &nbsp;&nbsp;
@@ -382,6 +386,35 @@ function CalenderEdit({ id, setShowViewModal }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
+                      <lable>Pnone Number</lable> &nbsp;&nbsp;
+                      <input
+                        type="text"
+                        //className="form-size form-control"
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        {...formik.getFieldProps("phoneNumber")}
+                        className={`form-size form-control   ${
+                          formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber && (
+                            <p className="text-danger">
+                              {formik.errors.phoneNumber}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment Name</lable> &nbsp;&nbsp;
                       <input
                         type="text"
@@ -442,7 +475,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Member</lable> &nbsp;&nbsp;
                       <input
@@ -466,7 +499,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { IoMdTrash } from "react-icons/io";
 import { FaPhoneAlt } from "react-icons/fa";
+import { FaSearchPlus } from "react-icons/fa";
+import Dropdown from "react-bootstrap/Dropdown";
 import {
   MdOutlineLeaderboard,
   MdOutlineAccountBalanceWallet,
@@ -26,8 +28,25 @@ const ListTasks = () => {
   const [wonTasks, setWonTasks] = useState([]);
   const [hoveredSection, setHoveredSection] = useState(null);
   const companyId = sessionStorage.getItem("companyId");
-
+  const [search, setSearch] = useState({
+    New: "",
+    Qualified: "",
+    Proposition: "",
+    Won: "",
+  });
   //  console.log("tasks",tasks)
+
+  const handleSearchChange = (e, status, clear = false) => {
+    setSearch({ ...search, [status]: clear ? "" : e.target.value });
+  };
+
+  const filteredTasks = (tasks, status) => {
+    return tasks.filter(
+      (task) =>
+        task.name.toLowerCase().startsWith(search[status].toLowerCase()) ||
+        task.email.toLowerCase().startsWith(search[status].toLowerCase())
+    );
+  };
 
   const fetchLeadData = async () => {
     try {
@@ -171,6 +190,9 @@ const ListTasks = () => {
             wonTasks={wonTasks}
             isHovered={hoveredSection === status}
             setHoveredSection={setHoveredSection}
+            search={search}
+            filteredTasks={filteredTasks}
+            handleSearchChange={handleSearchChange}
           />
         ))}
       </div>
@@ -194,6 +216,9 @@ const Section = ({
   wonTasks,
   isHovered,
   setHoveredSection,
+  search,
+  filteredTasks,
+  handleSearchChange,
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: "task",
@@ -335,6 +360,9 @@ const Section = ({
         text={text}
         count={tasksToMap.length}
         // bgContainer={bgContainer}
+        status={status}
+        search={search}
+        handleSearchChange={handleSearchChange}
       />
       <div
         className={`pt-2`}
@@ -348,25 +376,22 @@ const Section = ({
           scrollbarColor: "rgba(0,0,0,0.2) rgba(0,0,0,0.1)",
         }}
       >
-        {tasksToMap.length > 0 &&
-          tasksToMap.map((task) => (
-            <Task
-              key={task.id}
-              task={task}
-              tasks={tasks}
-              setTasks={setTasks}
-              fetchLeadData={fetchLeadData}
-              fetchContactData={fetchContactData}
-              fetchAcconutData={fetchAcconutData}
-              fetchDealData={fetchDealData}
-            />
-          ))}
+        {filteredTasks(tasksToMap, status).map((task, index) => (
+          <Task key={index} task={task} />
+        ))}
       </div>
     </div>
   );
 };
 
-const Header = ({ text, count, bgContainer }) => {
+const Header = ({
+  text,
+  count,
+  bgContainer,
+  status,
+  search,
+  handleSearchChange,
+}) => {
   let icons;
   // let progressBarColor;
   switch (text) {
@@ -402,9 +427,28 @@ const Header = ({ text, count, bgContainer }) => {
 
   return (
     <div
-      className={`p-3 d-flex align-items-center justify-content-between rounded-md text-sm text-dark `}
+      className={` d-flex align-items-center justify-content-between rounded-md text-sm text-dark `}
       style={{ backgroundColor: bgContainer }}
     >
+      <span className={`badge text-dark dragable-heading-count mt-2 `}>
+        <Dropdown drop="right">
+          <Dropdown.Toggle variant="none" id="dropdown-basic">
+            <FaSearchPlus />
+          </Dropdown.Toggle>
+          <Dropdown.Menu
+            className="px-2"
+            style={{ minWidth: "20%", background: "#add8e6" }}
+          >
+            <input
+              type="search"
+              placeholder={`Search ${status}`}
+              value={search[status]}
+              onChange={(e) => handleSearchChange(e, status)}
+              className="form-control form-control-sm p-0"
+            />
+          </Dropdown.Menu>
+        </Dropdown>
+      </span>
       <p className="dragable-heading-text" style={{ width: "60%" }}>
         {icons} {text}
         <div
@@ -415,7 +459,6 @@ const Header = ({ text, count, bgContainer }) => {
           aria-valuemin="0"
           aria-valuemax="100"
         >
-          {/* <div class={`progress-bar bg-success`} style={{ width: "50%" }}></div> */}
           <div
             className={`progress-bar ${progressBarColor}`}
             style={{ width: `${percentage}%` }}
@@ -433,7 +476,6 @@ const Header = ({ text, count, bgContainer }) => {
 
 const Task = ({
   task,
-  newTasks,
   fetchLeadData,
   fetchContactData,
   fetchAcconutData,
@@ -446,109 +488,54 @@ const Task = ({
       isDragging: monitor.isDragging(),
     }),
   }));
-  // console.log("object",task)
+
   const handleRemove = async (id, status) => {
-    if (status === "New") {
-      try {
-        const response = await axios.post(
-          `${API_URL}deleteMultipleClientData`,
-          [task.data],
-          {
-            headers: {
-              "Content-Type": "application/json",
-              // //Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.error(response.data.message, {
-            icon: <CiCircleRemove color="red" size={20} />,
-          });
-          fetchLeadData();
-          // toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
-      }
+    let apiEndpoint = "";
+    let fetchFunction = null;
+
+    switch (status) {
+      case "New":
+        apiEndpoint = "deleteMultipleClientData";
+        fetchFunction = fetchLeadData;
+        break;
+      case "Qualified":
+        apiEndpoint = "deleteMultipleContactData";
+        fetchFunction = fetchContactData;
+        break;
+      case "Proposition":
+        apiEndpoint = "deleteMultipleAccountData";
+        fetchFunction = fetchAcconutData;
+        break;
+      case "Won":
+        apiEndpoint = "deleteMultipleDealData";
+        fetchFunction = fetchDealData;
+        break;
+      default:
+        return;
     }
-    if (status === "Qualified") {
-      try {
-        const response = await axios.post(
-          `${API_URL}deleteMultipleContactData`,
-          [task.data],
-          {
-            headers: {
-              "Content-Type": "application/json",
-              // //Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.error(response.data.message, {
-            icon: <CiCircleRemove color="red" size={20} />,
-          });
-          fetchContactData();
-          // toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}${apiEndpoint}`,
+        [task.data],
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message, {
+          icon: <CiCircleRemove color="green" size={20} />,
+        });
+        if (fetchFunction) fetchFunction();
+      } else {
+        toast.error(response.data.message);
       }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
     }
-    if (status === "Proposition") {
-      try {
-        const response = await axios.post(
-          `${API_URL}deleteMultipleAccountData`,
-          [task.data],
-          {
-            headers: {
-              "Content-Type": "application/json",
-              // //Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.error(response.data.message, {
-            icon: <CiCircleRemove color="red" size={20} />,
-          });
-          fetchAcconutData();
-          // toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
-      }
-    }
-    if (status === "Won") {
-      try {
-        const response = await axios.post(
-          `${API_URL}deleteMultipleDealData`,
-          [task.data],
-          {
-            headers: {
-              "Content-Type": "application/json",
-              // //Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.error(response.data.message, {
-            icon: <CiCircleRemove color="red" size={20} />,
-          });
-          fetchDealData();
-          // toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
-      }
-    }
-    // toast("Task removed", { icon: <CiCircleRemove color="red" size={20} /> });
   };
 
   let badgeColor;
@@ -584,7 +571,7 @@ const Task = ({
         backgroundColor: "#fff",
         opacity: isDragging ? 1 : 1,
       }}
-      className={`color p-3 pb-1 d-flex flex-column  mx-2 cursor-grab `}
+      className={`color p-3 pb-1 d-flex flex-column mx-2 cursor-grab`}
     >
       <span>
         <p className="dragable-content-text">
@@ -597,27 +584,71 @@ const Task = ({
         <p className="dragable-content-amount">
           <FaPhoneAlt /> &nbsp; {task.phone}
         </p>
-        {/* <p className="dragable-content-amount">
-          <BsCurrencyDollar/> &nbsp; {task.amount}
-        </p> */}
       </span>
       <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
         <span
-          className={`badge rounded-pill ${badgeColor} mb-2 `}
+          className={`badge rounded-pill ${badgeColor} mb-2`}
           style={{ paddingTop: "6px !important" }}
         >
           {badgeText}
         </span>
         <br />
         <button
-          className="btn btn-outline-danger px-2 py-1 "
-          onClick={() => handleRemove(task.id, task.status)}
+          className="btn btn-outline-danger px-2 py-1"
+          data-bs-toggle="modal"
+          data-bs-target={`#deleteModal-${task.id}`}
           style={{
             border: "none",
           }}
         >
           <IoMdTrash />
         </button>
+      </div>
+
+      <div
+        className="modal fade"
+        id={`deleteModal-${task.id}`}
+        tabIndex="-1"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="fw-bold" id="deleteModalLabel">
+                Delete Confirmation
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <hr />
+            <div className="modal-body p-1 px-3">
+              Are you sure you want to delete this item?
+            </div>
+            <hr />
+            <div className="modal-footer p-1">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                No
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => handleRemove(task.id, task.status)}
+                data-bs-dismiss="modal"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

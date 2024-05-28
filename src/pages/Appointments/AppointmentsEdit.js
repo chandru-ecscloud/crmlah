@@ -8,13 +8,16 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   leadId: Yup.string().required("*Appointment for is required"),
-  serviceId: Yup.string().required("*Service is required"),
-  duration: Yup.string().required("*Duration is required"),
+  // serviceId: Yup.string().required("*Service is required"),
+  // duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Name is required"),
+  phoneNumber: Yup.string()
+    .required("*Phone Number is required")
+    .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   appointmentStartDate: Yup.date().required("*Start date is required"),
   timeSlotId: Yup.string().required("*Start Time is required"),
   location: Yup.string().required("*Location is required"),
-  member: Yup.string().required("*Member is required"),
+  // member: Yup.string().required("*Member is required"),
   street: Yup.string().required("*Street is required"),
   city: Yup.string().required("*City is required"),
   state: Yup.string().required("*State is required"),
@@ -42,6 +45,7 @@ function AppointmentsCreate({ name, id, getData }) {
       leadId: "",
       serviceId: "",
       appointmentStartDate: "",
+      phoneNumber: "",
       timeSlotId: "",
       duration: "",
       appointmentName: "",
@@ -67,11 +71,11 @@ function AppointmentsCreate({ name, id, getData }) {
         }
       });
 
-      serviceData.forEach((service) => {
-        if (parseInt(data.serviceId) === service.id) {
-          selectedServiceName = service.serviceName || "--";
-        }
-      });
+      // serviceData.forEach((service) => {
+      //   if (parseInt(data.serviceId) === service.id) {
+      //     selectedServiceName = service.serviceName || "--";
+      //   }
+      // });
 
       let selectedTimeSlot = "";
       appointmentTime.forEach((time) => {
@@ -83,7 +87,7 @@ function AppointmentsCreate({ name, id, getData }) {
       data.appointmentFor = selectedLeadName.name;
       data.appointmentStartTime = selectedTimeSlot;
       data.email = selectedLeadName.email;
-      data.serviceName = selectedServiceName;
+      // data.serviceName = selectedServiceName;
       data.appointmentOwner = userName;
       data.reminder = 2;
       // console.log(data);
@@ -275,7 +279,7 @@ function AppointmentsCreate({ name, id, getData }) {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Service Name</lable> &nbsp;&nbsp;
                       <select
@@ -308,7 +312,7 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Date</lable> &nbsp;&nbsp;
@@ -373,7 +377,7 @@ function AppointmentsCreate({ name, id, getData }) {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12  mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
                       <select
@@ -403,7 +407,7 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appoint Name</lable> &nbsp;&nbsp;
@@ -468,6 +472,35 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
+                      <lable>Pnone Number</lable> &nbsp;&nbsp;
+                      <input
+                        type="text"
+                        //className="form-size form-control"
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        {...formik.getFieldProps("phoneNumber")}
+                        className={`form-size form-control   ${
+                          formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber && (
+                            <p className="text-danger">
+                              {formik.errors.phoneNumber}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Member</lable> &nbsp;&nbsp;
                       <input
                         type="text"
@@ -490,7 +523,7 @@ function AppointmentsCreate({ name, id, getData }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>
