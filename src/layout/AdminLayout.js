@@ -60,6 +60,8 @@ import Calender from "../pages/Calendar/Calender";
 import CalenderEdit from "../pages/Calendar/CalenderEdit";
 import CalenderShow from "../pages/Calendar/CalenderShow";
 
+import AllClient from "../pages/AllClient";
+
 function AdminLayout({ handleLogout }) {
   return (
     <BrowserRouter>
@@ -147,6 +149,8 @@ function AdminLayout({ handleLogout }) {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/changepass" element={<ChangePassword />} />
         <Route path="/invoice" element={<Invoice />} />
+
+        <Route path="/allclient" element={<AllClient />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
