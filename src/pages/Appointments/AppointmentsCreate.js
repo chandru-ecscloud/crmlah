@@ -10,7 +10,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   const [show, setShow] = useState(false);
   const appointmentRole = sessionStorage.getItem("appointmentRole");
   const [serviceData, setserviceData] = useState([]);
-  // console.log(serviceData);
+  console.log(serviceData);
   const [leadData, setleadData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
@@ -20,28 +20,34 @@ function AppointmentsCreate({ name, schedule, getData }) {
   // console.log("appointmentTime", appointmentTime);
 
   const validationSchema = Yup.object().shape({
-    appointmentFor: Yup.string().required("*Appointment for is required"),
-    serviceId: Yup.string().required("*Service is required"),
-    duration: Yup.string().required("*Duration is required"),
+    leadId: Yup.string().required("*Appointment is required"),
+    // firstName:Yup.string().required("*First Name is required"),
+    // lastName:Yup.string().required("*Last Name is required"),
+    phoneNumber: Yup.string()
+      .required("*Phone Number is required")
+      .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
+    // serviceId: Yup.string().required("*Service is required"),
+    // duration: Yup.string().required("*Duration is required"),
     appointmentName: Yup.string().required("*Name is required"),
     appointmentStartDate: Yup.date().required("*Start date is required"),
     timeSlotId: Yup.string().required("*Start Time is required"),
     location: Yup.string().required("*Location is required"),
-    member: Yup.string().required("*Member is required"),
+    // member: Yup.string().required("*Member is required"),
     appointmentMode: Yup.string().required("*Appointment mode is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      serviceId: "",
+      // serviceId: "",
       email: "",
-      serviceName: "",
+      // serviceName: "",
       appointmentStartDate: "",
       timeSlotId: "",
-      duration: "",
+      // duration: "",
       appointmentName: "",
       location: "",
-      member: "",
+      // member: "",
+      phoneNumber: "",
       street: "",
       city: "",
       state: "",
@@ -58,7 +64,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       console.log("User Data", leadData);
       if (name === "Create Appointment") {
         let selectedLeadName = "";
-        let selectedServiceName = "";
+        // let selectedServiceName = "";
 
         leadData.forEach((lead) => {
           if (parseInt(data.leadId) === lead.id) {
@@ -66,13 +72,13 @@ function AppointmentsCreate({ name, schedule, getData }) {
           }
         });
 
-        serviceData.forEach((service) => {
-          if (parseInt(data.serviceId) === service.id) {
-            selectedServiceName = service.serviceName || "--";
-          }
-        });
+        // serviceData.forEach((service) => {
+        //   if (parseInt(data.serviceId) === service.id) {
+        //     selectedServiceName = service.serviceName || "--";
+        //   }
+        // });
 
-        data.serviceName = selectedServiceName;
+        // data.serviceName = selectedServiceName;
         data.appointmentFor = selectedLeadName.name;
         data.email = selectedLeadName.email;
         data.typeOfAppointment = "Leads";
@@ -89,7 +95,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       data.reminder = 2;
       data.appointmentRoleType = appointmentRole;
       data.userId = userId;
-      data.phoneNumber = 9941286931;
+      // data.phoneNumber = data.phoneNumber;
       data.companyName = "ECS";
 
       // console.log("Add appointment", data);
@@ -100,152 +106,175 @@ function AppointmentsCreate({ name, schedule, getData }) {
           },
         });
         if (response.status === 201) {
-          console.log(response.data.appointmentId);
+          // console.log(response.data.appointmentId);
+          const appointmentId = response.data.appointmentId;
           getData();
           resetForm();
           toast.success(response.data.message);
           setShow(false);
+          // console.log("Appoinment Created");
 
-          try {
-            const response = await axios.post(
-              `${API_URL}GenerateSingaporeZoomMeetingLink`,
-              {
-                meetingTitle: data.typeOfAppointment,
-                startDate: data.appointmentStartDate,
-                startTime: data.appointmentStartTime.split(" ")[0],
-                duration: data.duration.split(" ")[0],
+          let mailContent;
+          if (data.appointmentMode === "ONLINE") {
+            try {
+              // console.log("Link Generated function")
+              const linkResponse = await axios.post(
+                `${API_URL}GenerateSingaporeZoomMeetingLink`,
+                {
+                  meetingTitle: data.typeOfAppointment,
+                  startDate: data.appointmentStartDate,
+                  startTime: data.appointmentStartTime.split(" ")[0],
+                  duration: 30,
+                }
+              );
+              if (linkResponse.status === 200) {
+                mailContent = `
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <title>Invoice</title>
+                    <style>
+                      body{
+                        background-color: #ddd;
+                      }
+                      .invoice-box {
+                        font-size: 12px;
+                        max-width: 600px;
+                        background-color: #fff;
+                        margin: auto;
+                        padding: 30px;
+                        border-bottom: 3px solid #0059ff;
+                        line-height: 24px;
+                        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+                        color: #555;
+                        min-height: 85vh;
+                      }
+
+                    .invoice-box table {
+                      width: 100%;
+                      line-height: inherit;
+                      text-align: left;
+                    }
+
+                    .invoice-box table td {
+                      padding: 5px;
+                      vertical-align: top;
+                    }
+
+                    .invoice-box table td.third {
+                      text-align: right;
+                    }
+
+                    .invoice-box table tr.heading td {
+                      background: #eee;
+                      border-bottom: 1px solid #ddd;
+                      font-weight: bold;
+                    }
+
+                    .invoice-box table tr.item td {
+                      border-bottom: 1px solid #eee;
+                    }
+
+                    .invoice-box table tr.item.last td {
+                      border-bottom: none;
+                    }
+
+                    .invoice-box table tr.total td:nth-child(2) {
+                      border-top: 2px solid #eee;
+                      font-weight: bold;
+                    }
+                    .invoice{
+                        padding: 1rem;
+                    }
+
+                    #scan {
+                      float: right;
+                    }
+
+                    #scan img {
+                      max-width: 100%;
+                      height: auto;
+                    }
+
+                    @media print {
+                      .invoice-box {
+                        border: 0;
+                      }
+                    }
+
+                  </style>
+                  </head>
+                  <body >
+                    <div class="invoice-box">
+                      <table>
+                        <tr class="top">
+                          <td colspan="2">
+                            <table>
+                              <tr>
+                                <td class="title">
+                                  <img
+                                    src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                                    style="width: 75%; max-width: 180px"
+                                    alt="Logo"
+                                  />
+                                </td>
+                                <td class="third">
+                                  <b>Date:</b> 24-01-2024<br />
+                                  The Alexcier, 237 Alexandra Road,<br />
+                                  #04-10, Singapore-159929.
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+
+
+                    <div class="invoice" >
+                      <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
+                      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
+                        ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
+                      </p>
+
+                      <h3 style="margin-bottom: 0;">you can join:</h3>
+                      <h4 style="margin:0 ;">${linkResponse.data.message}</h4>
+
+                      <p style="margin: 1.5rem 0px 2rem 0px;"
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${appointmentId}">Cancel</a> Your Appointment</p> <hr />
+                      <p style=" margin: 2rem 0 0;">See You Soon,</p>
+                      <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
+                      <p style=" margin: 0 ; ">ECS Cloud</p>
+                      <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
+                      <hr />
+                    </div>
+                    </div>
+                  </body>
+                  </html>`;
+                try {
+                  const response = await axios.post(`${API_URL}sendMail`, {
+                    toMail: data.email,
+                    fromMail: data.email,
+                    subject: data.appointmentName,
+                    htmlContent: mailContent,
+                  });
+
+                  if (response.status === 200) {
+                    toast.success(response.data.message);
+                    toast.success("Mail Send Successfully");
+                  } else {
+                    toast.error(response.data.message);
+                  }
+                } catch (error) {
+                  toast.error("Mail Not Send");
+                  // console.error("Failed to send email:", error);
+                }
               }
-            );
-
-            if (response.status === 200) {
-              let mailContent;
-              if (data.appointmentMode === "ONLINE") {
-                mailContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                  <meta charset="UTF-8" />
-                  <title>Invoice</title>
-                  <style>
-                    body{
-                      background-color: #ddd;
-                    }
-                    .invoice-box {
-                      font-size: 12px;
-                      max-width: 600px;
-                      background-color: #fff;
-                      margin: auto;
-                      padding: 30px;
-                      border-bottom: 3px solid #0059ff;
-                      line-height: 24px;
-                      font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-                      color: #555;
-                      min-height: 85vh;
-                    }
-  
-                  .invoice-box table {
-                    width: 100%;
-                    line-height: inherit;
-                    text-align: left;
-                  }
-  
-                  .invoice-box table td {
-                    padding: 5px;
-                    vertical-align: top;
-                  }
-  
-                  .invoice-box table td.third {
-                    text-align: right;
-                  }
-  
-                  .invoice-box table tr.heading td {
-                    background: #eee;
-                    border-bottom: 1px solid #ddd;
-                    font-weight: bold;
-                  }
-  
-                  .invoice-box table tr.item td {
-                    border-bottom: 1px solid #eee;
-                  }
-  
-                  .invoice-box table tr.item.last td {
-                    border-bottom: none;
-                  }
-  
-                  .invoice-box table tr.total td:nth-child(2) {
-                    border-top: 2px solid #eee;
-                    font-weight: bold;
-                  }
-                  .invoice{
-                      padding: 1rem;
-                  }
-  
-                  #scan {
-                    float: right;
-                  }
-  
-                  #scan img {
-                    max-width: 100%;
-                    height: auto;
-                  }
-  
-                  @media print {
-                    .invoice-box {
-                      border: 0;
-                    }
-                  }
-  
-                </style>
-                </head>
-                <body >
-                  <div class="invoice-box">
-                    <table>
-                      <tr class="top">
-                        <td colspan="2">
-                          <table>
-                            <tr>
-                              <td class="title">
-                                <img
-                                  src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                                  style="width: 75%; max-width: 180px"
-                                  alt="Logo"
-                                />
-                              </td>
-                              <td class="third">
-                                <b>Date:</b> 24-01-2024<br />
-                                The Alexcier, 237 Alexandra Road,<br />
-                                #04-10, Singapore-159929.
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-  
-  
-                  <div class="invoice" >
-                    <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
-                    <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
-                      ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
-                    </p>
-  
-                    <h3 style="margin-bottom: 0;">you can join:</h3>
-                    <h4 style="margin:0 ;">${response.data.message}</h4>
-  
-                    <p style="margin: 1.5rem 0px 2rem 0px;"
-                    >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment</p>
-                    <hr />
-                    <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                    <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
-                    <p style=" margin: 0 ; ">ECS Cloud</p>
-                    <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
-                    <hr />
-                  </div>
-                  </div>
-                </body>
-                </html>`;
-              } else {
-                mailContent = `
+            } catch (e) {
+              toast.error("Error Generating Zoom Link ", e);
+            }
+          } else {
+            mailContent = `
               <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -370,31 +399,24 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 </div>
               </body>
               </html>`;
-              }
-              try {
-                const response = await axios.post(`${API_URL}sendMail`, {
-                  toMail: data.email,
-                  fromMail: data.email,
-                  subject: data.appointmentName,
-                  htmlContent: mailContent,
-                });
+            try {
+              const response = await axios.post(`${API_URL}sendMail`, {
+                toMail: data.email,
+                fromMail: data.email,
+                subject: data.appointmentName,
+                htmlContent: mailContent,
+              });
 
-                if (response.status === 200) {
-                  toast.success(response.data.message);
-                  toast.success("Mail Send Successfully");
-                } else {
-                  toast.error(response.data.message);
-                }
-              } catch (error) {
-                toast.error("Mail Not Send");
-                // console.error("Failed to send email:", error);
+              if (response.status === 200) {
+                toast.success(response.data.message);
+                toast.success("Mail Send Successfully");
+              } else {
+                toast.error(response.data.message);
               }
-            } else {
-              toast.error(response.data.message);
+            } catch (error) {
+              toast.error("Mail Not Send");
+              // console.error("Failed to send email:", error);
             }
-          } catch (error) {
-            toast.error("Mail Not Send");
-            // console.error("Failed to send email:", error);
           }
         } else {
           toast.error("Appointment Created Unsuccessful.");
@@ -607,13 +629,20 @@ function AppointmentsCreate({ name, schedule, getData }) {
                             ))}
                           </select>
                         </div>
-                        {formik.touched.leadId && formik.errors.leadId && (
-                          <p className="text-danger">{formik.errors.leadId}</p>
-                        )}
                       </>
                     )}
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.leadId && formik.errors.leadId && (
+                          <div className="text-danger">
+                            {formik.errors.leadId}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Service Name</lable> &nbsp;&nbsp;
                       <select
@@ -646,7 +675,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Date</lable> &nbsp;&nbsp;
@@ -730,7 +759,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     </div>
                   </div> */}
 
-                  <div className="col-lg-6 col-md-6 col-12  mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
                       <select
@@ -760,7 +789,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment Name</lable> &nbsp;&nbsp;
@@ -825,15 +854,16 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Member</lable> &nbsp;&nbsp;
+                      <lable>Pnone Number</lable> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
-                        name="member"
-                        id="member"
-                        {...formik.getFieldProps("member")}
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        {...formik.getFieldProps("phoneNumber")}
                         className={`form-size form-control   ${
-                          formik.touched.member && formik.errors.member
+                          formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber
                             ? "is-invalid"
                             : ""
                         }`}
@@ -842,9 +872,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                        {formik.touched.member && formik.errors.member && (
-                          <p className="text-danger">{formik.errors.member}</p>
-                        )}
+                        {formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber && (
+                            <p className="text-danger">
+                              {formik.errors.phoneNumber}
+                            </p>
+                          )}
                       </div>
                     </div>
                   </div>

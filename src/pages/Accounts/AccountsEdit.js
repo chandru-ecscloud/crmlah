@@ -122,6 +122,8 @@ function AccountsEdit() {
         const payload = {
           company_id: companyId,
           account_owner: getData.accountOwner,
+          first_name:getData.first_name,
+          last_name:getData.last_name,
           account_name: getData.accountName,
           country_code: getData.countryCode,
           phone: getData.phone,
