@@ -42,7 +42,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       email: "",
       // serviceName: "",
       appointmentStartDate: "",
-      phoneNumber:"",
+      phoneNumber: "",
       timeSlotId: "",
       duration: "",
       appointmentName: "",
@@ -148,10 +148,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
               const zoomResponse = await axios.post(
                 `${API_URL}GenerateSingaporeZoomMeetingLink`,
                 {
-                  meetingTitle: data.typeOfAppointment,
+                  meetingTitle: data.appointmentName,
                   startDate: StartDate,
-                  startTime: data.appointmentStartTime.split(" ")[0],
-                  duration: data.duration.split(" ")[0],
+                  startTime: "12:00",
+                  duration: 30,
                 }
               );
               if (zoomResponse.status === 200) {
@@ -380,12 +380,21 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
             </html>`;
           }
           // Send mail with the generated content
-          await axios.post(`${API_URL}sendMail`, {
-            fromMail: data.email,
-            toMail: data.email,
-            subject: `Appointment Confirmation - ${data.appointmentName}`,
-            htmlContent: mailContent,
-          });
+          try {
+            const emailResponse = await axios.post(`${API_URL}sendMail`, {
+              fromMail: data.email,
+              toMail: data.email,
+              subject: `Appointment Confirmation - ${data.appointmentName}`,
+              htmlContent: mailContent,
+            });
+            if (emailResponse.status === 200) {
+              toast.success("Mail Sent Successfully");
+            } else {
+              toast.error("Mail Not sent");
+            }
+          } catch (error) {
+            toast.error("Mail Not sent ", error);
+          }
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

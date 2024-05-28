@@ -437,7 +437,7 @@ const Header = ({
           </Dropdown.Toggle>
           <Dropdown.Menu
             className="px-2"
-            style={{ minWidth: "20%", background: "#add8e6" }}
+            style={{ minWidth: "20%", background: "#e3e3e3" }}
           >
             <input
               type="search"
