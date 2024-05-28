@@ -126,7 +126,7 @@ const CreateTask = ({ tasks, setTasks, handelLeadFetch }) => {
       </div>
       <div>
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton className="Calenderview">
             <Modal.Title className="fw-bold fs-5">Create Lead</Modal.Title>
           </Modal.Header>
           <form onSubmit={formik.handleSubmit}>
