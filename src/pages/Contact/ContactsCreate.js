@@ -18,7 +18,6 @@ const validationSchema = yup.object().shape({
     .string()
     .required("*Phone is required")
     .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
-  account_name: yup.string().required("*Account Name is required"),
 
 });
 
@@ -347,8 +346,7 @@ function ContactsLead() {
             </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Account Name</lable>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   className={`form-size form-select  ${
