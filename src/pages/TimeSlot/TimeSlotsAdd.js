@@ -53,6 +53,7 @@ const TimeSlotsAdd = ({ refreshData }) => {
           toast.success(response.data.message);
           closeModal();
           refreshData();
+          formik.resetForm();
         } else {
           toast.error(response.data.message);
         }

@@ -42,7 +42,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       email: "",
       // serviceName: "",
       appointmentStartDate: "",
-      phoneNumber: "",
+      phoneNumber:"",
       timeSlotId: "",
       duration: "",
       appointmentName: "",
@@ -137,6 +137,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
 
         if (response.status === 201) {
           console.log(response.data.appointmentId);
+          const appointmentId = response.data.appointmentId
           getData();
           formik.resetForm();
           toast.success(response.data.message);
@@ -148,10 +149,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
               const zoomResponse = await axios.post(
                 `${API_URL}GenerateSingaporeZoomMeetingLink`,
                 {
-                  meetingTitle: data.appointmentName,
+                  meetingTitle: data.typeOfAppointment,
                   startDate: StartDate,
-                  startTime: "12:00",
-                  duration: 30,
+                  startTime: data.appointmentStartTime.split(" ")[0],
+                  duration: data.duration.split(" ")[0],
                 }
               );
               if (zoomResponse.status === 200) {
@@ -250,7 +251,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       <h3 style="margin-bottom: 0;">You can join:</h3>
                       <h4 style="margin:0;">${zoomResponse.data.message}</h4>
                       <p style="margin: 1.5rem 0px 2rem 0px;">
-                        You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment
+                        You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${appointmentId}">Cancel</a> Your Appointment
                       </p>
                       <hr />
                       <p style="margin: 2rem 0 0;">See You Soon,</p>
@@ -380,21 +381,12 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
             </html>`;
           }
           // Send mail with the generated content
-          try {
-            const emailResponse = await axios.post(`${API_URL}sendMail`, {
-              fromMail: data.email,
-              toMail: data.email,
-              subject: `Appointment Confirmation - ${data.appointmentName}`,
-              htmlContent: mailContent,
-            });
-            if (emailResponse.status === 200) {
-              toast.success("Mail Sent Successfully");
-            } else {
-              toast.error("Mail Not sent");
-            }
-          } catch (error) {
-            toast.error("Mail Not sent ", error);
-          }
+          await axios.post(`${API_URL}sendMail`, {
+            fromMail: data.email,
+            toMail: data.email,
+            subject: `Appointment Confirmation - ${data.appointmentName}`,
+            htmlContent: mailContent,
+          });
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

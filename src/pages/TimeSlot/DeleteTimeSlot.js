@@ -6,7 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 
-function DeleteTimeSlot({ path }) {
+function DeleteTimeSlot({ path ,refreshData}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -18,6 +18,7 @@ function DeleteTimeSlot({ path }) {
       if (response.status === 201) {
         handleClose();
         toast.success(response.data.message);
+        refreshData();
       } else {
         toast.error(response.data.message);
       }
