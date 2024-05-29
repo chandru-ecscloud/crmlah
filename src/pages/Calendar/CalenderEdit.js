@@ -8,26 +8,26 @@ import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 
 const validationSchema = Yup.object().shape({
-  leadId: Yup.string().required("*Appointment for is required"),
+  // leadId: Yup.string().required("*Appointment for is required"),
   // serviceId: Yup.string().required("*Service is required"),
-  duration: Yup.string().required("*Duration is required"),
-  // appointmentName: Yup.string().required("*Name is required"),
+  // duration: Yup.string().required("*Duration is required"),
+  appointmentName: Yup.string().required("*Name is required"),
   // appointmentStartDate: Yup.date().required("*Start date is required"),
   // timeSlotId: Yup.string().required("*Start Time is required"),
   phoneNumber: Yup.string()
     .required("*Phone Number is required")
     .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
-  location: Yup.string().required("*Location is required"),
-  // member: Yup.string().required("*Member is required"),
-  street: Yup.string().required("*Street is required"),
-  city: Yup.string().required("*City is required"),
-  state: Yup.string().required("*State is required"),
-  zipCode: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Zip code is required"),
-  country: Yup.string().required("*Country is required"),
-  additionalInformation: Yup.string().required("*Description is required"),
-  appointmentMode: Yup.string().required("*Appointment Mode is required"),
+  // location: Yup.string().required("*Location is required"),
+  // // member: Yup.string().required("*Member is required"),
+  // street: Yup.string().required("*Street is required"),
+  // city: Yup.string().required("*City is required"),
+  // state: Yup.string().required("*State is required"),
+  // zipCode: Yup.string()
+  //   .matches(/^\d+$/, "Must be only digits")
+  //   .required("*Zip code is required"),
+  // country: Yup.string().required("*Country is required"),
+  // additionalInformation: Yup.string().required("*Description is required"),
+  // appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
 function CalenderEdit({ id, setShowViewModal }) {
@@ -59,7 +59,7 @@ function CalenderEdit({ id, setShowViewModal }) {
       timeSlotId: "",
       duration: "",
       appointmentName: "",
-      phoneNumber:"",
+      phoneNumber: "",
       location: "",
       member: "",
       street: "",
@@ -227,7 +227,8 @@ function CalenderEdit({ id, setShowViewModal }) {
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment</lable> &nbsp;&nbsp;
+                      <lable>Appointment</lable>{" "}
+                      <span className=" text-danger">*</span>
                       <select
                         name="leadId"
                         className={`form-select form-size ${
@@ -353,7 +354,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                         </div>
     
                       </div> */}
-                  <div className="col-lg-6 col-md-6 col-12  mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
                       <select
@@ -383,39 +384,11 @@ function CalenderEdit({ id, setShowViewModal }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Pnone Number</lable> &nbsp;&nbsp;
-                      <input
-                        type="text"
-                        //className="form-size form-control"
-                        name="phoneNumber"
-                        id="phoneNumber"
-                        {...formik.getFieldProps("phoneNumber")}
-                        className={`form-size form-control   ${
-                          formik.touched.phoneNumber &&
-                          formik.errors.phoneNumber
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      />
-                    </div>
-                    <div className="row sm-device">
-                      <div className="col-5"></div>
-                      <div className="col-6 sm-device">
-                        {formik.touched.phoneNumber &&
-                          formik.errors.phoneNumber && (
-                            <p className="text-danger">
-                              {formik.errors.phoneNumber}
-                            </p>
-                          )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment Name</lable> &nbsp;&nbsp;
+                      <lable>Appointment Name</lable>
+                      <span className=" text-danger">*</span>
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -442,6 +415,37 @@ function CalenderEdit({ id, setShowViewModal }) {
                       </div>
                     </div>
                   </div>
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <lable>Pnone Number</lable>{" "}
+                      <span className=" text-danger">*</span>
+                      <input
+                        type="text"
+                        //className="form-size form-control"
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        {...formik.getFieldProps("phoneNumber")}
+                        className={`form-size form-control   ${
+                          formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber && (
+                            <p className="text-danger">
+                              {formik.errors.phoneNumber}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
@@ -500,10 +504,10 @@ function CalenderEdit({ id, setShowViewModal }) {
                       </div>
                     </div>
                   </div> */}
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>
-                      &nbsp;&nbsp;
+                      <span className=" text-danger">*</span>
                       <select
                         id="appointmentMode"
                         //className="form-size form-select"
@@ -532,7 +536,7 @@ function CalenderEdit({ id, setShowViewModal }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

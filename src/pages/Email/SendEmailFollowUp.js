@@ -50,7 +50,8 @@ function SendEmailFollowUp({ toEmail, leadId }) {
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
         formData.append("body", values.body);
-        formData.append("userId", leadId);
+        formData.append("leadId", leadId);
+        // formData.append("leadName","sakthivel");
         values.files.forEach((file) => {
           formData.append("files", file);
         });
@@ -131,7 +132,7 @@ function SendEmailFollowUp({ toEmail, leadId }) {
   // };
 
   return (
-    <div>
+    <div className="mailtip">
       <Button
         className="fs-4 btn bg-primary bg-gradient mx-2 text-white shadow-none rounded-5"
         onClick={handleShow}

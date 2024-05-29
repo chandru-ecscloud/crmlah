@@ -133,6 +133,16 @@ const Deals = () => {
         accessorKey: "descriptionInfo",
         header: "Description",
       },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+      },
     ],
     []
   );
@@ -291,10 +301,14 @@ const Deals = () => {
     });
     const tableHeaders5 = [
       "Description",
+      "CreatedAt",
+      "UpdatedAt",
     ];
     const tableData5 = rows.map((row) => {
       return [
         row.original.descriptionInfo,
+        row.original.createdAt,
+        row.original.updatedAt,
       ];
     });
     autoTable(doc, {

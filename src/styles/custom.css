@@ -730,3 +730,6 @@ nav .nav-link Link {
   background-color: rgba(0, 0, 0, 0.8) !important;
 } */
 
+.mailtip{
+  z-index: 1 !important;
+}

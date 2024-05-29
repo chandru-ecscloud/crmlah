@@ -113,7 +113,7 @@ function LeadsShow() {
           {clientData.email && (
             <OverlayTrigger
               placement="bottom"
-              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+              overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
             >
               <span>
                 <SendEmailFollowUp toEmail={clientData.email} leadId={id}/>
@@ -291,6 +291,19 @@ function LeadsShow() {
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.phone || "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.created_at ? clientData.created_at.split("T")[0] : "--"}
+
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.updated_at ? clientData.updated_at.split("T")[0] : "--"}
                 </span>
               </div>
 

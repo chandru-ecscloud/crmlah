@@ -11,28 +11,17 @@ import { FaTrash } from "react-icons/fa";
 import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
-  dealName: yup.string().required("*Select Deal Name"),
+  quoteOwner: yup.string().required("*Quote owner is required"),
+  // dealName: yup.string().required("*Select Deal Name"),
   subject: yup.string().required("*Enter the Subject"),
   quoteStage: yup.string().required("*Enter the Quotes Stage"),
   validUntil: yup.string().required("*Select Valid Until"),
-  accountName: yup.string().required("*Select Account Name"),
-  contactName: yup.string().required("*Select Contact Name"),
-  shippingStreet: yup.string().required("*Enter the Shipping Street"),
-  billingStreet: yup.string().required("*Enter the Billing Street"),
-  shippingCity: yup.string().required("*Enter the Shipping City"),
-  billingCity: yup.string().required("*Enter the Billing City"),
-  shippingCode: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Enter the Shipping Code"),
-  billingCode: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Enter the Billing Code"),
-  shippingState: yup.string().required("*Enter the Shipping State"),
-  billingState: yup.string().required("*Enter the Billing State"),
-  shippingCountry: yup.string().required("*Enter the Shipping Country"),
-  billingCountry: yup.string().required("*Enter the Billing Country"),
+  shippingCode: yup.number()
+    .typeError('Shipping code must be a number')
+    .integer('Shipping code must be an integer'),
+  billingCode: yup.number()
+    .typeError('Billing code must be a number')
+    .integer('Billing code must be an integer'),
 });
 
 function QuotesCreate() {
@@ -101,7 +90,7 @@ function QuotesCreate() {
       grandTotal: "",
       subject: "",
       quoteStage: "",
-      dealName: "",
+      // dealName: "",
       validUntil: "",
       contactName: "",
       accountName: "",
@@ -118,7 +107,7 @@ function QuotesCreate() {
       quotesItemList: [
         {
           productName: "",
-          productId:"",
+          productId: "",
           quantity: "",
           listPrice: "",
           amount: "",
@@ -163,7 +152,7 @@ function QuotesCreate() {
           },
           quotesItemList: rows.map((item) => ({
             productName: item.ProductName,
-            productId : item.selectedOption,
+            productId: item.selectedOption,
             quantity: item.quantity,
             listPrice: item.listPrice,
             amount: item.amount,
@@ -362,7 +351,7 @@ function QuotesCreate() {
     calculateTotals();
   };
 
-  
+
   const calculateTotals = () => {
     let subtotal = 0;
     let totalDiscount = 0;
@@ -460,42 +449,32 @@ function QuotesCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device ">
-                <lable>Quote Owner</lable> &nbsp;&nbsp;
-                <select
+                <lable>Quote Owner</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <input
                   type="text"
                   name="quoteOwner"
-                  className="form-select form-size"
+                  className="form-control form-size"
                   {...formik.getFieldProps("quoteOwner")}
                   id="quoteOwner"
-                >
-                  <option value={owner}>{owner}</option>
-                  <option value="Vignesh Devan">Vignesh Devan</option>
-                  <option value="Chandru R">Chandru R</option>
-                  <option value="Gayathri M">Gayathri M</option>
-                  <option value="Poongodi K">Poongodi K</option>
-                  <option value="Suriya G">Suriya G</option>
-                  <option value="Leela Prasanna D">Leela Prasanna D</option>
-                  <option value="Saravanan M">Saravanan M</option>
-                  <option value="Nagaraj VR">Nagaraj VR</option>
-                  <option value="Yalini A">Yalini A</option>
-                  <option value="Vishnu Priya">Vishnu Priya</option>
-                  <option value="Kavitha">Kavitha</option>
-                </select>
+                  value={owner}
+                  readOnly
+                />
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Name</lable> &nbsp;&nbsp;
+                <lable>Deal Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <select
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-select form-size ${
-                    formik.touched.dealName && formik.errors.dealName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size ${formik.touched.dealName && formik.errors.dealName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(dealOption) &&
@@ -514,20 +493,20 @@ function QuotesCreate() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Subject</lable> &nbsp;&nbsp;
+                <lable>Subject</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
                   name="subject"
                   {...formik.getFieldProps("subject")}
-                  className={`form-control form-size ${
-                    formik.touched.subject && formik.errors.subject
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   id="subject"
                 />
               </div>
@@ -543,16 +522,16 @@ function QuotesCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Quotes Stage</lable> &nbsp;&nbsp;
+                <lable>Quotes Stage</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <select
                   name="quoteStage"
                   {...formik.getFieldProps("quoteStage")}
                   type="text"
-                  className={`form-select form-size ${
-                    formik.touched.quoteStage && formik.errors.quoteStage
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size ${formik.touched.quoteStage && formik.errors.quoteStage
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   id="quoteStage"
                 >
                   <option value=""></option>
@@ -577,15 +556,15 @@ function QuotesCreate() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Valid Until</lable> &nbsp;&nbsp;
+                <lable>Valid Until</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("validUntil")}
                   type="date"
-                  className={`form-control form-size ${
-                    formik.touched.validUntil && formik.errors.validUntil
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.validUntil && formik.errors.validUntil
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="validUntil"
                   id="validUntil"
                 />
@@ -615,18 +594,17 @@ function QuotesCreate() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable> &nbsp;&nbsp;
                 <select
                   name="accountName"
                   style={{ width: "60%" }}
                   {...formik.getFieldProps("accountName")}
-                  className={`form-select form-size ${
-                    formik.touched.accountName && formik.errors.accountName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size ${formik.touched.accountName && formik.errors.accountName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(accountOption) &&
@@ -647,20 +625,19 @@ function QuotesCreate() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Contact Name</lable> &nbsp;&nbsp;
                 <select
                   name="contactName"
                   style={{ width: "60%" }}
                   {...formik.getFieldProps("contactName")}
-                  className={`form-select form-size ${
-                    formik.touched.contactName && formik.errors.contactName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select form-size ${formik.touched.contactName && formik.errors.contactName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 >
                   <option value="" selected disabled></option>
                   {Array.isArray(contactOption) &&
@@ -681,7 +658,7 @@ function QuotesCreate() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -699,12 +676,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingStreet &&
+                  className={`form-control form-size ${formik.touched.shippingStreet &&
                     formik.errors.shippingStreet
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -727,11 +703,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingStreet && formik.errors.billingStreet
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="billingStreet"
                   id="billingStreet"
                 />
@@ -754,11 +729,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingCity && formik.errors.shippingCity
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -781,11 +755,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingCity && formik.errors.billingCity
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="billingCity"
                   id="billingCity"
                 />
@@ -808,11 +781,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingCode && formik.errors.shippingCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -835,11 +807,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingCode && formik.errors.billingCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="billingCode"
                   id="billingCode"
                 />
@@ -847,11 +818,12 @@ function QuotesCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billingCode && formik.errors.billingCode && (
-                    <div className="text-danger ">
-                      {formik.errors.billingCode}
-                    </div>
-                  )}
+                  {formik.touched.billingCode &&
+                    formik.errors.billingCode && (
+                      <div className="text-danger ">
+                        {formik.errors.billingCode}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -862,11 +834,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingState && formik.errors.shippingState
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -890,11 +861,10 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingState && formik.errors.billingState
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="billingState"
                   id="billingState"
                 />
@@ -918,12 +888,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingCountry &&
+                  className={`form-control form-size ${formik.touched.shippingCountry &&
                     formik.errors.shippingCountry
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -947,12 +916,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingCountry &&
+                  className={`form-control form-size ${formik.touched.billingCountry &&
                     formik.errors.billingCountry
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   name="billingCountry"
                   id="billingCountry"
                 />

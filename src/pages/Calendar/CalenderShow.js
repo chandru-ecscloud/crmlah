@@ -92,7 +92,7 @@ function CalenderShow({
                 <div className="col-6">: {clientData.appointmentFor}</div>
               </div>
             </div>
-            <div className="col-md-6 col-12 my-2">
+            {/* <div className="col-md-6 col-12 my-2">
               <div className="row">
                 <div className="col-6">
                   <b>Service Name</b>
@@ -108,7 +108,7 @@ function CalenderShow({
                 </div>
                 <div className="col-6">: {clientData.duration}</div>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-6 col-12 my-2">
               <div className="row">
                 <div className="col-6">

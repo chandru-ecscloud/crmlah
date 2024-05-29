@@ -284,6 +284,18 @@ function DealsShow() {
                   &nbsp; : &nbsp;{dealData.campaignSource || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{dealData.createdAt ? dealData.createdAt.split("T")[0]:""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{dealData.updatedAt ? dealData.updatedAt.split("T")[0]:""}
+                </span>
+              </div>
 
               {/* <div>
                 <label className="text-dark Label">Industry</label>
@@ -334,7 +346,7 @@ function DealsShow() {
                 <span className="text-dark">--</span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Contact Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.contactName || ""}
@@ -346,7 +358,7 @@ function DealsShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{dealData.accountName || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Fax</label>

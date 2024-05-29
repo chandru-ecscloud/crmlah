@@ -20,7 +20,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   // console.log("appointmentTime", appointmentTime);
 
   const validationSchema = Yup.object().shape({
-    leadId: Yup.string().required("*Appointment is required"),
+    // leadId: Yup.string().required("*Appointment is required"),
     // firstName:Yup.string().required("*First Name is required"),
     // lastName:Yup.string().required("*Last Name is required"),
     phoneNumber: Yup.string()
@@ -34,6 +34,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     location: Yup.string().required("*Location is required"),
     // member: Yup.string().required("*Member is required"),
     appointmentMode: Yup.string().required("*Appointment mode is required"),
+    additionalInformation: Yup.string().required("*Description is required"),
   });
 
   const formik = useFormik({
@@ -241,7 +242,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       <h4 style="margin:0 ;">${linkResponse.data.message}</h4>
 
                       <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${appointmentId}">Cancel</a> Your Appointment</p> <hr />
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
+                      <hr />
                       <p style=" margin: 2rem 0 0;">See You Soon,</p>
                       <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
                       <p style=" margin: 0 ; ">ECS Cloud</p>
@@ -387,8 +389,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <h4 style="margin:0 ;">${data.state}</h4>
 
                   <p style="margin: 1.5rem 0px 2rem 0px;"
-                  >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment</p>
-                  <hr />
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
+                      <hr />
                   
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
                   <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
@@ -587,7 +589,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     {name == "schedule" ? (
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
-                          <lable>Appointment</lable> &nbsp;&nbsp;
+                          <lable>Appointment</lable> <span className=" text-danger">*</span>
                           <input
                             type="text"
                             name="appointmentFor"
@@ -611,7 +613,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     ) : (
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
-                          <lable>Appointment </lable> &nbsp;&nbsp;
+                          <lable>Appointment </lable> <span className=" text-danger">*</span>
                           <select
                             name="leadId"
                             className={`form-select form-size ${
@@ -676,9 +678,38 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       </div>
                     </div>
                   </div> */}
+                   <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <lable>Appointment Name</lable><span className=" text-danger">*</span>
+                      <input
+                        type="text"
+                        //className="form-size form-control"
+                        name="appointmentName"
+                        id="appointmentName"
+                        {...formik.getFieldProps("appointmentName")}
+                        className={`form-size form-control   ${
+                          formik.touched.appointmentName &&
+                          formik.errors.appointmentName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.appointmentName &&
+                          formik.errors.appointmentName && (
+                            <p className="text-danger">
+                              {formik.errors.appointmentName}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Start Date</lable> &nbsp;&nbsp;
+                      <lable>Start Date</lable><span className=" text-danger">*</span>
                       <input
                         type="date"
                         name="appointmentStartDate"
@@ -707,7 +738,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label>Start Time</label>&nbsp;&nbsp;
+                      <label>Start Time</label><span className=" text-danger">*</span>
                       <select
                         type="text"
                         name="timeSlotId"
@@ -790,35 +821,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       </div>
                     </div>
                   </div> */}
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment Name</lable> &nbsp;&nbsp;
-                      <input
-                        type="text"
-                        //className="form-size form-control"
-                        name="appointmentName"
-                        id="appointmentName"
-                        {...formik.getFieldProps("appointmentName")}
-                        className={`form-size form-control   ${
-                          formik.touched.appointmentName &&
-                          formik.errors.appointmentName
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      />
-                    </div>
-                    <div className="row sm-device">
-                      <div className="col-5"></div>
-                      <div className="col-6 sm-device">
-                        {formik.touched.appointmentName &&
-                          formik.errors.appointmentName && (
-                            <p className="text-danger">
-                              {formik.errors.appointmentName}
-                            </p>
-                          )}
-                      </div>
-                    </div>
-                  </div>
+                 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
@@ -854,7 +857,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Pnone Number</lable> &nbsp;&nbsp;
+                      <lable>Phone Number</lable><span className=" text-danger">*</span>
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -884,7 +887,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>
-                      &nbsp;&nbsp;
+                      <span className=" text-danger">*</span>
                       <select
                         id="appointmentMode"
                         //className="form-size form-select"
@@ -1194,7 +1197,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 <div className="row">
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Description</lable> &nbsp;&nbsp;
+                      <lable>Description</lable><span className=" text-danger">*</span>
                       <textarea
                         rows={5}
                         type="text"
