@@ -85,16 +85,22 @@ const Lead = () => {
               className="badge bg-info py-2 "
               style={{ color: "#1f1f1f !important" }}
             >
-              Processed
+              Pending
             </span>
-          ) : row.original.lead_status === "Analysed" ? (
-            <span className="badge bg-primary py-2 ">Analysed</span>
-          ) : row.original.lead_status === "Delivered" ? (
-            <span className="badge bg-success py-2">Delivered</span>
-          ) : row.original.lead_status === "Intermediated" ? (
-            <span className="badge bg-warning py-2">Intermediated</span>
+          ) : row.original.lead_status === "Contacted" ? (
+            <span className="badge bg-primary py-2 ">Contacted</span>
+          ) : row.original.lead_status === "Qualified" ? (
+            <span className="badge bg-success py-2">Qualified</span>
+          ) : row.original.lead_status === "Negotiation" ? (
+            <span className="badge bg-warning py-2">Negotiation</span>
+          ) : row.original.lead_status === "Closed" ? (
+            <span className="badge bg-danger py-2">Closed</span>
+          ) : row.original.lead_status === "Win" ? (
+            <span className="badge bg-success py-2">Win</span>
+          ) : row.original.lead_status === "Junk" ? (
+            <span className="badge bg-warning py-2">Junk</span>
           ) : (
-            <span className="badge bg-danger  py-2">Terminated</span>
+            <span className="badge bg-danger  py-2">Lost</span>
           ),
       },
       {
@@ -149,6 +155,16 @@ const Lead = () => {
       {
         accessorKey: "twitter",
         header: "Twitter",
+      },
+      {
+        accessorKey: "created_at",
+        header: "Created At",
+        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updated_at",
+        header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updated_at).toLocaleDateString(),
       },
     ],
     []
@@ -284,12 +300,14 @@ const Lead = () => {
       },
     });
 
-    const tableHeaders4 = ["Description", "Skype ID", "Twitter"];
+    const tableHeaders4 = ["Description", "Skype ID", "Twitter","Created At","Updated At"];
     const tableData4 = rows.map((row) => {
       return [
         row.original.Description,
         row.original.skype_id,
         row.original.twitter,
+        row.original.createdAt,
+        row.original.updatedAt,
       ];
     });
     autoTable(doc, {
