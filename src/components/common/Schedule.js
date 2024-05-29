@@ -3,7 +3,7 @@ import CRM from "../../assets/heroImage.png";
 import { useFormik } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
@@ -16,10 +16,14 @@ const validationSchema = Yup.object().shape({
   // ),
 });
 const Schedule = () => {
-  const id =useParams()
-  console.log(id.id)
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  // console.log("ID:",id);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [loadIndicatorca, setLoadIndicatorca] = useState(false);
+  const navigate = useNavigate();
   const [appointmentStartTime, setAppointmentStartTime] = useState([]);
-  console.log("appoinment Time", appointmentStartTime)
+  // console.log("appoinment Time", appointmentStartTime);
 
   const formik = useFormik({
     initialValues: {
@@ -36,8 +40,9 @@ const Schedule = () => {
         }
       });
       data.appointmentStartTime = selectedTimeSlot;
+      setLoadIndicator(true);
       try {
-        const response = await axios.put(`${API_URL}reschedule/${id.id}`, data, {
+        const response = await axios.put(`${API_URL}reschedule/${id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -45,7 +50,9 @@ const Schedule = () => {
         if (response.status === 200) {
           // console.log(response.data.appointmentId)
           toast.success(response.data.message);
-
+          setTimeout(() => {
+            window.location.href = "https://crmlah.com/"; // Redirect to the external site
+          }, 2000);
         } else {
           toast.error("Appointment Cancel Unsuccessful.");
         }
@@ -55,15 +62,19 @@ const Schedule = () => {
         } else {
           toast.error(error.response?.data.message);
         }
+      } finally {
+        setLoadIndicator(false); // Set loading indicator back to false after request completes
       }
-
       resetForm();
     },
   });
+
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
-        `https://crmlah.com/ecscrm/api/getTodayAvailableSlotsByCompanyId/${2}?date=${formik.values.appointmentStartDate}`,
+        `https://crmlah.com/ecscrm/api/getTodayAvailableSlotsByCompanyId/${2}?date=${
+          formik.values.appointmentStartDate
+        }`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,15 +82,44 @@ const Schedule = () => {
         }
       );
       setAppointmentStartTime(response.data);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  // useEffect(() => {
-  //   formik.setFieldValue("appointmentStartDate", new Date().toISOString().split('T')[0])
-  // }, [])
+  const CancelAppointment = async () => {
+    setLoadIndicatorca(true);
+    try {
+      const response = await axios.delete(`${API_URL}cancelAppointment/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setTimeout(() => {
+          window.location.href = "https://crmlah.com/"; // Redirect to the external site
+        }, 2000);
+      } else {
+        toast.error("Appointment Cancel Unsuccessful");
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.warning(error.response?.data.message);
+      } else {
+        toast.error(error.response?.data.message);
+      }
+    }finally {
+      setLoadIndicatorca(false); // Set loading indicator back to false after request completes
+    }
+  };
+
+  useEffect(() => {
+    formik.setFieldValue(
+      "appointmentStartDate",
+      new Date().toISOString().split("T")[0]
+    );
+  }, []);
 
   useEffect(() => {
     fetchAppointmentTime();
@@ -98,73 +138,109 @@ const Schedule = () => {
               </h3>
               <div className="container px-5">
                 <form onSubmit={formik.handleSubmit}>
-              
-                      <div className="my-4">
-                      <label htmlFor="">Select new Date of Appointment</label>
+                  <div className="my-4">
+                    <label htmlFor="">Select new Date of Appointment</label>
 
-                        <input
-                          type="date"
-                          name="appointmentStartDate"
-                          id="appointmentStartDate"
-                          {...formik.getFieldProps("appointmentStartDate")}
-                          className={`form-size form-control   ${formik.touched.appointmentStartDate &&
-                            formik.errors.appointmentStartDate
-                            ? "is-invalid"
-                            : ""
-                            }`}
-                        />
-                      </div>
-                      {formik.touched.appointmentStartDate &&
-                        formik.errors.appointmentStartDate && (
-                          <p className="text-danger">
-                            {formik.errors.appointmentStartDate}
-                          </p>
-                        )}
-                    
-                    
-                      <div className="mt-4 mb-5">
-                      <label htmlFor="">Select new Time of Appointment</label>
+                    <input
+                      type="date"
+                      name="appointmentStartDate"
+                      id="appointmentStartDate"
+                      {...formik.getFieldProps("appointmentStartDate")}
+                      className={`form-size form-control   ${
+                        formik.touched.appointmentStartDate &&
+                        formik.errors.appointmentStartDate
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                  {formik.touched.appointmentStartDate &&
+                    formik.errors.appointmentStartDate && (
+                      <p className="text-danger">
+                        {formik.errors.appointmentStartDate}
+                      </p>
+                    )}
 
-                        <select
-                          type="text"
-                          name="timeSlotId"
-                          className="form-select form-size"
-                          {...formik.getFieldProps("timeSlotId")}
-                          id="timeSlotId"
-                        >
-                          <option value="">Select a start time</option>
-                          {appointmentStartTime.map((option) => (
-                            <option
-                              key={option.id}
-                              value={option.id}
-                              disabled={option.allocated}
-                            >
-                              {option.slotTime} {option.allocated ? "" : ""}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      {formik.touched.timeSlotId &&
-                        formik.errors.timeSlotId && (
-                          <p className="text-danger">
-                            {formik.errors.timeSlotId}
-                          </p>
-                        )}
-                
+                  <div className="mt-4 mb-5">
+                    <label htmlFor="">Select new Time of Appointment</label>
 
-                  <div className="d-flex justify-content-center mt-4 ">
-                    <button
-                      className="btn btn-outline-secondary  rounded-pill mx-3 px-4"
-                      type="button"
+                    <select
+                      type="text"
+                      name="timeSlotId"
+                      className="form-select form-size"
+                      {...formik.getFieldProps("timeSlotId")}
+                      id="timeSlotId"
                     >
-                      Cancel
-                    </button>
+                      <option value="">Select a start time</option>
+                      {appointmentStartTime.map((option) => (
+                        <option
+                          key={option.id}
+                          value={option.id}
+                          disabled={option.allocated}
+                        >
+                          {option.slotTime} {option.allocated ? "" : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {formik.touched.timeSlotId && formik.errors.timeSlotId && (
+                    <p className="text-danger">{formik.errors.timeSlotId}</p>
+                  )}
+
+                  <div className="col-12 mt-4">
                     <button
-                      className="btn btn-primary rounded-pill   px-5"
+                      className="btn btn-primary rounded-pill w-100 px-5"
                       style={{ background: "#385fe5" }}
                       type="submit"
                     >
-                      Reschedule
+                      {loadIndicator && (
+                        <span
+                          class="spinner-border spinner-border-sm me-2 "
+                          aria-hidden="true"
+                        ></span>
+                      )}Reschedule
+                    </button>
+
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div
+                        className="container-fluid"
+                        style={{
+                          flex: "0.1 1 0%",
+                          borderBottom: "1px solid rgb(192, 185, 185)",
+                          maxWidth: "40%",
+                        }}
+                      ></div>
+                      <p
+                        className="my-3"
+                        style={{
+                          marginBottom: "0rem",
+                          color: "rgb(150, 149, 149)",
+                        }}
+                      >
+                        OR
+                      </p>
+                      <div
+                        className="container-fluid"
+                        style={{
+                          flex: "0.1 1 0%",
+                          borderBottom: "1px solid rgb(192, 185, 185)",
+                          maxWidth: "40%",
+                        }}
+                      ></div>
+                    </div>
+
+                    <button
+                      className="btn btn-danger rounded-pill w-100 px-5"
+                      // style={{ background: "#385fe5" }}
+                      type="button"
+                      onClick={CancelAppointment}
+                    >
+                      {loadIndicatorca && (
+                        <span
+                          class="spinner-border spinner-border-sm me-2 "
+                          aria-hidden="true"
+                        ></span>
+                      )}Cancel Appoinment
                     </button>
                   </div>
                 </form>

@@ -35,7 +35,7 @@ function UserLayout({ handleLogin }) {
           <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
           <Route path="/forgot" element={<Forgot />} />
           <Route path="/emailsuccess" element={<EmailSuccess />} />
-          <Route path="/CrmAppoinmentReschedule/:id" element={<Schedule />} />
+          <Route path="/CrmAppoinmentReschedule" element={<Schedule />} />
           <Route
             path="/CrmAppoinmentCancelschedule/:id"
             element={<CancelSchedule />}
