@@ -36,16 +36,18 @@ const ListTasks = () => {
   });
   //  console.log("tasks",tasks)
 
-  const handleSearchChange = (e, status, clear = false) => {
-    setSearch({ ...search, [status]: clear ? "" : e.target.value });
+  const handleSearchChange = (e, status) => {
+    setSearch({ ...search, [status]: e.target.value });
   };
 
   const filteredTasks = (tasks, status) => {
-    return tasks.filter(
-      (task) =>
-        task.name.toLowerCase().startsWith(search[status].toLowerCase()) ||
-        task.email.toLowerCase().startsWith(search[status].toLowerCase())
-    );
+    return tasks.filter((task) => {
+      const name = task.name ? task.name.toLowerCase() : "";
+      const email = task.email ? task.email.toLowerCase() : "";
+      const searchTerm = search[status].toLowerCase();
+
+      return name.startsWith(searchTerm) || email.startsWith(searchTerm);
+    });
   };
 
   const fetchLeadData = async () => {
@@ -376,16 +378,19 @@ const Section = ({
           scrollbarColor: "rgba(0,0,0,0.2) rgba(0,0,0,0.1)",
         }}
       >
-        {filteredTasks(tasksToMap, status).map((task, index) => (
-          <Task key={index} task={task} 
-          tasks={tasks}
+        {tasksToMap.length > 0 &&
+          filteredTasks(tasksToMap, status).map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              tasks={tasks}
               setTasks={setTasks}
               fetchLeadData={fetchLeadData}
               fetchContactData={fetchContactData}
               fetchAcconutData={fetchAcconutData}
               fetchDealData={fetchDealData}
-              />
-        ))}
+            />
+          ))}
       </div>
     </div>
   );
@@ -634,7 +639,7 @@ const Task = ({
             </div>
             <hr />
             <div className="modal-body p-1 px-3">
-              Are you sure you want to delete this item?
+              Are you sure you want to delete?
             </div>
             <hr />
             <div className="modal-footer p-1">
