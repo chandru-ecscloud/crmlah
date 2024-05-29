@@ -26,22 +26,22 @@ const validationSchema = yup.object({
   // dealName: yup.string().required("*Select The Deal Name "),
   // accountName: yup.string().required("*Select The Account Name "),
   // contactName: yup.string().required("*Select The Contact Name "),
-  shippingStreet: yup.string().required("*Enter The Shipping Street "),
-  billingStreet: yup.string().required("*Enter The Billing Street "),
-  shippingCity: yup.string().required("*Enter The Shipping City "),
-  billingCity: yup.string().required("*Enter The Billing City "),
-  shippingState: yup.string().required("*Enter The Shipping State "),
-  billingState: yup.string().required("*Enter The Billing State "),
-  shippingCode: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Enter The Shipping Code "),
-  billingCode: yup
-    .string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Enter The Billing Code "),
-  shippingCountry: yup.string().required("*Enter The Shipping Country "),
-  billingCountry: yup.string().required("*Enter The Billing Country "),
+  // shippingStreet: yup.string().required("*Enter The Shipping Street "),
+  // billingStreet: yup.string().required("*Enter The Billing Street "),
+  // shippingCity: yup.string().required("*Enter The Shipping City "),
+  // billingCity: yup.string().required("*Enter The Billing City "),
+  // shippingState: yup.string().required("*Enter The Shipping State "),
+  // billingState: yup.string().required("*Enter The Billing State "),
+  // shippingCode: yup
+  //   .string()
+  //   .matches(/^\d+$/, "Must be only digits")
+  //   .required("*Enter The Shipping Code "),
+  // billingCode: yup
+  //   .string()
+  //   .matches(/^\d+$/, "Must be only digits")
+  //   .required("*Enter The Billing Code "),
+  // shippingCountry: yup.string().required("*Enter The Shipping Country "),
+  // billingCountry: yup.string().required("*Enter The Billing Country "),
   termsAndConditions: yup.string().required("*Enter The termsAndConditions "),
   // description: yup.string().required("*Enter The Description "),
 });
@@ -837,7 +837,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Street</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingStreet"
@@ -865,7 +865,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Street</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingStreet"
@@ -892,7 +892,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping City</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCity"
@@ -919,7 +919,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing City</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCity"
@@ -945,7 +945,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping State</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingState"
@@ -973,7 +973,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing State</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingState"
@@ -1000,7 +1000,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Zip Code</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+              &nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCode"
@@ -1027,7 +1027,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Zip Code</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+               &nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCode"
@@ -1053,7 +1053,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping Country</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="shippingCountry"
@@ -1081,7 +1081,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Country</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   name="billingCountry"

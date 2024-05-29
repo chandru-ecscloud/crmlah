@@ -42,7 +42,7 @@ const Quotes = () => {
       {
         accessorKey: "dealName",
         enableHiding: false,
-        header: "Deals Name",
+        header: "Quote Name",
         Cell: ({ row }) => (
           <Link to={`/quotes/show/${row.original.id}`} className="rowName">
             {row.original.dealName}

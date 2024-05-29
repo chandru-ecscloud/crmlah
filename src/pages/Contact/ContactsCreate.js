@@ -43,8 +43,8 @@ const validationSchema = yup.object().shape({
 
 function ContactsLead() {
   const owner = sessionStorage.getItem("user_name");
-  const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
+  // const token = sessionStorage.getItem("token");
+  // const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [account_name, setaccount_name] = useState([]);
   console.log(account_name);

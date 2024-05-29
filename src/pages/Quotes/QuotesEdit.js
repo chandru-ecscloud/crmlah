@@ -12,7 +12,7 @@ import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
   quoteOwner: yup.string().required("*Quote owner is required"),
-  // dealName: yup.string().required("*Select Deal Name"),
+  dealName: yup.string().required("*Quote Name is required"),
   subject: yup.string().required("*Enter the Subject"),
   quoteStage: yup.string().required("*Enter the Quotes Stage"),
   validUntil: yup.string().required("*Select Valid Until"),
@@ -90,7 +90,7 @@ function QuotesEdit() {
       grandTotal: "",
       subject: "",
       quoteStage: "",
-      // dealName: "",
+      dealName: "",
       validUntil: "",
       contactName: "",
       accountName: "",
@@ -135,7 +135,7 @@ function QuotesEdit() {
           quoteOwner: values.quoteOwner,
           subject: values.subject,
           quoteStage: values.quoteStage,
-          // dealName: values.dealName,
+          dealName: values.dealName,
           validUntil: values.validUntil,
           contactName: values.contactName,
           accountName: values.accountName,
@@ -501,27 +501,21 @@ function QuotesEdit() {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Name</lable>
+                <lable>Quote Name</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
-                <select
+                <input
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-select form-size ${formik.touched.dealName && formik.errors.dealName
-                      ? "is-invalid"
-                      : ""
+                  className={`form-control form-size ${formik.touched.dealName && formik.errors.dealName
+                    ? "is-invalid"
+                    : ""
                     }`}
-                >
-                  <option value="" selected disabled></option>
-                  {Array.isArray(dealOption) &&
-                    dealOption.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                </select>
+               />
+                  
+                  
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
@@ -531,7 +525,7 @@ function QuotesEdit() {
                   )}
                 </div>
               </div>
-            </div> */}
+            </div>
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
