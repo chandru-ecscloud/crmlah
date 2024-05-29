@@ -248,6 +248,18 @@ function ContactShow() {
                   &nbsp; : &nbsp;{contactData.phone || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.createdAt ?contactData.createdAt.split("T")[0]:""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.updatedAt ?contactData.updatedAt.split("T")[0]:""}
+                </span>
+              </div>
 
               {/* <div>
                 <label className="text-dark Label">Mobile</label>

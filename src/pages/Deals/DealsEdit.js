@@ -10,16 +10,16 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  amount: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Amount is required"),
+  // amount: yup.string()
+  // .matches(/^\d+$/, "Must be only digits")
+  // .required("*Amount is required"),
   email: yup
     .string()
     .email("*Enter valid email")
     .required("*Email is required"),
   deal_name: yup.string().required("*Deal name is required"),
-  contact_name: yup.string().required("*Contact name is required"),
-  account_name: yup.string().required("*Account name is required"),
+  // contact_name: yup.string().required("*Contact name is required"),
+  // account_name: yup.string().required("*Account name is required"),
   stage: yup.string().required("*Stage is required"),
   phone_number: yup.string()
   .matches(/^\d+$/, "Must be only digits")
@@ -274,7 +274,7 @@ function DealsEdit() {
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Amount</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                {/* <span className="text-danger">*</span>&nbsp;&nbsp; */}
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -386,7 +386,7 @@ function DealsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Contact Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
@@ -419,9 +419,9 @@ function DealsEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3 ">
+            {/* <div className="col-lg-6 col-md-6 col-12  mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
@@ -454,7 +454,7 @@ function DealsEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
@@ -745,7 +745,7 @@ function DealsEdit() {
           <div className="row">
             <div className="col-12 mb-3 ">
               <div className="d-flex align-items-start justify-content-center sm-device">
-                <lable>Discription</lable> &nbsp;&nbsp;
+                <lable>Description</lable> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"

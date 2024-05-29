@@ -157,19 +157,19 @@ function AppointmentsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Service Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.serviceName || "--"}
                 </span>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Duration</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.duration || "--"}
                 </span>
-              </div>
+              </div> */}
               
               <div>
                 <label className="text-dark Label">Appointment Mode</label>
@@ -228,12 +228,12 @@ function AppointmentsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Member</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.member || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Remainder</label>
@@ -269,6 +269,18 @@ function AppointmentsShow() {
                 <label className="text-dark Label">Location</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.location || "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.created_at ?clientData.created_at.split("T")[0]:"--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.updated_at  ?clientData.updated_at.split("T")[0]:"--"}
                 </span>
               </div>
 

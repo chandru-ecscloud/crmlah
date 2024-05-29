@@ -199,12 +199,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Vendor Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.vendorName || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Qty Ordered</label>
@@ -263,13 +263,25 @@ function ProductsShow() {
                   &nbsp; : &nbsp;{productData.salesEndDate || "--"}
                 </span>
               </div>
-
               <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{productData.createdAt ?productData.createdAt.split("T")[0]: "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{productData.updatedAt ?productData.updatedAt.split("T")[0]: "--"}
+                </span>
+              </div>
+
+              {/* <div>
                 <label className="text-dark Label">Support End Date</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.supportEndDate || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Modified By</label>
@@ -287,12 +299,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Vendor Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.vendorName || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Manufacturer</label>
@@ -308,12 +320,12 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Support Start Date</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.supportStartDate || "--"}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Created By</label>

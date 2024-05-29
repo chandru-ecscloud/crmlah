@@ -164,6 +164,7 @@ const Example = () => {
       {
         accessorKey: "createdAt",
         header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
       },
       {
         accessorKey: "createdBy",
@@ -173,6 +174,7 @@ const Example = () => {
       {
         accessorKey: "updatedAt",
         header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
       },
       {
         accessorKey: "updatedBy",
@@ -577,7 +579,7 @@ const Example = () => {
               <ul class="dropdown-menu">
                 {role === "CRM_SUPERADMIN" ? (
                   <>
-                    <li>
+                    {/* <li>
                       <button
                         // className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -596,7 +598,7 @@ const Example = () => {
                           path={`associateProductsWithInvoice/${rowId}`}
                         />
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"

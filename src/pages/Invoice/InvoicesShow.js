@@ -640,7 +640,7 @@ function InvoiceShow() {
                   &nbsp; : &nbsp;{invoiceData.salesCommission || "--"}
                 </span>
               </div>
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Account Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.accountName || "--"}
@@ -657,7 +657,7 @@ function InvoiceShow() {
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.dealName || "--"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
@@ -693,6 +693,18 @@ function InvoiceShow() {
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{invoiceData.createdBy || "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{invoiceData.createdAt ?invoiceData.createdAt.split("T")[0]: "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{invoiceData.updatedAt ?invoiceData.updatedAt.split("T")[0]: "--"}
                 </span>
               </div>
 
@@ -737,7 +749,7 @@ function InvoiceShow() {
                   </span>
                 </div>
                 <div>
-                  <label className="text-dark Label">Shipping Code</label>
+                  <label className="text-dark Label">Shipping Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{invoiceData.shippingCode || "--"}
                   </span>
@@ -770,7 +782,7 @@ function InvoiceShow() {
                   </span>
                 </div>
                 <div>
-                  <label className="text-dark Label">Billing Code</label>
+                  <label className="text-dark Label">Billing Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{invoiceData.billingCode || "--"}
                   </span>

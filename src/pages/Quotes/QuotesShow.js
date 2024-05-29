@@ -626,15 +626,27 @@ function QuotesShow() {
                   &nbsp; : &nbsp;{quoteData.createdBy || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{quoteData.createdAt ?quoteData.createdAt.split("T")[0]: ""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{quoteData.updatedAt ?quoteData.updatedAt.split("T")[0]: ""}
+                </span>
+              </div>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Deal Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.dealName || ""}
                 </span>
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-dark Label">Valied Until</label>
@@ -650,12 +662,12 @@ function QuotesShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Account Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.accountName || ""}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Modified By</label>
@@ -698,7 +710,7 @@ function QuotesShow() {
                   </span>
                 </div>
                 <div>
-                  <label className="text-dark Label">Shipping Code</label>
+                  <label className="text-dark Label">Shipping Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingCode || "--"}
                   </span>
@@ -731,7 +743,7 @@ function QuotesShow() {
                   </span>
                 </div>
                 <div>
-                  <label className="text-dark Label">Billing Code</label>
+                  <label className="text-dark Label">Billing Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingCode || "--"}
                   </span>

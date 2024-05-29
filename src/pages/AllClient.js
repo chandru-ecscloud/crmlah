@@ -52,7 +52,7 @@ import {
           header: "Name",
         },
         {
-          accessorKey: "companyname",
+          accessorKey: "companyName",
           enableHiding: false,
           header: "Company Name",
         },
@@ -62,7 +62,7 @@ import {
           header: "Stage",
         },
         {
-          accessorKey: "phone",
+          accessorKey: "phoneNumber",
           enableHiding: false,
           header: "Phone",
         },
@@ -71,11 +71,11 @@ import {
           enableHiding: false,
           header: "Email",
         },
-        {
-          accessorKey: "accountid",
-          enableHiding: false,
-          header: "Account Id",
-        },
+        // {
+        //   accessorKey: "accountid",
+        //   enableHiding: false,
+        //   header: "Account Id",
+        // },
       
       ],
       []
@@ -85,7 +85,7 @@ import {
       try {
         setLoading(true);
         const response = await axios(
-          `${API_URL}allProductsByCompanyId/${companyId}`,
+          `${API_URL}getAllCompanyInfoByCompanyId/${2}`,
           {
             headers: {
               "Content-Type": "application/json",

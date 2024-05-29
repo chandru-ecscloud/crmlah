@@ -15,30 +15,30 @@ const validationSchema = yup.object().shape({
   product_code: yup.string()
   .matches(/^\d+$/, "Must be only digits")
   .required("*Product code is required."),
-  vendor_name: yup.string().required("*Vendor name is required."),
+  // vendor_name: yup.string().required("*Vendor name is required."),
   product_category: yup.string().required("*Product category is required."),
   sales_start_date: yup.date().required("*Date is required"),
   sales_end_date: yup.date().required("*Date is required"),
-  support_start_date: yup.date().required("*Date is required"),
-  support_end_date: yup.date().required("*Date is required"),
+  // support_start_date: yup.date().required("*Date is required"),
+  // support_end_date: yup.date().required("*Date is required"),
   unit_price: yup.string()
   .matches(/^\d+$/, "Must be only digits")
   .required("*Unit price is required."),
-  commission_rate: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Commission rate is required."),
+  // commission_rate: yup.string()
+  // .matches(/^\d+$/, "Must be only digits")
+  // .required("*Commission rate is required."),
   tax: yup.string()
   .matches(/^\d+$/, "Must be only digits")
   .required("*Tax is required."),
-  usage_unit: yup.string().required("*Usage unit is required."),
-  quantity_ordered: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Quantity ordered is required."),
-  quantity_in_stock: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Quantity in stock is required."),
-  handler: yup.string().required("*Handler demand is required."),
-  description_info: yup.string().required("*Description is required"),
+  // usage_unit: yup.string().required("*Usage unit is required."),
+  // quantity_ordered: yup.string()
+  // .matches(/^\d+$/, "Must be only digits")
+  // .required("*Quantity ordered is required."),
+  // quantity_in_stock: yup.string()
+  // .matches(/^\d+$/, "Must be only digits")
+  // .required("*Quantity in stock is required."),
+  // handler: yup.string().required("*Handler demand is required."),
+  // description_info: yup.string().required("*Description is required"),
 });
 
 function ProductsEdit() {
@@ -299,7 +299,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Product Name</lable> &nbsp;&nbsp;
+                <lable>Product Name</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -327,7 +328,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Product Code</lable> &nbsp;&nbsp;
+                <lable>Product Code</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -353,7 +355,7 @@ function ProductsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Vendor Name</lable> &nbsp;&nbsp;
                 <input
@@ -376,7 +378,7 @@ function ProductsEdit() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div
@@ -420,7 +422,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Product Category</lable> &nbsp;&nbsp;
+                <lable>Product Category</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -449,7 +452,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Sales Start Date</lable> &nbsp;&nbsp;
+                <lable>Sales Start Date</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="date"
                   className={`form-size form-control  ${
@@ -478,7 +482,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Sales End Date</lable> &nbsp;&nbsp;
+                <lable>Sales End Date</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="date"
                   className={`form-size form-control  ${
@@ -505,7 +510,7 @@ function ProductsEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Support Start Date</lable> &nbsp;&nbsp;
                 <input
@@ -532,9 +537,9 @@ function ProductsEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Support End Date</lable> &nbsp;&nbsp;
                 <input
@@ -561,7 +566,7 @@ function ProductsEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -574,7 +579,8 @@ function ProductsEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Unit Price</lable> &nbsp;&nbsp;
+                <lable>Unit Price</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -628,7 +634,8 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Tax</lable> &nbsp;&nbsp;
+                <lable>Tax</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${

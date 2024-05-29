@@ -12,9 +12,9 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object({
   invoiceOwner: yup.string().required("*Select The Invoice Owner"),
-  salesOrder: yup.string().required("*Enter The Sales Order"),
+  // salesOrder: yup.string().required("*Enter The Sales Order"),
   subject: yup.string().required("*Enter The Subject"),
-  purchaseOrder: yup.string().required("*Enter The Purchase Order"),
+  // purchaseOrder: yup.string().required("*Enter The Purchase Order"),
   invoiceDate: yup.string().required("*Enter The Invoice Date"),
   status: yup.string().required("*Enter The Status"),
   dueDate: yup.string().required("*Enter The Due Date"),
@@ -23,9 +23,9 @@ const validationSchema = yup.object({
     .string()
     .matches(/^\d+$/, "Must be only digits")
     .required("*Enter The Sales Commission"),
-  dealName: yup.string().required("*Select The Deal Name "),
-  accountName: yup.string().required("*Select The Account Name "),
-  contactName: yup.string().required("*Select The Contact Name "),
+  // dealName: yup.string().required("*Select The Deal Name "),
+  // accountName: yup.string().required("*Select The Account Name "),
+  // contactName: yup.string().required("*Select The Contact Name "),
   shippingStreet: yup.string().required("*Enter The Shipping Street "),
   billingStreet: yup.string().required("*Enter The Billing Street "),
   shippingCity: yup.string().required("*Enter The Shipping City "),
@@ -43,7 +43,7 @@ const validationSchema = yup.object({
   shippingCountry: yup.string().required("*Enter The Shipping Country "),
   billingCountry: yup.string().required("*Enter The Billing Country "),
   termsAndConditions: yup.string().required("*Enter The termsAndConditions "),
-  description: yup.string().required("*Enter The Description "),
+  // description: yup.string().required("*Enter The Description "),
 });
 function InvoicesCreate() {
   const [rows, setRows] = useState([{}]);
@@ -505,7 +505,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Sales Order</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+              &nbsp;&nbsp; 
                 <input
                   type="text"
                   name="salesOrder"
@@ -581,7 +581,7 @@ function InvoicesCreate() {
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Purchase Order</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp; 
                 <input
                   type="text"
                   name="purchaseOrder"
@@ -720,16 +720,11 @@ function InvoicesCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Deal Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                {/* <input
                
-                type="text"
-                className="form-size form-control"
-                id="dealName"
-              /> */}
                 <select
                   style={{ width: "60%" }}
                   name="dealName"
@@ -758,9 +753,9 @@ function InvoicesCreate() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
@@ -794,9 +789,9 @@ function InvoicesCreate() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Contact Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
@@ -828,7 +823,7 @@ function InvoicesCreate() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -1004,7 +999,7 @@ function InvoicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Shipping Code</lable>
+                <lable>Shipping Zip Code</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -1031,7 +1026,7 @@ function InvoicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Billing Code</lable>
+                <lable>Billing Zip Code</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -1371,7 +1366,7 @@ function InvoicesCreate() {
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Description</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"

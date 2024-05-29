@@ -8,20 +8,20 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   // serviceId: Yup.string().required("*Service is required"),
-  duration: Yup.string().required("*Duration is required"),
+  // duration: Yup.string().required("*Duration is required"),
   appointmentName: Yup.string().required("*Name is required"),
   phoneNumber: Yup.string()
     .required("*Phone Number is required")
     .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
-  location: Yup.string().required("*Location is required"),
-  // member: Yup.string().required("*Member is required"),
-  street: Yup.string().required("*Street is required"),
-  city: Yup.string().required("*City is required"),
-  state: Yup.string().required("*State is required"),
-  zipCode: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .required("*Zip code is required"),
-  country: Yup.string().required("*Country is required"),
+  // location: Yup.string().required("*Location is required"),
+  // // member: Yup.string().required("*Member is required"),
+  // street: Yup.string().required("*Street is required"),
+  // city: Yup.string().required("*City is required"),
+  // state: Yup.string().required("*State is required"),
+  // zipCode: Yup.string()
+  //   .matches(/^\d+$/, "Must be only digits")
+  //   .required("*Zip code is required"),
+  // country: Yup.string().required("*Country is required"),
   appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
@@ -42,9 +42,9 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       email: "",
       // serviceName: "",
       appointmentStartDate: "",
-      phoneNumber:"",
+      phoneNumber: "",
       timeSlotId: "",
-      duration: "",
+      // duration: "",
       appointmentName: "",
       location: "",
       member: "",
@@ -90,18 +90,16 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
           selectedTimeSlot = time.slotTime || "--";
         }
       });
-      const startTime = new Date(eventData.start).toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
-      const endTime = new Date(eventData.end).toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
+      function formatDateToLocalTimeZone(date) {
+        return new Date(date).toLocaleString(undefined, {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        });
+      }
+
+      const startTime = formatDateToLocalTimeZone(eventData.start);
+      const endTime = formatDateToLocalTimeZone(eventData.end);
 
       const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -137,7 +135,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
 
         if (response.status === 201) {
           console.log(response.data.appointmentId);
-          const appointmentId = response.data.appointmentId
+          const appointmentId = response.data.appointmentId;
           getData();
           formik.resetForm();
           toast.success(response.data.message);
@@ -152,7 +150,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   meetingTitle: data.typeOfAppointment,
                   startDate: StartDate,
                   startTime: data.appointmentStartTime.split(" ")[0],
-                  duration: data.duration.split(" ")[0],
+                  duration: 30,
                 }
               );
               if (zoomResponse.status === 200) {
@@ -250,9 +248,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       </p>
                       <h3 style="margin-bottom: 0;">You can join:</h3>
                       <h4 style="margin:0;">${zoomResponse.data.message}</h4>
-                      <p style="margin: 1.5rem 0px 2rem 0px;">
-                        You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${appointmentId}">Cancel</a> Your Appointment
-                      </p>
+                      <p style="margin: 1.5rem 0px 2rem 0px;"
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
                       <hr />
                       <p style="margin: 2rem 0 0;">See You Soon,</p>
                       <h4 style="margin: 0;">${data.appointmentOwner}</h4>
@@ -366,9 +363,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   </p>
                   <h3 style="margin-bottom: 0;">Location details:</h3>
                   <h4 style="margin:0;">${data.state}</h4>
-                  <p style="margin: 1.5rem 0px 2rem 0px;">
-                    You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${response.data.appointmentId}">reschedule</a></span> or <a href="https://crmlah.com/cancel/index.html?id=${response.data.appointmentId}">Cancel</a> Your Appointment
-                  </p>
+                  <p style="margin: 1.5rem 0px 2rem 0px;"
+                  >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
                   <hr />
                   <p style="margin: 2rem 0 0;">See You Soon,</p>
                   <h4 style="margin: 0;">${data.appointmentOwner}</h4>
@@ -501,7 +497,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   {name == "schedule" ? (
                     <>
                       <div className="d-flex align-items-center justify-content-end sm-device">
-                        <lable>Appointment</lable> &nbsp;&nbsp;
+                        <lable>Appointment</lable>
+                        <span className=" text-danger">*</span>
                         <input
                           type="text"
                           name="appointmentFor"
@@ -525,7 +522,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   ) : (
                     <>
                       <div className="d-flex align-items-center justify-content-end sm-device">
-                        <lable>Appointment </lable> &nbsp;&nbsp;
+                        <lable>Appointment </lable>
+                        <span className=" text-danger">*</span>
                         <select
                           name="leadId"
                           className={`form-select form-size ${
@@ -580,7 +578,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                     </div>
                   </div>
                 </div> */}
-                <div className="col-lg-6 col-md-6 col-12  mb-3">
+                {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
                   <div className="d-flex align-items-center justify-content-end sm-device">
                     <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
                     <select
@@ -608,38 +606,11 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end sm-device">
-                    <lable>Pnone Number</lable> &nbsp;&nbsp;
-                    <input
-                      type="text"
-                      //className="form-size form-control"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      {...formik.getFieldProps("phoneNumber")}
-                      className={`form-size form-control   ${
-                        formik.touched.phoneNumber && formik.errors.phoneNumber
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
-                  </div>
-                  <div className="row sm-device">
-                    <div className="col-5"></div>
-                    <div className="col-6 sm-device">
-                      {formik.touched.phoneNumber &&
-                        formik.errors.phoneNumber && (
-                          <p className="text-danger">
-                            {formik.errors.phoneNumber}
-                          </p>
-                        )}
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-12 mb-3">
-                  <div className="d-flex align-items-center justify-content-end sm-device">
-                    <lable>Appointment Name</lable> &nbsp;&nbsp;
+                    <lable>Appointment Name</lable>{" "}
+                    <span className=" text-danger">*</span>
                     <input
                       type="text"
                       //className="form-size form-control"
@@ -666,6 +637,36 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="d-flex align-items-center justify-content-end sm-device">
+                    <lable>Phone Number</lable>
+                    <span className=" text-danger">*</span>
+                    <input
+                      type="text"
+                      //className="form-size form-control"
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      {...formik.getFieldProps("phoneNumber")}
+                      className={`form-size form-control   ${
+                        formik.touched.phoneNumber && formik.errors.phoneNumber
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                  <div className="row sm-device">
+                    <div className="col-5"></div>
+                    <div className="col-6 sm-device">
+                      {formik.touched.phoneNumber &&
+                        formik.errors.phoneNumber && (
+                          <p className="text-danger">
+                            {formik.errors.phoneNumber}
+                          </p>
+                        )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end sm-device">
                     <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
@@ -725,7 +726,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end sm-device">
                     <label htmlFor="leadowner">Appointment Mode</label>
-                    &nbsp;&nbsp;
+                    <span className=" text-danger">*</span>
                     <select
                       id="appointmentMode"
                       //className="form-size form-select"
