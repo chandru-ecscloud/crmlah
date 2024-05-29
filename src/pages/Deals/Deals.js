@@ -45,21 +45,21 @@ const Deals = () => {
           </Link>
         ),
       },
-      {
-        accessorKey: "accountName",
-        enableHiding: false,
-        header: "Account Name",
-        Cell: ({ row }) => (
-          <Link to={`/deals/show/${row.original.id}`} className="rowName">
-            {row.original.accountName}
-          </Link>
-        ),
-      },
-      {
-        accessorKey: "contactName",
-        enableHiding: false,
-        header: "Contact Name",
-      },
+      // {
+      //   accessorKey: "accountName",
+      //   enableHiding: false,
+      //   header: "Account Name",
+      //   Cell: ({ row }) => (
+      //     <Link to={`/deals/show/${row.original.id}`} className="rowName">
+      //       {row.original.accountName}
+      //     </Link>
+      //   ),
+      // },
+      // {
+      //   accessorKey: "contactName",
+      //   enableHiding: false,
+      //   header: "Contact Name",
+      // },
       {
         accessorKey: "dealOwner",
         enableHiding: false,

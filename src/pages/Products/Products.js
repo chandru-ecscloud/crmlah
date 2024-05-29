@@ -51,11 +51,11 @@ const Products = () => {
         enableHiding: false,
         header: "Product Code",
       },
-      {
-        accessorKey: "vendorName",
-        enableHiding: false,
-        header: "Vendor Name",
-      },
+      // {
+      //   accessorKey: "vendorName",
+      //   enableHiding: false,
+      //   header: "Vendor Name",
+      // },
       {
         accessorKey: "productOwner",
         enableHiding: false,
