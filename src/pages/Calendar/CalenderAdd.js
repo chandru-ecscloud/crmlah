@@ -148,8 +148,8 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                 `${API_URL}GenerateSingaporeZoomMeetingLink`,
                 {
                   meetingTitle: data.typeOfAppointment,
-                  startDate: StartDate,
-                  startTime: data.appointmentStartTime.split(" ")[0],
+                  startDate: "2024-05-30",
+                  startTime: "12:00",
                   duration: 30,
                 }
               );
