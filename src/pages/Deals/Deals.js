@@ -325,33 +325,6 @@ const Deals = () => {
     doc.save("ECS.pdf");
   };
 
-  const handleSendDealToInvoice = async (rows) => {
-    const rowData = rows.map((row) => row.original.id);
-    const invoiceId = sessionStorage.getItem("invoice_id");
-    try {
-      const response = await axios.post(
-        `${API_URL}associateDealsWithInvoice/${invoiceId}`,
-        rowData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        sessionStorage.removeItem("invoice_id");
-        navigate("/invoices");
-        table.setRowSelection(false);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
-  };
-
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -415,6 +388,8 @@ const Deals = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/deals");
+        table.setRowSelection(false);
+
       } else {
         toast.error(response.data.message);
       }

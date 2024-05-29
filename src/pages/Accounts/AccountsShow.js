@@ -156,7 +156,7 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;{accountData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp;&nbsp;+{accountData.countryCode || ""}&nbsp;
                   {accountData.phone || ""}
                 </span>
               </div>
