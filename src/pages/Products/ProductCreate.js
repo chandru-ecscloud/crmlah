@@ -10,7 +10,7 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  product_owner: yup.string().required("*Product Owner is required."),
+  // product_owner: yup.string().required("*Product Owner is required."),
   product_name: yup.string().required("*Product name is required."),
   product_code: yup.string()
   .matches(/^\d+$/, "Must be only digits")
@@ -167,17 +167,19 @@ function ProductCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Product Owner</lable> &nbsp;&nbsp;
-                <select
+                <input
                   type="text"
-                  className={`form-size form-select  ${
+                  className={`form-size form-control  ${
                     formik.touched.product_owner && formik.errors.product_owner
                       ? "is-invalid"
                       : ""
                   }`}
                   {...formik.getFieldProps("product_owner")}
                   id="product_owner"
-                >
-                  <option value={owner}>{owner}</option>
+                  value={owner}
+                  readOnly
+                />
+                  {/* <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>
                   <option value="Chandru R">Chandru R</option>
                   <option value="Gayathri M">Gayathri M</option>
@@ -189,7 +191,7 @@ function ProductCreate() {
                   <option value="Yalini A">Yalini A</option>
                   <option value="Vishnu Priya">Vishnu Priya</option>
                   <option value="Kavitha">Kavitha</option>
-                </select>
+                </input> */}
               </div>
 
               <div className="row sm-device">
