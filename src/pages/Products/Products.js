@@ -62,6 +62,18 @@ const Products = () => {
         header: "Product Owner",
       },
       {
+        accessorKey: "createdAt",
+        enableHiding: false,
+        header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updatedAt",
+        enableHiding: false,
+        header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+      },
+      {
         accessorKey: "productActive",
         header: "Product Active",
         Cell: ({ value }) => (value ? "Active" : "Inactive"),
@@ -200,9 +212,13 @@ const Products = () => {
       "Support Start Date",
       "Support End Date",
       "Description",
+      "Created At", 
+      "Updated At",
     ];
     const tableData3 = rows.map((row) => {
       return [
+        row.original.createdAt,
+        row.original.updatedAt,
         row.original.supportStartDate,
         row.original.supportEndDate,
         row.original.description_info,

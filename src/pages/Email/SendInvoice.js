@@ -7,6 +7,8 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { MdErrorOutline } from "react-icons/md";
+import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
@@ -26,6 +28,7 @@ function SendInvoice({ invoiceData, id }) {
   const formik = useFormik({
     initialValues: {
       subject: "",
+      files: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -347,6 +350,10 @@ function SendInvoice({ invoiceData, id }) {
   //   calculateTotals();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [invoiceData]);
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    formik.setFieldValue("files", [...formik.values.files, ...files]);
+  };
 
   useEffect(() => {
     // This effect triggers the email sending process when HTML content is set and we're ready to send.
@@ -711,7 +718,40 @@ function SendInvoice({ invoiceData, id }) {
               </div>
             </div>
 
-            <div className="d-flex align-items-end justify-content-end">
+            <div className="d-flex align-items-end justify-content-between">
+            <span
+                style={{ minHeight: "80px", gap: "10px" }}
+                className="d-flex align-items-center"
+              >
+                <span>
+                  <label
+                    htmlFor="file-input"
+                    className="btn btn-outline-primary"
+                  >
+                    <GrAttachment />
+                  </label>
+                  <input
+                    id="file-input"
+                    type="file"
+                    name="files"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                    multiple
+                    accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
+                  />
+                  {formik.values.files.length > 0 ? (
+                    <span>
+                      &nbsp;{formik.values.files.length} files selected
+                    </span>
+                  ) : (
+                    <span className="text-danger">
+                      &nbsp;
+                      <MdErrorOutline className="text-danger" />
+                      &nbsp;{formik.errors.files}
+                    </span>
+                  )}
+                </span>
+              </span>
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button type="submit" className="btn btn-primary mt-4">
                   {loadIndicator && (

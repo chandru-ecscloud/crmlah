@@ -65,6 +65,18 @@ const Quotes = () => {
         header: "Quotes Owner",
       },
       {
+        accessorKey: "createdAt",
+        enableHiding: false,
+        header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updatedAt",
+        enableHiding: false,
+        header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+      },
+      {
         accessorKey: "product",
         header: "Product",
       },
@@ -229,6 +241,8 @@ const Quotes = () => {
       "Contact Name",
       "Account Name",
       "Adjustment",
+      "Created At", 
+      "Updated At",
     ];
     const tableData2 = rows.map((row) => {
       return [
@@ -238,6 +252,8 @@ const Quotes = () => {
         row.original.contactName,
         row.original.accountName,
         row.original.adjustment,
+        row.original.createdAt,
+        row.original.updatedAt,
       ];
     });
     autoTable(doc, {
@@ -452,9 +468,9 @@ const Quotes = () => {
         itemDescription: false,
         termsAndConditions: false,
         description: false,
-        createdAt: false,
+        // createdAt: false,
         createdBy: false,
-        updatedAt: false,
+        // updatedAt: false,
         updatedBy: false,
         companyId: false,
       },
