@@ -467,7 +467,7 @@ function InvoiceShow() {
             >
               <FaFilePdf className="mx-1 text-white fs-5" />
             </button>
-            <ul className="dropdown-menu">
+            {/* <ul className="dropdown-menu">
               <li
                 className="dropdown-item"
                 onClick={() => generatePDF("download")}
@@ -483,7 +483,7 @@ function InvoiceShow() {
               >
                 Print PDF
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </section>

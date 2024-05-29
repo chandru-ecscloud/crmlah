@@ -20,8 +20,9 @@ const validationSchema = yup.object().shape({
   //     .required("Attacment is Must"),
 });
 
-function SendEmailFollowUp({ toEmail, leadId }) {
+function SendEmailFollowUp({ toEmail, leadId, leadName }) {
   // console.log("To Mail:",toEmail);
+  console.log("leadName",leadName);
 
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
@@ -51,7 +52,7 @@ function SendEmailFollowUp({ toEmail, leadId }) {
         formData.append("subject", values.subject);
         formData.append("body", values.body);
         formData.append("leadId", leadId);
-        // formData.append("leadName","sakthivel");
+        formData.append("leadName",leadName);
         values.files.forEach((file) => {
           formData.append("files", file);
         });

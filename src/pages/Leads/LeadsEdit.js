@@ -103,14 +103,14 @@ function LeadsEdit() {
         });
         const getData = response.data;
         const payload = {
-          lead_owner: getData.lead_owner,
+          lead_owner: getData.lead_owner || owner,
           company: getData.company,
           first_name: getData.first_name,
           last_name: getData.last_name,
-          country_code: getData.countryCode,
+          country_code: getData.countryCode || "+65",
           phone: getData.phone,
           email: getData.email,
-          landLine: getData.land_line,
+          landLine: getData.land_line || "",
           lead_source: getData.lead_source,
           lead_status: getData.lead_status,
           skypeId: getData.skype_id,
@@ -118,7 +118,7 @@ function LeadsEdit() {
           street: getData.street,
           city: getData.city,
           state: getData.state,
-          zipCode: getData.zipCode,
+          zipCode: getData.zipCode || "",
           country: getData.country,
           description_info: getData.description_info,
         };

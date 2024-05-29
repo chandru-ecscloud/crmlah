@@ -3,10 +3,10 @@ import CRM from "../../assets/heroImage.png";
 import { useFormik } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
 const validationSchema = Yup.object().shape({
   appointmentStartDate: Yup.string().required(
     "*Appointment start date is required"
@@ -24,6 +24,11 @@ const Schedule = () => {
   const navigate = useNavigate();
   const [appointmentStartTime, setAppointmentStartTime] = useState([]);
   // console.log("appoinment Time", appointmentStartTime);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const formik = useFormik({
     initialValues: {
@@ -96,6 +101,7 @@ const Schedule = () => {
         },
       });
       if (response.status === 200) {
+        handleClose()
         toast.success(response.data.message);
         setTimeout(() => {
           window.location.href = "https://crmlah.com/"; // Redirect to the external site
@@ -109,7 +115,7 @@ const Schedule = () => {
       } else {
         toast.error(error.response?.data.message);
       }
-    }finally {
+    } finally {
       setLoadIndicatorca(false); // Set loading indicator back to false after request completes
     }
   };
@@ -124,6 +130,7 @@ const Schedule = () => {
   useEffect(() => {
     fetchAppointmentTime();
   }, [formik.values.appointmentStartDate]);
+
   return (
     <section className="signIn">
       <div style={{ marginTop: "105px", backgroundColor: "#fff" }}>
@@ -192,13 +199,15 @@ const Schedule = () => {
                       className="btn btn-primary rounded-pill w-100 px-5"
                       style={{ background: "#385fe5" }}
                       type="submit"
+                      disabled={loadIndicator}
                     >
                       {loadIndicator && (
                         <span
                           class="spinner-border spinner-border-sm me-2 "
                           aria-hidden="true"
                         ></span>
-                      )}Reschedule
+                      )}
+                      Reschedule
                     </button>
 
                     <div className="d-flex justify-content-center align-items-center">
@@ -231,17 +240,56 @@ const Schedule = () => {
 
                     <button
                       className="btn btn-danger rounded-pill w-100 px-5"
-                      // style={{ background: "#385fe5" }}
                       type="button"
-                      onClick={CancelAppointment}
+                      onClick={handleShow}
+                      disabled={loadIndicatorca}
                     >
                       {loadIndicatorca && (
                         <span
                           class="spinner-border spinner-border-sm me-2 "
                           aria-hidden="true"
                         ></span>
-                      )}Cancel Appoinment
+                      )}
+                      Cancel Appoinment
                     </button>
+
+                    <Modal
+                      size="sm"
+                      show={show}
+                      onHide={handleClose}
+                      aria-labelledby="example-modal-sizes-title-lg"
+                      centered
+                    >
+                      <Modal.Header className="bg-light p-2">
+                        <Modal.Title className="fs-5">Cancel Appointment</Modal.Title>
+                      </Modal.Header>
+                      <hr className="m-0"/>
+                      <Modal.Body>
+                        Are you sure you want to Cancel The Appoinment?
+                      </Modal.Body>
+                      <hr className="m-0"/>
+                      <Modal.Footer className="d-flex justify-content-between align-items-center">
+                        <button
+                          className="btn btn-sm btn-danger"
+                          variant="secondary"
+                          onClick={handleClose}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="btn btn-sm btn-primary"
+                          onClick={CancelAppointment}
+                        >
+                          {loadIndicatorca && (
+                            <span
+                              class="spinner-border spinner-border-sm me-2"
+                              aria-hidden="true"
+                            ></span>
+                          )}
+                          Confirm
+                        </button>
+                      </Modal.Footer>
+                    </Modal>
                   </div>
                 </form>
               </div>

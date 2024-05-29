@@ -140,11 +140,11 @@ function AccountsEdit() {
 
         const payload = {
           company_id: companyId,
-          account_owner: getData.accountOwner,
+          account_owner: getData.accountOwner || owner,
           first_name: getData.first_name,
           last_name: getData.last_name,
           account_name: getData.accountName,
-          country_code: getData.countryCode,
+          country_code: getData.countryCode  || "+65",
           phone: getData.phone,
           email: getData.email,
           parent_account: getData.parentAccount,

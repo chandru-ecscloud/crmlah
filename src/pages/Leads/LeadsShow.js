@@ -22,6 +22,7 @@ function LeadsShow() {
   const navigate = useNavigate();
   // const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [leadName, setLeadName] = useState([]);
 
   // const handleClose = () => {
   //   setSelectedFiles([]);
@@ -47,8 +48,12 @@ function LeadsShow() {
           //Authorization: `Bearer ${token}`,
         },
       });
+      const { first_name, last_name } = response.data;
+      const concatenatedName = `${first_name || ''} ${last_name || ''}`.trim(); 
       setClientData(response.data);
+      setLeadName(concatenatedName);
       console.log("Lead Show :", response.data);
+      console.log("setLeadName :",concatenatedName);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -116,7 +121,7 @@ function LeadsShow() {
               overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
             >
               <span>
-                <SendEmailFollowUp toEmail={clientData.email} leadId={id}/>
+                <SendEmailFollowUp toEmail={clientData.email} leadId={id} leadName={leadName}/>
               </span>
             </OverlayTrigger>
           )}
@@ -333,7 +338,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.first_name || "--"}{" "}
+                  &nbsp; : &nbsp;{leadName|| "--"}{" "}
                   {/* {clientData.last_name} */}
                 </span>
               </div>

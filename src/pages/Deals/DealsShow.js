@@ -333,6 +333,12 @@ function DealsShow() {
                   &nbsp; : &nbsp;{dealData.dealName || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Phone Number</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{dealData.phoneNumber || ""}
+                </span>
+              </div>
 
               <div>
                 <label className="text-dark Label">Email</label>
