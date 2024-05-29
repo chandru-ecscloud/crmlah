@@ -160,6 +160,7 @@ function AccountsShow() {
                   {accountData.phone || ""}
                 </span>
               </div>
+             
 
               {/* <div>
                 <label className="text-dark Label">Mobile</label>
@@ -210,6 +211,19 @@ function AccountsShow() {
                   &nbsp; : &nbsp;{accountData.accountOwner || "--"}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Created At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;&nbsp;{accountData.createdAt ? accountData.createdAt.split("T")[0]:""}&nbsp;
+                 </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Updated At</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;&nbsp;{accountData.updatedAt ? accountData.updatedAt.split("T")[0]:""}&nbsp;
+                  </span>
+              </div>
+
 
               {/* <div>
                 <label className="text-dark Label">Title</label>

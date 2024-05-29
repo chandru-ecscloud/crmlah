@@ -137,6 +137,7 @@ const Contacts = () => {
       {
         accessorKey: "createdAt",
         header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
       },
       {
         accessorKey: "createdBy",
@@ -145,6 +146,7 @@ const Contacts = () => {
       {
         accessorKey: "updatedAt",
         header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
       },
       {
         accessorKey: "updatedBy",

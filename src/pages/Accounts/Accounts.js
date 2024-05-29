@@ -118,6 +118,16 @@ const Accounts = () => {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+      },
       // {
       //   accessorKey: "id",
       //   enableHiding: false,
@@ -262,6 +272,27 @@ const Accounts = () => {
         row.original.billingState,
         row.original.billingCode,
         row.original.billingCountry,
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders4 = [
+      "Created At",
+      "Updated At",
+      ];
+    const tableData4 = rows.map((row) => {
+      return [
+        row.original.createdAt,
+        row.original.updatedAt,
+        
       ];
     });
     autoTable(doc, {

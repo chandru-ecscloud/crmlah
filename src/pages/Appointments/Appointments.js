@@ -162,6 +162,16 @@ const Appointments = () => {
         accessorKey: "additionalInformation",
         header: "Description",
       },
+      {
+        accessorKey: "created_at",
+        header: "CreatedAt",
+        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+      },
+      {
+        accessorKey: "updated_at",
+        header: "UpdatedAt",
+        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+      },
     ],
     []
   );
@@ -266,6 +276,28 @@ const Appointments = () => {
     autoTable(doc, {
       head: [tableHeaders2],
       body: tableData2,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    const tableHeaders3 = [
+      "created_at",
+      "Updated_at",
+    
+    ];
+    const tableData3 = rows.map((row) => {
+      return [
+        row.original.created_at,
+        row.original.updated_at,
+       
+      ];
+    });
+    autoTable(doc, {
+      head: [tableHeaders3],
+      body: tableData3,
       styles: {
         cellPadding: 1,
         fontSize: 10,
