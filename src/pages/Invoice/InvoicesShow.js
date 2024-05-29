@@ -457,7 +457,7 @@ function InvoiceShow() {
             Edit
           </button>
 
-          <div className="dropdown mx-1" style={{ cursor: "pointer" }}>
+          {/* <div className="dropdown mx-1" style={{ cursor: "pointer" }}>
             <button
               className="btn shadow-none dropdown-toggle"
               type="button"
@@ -467,7 +467,7 @@ function InvoiceShow() {
             >
               <FaFilePdf className="mx-1 text-white fs-5" />
             </button>
-            {/* <ul className="dropdown-menu">
+            <ul className="dropdown-menu">
               <li
                 className="dropdown-item"
                 onClick={() => generatePDF("download")}
@@ -483,8 +483,8 @@ function InvoiceShow() {
               >
                 Print PDF
               </li>
-            </ul> */}
-          </div>
+            </ul>
+          </div> */}
         </div>
       </section>
 
