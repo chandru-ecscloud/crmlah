@@ -646,7 +646,7 @@ function LeadsCreate() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center  sm-device">
-                <lable>Description</lable> &nbsp;&nbsp;
+                <lable>Description</lable><span className=" text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"

@@ -10,9 +10,9 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  // amount: yup.string()
-  // .matches(/^\d+$/, "Must be only digits")
-  // .required("*Amount is required"),
+   amount: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+   .required("*Amount is required"),
   email: yup
     .string()
     .email("*Enter valid email")
@@ -55,6 +55,7 @@ function DealsEdit() {
       company_id: companyId,
       amount: "",
       email: "",
+      company: "",
       deal_name: "",
       contact_name: "",
       account_name: "",
@@ -186,7 +187,7 @@ function DealsEdit() {
           account_name: getData.accountName,
           closing_date: closingDate,
           stage: getData.stage,
-          companyName :getData.company,
+          company :getData.companyName,
           country_code: getData.countryCode || "+65",
           phone: getData.phone,
           probability: getData.probability,
