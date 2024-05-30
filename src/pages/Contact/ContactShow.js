@@ -197,6 +197,13 @@ function ContactShow() {
                  
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Amount</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.amount || ""}
+                 
+                </span>
+              </div>
 
               {/* <div>
                 <label className="text-dark Label">Contact Status</label>

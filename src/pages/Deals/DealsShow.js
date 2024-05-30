@@ -213,6 +213,18 @@ function DealsShow() {
                   &nbsp; : &nbsp;{dealData.email || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Company Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{dealData.companyName || ""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Amount</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{dealData.amount || ""}
+                </span>
+              </div>
 
               {/* <div>
                 <label className="text-dark Label">Phone</label>
