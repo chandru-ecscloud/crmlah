@@ -14,7 +14,7 @@ const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
 });
 
-function SendInvoice({ invoiceData, id }) {
+function SendInvoice({ invoiceData, id, generatePDF }) {
   const [show, setShow] = useState(false);
 
   console.log("Invoice Data Mail:", invoiceData.email);
@@ -32,6 +32,7 @@ function SendInvoice({ invoiceData, id }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      generatePDF()
       // try {
       //   const generateHtmlContent = () => {
       //     setLoadIndicator(true);
@@ -327,12 +328,18 @@ function SendInvoice({ invoiceData, id }) {
       // }
 
       try {
+        const pdfBase64 = await generatePDF("download");
         setLoadIndicator(true);
         const response = await axios.post(`${API_URL}sendMail`, {
           toMail: invoiceData.email,
           fromMail: userEmail,
           subject: values.subject,
           htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
+          attachment: {
+                filename: 'invoice.pdf',
+                content: pdfBase64,
+                encoding: 'base64'
+            }
         });
 
         if (response.status === 200) {

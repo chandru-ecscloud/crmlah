@@ -24,6 +24,7 @@ function InvoiceShow() {
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
+  console.log("invoiceData",invoiceData)
 
 
   const invoiceItems= [
@@ -128,6 +129,7 @@ function InvoiceShow() {
     // console.log("CompanyLogo:", CompanyLogo);
   //  PDF Generate
   const generatePDF = (action = "open") => {
+    return new Promise((resolve, reject) => {
     const docDefinition = {
      
       header: {
@@ -284,7 +286,6 @@ function InvoiceShow() {
           text: "Invoiced Items",
           style: "sectionHeader",
         },
-
         {
           table: {
             headerRows: 1,
@@ -299,20 +300,48 @@ function InvoiceShow() {
                 { text: "Tax", bold: true, fillColor: "#dedede" },
                 { text: "Total Amount", bold: true, fillColor: "#dedede" },
               ],
-              ...(invoiceData.invoiceItemList || []).map((item)=> [
+              ...(invoiceData.invoiceItemList || []).map((item) => [
                 item.productName || "--",
-                item.listPrice,
-                item.quantity ,
-                item.productName,
-                item.amount,
-                item.quantity,
-                item.total,
-                `${item.discount} %`,
-                `${item.tax} %`,
-              ]),
+                item.listPrice || "--",
+                item.quantity || "--",
+                item.amount || "--",
+                // item.discount || "--",
+                `${item.discount} % `|| "--",
+                item.tax || "--",
+                item.total || "--",
+                ]),
             ],
           },
         },
+
+        // {
+        //   table: {
+        //     headerRows: 1,
+        //     widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
+        //     body: [
+        //       [
+        //         { text: "Product Name", bold: true, fillColor: "#dedede" },
+        //         { text: "Price", bold: true, fillColor: "#dedede" },
+        //         { text: "Quantity", bold: true, fillColor: "#dedede" },
+        //         { text: "Amount", bold: true, fillColor: "#dedede" },
+        //         { text: "Discount", bold: true, fillColor: "#dedede" },
+        //         { text: "Tax", bold: true, fillColor: "#dedede" },
+        //         { text: "Total Amount", bold: true, fillColor: "#dedede" },
+        //       ],
+        //       ...(invoiceData.invoiceItemList || []).map((item)=> [
+        //         item.productName || "--",
+        //         item.listPrice,
+        //         item.quantity ,
+        //         item.productName,
+        //         item.amount,
+        //         item.quantity,
+        //         item.total,
+        //         `${item.discount} %`,
+        //         `${item.tax} %`,
+        //       ]),
+        //     ],
+        //   },
+        // },
         {
           columns: [
             [
@@ -404,7 +433,9 @@ function InvoiceShow() {
     };
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-
+    pdfDocGenerator.getBase64((data) => {
+      resolve(data);
+  });
     if (action === "download") {
       pdfDocGenerator.download("invoice.pdf");
     } else if (action === "print") {
@@ -412,8 +443,9 @@ function InvoiceShow() {
     } else {
       pdfDocGenerator.open();
     }
-  };
-
+  });
+}
+ 
   return (
     <>
       {/* header section */}
@@ -445,7 +477,7 @@ function InvoiceShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <SendInvoice invoiceData={invoiceData} id={id} />
+        <SendInvoice invoiceData={invoiceData} id={id} generatePDF={() => generatePDF("download")} />
 
           {/* <SendEmail /> */}
 
@@ -457,7 +489,7 @@ function InvoiceShow() {
             Edit
           </button>
 
-          {/* <div className="dropdown mx-1" style={{ cursor: "pointer" }}>
+          <div className="dropdown mx-1" style={{ cursor: "pointer" }}>
             <button
               className="btn shadow-none dropdown-toggle"
               type="button"
@@ -484,7 +516,7 @@ function InvoiceShow() {
                 Print PDF
               </li>
             </ul>
-          </div> */}
+          </div>
         </div>
       </section>
 
