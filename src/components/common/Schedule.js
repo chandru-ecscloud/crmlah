@@ -167,14 +167,14 @@ const Schedule = () => {
 
 
                   <div class="invoice" >
-                  <h1 style="color: black;">Hi there, ${name}</h1>
-                  <p style="margin: 2rem 0 0; font-size: 1rem;">We are pleased to inform you that your appointment has been successfully rescheduled. The appointment has been rescheduled for  ${data.appointmentStartDate} at ${data.appointmentStartTime}. We hope this new schedule is convenient for you. <br />.
+                  <h1 style="color: black;">Hi, ${name}</h1>
+                  <p style="margin: 2rem 0 0; font-size: 1rem;">We are pleased to inform you that your appointment has been successfully rescheduled. The appointment has been rescheduled for  ${data.appointmentStartDate} at ${data.appointmentStartTime}. We hope this new schedule is convenient for you. <br />
                   </p>
   
                       <hr />
                   
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                  <h4 style=" margin: 0; ">${name}</h4>
+                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
                   <p style=" margin: 0 ; ">ECS Cloud</p>
                   <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                   <hr />
@@ -353,7 +353,7 @@ const Schedule = () => {
 
 
             <div class="invoice" >
-            <h1 style="color: black;">Hi there, ${name}</h1>
+            <h1 style="color: black;">Hi, ${name}</h1>
             <p style="margin: 2rem 0 0; font-size: 1rem;">We regret to inform you that your scheduled appointment has been cancelled at your request. If you have any questions or need further assistance, please do not hesitate to contact us.<br />
             </p>
 
