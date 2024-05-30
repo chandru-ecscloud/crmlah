@@ -477,7 +477,7 @@ function InvoiceShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-        <SendInvoice invoiceData={invoiceData} id={id} generatePDF={() => generatePDF("download")} />
+        {/* <SendInvoice invoiceData={invoiceData} id={id} generatePDF={() => generatePDF("download")} /> */}
 
           {/* <SendEmail /> */}
 
