@@ -390,7 +390,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <h4 style="margin:0 ;">${data.state}</h4>
 
                   <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="http://localhost:3000/CrmAppoinmentReschedule?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}">Reschedule or Cancel</a> Your Appointment</p>     
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}">Reschedule or Cancel</a> Your Appointment</p>     
                       <hr />
                   
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
