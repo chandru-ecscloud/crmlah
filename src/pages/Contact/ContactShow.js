@@ -190,6 +190,13 @@ function ContactShow() {
                   {contactData.phone || ""}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Company Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.companyName || ""}
+                 
+                </span>
+              </div>
 
               {/* <div>
                 <label className="text-dark Label">Contact Status</label>

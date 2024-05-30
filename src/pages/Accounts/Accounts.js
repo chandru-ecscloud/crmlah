@@ -36,12 +36,12 @@ const Accounts = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "accountName",
+        accessorKey: "firstName",
         enableHiding: false,
         header: "Account Name",
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
-            {row.original.accountName}
+            {row.original.firstName}
 
           </Link>
         ),
@@ -211,7 +211,7 @@ const Accounts = () => {
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.accountName,
+        row.original.first_name,
         row.original.accountNumber,
         row.original.email,
         row.original.phone,

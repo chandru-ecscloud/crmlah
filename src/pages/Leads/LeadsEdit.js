@@ -24,17 +24,22 @@ const validationSchema = yup.object().shape({
   last_name: yup.string().required("*Last Name is required"),
   country_code: yup.string().required("*Country Code is required"),
   phone: yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
-      const { country_code } = this.parent;
-      if (country_code === '+65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
-      }
-      if (country_code === '+91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
-      }
-      return true; // Default validation for other country codes
-    }),
+  .required('Phone number is required')
+  .test('phone-length', function (value) {
+    const { country_code } = this.parent;
+    if (value && /\s/.test(value)) {
+      return this.createError({ message: 'Phone number should not contain spaces' });
+    }
+    if (country_code === '+65') {
+      return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+    }
+    if (country_code === '+91') {
+      return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+    }
+    return true; // Default validation for other country codes
+  }),
+country_code: yup.string().required('Country code is required'),
+
   email: yup.string().email("*Invalid Email").required("*Email is required"),
   lead_owner: yup.string().required("*Lead owner is required"),
   description_info: yup.string().required("*Description is required"),

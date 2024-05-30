@@ -130,7 +130,7 @@ const ListTasks = () => {
         // console.log("apideal",response.data)
         const newTasks = response.data.map((client) => ({
           id: client.id,
-          name: client.accountName,
+          name: client.dealName,
           phone: client.phone,
           email: client.email,
           status: "Won",
@@ -143,11 +143,15 @@ const ListTasks = () => {
     }
   };
 
-  useEffect(() => {
+  const getAllData = ()=>{
     fetchLeadData();
     fetchContactData();
     fetchAcconutData();
     fetchDealData();
+  }
+  
+  useEffect(() => {
+    getAllData()
   }, []);
   // useEffect(() => {
   //   if (tasks) {
@@ -185,6 +189,7 @@ const ListTasks = () => {
             fetchContactData={fetchContactData}
             fetchAcconutData={fetchAcconutData}
             fetchDealData={fetchDealData}
+            getAllData={getAllData}
             setTasks={setTasks}
             newTasks={newTasks}
             qualifiedTasks={qualifiedTasks}
@@ -212,6 +217,7 @@ const Section = ({
   fetchLeadData,
   fetchContactData,
   fetchAcconutData,
+  getAllData,
   fetchDealData,
   qualifiedTasks,
   propositionTasks,
@@ -389,6 +395,7 @@ const Section = ({
               fetchContactData={fetchContactData}
               fetchAcconutData={fetchAcconutData}
               fetchDealData={fetchDealData}
+              getAllData={getAllData}
             />
           ))}
       </div>
@@ -488,10 +495,7 @@ const Header = ({
 
 const Task = ({
   task,
-  fetchLeadData,
-  fetchContactData,
-  fetchAcconutData,
-  fetchDealData,
+  getAllData
 }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
@@ -508,19 +512,19 @@ const Task = ({
     switch (status) {
       case "New":
         apiEndpoint = "deleteMultipleClientData";
-        fetchFunction = fetchLeadData;
+        fetchFunction = getAllData;
         break;
       case "Qualified":
-        apiEndpoint = "deleteMultipleContactData";
-        fetchFunction = fetchContactData;
+        apiEndpoint = `contactToLeadConvert/${id}`;
+        fetchFunction = getAllData;
         break;
       case "Proposition":
-        apiEndpoint = "deleteMultipleAccountData";
-        fetchFunction = fetchAcconutData;
+        apiEndpoint = `accountToContactConvert/${id}`;
+        fetchFunction = getAllData;
         break;
       case "Won":
-        apiEndpoint = "deleteMultipleDealData";
-        fetchFunction = fetchDealData;
+        apiEndpoint = `dealToAccountConvert/${id}`;
+        fetchFunction = getAllData;
         break;
       default:
         return;

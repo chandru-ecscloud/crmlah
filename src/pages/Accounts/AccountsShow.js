@@ -27,8 +27,8 @@ function AccountsShow() {
   // const [selectedFile, setSelectedFile] = useState(null);
   // const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
+  console.log(accountData)
 
-  console.log("Account Datas:", accountData.quotes);
 
   const navigate = useNavigate();
 
@@ -160,6 +160,14 @@ function AccountsShow() {
                   {accountData.phone || ""}
                 </span>
               </div>
+
+              <div>
+                <label className="text-dark Label">Company Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{accountData.companyName || ""}
+                </span>
+              </div>
+
              
 
               {/* <div>
