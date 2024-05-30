@@ -240,12 +240,12 @@ function AccountsShow() {
                 </span>
               </div> */}
 
-              <div>
+              {/* <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{accountData.phone || "--"}
                 </span>
-              </div>
+              </div> */}
 
               {/* <div>
                 <label className="text-dark Label">Lead Source</label>
@@ -270,17 +270,17 @@ function AccountsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              {/* <div>
-                <label className="text-dark Label">Company</label>
+              <div>
+                <label className="text-dark Label">Amount</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.company || "--"}
+                  &nbsp; : &nbsp;{accountData.amount || "--"}
                 </span>
-              </div> */}
+              </div>
 
               <div>
                 <label className="text-dark Label">Account Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{accountData.accountName || "--"}
+                  &nbsp; : &nbsp;{accountData.firstName || "--"}
                 </span>
               </div>
 

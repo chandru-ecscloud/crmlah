@@ -24,21 +24,21 @@ const validationSchema = Yup.object().shape({
     .typeError('Billing code must be a number')
     .integer('Billing code must be an integer'),
     country_code: Yup.string().required("*Country Code is required"),
-  phone: Yup.string()
-  .required('Phone number is required')
-  .test('phone-length', function (value) {
-    const { country_code } = this.parent;
-    if (value && /\s/.test(value)) {
-      return this.createError({ message: 'Phone number should not contain spaces' });
-    }
-    if (country_code === '+65') {
-      return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
-    }
-    if (country_code === '+91') {
-      return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
-    }
-    return true; 
-  }),
+    phone: Yup.string()
+    .required('Phone number is required')
+    .test('phone-length', function (value) {
+      const { country_code } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({ message: 'Phone number should not contain spaces' });
+      }
+      if (country_code === '+65') {
+        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      }
+      if (country_code === '+91') {
+        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      }
+      return true; // Default validation for other country codes
+    }),
   country_code: Yup.string().required('Country code is required'),
 
   email: Yup.string().email("Invalid email").required("*Email is required"),
