@@ -599,7 +599,7 @@ const Example = () => {
                         />
                       </button>
                     </li> */}
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -617,7 +617,7 @@ const Example = () => {
                           path={`associateDealsWithInvoice/${rowId}`}
                         />
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"
