@@ -21,9 +21,27 @@ const validationSchema = yup.object().shape({
   // contact_name: yup.string().required("*Contact name is required"),
   // account_name: yup.string().required("*Account name is required"),
   stage: yup.string().required("*Stage is required"),
-  phone_number: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Phone Number is required"),
+  company: yup.string().required('Company Name is required'),
+  country_code: yup.string().required("*Country Code is required"),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
+      const { country_code } = this.parent;
+      if (country_code === "+65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
+      }
+      if (country_code === "+91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
+      }
+      return true; // Default validation for other country codes
+    }),
 });
 
 function DealsCreate() {
@@ -45,9 +63,11 @@ function DealsCreate() {
       email: "",
       deal_name: "",
       contact_name: "",
+      company:"",
       account_name: "",
       closing_date: "",
-      phone_number: "",
+      country_code: "+65",
+      phone: "",
       stage: "",
       probability: "",
       campaign_source: "",
@@ -62,7 +82,7 @@ function DealsCreate() {
       billing_street: "",
       billing_code: "",
       billing_country: "",
-      description_info:""
+      description_info: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -200,7 +220,7 @@ function DealsCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Owner</lable> 
+                <lable>Deal Owner</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -211,6 +231,30 @@ function DealsCreate() {
                   value={owner}
                   readOnly
                 />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Company Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("company")}
+                  id="company"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.company && formik.errors.company && (
+                    <p className="text-danger">{formik.errors.company}</p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -240,27 +284,80 @@ function DealsCreate() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Phone Number</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
-                    formik.touched.phone_number && formik.errors.phone_number
+                    formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("phone_number")}
-                  name="phone_number"
-                  id="phone_number"
+                  {...formik.getFieldProps("phone")}
+                  name="phone"
+                  id="phone"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.phone_number && formik.errors.phone_number && (
-                    <p className="text-danger">{formik.errors.phone_number}</p>
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-danger">{formik.errors.phone}</p>
+                  )}
+                </div>
+              </div>
+            </div> */}
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Phone</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <div className="input-group" style={{ width: "60%" }}>
+                  <div>
+                    <select
+                      {...formik.getFieldProps("country_code")}
+                      id="country_code"
+                      name="country_code"
+                      className={`form-size form-control  ${
+                        formik.touched.country_code &&
+                        formik.errors.country_code
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      style={{
+                        width: "80px",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                    >
+                      <option value="+65" selected>
+                        +65
+                      </option>
+                      <option value="+91">+91</option>
+                    </select>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("phone")}
+                    id="phone"
+                    aria-label="Text input with checkbox"
+                  />
+                </div>
+              </div>
+
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-danger">{formik.errors.phone}</p>
                   )}
                 </div>
               </div>
@@ -268,7 +365,7 @@ function DealsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable> 
+                <lable>Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
@@ -469,12 +566,9 @@ function DealsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.stage &&
-                    formik.errors.stage && (
-                      <p className="text-danger">
-                        {formik.errors.stage}
-                      </p>
-                    )}
+                  {formik.touched.stage && formik.errors.stage && (
+                    <p className="text-danger">{formik.errors.stage}</p>
+                  )}
                 </div>
               </div>
             </div>

@@ -21,9 +21,20 @@ const validationSchema = yup.object().shape({
   // contact_name: yup.string().required("*Contact name is required"),
   // account_name: yup.string().required("*Account name is required"),
   stage: yup.string().required("*Stage is required"),
-  phone_number: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Phone Number is required"),
+  country_code: yup.string().required("*Country Code is required"),
+  company: yup.string().required('Company Name is required'),
+  phone: yup.string()
+    .required('Phone number is required')
+    .test('phone-length', function (value) {
+      const { country_code } = this.parent;
+      if (country_code === '+65') {
+        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      }
+      if (country_code === '+91') {
+        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      }
+      return true; // Default validation for other country codes
+    }),
 });
 
 function DealsEdit() {
@@ -50,7 +61,8 @@ function DealsEdit() {
       closing_date: "",
       stage: "",
       probability: "",
-      phone_number: "",
+      country_code:"",
+      phone: "",
       campaign_source: "",
       lead_source: "",
       shipping_street: "",
@@ -174,7 +186,9 @@ function DealsEdit() {
           account_name: getData.accountName,
           closing_date: closingDate,
           stage: getData.stage,
-          phone_number: getData.phoneNumber,
+          companyName :getData.company,
+          country_code: getData.countryCode || "+65",
+          phone: getData.phone,
           probability: getData.probability,
           campaign_source: getData.campaignSource,
           lead_source: getData.leadSource,
@@ -271,6 +285,30 @@ function DealsEdit() {
               </div>
             </div>
 
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Company Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("company")}
+                  id="company"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.company && formik.errors.company && (
+                    <p className="text-danger">{formik.errors.company}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Amount</lable>
@@ -296,27 +334,51 @@ function DealsEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone Number</lable>
+
+
+             <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Phone</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.phone_number && formik.errors.phone_number
+                <div className="input-group" style={{ width: "60%" }}>
+                  <div>
+                    <select
+                      {...formik.getFieldProps("country_code")}
+                      id="country_code"
+                      name="country_code"
+                      className={`form-size form-control  ${formik.touched.country_code && formik.errors.country_code
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      style={{
+                        width: "80px",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                    >
+                      <option value="+65" selected>+65</option>
+                      <option value="+91">+91</option>
+                    </select>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
-                  }`}
-                  {...formik.getFieldProps("phone_number")}
-                  name="phone_number"
-                  id="phone_number"
-                />
+                      }`}
+                    {...formik.getFieldProps("phone")}
+                    id="phone"
+                    aria-label="Text input with checkbox"
+                  />
+                </div>
               </div>
+
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.phone_number && formik.errors.phone_number && (
-                    <p className="text-danger">{formik.errors.phone_number}</p>
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-danger">{formik.errors.phone}</p>
                   )}
                 </div>
               </div>
