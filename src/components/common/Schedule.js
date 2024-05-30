@@ -7,24 +7,28 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
+
 const validationSchema = Yup.object().shape({
   appointmentStartDate: Yup.string().required(
     "*Appointment start date is required"
   ),
-  // appointmentStartTime: Yup.string().required(
-  //   "*Appointment start Time is required"
-  // ),
+  timeSlotId: Yup.string().required(
+    "*Appointment start Time is required"
+  ),
 });
+
 const Schedule = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const name = searchParams.get("name");
+  const email = searchParams.get("email");
+  console.log(name, email);
   // console.log("ID:",id);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loadIndicatorca, setLoadIndicatorca] = useState(false);
   const navigate = useNavigate();
   const [appointmentStartTime, setAppointmentStartTime] = useState([]);
   // console.log("appoinment Time", appointmentStartTime);
-
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -58,8 +62,146 @@ const Schedule = () => {
           setTimeout(() => {
             window.location.href = "https://crmlah.com/"; // Redirect to the external site
           }, 2000);
-        } else {
-          toast.error("Appointment Cancel Unsuccessful.");
+
+          const mailContent = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <title>Invoice</title>
+                <style>
+                  body{
+                    background-color: #ddd;
+                  }
+                  .invoice-box {
+                    font-size: 12px;
+                    max-width: 600px;
+                    background-color: #fff;
+                    margin: auto;
+                    padding: 30px;
+                    border-bottom: 3px solid #0059ff;
+                    line-height: 24px;
+                    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+                    color: #555;
+                    min-height: 85vh;
+                  }
+
+                .invoice-box table {
+                  width: 100%;
+                  line-height: inherit;
+                  text-align: left;
+                }
+
+                .invoice-box table td {
+                  padding: 5px;
+                  vertical-align: top;
+                }
+
+                .invoice-box table td.third {
+                  text-align: right;
+                }
+
+                .invoice-box table tr.heading td {
+                  background: #eee;
+                  border-bottom: 1px solid #ddd;
+                  font-weight: bold;
+                }
+
+                .invoice-box table tr.item td {
+                  border-bottom: 1px solid #eee;
+                }
+
+                .invoice-box table tr.item.last td {
+                  border-bottom: none;
+                }
+
+                .invoice-box table tr.total td:nth-child(2) {
+                  border-top: 2px solid #eee;
+                  font-weight: bold;
+                }
+                .invoice{
+                    padding: 1rem;
+                }
+
+                #scan {
+                  float: right;
+                }
+
+                #scan img {
+                  max-width: 100%;
+                  height: auto;
+                }
+
+                @media print {
+                  .invoice-box {
+                    border: 0;
+                  }
+                }
+
+              </style>
+              </head>
+              <body >
+                <div class="invoice-box">
+                  <table>
+                    <tr class="top">
+                      <td colspan="2">
+                        <table>
+                          <tr>
+                            <td class="title">
+                              <img
+                                src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                                style="width: 75%; max-width: 180px"
+                                alt="Logo"
+                              />
+                            </td>
+                            <td class="third">
+                              <b>Date:</b> 24-01-2024<br />
+                              The Alexcier, 237 Alexandra Road,<br />
+                              #04-10, Singapore-159929.
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+
+
+                  <div class="invoice" >
+                  <h1 style="color: black;">Hi there, ${name}</h1>
+                  <p style="margin: 2rem 0 0; font-size: 1rem;">We are pleased to inform you that your appointment has been successfully rescheduled. The appointment has been rescheduled for  ${data.appointmentStartDate} at ${data.appointmentStartTime}. We hope this new schedule is convenient for you. <br />.
+                  </p>
+  
+                      <hr />
+                  
+                  <p style=" margin: 2rem 0 0;">See You Soon,</p>
+                  <h4 style=" margin: 0; ">${name}</h4>
+                  <p style=" margin: 0 ; ">ECS Cloud</p>
+                  <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
+                  <hr />
+                </div>
+                </div>
+              </body>
+              </html>`;
+
+          try {
+            const response = await axios.post(`${API_URL}sendMail`, {
+              toMail: email,
+              fromMail: email,
+              // subject: data.appointmentName,
+              subject: "Your Appointment Has Been Successfully Rescheduled",
+              htmlContent: mailContent,
+            });
+
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              // toast.success("Mail Send Successfully");
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            // toast.error("Mail Not Send");
+            console.error("Failed to send email:", error);
+          }
         }
       } catch (error) {
         if (error.response?.status === 400) {
@@ -92,7 +234,7 @@ const Schedule = () => {
     }
   };
 
-  const CancelAppointment = async () => {
+  const CancelAppointment = async (data) => {
     setLoadIndicatorca(true);
     try {
       const response = await axios.delete(`${API_URL}cancelAppointment/${id}`, {
@@ -101,11 +243,150 @@ const Schedule = () => {
         },
       });
       if (response.status === 200) {
-        handleClose()
+        handleClose();
         toast.success(response.data.message);
         setTimeout(() => {
           window.location.href = "https://crmlah.com/"; // Redirect to the external site
         }, 2000);
+
+        const mailContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <title>Invoice</title>
+          <style>
+            body{
+              background-color: #ddd;
+            }
+            .invoice-box {
+              font-size: 12px;
+              max-width: 600px;
+              background-color: #fff;
+              margin: auto;
+              padding: 30px;
+              border-bottom: 3px solid #0059ff;
+              line-height: 24px;
+              font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+              color: #555;
+              min-height: 85vh;
+            }
+
+          .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+          }
+
+          .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+          }
+
+          .invoice-box table td.third {
+            text-align: right;
+          }
+
+          .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+          }
+
+          .invoice-box table tr.item td {
+            border-bottom: 1px solid #eee;
+          }
+
+          .invoice-box table tr.item.last td {
+            border-bottom: none;
+          }
+
+          .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+          }
+          .invoice{
+              padding: 1rem;
+          }
+
+          #scan {
+            float: right;
+          }
+
+          #scan img {
+            max-width: 100%;
+            height: auto;
+          }
+
+          @media print {
+            .invoice-box {
+              border: 0;
+            }
+          }
+
+        </style>
+        </head>
+        <body >
+          <div class="invoice-box">
+            <table>
+              <tr class="top">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td class="title">
+                        <img
+                          src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                          style="width: 75%; max-width: 180px"
+                          alt="Logo"
+                        />
+                      </td>
+                      <td class="third">
+                        <b>Date:</b> 24-01-2024<br />
+                        The Alexcier, 237 Alexandra Road,<br />
+                        #04-10, Singapore-159929.
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+
+            <div class="invoice" >
+            <h1 style="color: black;">Hi there, ${name}</h1>
+            <p style="margin: 2rem 0 0; font-size: 1rem;">We regret to inform you that your scheduled appointment has been cancelled at your request. If you have any questions or need further assistance, please do not hesitate to contact us.<br />
+            </p>
+
+                <hr />
+            
+            <p style=" margin: 2rem 0 0;">See You Soon,</p>
+            <h4 style=" margin: 0; ">${name}</h4>
+            <p style=" margin: 0 ; ">ECS Cloud</p>
+            <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
+            <hr />
+          </div>
+          </div>
+        </body>
+        </html>`;
+        try {
+          const response = await axios.post(`${API_URL}sendMail`, {
+            toMail: email,
+            fromMail: email,
+            // subject: data.appointmentName,
+            subject: "Your Appointment Has Been Successfully Rescheduled",
+            htmlContent: mailContent,
+          });
+
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            // toast.success("Mail Send Successfully");
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          // toast.error("Mail Not Send");
+          // console.error("Failed to send email:", error);
+        }
       } else {
         toast.error("Appointment Cancel Unsuccessful");
       }
@@ -127,8 +408,18 @@ const Schedule = () => {
     );
   }, []);
 
+  // const getData = async () => {
+  //   try {
+  //     const response = await axios(`${API_URL}allAppointments/${id}`);
+  //     formik.setValues(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   useEffect(() => {
     fetchAppointmentTime();
+    // getData();
   }, [formik.values.appointmentStartDate]);
 
   return (
@@ -189,10 +480,11 @@ const Schedule = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                  {formik.touched.timeSlotId && formik.errors.timeSlotId && (
+                    {formik.touched.timeSlotId && formik.errors.timeSlotId && (
                     <p className="text-danger">{formik.errors.timeSlotId}</p>
                   )}
+                  </div>
+
 
                   <div className="col-12 mt-4">
                     <button
@@ -261,13 +553,15 @@ const Schedule = () => {
                       centered
                     >
                       <Modal.Header className="bg-light p-2">
-                        <Modal.Title className="fs-5">Cancel Appointment</Modal.Title>
+                        <Modal.Title className="fs-5">
+                          Cancel Appointment
+                        </Modal.Title>
                       </Modal.Header>
-                      <hr className="m-0"/>
+                      <hr className="m-0" />
                       <Modal.Body>
                         Are you sure you want to Cancel The Appoinment?
                       </Modal.Body>
-                      <hr className="m-0"/>
+                      <hr className="m-0" />
                       <Modal.Footer className="d-flex justify-content-between align-items-center">
                         <button
                           className="btn btn-sm btn-danger"
