@@ -18,6 +18,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import InvoiceModel from "./InvoiceModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -26,6 +27,7 @@ const csvConfig = mkConfig({
 });
 
 const Deals = () => {
+  const [rowId, setRowId] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
@@ -66,12 +68,28 @@ const Deals = () => {
         header: "Deal Owner",
       },
       {
+        accessorKey: "accountNumber",
+        enableHiding: false,
+        header: "Account Number",
+      },
+      {
+        accessorKey: "phone",
+        enableHiding: false,
+        header: "Phone",
+      },
+      {
+        accessorKey: "email",
+        enableHiding: false,
+        header: "Email",
+      },
+      {
         accessorKey: "amount",
         header: "Amount",
       },
       {
         accessorKey: "closingDate",
         header: "Closing Date",
+        Cell: ({ row }) => new Date(row.original.closingDate).toLocaleDateString(),
       },
       {
         accessorKey: "leadSource",
@@ -483,6 +501,13 @@ const Deals = () => {
     ),
   });
 
+  const handleAssignInvoice = async (rows) => {
+    const rowData = rows.map((row) => row.original.id);
+    setRowId(rowData);
+    // sessionStorage.setItem("invoice_id", rowData);
+    // navigate("/deals");
+  };
+
   return (
     <section>
       {loading && <LinearProgress />}
@@ -511,7 +536,7 @@ const Deals = () => {
               <ul class="dropdown-menu">
                 {role === "CRM_SUPERADMIN" ? (
                   <>
-                    {/* <li>
+                    <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -520,14 +545,12 @@ const Deals = () => {
                           !table.getIsAllRowsSelected()
                         }
                         onClick={() =>
-                          handleSendDealToInvoice(
-                            table.getSelectedRowModel().rows
-                          )
+                          handleAssignInvoice(table.getSelectedRowModel().rows)
                         }
                       >
-                        Send to Invoice
+                        <InvoiceModel  path={`associateInvoiceWithDeals/${rowId}`}/>
                       </button>
-                    </li> */}
+                    </li>
                     <li>
                       <button
                         className="btn"

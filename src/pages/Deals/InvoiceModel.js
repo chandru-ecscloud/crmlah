@@ -4,14 +4,14 @@ import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 
-const DealsModel = ({ path }) => {
+const InvoiceModel = ({ path }) => {
   console.log(path);
-  const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const [dealsdata, setDealsData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const companyId = sessionStorage.getItem("companyId");
 
   const openModal = () => {
     setIsOpen(true);
@@ -23,34 +23,29 @@ const DealsModel = ({ path }) => {
     setSelectedRows([]);
   };
 
-  const fetchDealsData = async () => {
+  const fetchInvoiceData = async () => {
     try {
-      //   setLoading(true);
-      const response = await axios(`${API_URL}allDeals`, {
+      const response = await axios(`${API_URL}allInvoicesByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
         },
       });
       setDealsData(response.data);
-      console.log("DealsData", response.data);
+      console.log("Invoice Data:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
-    fetchDealsData();
+    fetchInvoiceData();
   }, []);
 
-  const handleSendDealsToInvoice = async () => {
+  const handleDealsAssignToInvoice = async () => {
     try {
       const response = await axios.post(`${API_URL}${path}`, selectedRows, {
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
         },
       });
       if (response.status === 200) {
@@ -64,18 +59,10 @@ const DealsModel = ({ path }) => {
     }
   };
 
-  // const handleCheckboxChange = (id) => {
-  //   const isChecked = selectedRows.includes(id);
-  //   if (isChecked) {
-  //     setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
-  //   } else {
-  //     setSelectedRows([...selectedRows, id]);
-  //   }
-  // };
-
   const handleCheckboxChange = (id) => {
     setSelectedRows([id]);
   };
+
   console.log("selected", selectedRows);
 
   return (
@@ -85,7 +72,7 @@ const DealsModel = ({ path }) => {
         style={{ width: "100%", border: "none" }}
         onClick={openModal}
       >
-        Assign Deal
+        Assign Invoice
       </button>
       <Modal
         size="lg"
@@ -93,9 +80,9 @@ const DealsModel = ({ path }) => {
         onHide={closeModal}
         aria-labelledby="example-modal-sizes-title-lg"
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="Calenderview">
           <Modal.Title id="example-modal-sizes-title-lg">
-            Assign Deal
+            Assign Invoice
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -112,16 +99,16 @@ const DealsModel = ({ path }) => {
                       className=" table-dark "
                     >
                       <th scope="col">Select</th>
-                      <th scope="col">Deal Name</th>
-                      <th scope="col">Account Name</th>
-                      <th scope="col">Contact Name</th>
-                      <th scope="col">Deal Owner</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Invoice Date</th>
+                      <th scope="col">Invoice Owner</th>
                     </tr>
                   </thead>
                   <tbody>
                     {dealsdata.map((item, index) => (
                       <tr className="" key={item.id}>
-                        <td>
+                         <td>
                           <input
                             type="radio"
                             className="form-check-input"
@@ -129,10 +116,10 @@ const DealsModel = ({ path }) => {
                             onChange={() => handleCheckboxChange(item.id)}
                           />
                         </td>
-                        <td>{item.dealName}</td>
-                        <td>{item.accountName}</td>
-                        <td>{item.contactName}</td>
-                        <td>{item.dealOwner}</td>
+                        <td>{item.subject}</td>
+                        <td>{item.status}</td>
+                        <td>{new Date(item.invoiceDate).toISOString().substring(0, 10)}</td>
+                        <td>{item.invoiceOwner}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -145,7 +132,7 @@ const DealsModel = ({ path }) => {
                 <button
                   className="btn btn-primary "
                   type="button"
-                  onClick={() => handleSendDealsToInvoice(selectedRows)}
+                  onClick={() => handleDealsAssignToInvoice(selectedRows)}
                 >
                   Assign
                 </button>
@@ -158,4 +145,4 @@ const DealsModel = ({ path }) => {
   );
 };
 
-export default DealsModel;
+export default InvoiceModel;

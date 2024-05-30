@@ -51,32 +51,6 @@ function SendQuotes({ accountData }) {
       }
     },
   });
-  // onSubmit: async (data) => {
-  //   console.log("Invoice:", subject);
-  //   setSubject(data.subject)
-  //   try {
-  //     const response = await axios.post(`${API_URL}sendMail`, {
-  //       toMail: accountData.email,
-  //       fromMail: userEmail,
-  //       subject: subject,
-  //       // htmlContent: generateInvoice(accountData.quotes),
-  //       htmlContent: htmlContent,
-  //       // contentType: "text/html",
-  //     });
-
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message);
-  //       toast.success("Mail Send Successfully");
-  //       handleHide();
-  //       setIsSendingEmail(false);
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // },
-  // });
 
   const handleShow = () => setShow(true);
 
@@ -314,8 +288,6 @@ function SendQuotes({ accountData }) {
         </body>
       </html>
     `;
-    // setHtmlContent(invoiceHTML);
-    // setIsSendingEmail(true);
   };
 
   return (
