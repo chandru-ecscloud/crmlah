@@ -393,8 +393,8 @@ function ContactsLead() {
                       ? "is-invalid"
                       : ""
                     }`}
-                  {...formik.getFieldProps("company_name")}
-                  id="company_name"
+                  {...formik.getFieldProps("company")}
+                  id="company"
                 />
               </div>
               <div className="row sm-device">

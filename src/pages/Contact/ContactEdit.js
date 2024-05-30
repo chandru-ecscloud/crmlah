@@ -69,6 +69,7 @@ function ContactEdit() {
       last_name: "",
       email: "",
       phone: "",
+      company: "",
       country_code: "",
       account_name: "",
       vendor_name: "",
@@ -130,6 +131,8 @@ function ContactEdit() {
           first_name: getData.firstName,
           last_name: getData.lastName,
           email: getData.email,
+          company: getData.companyName,
+          amount: getData.amount || "",
           country_code: getData.countryCode || "+65",
           phone: getData.phone,
           account_name: getData.accountName,
@@ -441,8 +444,8 @@ function ContactEdit() {
                       ? "is-invalid"
                       : ""
                     }`}
-                  {...formik.getFieldProps("company_name")}
-                  id="company_name"
+                  {...formik.getFieldProps("company")}
+                  id="company"
                 />
               </div>
               <div className="row sm-device">
