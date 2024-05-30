@@ -233,19 +233,20 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
 
                     <div class="invoice" >
-                      <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
-                      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
-                        ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
+                      <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
+                      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+                        ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Kolkata GMT +05:30).
                       </p>
 
                       <h3 style="margin-bottom: 0;">you can join:</h3>
                       <h4 style="margin:0 ;">${linkResponse.data.message}</h4>
 
+
                       <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
+                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}">Reschedule or Cancel</a> Your Appointment</p>       
                       <hr />
                       <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                      <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
+                      <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
                       <p style=" margin: 0 ; ">ECS Cloud</p>
                       <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                       <hr />
@@ -380,20 +381,20 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
 
                 <div class="invoice" >
-                  <h1 style="color: black;">Hi there, ${data.appointmentFor}</h1>
-                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
-                    ${data.appointmentStartDate} at ${data.timeSlotId} <br />(Asia/Kolkata GMT +05:30).
+                  <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
+                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
+                    ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Kolkata GMT +05:30).
                   </p>
 
                   <h3 style="margin-bottom: 0;">Location details:</h3>
                   <h4 style="margin:0 ;">${data.state}</h4>
 
                   <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}">Reschedule or Cancel</a> Your Appointment</p>     
+                      >You Can Still <span><a href="http://localhost:3000/CrmAppoinmentReschedule?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}">Reschedule or Cancel</a> Your Appointment</p>     
                       <hr />
                   
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                  <h4 style=" margin: 0; ">${data.appointmentFor}</h4>
+                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
                   <p style=" margin: 0 ; ">ECS Cloud</p>
                   <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                   <hr />
@@ -514,6 +515,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
   useEffect(() => {
     fetchServiceData();
     fetchLeadData();
+    formik.setFieldValue(
+      "appointmentStartDate",
+      new Date().toISOString().split("T")[0]
+    );
   }, []);
 
   useEffect(() => {
@@ -824,7 +829,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                  
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
+                      <label htmlFor="leadowner">Location</label><span className=" text-danger">*</span>&nbsp;&nbsp;
                       <select
                         id="location"
                         //className="form-size form-select"

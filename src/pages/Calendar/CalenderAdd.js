@@ -241,9 +241,9 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       </tr>
                     </table>
                     <div class="invoice">
-                      <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
+                      <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
                       <p style="margin: 2rem 0 0;">
-                        You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.timeSlotId}
+                        You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.appointmentStartTime}
                         <br />(Asia/Kolkata GMT +05:30).
                       </p>
                       <h3 style="margin-bottom: 0;">You can join:</h3>
@@ -356,9 +356,9 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   </tr>
                 </table>
                 <div class="invoice">
-                  <h1 style="color: black;">Hi there, ${data.appointmentOwner}</h1>
+                  <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
                   <p style="margin: 2rem 0 0;">
-                    You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.timeSlotId}
+                    You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.appointmentStartTime}
                     <br />(Asia/Kolkata GMT +05:30).
                   </p>
                   <h3 style="margin-bottom: 0;">Location details:</h3>
