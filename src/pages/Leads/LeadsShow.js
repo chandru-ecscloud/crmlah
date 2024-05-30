@@ -257,6 +257,13 @@ function LeadsShow() {
               </div>
 
               <div>
+                <label className="text-dark Label">Amount</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{clientData.amount || ""}
+                </span>
+              </div>
+
+              <div>
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.country || ""}

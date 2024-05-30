@@ -115,6 +115,7 @@ function LeadsEdit() {
           country_code: getData.countryCode || "+65",
           phone: getData.phone,
           email: getData.email,
+          amount:getData.amount || "",
           landLine: getData.land_line || "",
           lead_source: getData.lead_source,
           lead_status: getData.lead_status,
