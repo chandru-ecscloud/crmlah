@@ -66,11 +66,7 @@ const Accounts = () => {
           </span>
         ),
       },
-      {
-        accessorKey: "parentAccount",
-        enableHiding: false,
-        header: "Parent Account",
-      },
+      
 
       {
         accessorKey: "shippingStreet",
@@ -115,6 +111,11 @@ const Accounts = () => {
         header: "Billing Code",
       },
       {
+        accessorKey: "parentAccount",
+        // enableHiding: true,
+        header: "Parent Account",
+      },
+      {
         accessorKey: "billingCountry",
         header: "Billing Country",
       },
@@ -128,6 +129,7 @@ const Accounts = () => {
         header: "Updated At",
         Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
       },
+   
       // {
       //   accessorKey: "id",
       //   enableHiding: false,
@@ -431,6 +433,7 @@ const Accounts = () => {
         billingState: false,
         billingCode: false,
         billingCountry: false,
+        parentAccount:false,
       },
     },
     enableRowSelection: true,

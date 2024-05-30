@@ -11,12 +11,12 @@ import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string().required("*First Name is required"),
-  last_name: Yup.string().required("*Last Name is required"),
+  firstName: Yup.string().required("*First Name is required"),
+  lastName: Yup.string().required("*Last Name is required"),
   // account_name: Yup.string().required("Account Name is required"),
   amount: Yup.number()
-    .typeError('Amount must be a number')
-    .integer('Amount must be an integer'),
+    .typeError('amount must be a number')
+    .integer('amount must be an integer'),
   shipping_code: Yup.number()
     .typeError('Shipping code must be a number')
     .integer('Shipping code must be an integer'),
@@ -60,12 +60,13 @@ function AccountsEdit() {
       company_id: companyId,
       account_owner: owner,
       account_name: "",
-      first_name: "",
-      last_name: "",
+      firstName: "",
+      lastName: "",
       country_code: "+65",
       phone: "",
       company: "",
       email: "",
+      amount:"",
       parent_account: "",
       account_number: "",
       account_type: "",
@@ -147,13 +148,14 @@ function AccountsEdit() {
         const payload = {
           company_id: companyId,
           account_owner: getData.accountOwner || owner,
-          first_name: getData.first_name,
+          firstName: getData.firstName,
           company: getData.companyName,
-          last_name: getData.last_name,
+          lastName: getData.lastName,
           account_name: getData.accountName,
           country_code: getData.countryCode  || "+65",
           phone: getData.phone,
           email: getData.email,
+          amount:getData.amount,
           parent_account: getData.parentAccount,
           account_number: getData.accountNumber,
           account_type: getData.accountType,
@@ -161,8 +163,8 @@ function AccountsEdit() {
           billing_street: getData.billingStreet,
           shipping_city: getData.shippingCity,
           billing_city: getData.billingCity,
-          shipping_code: getData.shippingCode,
-          billing_code: getData.billingCode,
+          shipping_code: getData.shippingCode || "",
+          billing_code: getData.billingCode || "",
           shipping_state: getData.shippingState,
           billing_state: getData.billingState,
           shipping_country: getData.shippingCountry,
@@ -300,18 +302,18 @@ function AccountsEdit() {
                 <lable>First Name</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("first_name")}
+                  {...formik.getFieldProps("firstName")}
                   type="text"
                   className="form-size form-control"
-                  id="first_name"
-                  name="first_name"
+                  id="firstName"
+                  name="firstName"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.first_name && formik.errors.first_name && (
-                    <div className="text-danger ">{formik.errors.first_name}</div>
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <div className="text-danger ">{formik.errors.firstName}</div>
                   )}
                 </div>
               </div>
@@ -321,18 +323,18 @@ function AccountsEdit() {
                 <lable>Last Name</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("last_name")}
+                  {...formik.getFieldProps("lastName")}
                   type="text"
                   className="form-size form-control"
-                  id="last_name"
-                  name="last_name"
+                  id="lastName"
+                  name="lastName"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.last_name && formik.errors.last_name && (
-                    <div className="text-danger ">{formik.errors.last_name}</div>
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <div className="text-danger ">{formik.errors.lastName}</div>
                   )}
                 </div>
               </div>
