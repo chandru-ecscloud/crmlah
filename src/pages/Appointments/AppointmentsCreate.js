@@ -37,12 +37,13 @@ function AppointmentsCreate({ name, schedule, getData }) {
     additionalInformation: Yup.string().required("*Description is required"),
   });
 
+  const currentData =  new Date().toISOString().split("T")[0];
   const formik = useFormik({
     initialValues: {
       // serviceId: "",
       email: "",
       // serviceName: "",
-      appointmentStartDate: "",
+      appointmentStartDate: currentData,
       timeSlotId: "",
       // duration: "",
       appointmentName: "",
@@ -453,7 +454,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     setShow(true);
     formik.setFieldValue(
       "appointmentStartDate",
-      new Date().toISOString().split("T")[0]
+      currentData
     );
     console.log("scheduleDataM", schedule);
 
@@ -517,9 +518,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
     fetchLeadData();
     formik.setFieldValue(
       "appointmentStartDate",
-      new Date().toISOString().split("T")[0]
+      currentData
     );
-  }, []);
+  }, [show]);
+  
 
   useEffect(() => {
     fetchAppointmentTime();
