@@ -260,32 +260,30 @@ function InvoiceShow() {
       ],
     });
 
-    // Add Company Footer Information
-    const finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    doc.text("Notes", 13, finalY);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(
-      `${invoiceData.description}`,
-      13,
-      finalY + 5
-    );
-    doc.text("Bank Details:", 13, finalY + 12);
-    doc.text("Account No : 1000010001", 13, finalY + 17);
-    doc.text("IFSC Code: MJ21397", 13, finalY + 22);
+       // Add Company Footer Information
+       const finalY = doc.lastAutoTable.finalY + 10;
 
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    doc.text("Terms & Conditions", 13, finalY + 30);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(
-      `${invoiceData.termsAndConditions}`,
-      13,
-      finalY + 24
-    );
+       // Wrap the Notes text
+       doc.setFontSize(12);
+       doc.setFont("helvetica", "normal");
+       doc.text("Notes", 13, finalY);
+   
+       doc.setFontSize(10);
+       doc.setFont("helvetica", "normal");
+       const notesText = doc.splitTextToSize(`${invoiceData.description}`, 180); // 180 is the width
+       doc.text(notesText, 13, finalY + 6);
+   
+       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
+   
+       // Wrap the Terms & Conditions text
+       doc.setFontSize(12);
+       doc.setFont("helvetica", "normal");
+       doc.text("Terms & Conditions", 13, nextY);
+   
+       doc.setFontSize(10);
+       doc.setFont("helvetica", "normal");
+       const termsText = doc.splitTextToSize(`${invoiceData.termsAndConditions}`,180); // 180 is the width
+       doc.text(termsText, 13, nextY + 6);
 
     // Save the PDF
     if (action === "download") {

@@ -56,7 +56,7 @@ function SendQuotes({ accountData }) {
           },
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success("Mail sent successfully");
           handleHide();
         } else {

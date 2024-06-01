@@ -116,7 +116,6 @@ function QuotesShow() {
   const handleEdit = () => {
     navigate(`/quotes/edit/${id}`);
   };
- 
 
   // const generatePDF = (action = "open", CompanyLogo) => {
   //   const docDefinition = {
@@ -151,7 +150,7 @@ function QuotesShow() {
   //             {
   //               text: `ECS Cloud Infotech pte ltd
   //                The Alexcier,
-  //                237 Alexandra Road, 
+  //                237 Alexandra Road,
   //                #04-10, Singapore-159929.`,
   //             },
   //           ],
@@ -398,176 +397,178 @@ function QuotesShow() {
   //   }
   // };
 
-    //  PDF Generate
-    
-    const generatePDF = (action = "download") => {
-      const doc = new jsPDF();
-      doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
-  
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(28);
-      doc.text("QUOTES", 155, 22);
-  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
-  
-      doc.setFont("helvetica", "small");
-      doc.setFontSize(10);
-      doc.text("The Alexcier", 13, 35);
-      doc.text("237 Alexandra Road #04-10", 13, 40);
-      doc.text("Singapore 159929", 13, 45);
-      doc.text("Singapore", 13, 50);
-  
-      doc.setFontSize(11);
-       doc.setFont("helvetica", "bold");
-      doc.text("Bill To", 13, 65);
-      // doc.setFontSize(10);
-      // doc.setFont("helvetica", "bold");
-      // doc.text("Manoj Prabhakar", 13, 65);
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "small");
-      doc.text(`${quoteData.billingStreet}`, 13, 70);
-      doc.text(`${quoteData.billingCity}`, 13, 75);
-      doc.text(`${quoteData.billingCode}`, 13, 80);
-      doc.text(`${quoteData.billingCountry}`, 13, 85);
-  
-      doc.text("Subject :", 13, 95);
-      doc.text(`${quoteData.subject}`, 13, 100);
-  
-      // Add the table
-      const tableData =
-        quoteData.quotesItemList &&
-        quoteData.quotesItemList.map((invoiceItem, index) => [
-          index + 1,
-          invoiceItem.productName,
-          invoiceItem.quantity,
-          invoiceItem.listPrice,
-          invoiceItem.amount,
-          invoiceItem.discount,
-          invoiceItem.tax,
-          invoiceItem.total,
-        ]);
-      doc.autoTable({
-        startY: 110,
-        headStyles: {
-          fillColor: [50, 50, 50],
-          textColor: [255, 255, 255],
-          fontStyle: "normal",
-        },
-        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-        head: [
-          [
-            "S.No",
-            "Product Name",
-            "Quantity",
-            "Price",
-            "Amount",
-            "Discount",
-            "Tax",
-            "Total",
-          ],
+  //  PDF Generate
+
+  const generatePDF = (action = "download") => {
+    const doc = new jsPDF();
+    doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(28);
+    doc.text("ESTIMATE", 155, 22);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
+
+    doc.setFont("helvetica", "small");
+    doc.setFontSize(10);
+    doc.text("The Alexcier", 13, 35);
+    doc.text("237 Alexandra Road #04-10", 13, 40);
+    doc.text("Singapore 159929", 13, 45);
+    doc.text("Singapore", 13, 50);
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("Bill To", 13, 65);
+    // doc.setFontSize(10);
+    // doc.setFont("helvetica", "bold");
+    // doc.text("Manoj Prabhakar", 13, 65);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "small");
+    doc.text(`${quoteData.billingStreet}`, 13, 70);
+    doc.text(`${quoteData.billingCity}`, 13, 75);
+    doc.text(`${quoteData.billingCode}`, 13, 80);
+    doc.text(`${quoteData.billingCountry}`, 13, 85);
+
+    doc.text("Subject :", 13, 95);
+    doc.text(`${quoteData.subject}`, 13, 100);
+
+    // Add the table
+    const tableData =
+      quoteData.quotesItemList &&
+      quoteData.quotesItemList.map((invoiceItem, index) => [
+        index + 1,
+        invoiceItem.productName,
+        invoiceItem.quantity,
+        invoiceItem.listPrice,
+        invoiceItem.amount,
+        invoiceItem.discount,
+        invoiceItem.tax,
+        invoiceItem.total,
+      ]);
+    doc.autoTable({
+      startY: 110,
+      headStyles: {
+        fillColor: [50, 50, 50],
+        textColor: [255, 255, 255],
+        fontStyle: "normal",
+      },
+      bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+      head: [
+        [
+          "S.No",
+          "Product Name",
+          "Quantity",
+          "Price",
+          "Amount",
+          "Discount",
+          "Tax",
+          "Total",
         ],
-        body: tableData,
-        footStyles: {
-          fillColor: [255, 255, 255],
-          textColor: [0, 0, 0],
-          fontStyle: "normal",
-        },
-        body: tableData,
-        foot: [
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Sub Total(SGT)",
-            `: ${quoteData.subTotal || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Discount(%)",
-            `: ${quoteData.txnDiscount || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Tax(%)",
-            `: ${quoteData.txnTax || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Grand Total(SGT)",
-            `: ${quoteData.grandTotal || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
+      ],
+      body: tableData,
+      footStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: "normal",
+      },
+      body: tableData,
+      foot: [
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Sub Total(SGT)",
+          `: ${quoteData.subTotal || "--"}`,
+          "",
+          "",
+          "",
+          "",
         ],
-      });
-  
-      // Add Company Footer Information
-      const finalY = doc.lastAutoTable.finalY + 10;
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "normal");
-      doc.text("Notes", 13, finalY);
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.text(
-        `${quoteData.description}`,
-        13,
-        finalY + 5
-      );
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "normal");
-      doc.text("Terms & Conditions", 13, finalY + 17);
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.text(
-        `${quoteData.termsAndConditions}`,
-        13,
-        finalY + 24
-      );
-  
-      // Save the PDF
-      if (action === "download") {
-        doc.save("quotes.pdf");
-      } else if (action === "print") {
-        doc.autoPrint();
-        window.open(doc.output("bloburl"), "_blank");
-      } else if (action === "open") {
-        window.open(doc.output("bloburl"), "_blank");
-      }
-    };
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Discount(%)",
+          `: ${quoteData.txnDiscount || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Tax(%)",
+          `: ${quoteData.txnTax || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Grand Total(SGT)",
+          `: ${quoteData.grandTotal || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+      ],
+    });
+
+    // Add Company Footer Information
+    const finalY = doc.lastAutoTable.finalY + 10;
+
+    // Wrap the Notes text
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("Notes", 13, finalY);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const notesText = doc.splitTextToSize(`${quoteData.description}`, 180); // 180 is the width
+    doc.text(notesText, 13, finalY + 6);
+
+    const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
+
+    // Wrap the Terms & Conditions text
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("Terms & Conditions", 13, nextY);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const termsText = doc.splitTextToSize(`${quoteData.termsAndConditions}`,180); // 180 is the width
+    doc.text(termsText, 13, nextY + 6);
+
+    // Save the PDF
+    if (action === "download") {
+      doc.save("quotes.pdf");
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    } else if (action === "open") {
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  };
 
   return (
     <>
@@ -797,13 +798,15 @@ function QuotesShow() {
               <div>
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.createdAt ?quoteData.createdAt.split("T")[0]: ""}
+                  &nbsp; : &nbsp;
+                  {quoteData.createdAt ? quoteData.createdAt.split("T")[0] : ""}
                 </span>
               </div>
               <div>
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.updatedAt ?quoteData.updatedAt.split("T")[0]: ""}
+                  &nbsp; : &nbsp;
+                  {quoteData.updatedAt ? quoteData.updatedAt.split("T")[0] : ""}
                 </span>
               </div>
             </div>
@@ -954,7 +957,7 @@ function QuotesShow() {
                         </thead>
                         {/* Table body */}
                         <tbody>
-                          {quoteData?.quotesItemList.map((product, index) =>(
+                          {quoteData?.quotesItemList.map((product, index) => (
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
@@ -1031,13 +1034,11 @@ function QuotesShow() {
                       <div className="container-fluid py-2">
                         <div className="row">
                           <div className="col-md-8 col-12">
-                            
                             <label className="text-dark ">
                               Grand Total(SGT)
                             </label>
                           </div>
                           <div className="col-md-4 col-12">
-                           
                             <span>: {quoteData.grandTotal || "0"}.00</span>
                           </div>
                         </div>
