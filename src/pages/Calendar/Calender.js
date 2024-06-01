@@ -825,6 +825,7 @@ function Calendar() {
         setShowViewModal={setShowViewModal}
         setShowEditModal={setShowEditModal}
         setShowDeleteModal={setShowDeleteModal}
+        getData={fetchData}
       />
 
       {/* Delete Event Modal */}

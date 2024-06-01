@@ -25,7 +25,7 @@ const menuItems = [
   // { to: "/meeting", label: "meeting" },
   // { to: "/report", label: "report" },
   // { to: "/task", label: "task" },
-  { to: "/calendar", label: "Calender" },
+  { to: "/calendar", label: "Calendar" },
   // { to: "/projects", label: "projects" },
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },

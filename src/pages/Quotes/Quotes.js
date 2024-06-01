@@ -65,16 +65,20 @@ const Quotes = () => {
         header: "Quotes Owner",
       },
       {
-        accessorKey: "createdAt",
-        enableHiding: false,
+        accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+        Cell: ({ row }) => row.original.createdAt.substring(0, 10),
       },
       {
-        accessorKey: "updatedAt",
-        enableHiding: false,
+        accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.updatedAt) {
+            return row.original.updatedAt.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
       {
         accessorKey: "product",
@@ -528,6 +532,12 @@ const Quotes = () => {
         </OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/quotes/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   return (

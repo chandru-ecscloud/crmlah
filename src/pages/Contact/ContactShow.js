@@ -89,7 +89,7 @@ function ContactShow() {
             </OverlayTrigger>
           )}
           <Appointment
-            name={"schedule"}
+            name={"Schedule"}
             schedule={scheduleData}
             getData={userData}
           />
@@ -186,7 +186,7 @@ function ContactShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp;+{contactData.countryCode || ""}&nbsp;
                   {contactData.phone || ""}
                 </span>
               </div>

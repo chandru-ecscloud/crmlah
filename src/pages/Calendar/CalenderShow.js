@@ -15,6 +15,7 @@ function CalenderShow({
   setShowDeleteModal,
   showEditModal,
   setShowEditModal,
+  getData
 }) {
   //   const { id } = useParams();
   const [clientData, setClientData] = useState({});
@@ -70,6 +71,7 @@ function CalenderShow({
             setShowEditModal={setShowEditModal}
             setShowViewModal={setShowViewModal}
             showEditModal={showEditModal}
+            getData={getData}
           />
           <button className="btn text-light">
             <MdDelete size={20} onClick={handleDeleteClick} />
@@ -208,7 +210,7 @@ function CalenderShow({
                 <div className="col-6">
                   <b>Description</b>
                 </div>
-                <div className="col-6">: {clientData.description}</div>
+                <div className="col-6">: {clientData.additionalInformation}</div>
               </div>
             </div>
             <div className="col-md-6  col-12 my-2">

@@ -469,7 +469,7 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Pnone Number</lable> &nbsp;&nbsp;
+                      <lable>Phone Number</lable> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -521,7 +521,7 @@ function AppointmentsCreate({ name, id, getData }) {
                       </div>
                     </div>
                   </div> */}
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>
                       &nbsp;&nbsp;
@@ -553,7 +553,7 @@ function AppointmentsCreate({ name, id, getData }) {
                           )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

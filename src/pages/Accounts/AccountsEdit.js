@@ -382,8 +382,8 @@ function AccountsEdit() {
                       name="country_code"
                       id="country_code"
                     >
-                      <option value="+65">+65</option>
-                      <option value="+91">+91</option>
+                      <option value="65">+65</option>
+                      <option value="91">+91</option>
                     </select>
                   </div>
                   <input
@@ -521,7 +521,7 @@ function AccountsEdit() {
               </div>
             </div> */}
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Number</lable> &nbsp;&nbsp;
                 <input
@@ -543,7 +543,7 @@ function AccountsEdit() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* <div className="col-lg-6 col-md-6 col-12">
               <div className="d-flex align-items-center justify-content-end mb-3 sm-device">
