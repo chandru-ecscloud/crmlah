@@ -38,6 +38,12 @@ function LeadsShow() {
     id: id,
     appointmentName: clientData.first_name,
     email: clientData.email,
+    phone:clientData.phone,
+    city: clientData.city,
+    state:clientData.state,
+    street:clientData.street,
+    zipCode:clientData.zipCode,
+    country:clientData.country
   };
 
   const userData = async () => {

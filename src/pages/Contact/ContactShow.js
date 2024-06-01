@@ -21,6 +21,12 @@ function ContactShow() {
     id: id,
     appointmentName: contactData.firstName,
     email: contactData.email,
+    phone:contactData.phone,
+    city: contactData.city,
+    state:contactData.state,
+    street:contactData.street,
+    zipCode:contactData.zipCode,
+    country:contactData.country
   };
 
   // console.log("scheduleData",scheduleData)

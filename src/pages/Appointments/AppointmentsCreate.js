@@ -50,7 +50,7 @@ console.log("object",schedule)
       appointmentName: "",
       location: "",
       // member: "",
-      phoneNumber: schedule.phone,
+      phoneNumber: "",
       street: "",
       city: "",
       state: "",
@@ -522,12 +522,15 @@ console.log("object",schedule)
       "appointmentStartDate",
       currentData
     );
+
+    if(name==="Schedule"){
     formik.setFieldValue("phoneNumber",schedule.phone)
     formik.setFieldValue("street",schedule.street )
     formik.setFieldValue("city",schedule.city )
     formik.setFieldValue("state",schedule.state )
     formik.setFieldValue("zipCode",schedule.zipCode )
     formik.setFieldValue("country",schedule.country )
+    }
   }, [show]);
   
 

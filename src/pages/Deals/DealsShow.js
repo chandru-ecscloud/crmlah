@@ -26,6 +26,12 @@ function DealsShow() {
     id: id,
     appointmentName: dealData.dealName,
     email: dealData.email,
+    phone:dealData.phone,
+    city: dealData.city,
+    state:dealData.state,
+    street:dealData.street,
+    zipCode:dealData.zipCode,
+    country:dealData.country
   };
 
   const userData = async () => {

@@ -37,6 +37,12 @@ function AccountsShow() {
     id: id,
     appointmentName: accountData.accountName,
     email: accountData.email,
+    phone:accountData.phone,
+    city: accountData.city,
+    state:accountData.state,
+    street:accountData.street,
+    zipCode:accountData.zipCode,
+    country:accountData.country
   };
   const userData = async () => {
     try {
@@ -98,10 +104,10 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <Activity />
+          <Activity id={id}/>
           <SendQuotes accountData={accountData} />
           <Appointment
-            name={"schedule"}
+            name={"Schedule"}
             schedule={scheduleData}
             getData={userData}
           />
