@@ -132,7 +132,7 @@ function LeadsShow() {
             Send Email
           </button> */}
           <Appointment
-            name={"schedule"}
+            name={"Schedule"}
             schedule={scheduleData}
             getData={userData}
           />
@@ -230,7 +230,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp;+{clientData.countryCode || ""}&nbsp;
                   {clientData.phone || "--"}
                 </span>
               </div>

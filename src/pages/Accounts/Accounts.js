@@ -31,6 +31,7 @@ const Accounts = () => {
 
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
+  const accountId = sessionStorage.getItem("accountId");
   const navigate = useNavigate();
 
   const columns = useMemo(
@@ -66,7 +67,7 @@ const Accounts = () => {
           </span>
         ),
       },
-      
+
 
       {
         accessorKey: "shippingStreet",
@@ -120,16 +121,22 @@ const Accounts = () => {
         header: "Billing Country",
       },
       {
-        accessorKey: "createdAt",
+        accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+        Cell: ({ row }) => row.original.createdAt.substring(0, 10),
       },
       {
-        accessorKey: "updatedAt",
+        accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.updatedAt) {
+            return row.original.updatedAt.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
-   
+
       // {
       //   accessorKey: "id",
       //   enableHiding: false,
@@ -289,12 +296,12 @@ const Accounts = () => {
     const tableHeaders4 = [
       "Created At",
       "Updated At",
-      ];
+    ];
     const tableData4 = rows.map((row) => {
       return [
         row.original.createdAt,
         row.original.updatedAt,
-        
+
       ];
     });
     autoTable(doc, {
@@ -361,8 +368,41 @@ const Accounts = () => {
     } catch (error) {
       toast.error("Failed: " + error.message);
     }
+    
     fetchData();
   };
+
+
+  const handleAccountConvert = async (rows) => {
+    rows.forEach((row) => {
+      row.original.account_id = accountId;
+    });
+
+    const rowData = rows.map((row) => row.original);
+    const rowDataid = rows.map((row) => row.original.id).toString();
+  try {
+    const response = await axios.post(
+      `${API_URL}accountToDealConvert/${rowDataid}`,
+      rowData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      toast.success(response.data.message);
+      navigate("/accounts");
+      table.setRowSelection(false);
+    } else {
+      toast.error(response.data.message);
+    }
+  } catch (error) {
+    toast.error("Failed: " + error.message);
+  }
+  fetchData();
+}
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -433,7 +473,7 @@ const Accounts = () => {
         billingState: false,
         billingCode: false,
         billingCountry: false,
-        parentAccount:false,
+        parentAccount: false,
       },
     },
     enableRowSelection: true,
@@ -490,6 +530,12 @@ const Accounts = () => {
         </OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/accounts/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
   useEffect(() => {
     fetchData();
@@ -554,7 +600,7 @@ const Accounts = () => {
                           ) || table.getSelectedRowModel().rows.length !== 1
                         }
                         onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
+                          handleAccountConvert(table.getSelectedRowModel().rows)
                         }
                       >
                         Convert Deal

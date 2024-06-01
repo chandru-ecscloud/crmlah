@@ -135,18 +135,30 @@ const Contacts = () => {
         header: "Description",
       },
       {
-        accessorKey: "createdAt",
+        accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+        Cell: ({ row }) =>{ 
+        if (row.original.createdAt) {
+          return row.original.createdAt.substring(0, 10);
+        } else {
+          return "";
+        }
+      },
       },
       {
         accessorKey: "createdBy",
         header: "Created By",
       },
       {
-        accessorKey: "updatedAt",
+        accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.updatedAt) {
+            return row.original.updatedAt.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
       {
         accessorKey: "updatedBy",
@@ -500,6 +512,12 @@ const Contacts = () => {
           </button></OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/contacts/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   return (

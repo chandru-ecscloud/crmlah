@@ -152,14 +152,20 @@ const Deals = () => {
         header: "Description",
       },
       {
-        accessorKey: "createdAt",
+        accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+        Cell: ({ row }) => row.original.createdAt.substring(0, 10),
       },
       {
-        accessorKey: "updatedAt",
+        accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ row }) => new Date(row.original.updatedAt).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.updatedAt) {
+            return row.original.updatedAt.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
     ],
     []
@@ -499,6 +505,12 @@ const Deals = () => {
           </button></OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/deals/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   const handleAssignInvoice = async (rows) => {
