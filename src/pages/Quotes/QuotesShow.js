@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link, useNavigate } from "react-router-dom";
-// import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
-import CompanyLogo from "../../assets/Logo.png";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import SendEmail from "../Email/SendEmail";
+import CompanyLogo from "../../assets/CMPLogoNew.png";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function QuotesShow() {
   const { id } = useParams();
@@ -67,9 +67,6 @@ function QuotesShow() {
     ));
   };
 
-  // const [clientData, setClientData] = useState({});
-  // const navigate = useNavigate();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -120,286 +117,457 @@ function QuotesShow() {
     navigate(`/quotes/edit/${id}`);
   };
  
-  // console.log("CompanyLogo:", CompanyLogo);
-  const generatePDF = (action = "open", CompanyLogo) => {
-    const docDefinition = {
-      header: {
-        canvas: [
-          {
-            image: CompanyLogo,
-          },
-          {
-            type: "rect",
-            x: 0,
-            y: 0,
-            w: 850, // landscape
-            h: 120,
-          },
+
+  // const generatePDF = (action = "open", CompanyLogo) => {
+  //   const docDefinition = {
+  //     header: {
+  //       canvas: [
+  //         {
+  //           image: CompanyLogo,
+  //         },
+  //         {
+  //           type: "rect",
+  //           x: 0,
+  //           y: 0,
+  //           w: 850, // landscape
+  //           h: 120,
+  //         },
+  //       ],
+  //     },
+
+  //     content: [
+  //       {
+  //         text: "TAX INVOICE",
+  //         fontSize: 25,
+  //         alignment: "center",
+  //         color: "#000000",
+  //         bold: true,
+  //         margin: [0, 0, 0, 20],
+  //       },
+
+  //       {
+  //         columns: [
+  //           [
+  //             {
+  //               text: `ECS Cloud Infotech pte ltd
+  //                The Alexcier,
+  //                237 Alexandra Road, 
+  //                #04-10, Singapore-159929.`,
+  //             },
+  //           ],
+  //           [
+  //             {
+  //               text: `Date: ${new Date().toLocaleDateString()}`,
+  //               alignment: "right",
+  //             },
+  //             {
+  //               text: `Time: ${new Date().toLocaleTimeString([], {
+  //                 hour: "2-digit",
+  //                 minute: "2-digit",
+  //               })}`,
+  //               alignment: "right",
+  //             },
+  //           ],
+  //         ],
+  //       },
+
+  //       // 1, Invoice Information
+  //       {
+  //         text: "Invoice Information",
+  //         style: "sectionHeader",
+  //       },
+  //       {
+  //         columns: [
+  //           [
+  //             { text: `Quotes Owner ` },
+  //             { text: `Subject ` },
+  //             { text: `Valid Until ` },
+  //             { text: `Quotes Stage ` },
+  //             { text: `Deal Name ` },
+  //             { text: `Account Name ` },
+  //             { text: `Status ` },
+  //           ],
+
+  //           [
+  //             { text: `: ${quoteData.quoteOwner || "--"}`, bold: true },
+  //             { text: `: ${quoteData.subject || "--"}` },
+  //             { text: `: ${quoteData.validUntil || "--"}` },
+  //             { text: `: ${quoteData.quoteStage || "--"}` },
+  //             { text: `: ${quoteData.dealName || "--"}` },
+  //             { text: `: ${quoteData.accountName || "--"}` },
+  //             { text: `: ${quoteData.status || "--"}` },
+  //           ],
+  //         ],
+  //       },
+
+  //       // 2, Address Information
+  //       {
+  //         text: "Address Information",
+  //         style: "sectionHeader",
+  //       },
+
+  //       {
+  //         text: "Billing Details",
+  //         bold: true,
+  //         style: "sectionHeader",
+  //       },
+
+  //       {
+  //         columns: [
+  //           [
+  //             { text: `Billing Street ` },
+  //             { text: `Billing City ` },
+  //             { text: `Billing State ` },
+  //             { text: `Billing Code ` },
+  //             { text: `Billing Country ` },
+  //           ],
+
+  //           [
+  //             { text: `: ${quoteData.billingStreet || "--"}` },
+  //             { text: `: ${quoteData.billingCity || "--"}` },
+  //             { text: `: ${quoteData.billingState || "--"}` },
+  //             { text: `: ${quoteData.billingCode || "--"}` },
+  //             { text: `: ${quoteData.billingCountry || "--"}` },
+  //           ],
+  //         ],
+  //       },
+
+  //       {
+  //         text: "Shipping Details",
+  //         bold: true,
+  //         style: "sectionHeader",
+  //       },
+
+  //       {
+  //         columns: [
+  //           [
+  //             { text: `Shipping Street ` },
+  //             { text: `Shipping City ` },
+  //             { text: `Shipping State ` },
+  //             { text: `Shipping Code  ` },
+  //             { text: `Shipping Country ` },
+  //           ],
+
+  //           [
+  //             { text: `: ${quoteData.shippingStreet || "--"}` },
+  //             { text: `: ${quoteData.shippingCity || "--"}` },
+  //             { text: `: ${quoteData.shippingState || "--"}` },
+  //             { text: `: ${quoteData.shippingCode || "--"}` },
+  //             { text: `: ${quoteData.shippingCountry || "--"}` },
+  //           ],
+  //         ],
+  //       },
+
+  //       // 3, Invoiced Items Table
+  //       {
+  //         text: "Invoiced Items",
+  //         style: "sectionHeader",
+  //       },
+
+  //       {
+  //         table: {
+  //           headerRows: 1,
+  //           widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
+
+  //           body: [
+  //             [
+  //               { text: "Product Name", bold: true, fillColor: "#dedede" },
+  //               { text: "Price", bold: true, fillColor: "#dedede" },
+  //               { text: "Quantity", bold: true, fillColor: "#dedede" },
+  //               { text: "Amount", bold: true, fillColor: "#dedede" },
+  //               { text: "Discount", bold: true, fillColor: "#dedede" },
+  //               { text: "Tax", bold: true, fillColor: "#dedede" },
+  //               { text: "Total Amount", bold: true, fillColor: "#dedede" },
+  //             ],
+  //             ...(quoteData.quotesItemList || []).map((item) => [
+  //               item.productName || "--",
+  //               item.listPrice,
+  //               item.quantity,
+  //               item.amount,
+  //               `${item.discount} %`,
+  //               `${item.tax} %`,
+  //               item.total,
+  //             ]),
+  //           ],
+  //         },
+  //       },
+  //       {
+  //         columns: [
+  //           [
+  //             { text: `Sub Total(SGT) `, style: ["column"] },
+  //             { text: `Discount(%) `, style: ["column"] },
+  //             { text: `Tax(%) `, style: ["column"] },
+  //             // { text: `Adjustment(Rs.) `, style: ["column"] },
+  //             { text: `Grand Total(SGT) `, style: ["column"] },
+
+  //             //  { text: `Sub Total(Rs.) ` },
+  //             // { text: `Discount(Rs.) ` },
+  //             // { text: `Tax(Rs.) ` },
+  //             // { text: `Adjustment(Rs.)  ` },
+  //             // { text: `Grand Total(Rs.) ` },
+  //           ],
+
+  //           [
+  //             {
+  //               text: `: ${quoteData.subTotal || "--"}`,
+  //               style: ["column"],
+  //             },
+  //             {
+  //               text: `: ${quoteData.txnDiscount || "--"} `,
+  //               style: ["column"],
+  //             },
+  //             {
+  //               text: `: ${quoteData.txnTax || "--"} `,
+  //               style: ["column"],
+  //             },
+  //             // {
+  //             //   text: `: ${quoteData.adjustment || "--"}`,
+  //             //   style: ["column"],
+  //             // },
+  //             {
+  //               text: `: ${quoteData.grandTotal || "--"}`,
+  //               style: ["column"],
+  //             },
+  //             // { text: `: ${quoteData.subTotal || "--"}` style: ['column'] } },
+  //             // { text: `: ${quoteData.discount || "--"}` },
+  //             // { text: `: ${quoteData.tax || "--"}` },
+  //             // { text: `: ${quoteData.adjustment || "--"}` },
+  //             // { text: `: ${quoteData.grandTotal || "--"}` },
+  //           ],
+  //         ],
+  //       },
+
+  //       // 4 ,Terms and Conditions
+  //       {
+  //         text: "Terms and Conditions",
+  //         style: "sectionHeader",
+  //       },
+  //       {
+  //         // text: this.itemDescription,
+  //         text: `Invoice Amount transfer to the below details, Bank : Axis Bank Branch : xxx Branch, Chennai-600 002. A/c No : 9...............67 . IFSC : AXIS0004.
+  //           Just for Demo Purpose`,
+  //         margin: [0, 10, 0, 15],
+  //       },
+
+  //       // 5 ,Description Information
+  //       {
+  //         text: "Description Information",
+  //         style: "sectionHeader",
+  //       },
+  //       {
+  //         text: "",
+  //         margin: [0, 0, 0, 15],
+  //       },
+
+  //       {
+  //         columns: [
+  //           [{ qr: `${quoteData.invoiceOwner}`, fit: "100" }],
+  //           [
+  //             {
+  //               text: "Authorized Signature",
+  //               alignment: "right",
+  //               italics: true,
+  //             },
+  //           ],
+  //         ],
+  //       },
+  //     ],
+
+  //     styles: {
+  //       sectionHeader: {
+  //         bold: true,
+  //         decoration: "underline",
+  //         fontSize: 14,
+  //         margin: [0, 25, 0, 15],
+  //       },
+  //       column: {
+  //         margin: [0, 10, 0, 0], // Margin top is set to 10
+  //         border: "1px solid black", // Border style
+  //       },
+  //     },
+  //   };
+
+  //   const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+
+  //   if (action === "download") {
+  //     pdfDocGenerator.download("quote.pdf");
+  //   } else if (action === "print") {
+  //     pdfDocGenerator.print();
+  //   } else {
+  //     pdfDocGenerator.open();
+  //   }
+  // };
+
+    //  PDF Generate
+    
+    const generatePDF = (action = "download") => {
+      const doc = new jsPDF();
+      doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+  
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(28);
+      doc.text("QUOTES", 155, 22);
+  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
+  
+      doc.setFont("helvetica", "small");
+      doc.setFontSize(10);
+      doc.text("The Alexcier", 13, 35);
+      doc.text("237 Alexandra Road #04-10", 13, 40);
+      doc.text("Singapore 159929", 13, 45);
+      doc.text("Singapore", 13, 50);
+  
+      doc.setFontSize(11);
+       doc.setFont("helvetica", "bold");
+      doc.text("Bill To", 13, 65);
+      // doc.setFontSize(10);
+      // doc.setFont("helvetica", "bold");
+      // doc.text("Manoj Prabhakar", 13, 65);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "small");
+      doc.text(`${quoteData.billingStreet}`, 13, 70);
+      doc.text(`${quoteData.billingCity}`, 13, 75);
+      doc.text(`${quoteData.billingCode}`, 13, 80);
+      doc.text(`${quoteData.billingCountry}`, 13, 85);
+  
+      doc.text("Subject :", 13, 95);
+      doc.text(`${quoteData.subject}`, 13, 100);
+  
+      // Add the table
+      const tableData =
+        quoteData.quotesItemList &&
+        quoteData.quotesItemList.map((invoiceItem, index) => [
+          index + 1,
+          invoiceItem.productName,
+          invoiceItem.quantity,
+          invoiceItem.listPrice,
+          invoiceItem.amount,
+          invoiceItem.discount,
+          invoiceItem.tax,
+          invoiceItem.total,
+        ]);
+      doc.autoTable({
+        startY: 110,
+        headStyles: {
+          fillColor: [50, 50, 50],
+          textColor: [255, 255, 255],
+          fontStyle: "normal",
+        },
+        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        head: [
+          [
+            "S.No",
+            "Product Name",
+            "Quantity",
+            "Price",
+            "Amount",
+            "Discount",
+            "Tax",
+            "Total",
+          ],
         ],
-      },
-
-      content: [
-        {
-          text: "TAX INVOICE",
-          fontSize: 25,
-          alignment: "center",
-          color: "#000000",
-          bold: true,
-          margin: [0, 0, 0, 20],
+        body: tableData,
+        footStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: "normal",
         },
-
-        {
-          columns: [
-            [
-              {
-                text: `ECS Cloud Infotech pte ltd
-                 The Alexcier,
-                 237 Alexandra Road, 
-                 #04-10, Singapore-159929.`,
-              },
-            ],
-            [
-              {
-                text: `Date: ${new Date().toLocaleDateString()}`,
-                alignment: "right",
-              },
-              {
-                text: `Time: ${new Date().toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}`,
-                alignment: "right",
-              },
-            ],
+        body: tableData,
+        foot: [
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Sub Total(SGT)",
+            `: ${quoteData.subTotal || "--"}`,
+            "",
+            "",
+            "",
+            "",
           ],
-        },
-
-        // 1, Invoice Information
-        {
-          text: "Invoice Information",
-          style: "sectionHeader",
-        },
-        {
-          columns: [
-            [
-              { text: `Quotes Owner ` },
-              { text: `Subject ` },
-              { text: `Valid Until ` },
-              { text: `Quotes Stage ` },
-              { text: `Deal Name ` },
-              { text: `Account Name ` },
-              { text: `Status ` },
-            ],
-
-            [
-              { text: `: ${quoteData.quoteOwner || "--"}`, bold: true },
-              { text: `: ${quoteData.subject || "--"}` },
-              { text: `: ${quoteData.validUntil || "--"}` },
-              { text: `: ${quoteData.quoteStage || "--"}` },
-              { text: `: ${quoteData.dealName || "--"}` },
-              { text: `: ${quoteData.accountName || "--"}` },
-              { text: `: ${quoteData.status || "--"}` },
-            ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Discount(%)",
+            `: ${quoteData.txnDiscount || "--"}`,
+            "",
+            "",
+            "",
+            "",
           ],
-        },
-
-        // 2, Address Information
-        {
-          text: "Address Information",
-          style: "sectionHeader",
-        },
-
-        {
-          text: "Billing Details",
-          bold: true,
-          style: "sectionHeader",
-        },
-
-        {
-          columns: [
-            [
-              { text: `Billing Street ` },
-              { text: `Billing City ` },
-              { text: `Billing State ` },
-              { text: `Billing Code ` },
-              { text: `Billing Country ` },
-            ],
-
-            [
-              { text: `: ${quoteData.billingStreet || "--"}` },
-              { text: `: ${quoteData.billingCity || "--"}` },
-              { text: `: ${quoteData.billingState || "--"}` },
-              { text: `: ${quoteData.billingCode || "--"}` },
-              { text: `: ${quoteData.billingCountry || "--"}` },
-            ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Tax(%)",
+            `: ${quoteData.txnTax || "--"}`,
+            "",
+            "",
+            "",
+            "",
           ],
-        },
-
-        {
-          text: "Shipping Details",
-          bold: true,
-          style: "sectionHeader",
-        },
-
-        {
-          columns: [
-            [
-              { text: `Shipping Street ` },
-              { text: `Shipping City ` },
-              { text: `Shipping State ` },
-              { text: `Shipping Code  ` },
-              { text: `Shipping Country ` },
-            ],
-
-            [
-              { text: `: ${quoteData.shippingStreet || "--"}` },
-              { text: `: ${quoteData.shippingCity || "--"}` },
-              { text: `: ${quoteData.shippingState || "--"}` },
-              { text: `: ${quoteData.shippingCode || "--"}` },
-              { text: `: ${quoteData.shippingCountry || "--"}` },
-            ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Grand Total(SGT)",
+            `: ${quoteData.grandTotal || "--"}`,
+            "",
+            "",
+            "",
+            "",
           ],
-        },
-
-        // 3, Invoiced Items Table
-        {
-          text: "Invoiced Items",
-          style: "sectionHeader",
-        },
-
-        {
-          table: {
-            headerRows: 1,
-            widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
-
-            body: [
-              [
-                { text: "Product Name", bold: true, fillColor: "#dedede" },
-                { text: "Price", bold: true, fillColor: "#dedede" },
-                { text: "Quantity", bold: true, fillColor: "#dedede" },
-                { text: "Amount", bold: true, fillColor: "#dedede" },
-                { text: "Discount", bold: true, fillColor: "#dedede" },
-                { text: "Tax", bold: true, fillColor: "#dedede" },
-                { text: "Total Amount", bold: true, fillColor: "#dedede" },
-              ],
-              ...(quoteData.quotesItemList || []).map((item) => [
-                item.productName || "--",
-                item.listPrice,
-                item.quantity,
-                item.amount,
-                `${item.discount} %`,
-                `${item.tax} %`,
-                item.total,
-              ]),
-            ],
-          },
-        },
-        {
-          columns: [
-            [
-              { text: `Sub Total(SGT) `, style: ["column"] },
-              { text: `Discount(%) `, style: ["column"] },
-              { text: `Tax(%) `, style: ["column"] },
-              // { text: `Adjustment(Rs.) `, style: ["column"] },
-              { text: `Grand Total(SGT) `, style: ["column"] },
-
-              //  { text: `Sub Total(Rs.) ` },
-              // { text: `Discount(Rs.) ` },
-              // { text: `Tax(Rs.) ` },
-              // { text: `Adjustment(Rs.)  ` },
-              // { text: `Grand Total(Rs.) ` },
-            ],
-
-            [
-              {
-                text: `: ${quoteData.subTotal || "--"}`,
-                style: ["column"],
-              },
-              {
-                text: `: ${quoteData.txnDiscount || "--"} `,
-                style: ["column"],
-              },
-              {
-                text: `: ${quoteData.txnTax || "--"} `,
-                style: ["column"],
-              },
-              // {
-              //   text: `: ${quoteData.adjustment || "--"}`,
-              //   style: ["column"],
-              // },
-              {
-                text: `: ${quoteData.grandTotal || "--"}`,
-                style: ["column"],
-              },
-              // { text: `: ${quoteData.subTotal || "--"}` style: ['column'] } },
-              // { text: `: ${quoteData.discount || "--"}` },
-              // { text: `: ${quoteData.tax || "--"}` },
-              // { text: `: ${quoteData.adjustment || "--"}` },
-              // { text: `: ${quoteData.grandTotal || "--"}` },
-            ],
-          ],
-        },
-
-        // 4 ,Terms and Conditions
-        {
-          text: "Terms and Conditions",
-          style: "sectionHeader",
-        },
-        {
-          // text: this.itemDescription,
-          text: `Invoice Amount transfer to the below details, Bank : Axis Bank Branch : xxx Branch, Chennai-600 002. A/c No : 9...............67 . IFSC : AXIS0004.
-            Just for Demo Purpose`,
-          margin: [0, 10, 0, 15],
-        },
-
-        // 5 ,Description Information
-        {
-          text: "Description Information",
-          style: "sectionHeader",
-        },
-        {
-          text: "",
-          margin: [0, 0, 0, 15],
-        },
-
-        {
-          columns: [
-            [{ qr: `${quoteData.invoiceOwner}`, fit: "100" }],
-            [
-              {
-                text: "Authorized Signature",
-                alignment: "right",
-                italics: true,
-              },
-            ],
-          ],
-        },
-      ],
-
-      styles: {
-        sectionHeader: {
-          bold: true,
-          decoration: "underline",
-          fontSize: 14,
-          margin: [0, 25, 0, 15],
-        },
-        column: {
-          margin: [0, 10, 0, 0], // Margin top is set to 10
-          border: "1px solid black", // Border style
-        },
-      },
+        ],
+      });
+  
+      // Add Company Footer Information
+      const finalY = doc.lastAutoTable.finalY + 10;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Notes", 13, finalY);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(
+        `${quoteData.description}`,
+        13,
+        finalY + 5
+      );
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Terms & Conditions", 13, finalY + 17);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(
+        `${quoteData.termsAndConditions}`,
+        13,
+        finalY + 24
+      );
+  
+      // Save the PDF
+      if (action === "download") {
+        doc.save("quotes.pdf");
+      } else if (action === "print") {
+        doc.autoPrint();
+        window.open(doc.output("bloburl"), "_blank");
+      } else if (action === "open") {
+        window.open(doc.output("bloburl"), "_blank");
+      }
     };
-
-    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-
-    if (action === "download") {
-      pdfDocGenerator.download("quote.pdf");
-    } else if (action === "print") {
-      pdfDocGenerator.print();
-    } else {
-      pdfDocGenerator.open();
-    }
-  };
 
   return (
     <>
@@ -459,7 +627,7 @@ function QuotesShow() {
               >
                 Download PDF
               </li>
-              <li className="dropdown-item" onClick={() => generatePDF()}>
+              <li className="dropdown-item" onClick={() => generatePDF("open")}>
                 Open PDF
               </li>
               <li
