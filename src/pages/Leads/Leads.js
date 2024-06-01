@@ -160,12 +160,18 @@ const Lead = () => {
       {
         accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+        Cell: ({ row }) => row.original.created_at.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ row }) => new Date(row.original.updated_at).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.updated_at) {
+            return row.original.updated_at.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
     ],
     []
@@ -478,6 +484,12 @@ const Lead = () => {
         </OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/leads/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   return (

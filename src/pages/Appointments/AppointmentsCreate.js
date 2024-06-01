@@ -36,8 +36,9 @@ function AppointmentsCreate({ name, schedule, getData }) {
     appointmentMode: Yup.string().required("*Appointment mode is required"),
     additionalInformation: Yup.string().required("*Description is required"),
   });
-
+console.log("object",schedule)
   const currentData =  new Date().toISOString().split("T")[0];
+ 
   const formik = useFormik({
     initialValues: {
       // serviceId: "",
@@ -49,7 +50,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       appointmentName: "",
       location: "",
       // member: "",
-      phoneNumber: "",
+      phoneNumber: schedule.phone,
       street: "",
       city: "",
       state: "",
@@ -67,7 +68,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       if (name === "Create Appointment") {
         let selectedLeadName = "";
         // let selectedServiceName = "";
-
+       
         leadData.forEach((lead) => {
           if (parseInt(data.leadId) === lead.id) {
             selectedLeadName = lead || "--";
@@ -456,9 +457,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
       "appointmentStartDate",
       currentData
     );
+    
     console.log("scheduleDataM", schedule);
 
-    if (name === "schedule") {
+    if (name === "Schedule") {
       let scheduleData = {
         appointmentFor: schedule.appointmentName,
         email: schedule.email,
@@ -520,6 +522,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
       "appointmentStartDate",
       currentData
     );
+    formik.setFieldValue("phoneNumber",schedule.phone)
+    formik.setFieldValue("street",schedule.street )
+    formik.setFieldValue("city",schedule.city )
+    formik.setFieldValue("state",schedule.state )
+    formik.setFieldValue("zipCode",schedule.zipCode )
+    formik.setFieldValue("country",schedule.country )
   }, [show]);
   
 
@@ -870,6 +878,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //className="form-size form-control"
                         name="phoneNumber"
                         id="phoneNumber"
+                        value={"9797979797"}
                         {...formik.getFieldProps("phoneNumber")}
                         className={`form-size form-control   ${
                           formik.touched.phoneNumber &&

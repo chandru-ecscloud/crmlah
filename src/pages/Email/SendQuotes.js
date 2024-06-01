@@ -9,9 +9,14 @@ import user from "../../assets/user.png";
 import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { MdErrorOutline } from "react-icons/md";
+import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object({
   subject: yup.string().required("*Subject is required"),
+  files: yup.array()
+  .min(1, "Attacment is Must")
+  .required("Attacment is Must"),
 });
 function SendQuotes({ accountData }) {
   const [show, setShow] = useState(false);
@@ -25,16 +30,30 @@ function SendQuotes({ accountData }) {
   const formik = useFormik({
     initialValues: {
       subject: "",
+      files:[],
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        const formData = new FormData();
+        formData.append("to",accountData.email);
+        formData.append("from", userEmail);
+        formData.append("subject", values.subject);
+        formData.append("body", values.subject);
+        formData.append("htmlContent",generateInvoice(accountData.quotes));
+        values.files.forEach((file) => {
+          formData.append("files", file);
+        });
         setLoadIndicator(true);
-        const response = await axios.post(`${API_URL}sendMail`, {
-          toMail: accountData.email,
-          fromMail: userEmail,
-          subject: values.subject,
-          htmlContent: generateInvoice(accountData.quotes),
+        const response = await axios.post(`${API_URL}sendMailWithAttachment`,formData, {
+          // toMail: accountData.email,
+          // fromMail: userEmail,
+          // subject: values.subject,
+          // htmlContent: generateInvoice(accountData.quotes),
+          // file:values.files,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
         if (response.status === 200) {
@@ -57,6 +76,11 @@ function SendQuotes({ accountData }) {
   const handleHide = () => {
     setShow(false);
   };
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    formik.setFieldValue("files", [...formik.values.files, ...files]);
+  };
+
 
   useEffect(() => {
     if (formik.values.subject && accountData.quotes) {
@@ -483,8 +507,54 @@ function SendQuotes({ accountData }) {
                 )}
               </div>
             </div>
-
-            <div className="d-flex align-items-end justify-content-end">
+            <div className="d-flex align-items-end justify-content-between">
+              <div
+                style={{ minHeight: "80px", gap: "10px" }}
+                className="d-flex align-items-end"
+              >
+                <span>
+                  <label
+                    htmlFor="file-input"
+                    className="btn btn-outline-primary"
+                  >
+                    <GrAttachment />
+                  </label>
+                  <input
+                    id="file-input"
+                    type="file"
+                    name="files"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                    multiple
+                    accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
+                  />
+                  {formik.values.files.length > 0 ? (
+                    <span>
+                      &nbsp;{formik.values.files.length} files selected
+                    </span>
+                  ) : (
+                    <span className="text-danger">
+                      &nbsp;
+                      <MdErrorOutline className="text-danger" />
+                      &nbsp;{formik.errors.files}
+                    </span>
+                  )}
+                </span>
+              </div>
+              <span className="d-flex" style={{ gap: "10px" }}>
+                <button type="submit" className="btn btn-primary mt-4" onClick={formik.handleSubmit}>
+                  {loadIndicator && (
+                    <span
+                      class="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Send
+                  <IoMdSend className="ms-2 mb-1" />
+                </button>
+              </span>
+            </div>
+            {/* <div className="d-flex align-items-end justify-content-end">
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button
                   className="btn btn-primary mt-4"
@@ -500,7 +570,7 @@ function SendQuotes({ accountData }) {
                   <IoMdSend className="ms-2 mb-1" />
                 </button>
               </span>
-            </div>
+            </div> */}
           </Offcanvas.Body>
         </Offcanvas>
       </form>

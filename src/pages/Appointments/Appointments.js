@@ -164,13 +164,19 @@ const Appointments = () => {
       },
       {
         accessorKey: "created_at",
-        header: "CreatedAt",
-        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+        header: "Created At",
+        Cell: ({ row }) => row.original.created_at.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
-        header: "UpdatedAt",
-        Cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString(),
+        header: "Updated At",
+        Cell: ({ row }) => {
+          if (row.original.updated_at) {
+            return row.original.updated_at.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
     ],
     []
@@ -423,6 +429,12 @@ const Appointments = () => {
         </OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/appoinments/show/${row.original.id}`);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   return (

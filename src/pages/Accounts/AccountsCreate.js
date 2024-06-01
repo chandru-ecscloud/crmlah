@@ -13,7 +13,6 @@ import "../../styles/dummy.css";
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("*First Name is required"),
   last_name: Yup.string().required("*Last Name is required"),
-  // account_name: Yup.string().required("Account Name is required"),
   amount: Yup.number()
     .typeError('Amount must be a number')
     .integer('Amount must be an integer'),
@@ -23,8 +22,10 @@ const validationSchema = Yup.object().shape({
   billing_code: Yup.number()
     .typeError('Billing code must be a number')
     .integer('Billing code must be an integer'),
-    country_code: Yup.string().required("*Country Code is required"),
-    phone: Yup.string()
+  country_code: Yup.string()
+    .required('Country code is required'),
+    // .matches(/^\+65$|^\+91$/, 'Invalid country code'), // Ensure only +65 or +91 are allowed
+  phone: Yup.string()
     .required('Phone number is required')
     .test('phone-length', function (value) {
       const { country_code } = this.parent;
@@ -37,13 +38,14 @@ const validationSchema = Yup.object().shape({
       if (country_code === '+91') {
         return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
       }
-      return true; // Default validation for other country codes
+      return false; // Default validation for other country codes
     }),
-  country_code: Yup.string().required('Country code is required'),
-
   email: Yup.string().email("Invalid email").required("*Email is required"),
   company: Yup.string().required('Company Name is required'),
 });
+
+
+
 function AccountsCreate() {
   const navigate = useNavigate();
   const owner = sessionStorage.getItem("user_name");
@@ -81,6 +83,7 @@ function AccountsCreate() {
       description_info: "",
     },
     validationSchema: validationSchema,
+    validateOnMount: true,
     onSubmit: async (data) => {
       // data.account_name = `${data.first_name}${data.last_name}`
 
@@ -132,7 +135,7 @@ function AccountsCreate() {
 
   useEffect(() => {
     AccountList();
-    formik.setFieldValue("country_code", 65);
+    formik.setFieldValue("country_code",+65);
   }, []);
 
   return (

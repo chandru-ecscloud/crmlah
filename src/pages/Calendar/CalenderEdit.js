@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
   // appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
-function CalenderEdit({ id, setShowViewModal }) {
+function CalenderEdit({ id, setShowViewModal,getData }) {
   const companyId = sessionStorage.getItem("companyId");
   const [showEditModal, setShowEditModal] = useState(false);
   const [serviceData, setServiceData] = useState([]);
@@ -80,7 +80,9 @@ function CalenderEdit({ id, setShowViewModal }) {
         companyId: data.companyId,
         leadId: data.leadId,
         // serviceId: data.serviceId,
+        appointmentName: data.appointmentName,
         duration: data.duration,
+        phoneNumber: data.phoneNumber,
         location: data.location,
         member: data.member,
         street: data.street,
@@ -103,6 +105,7 @@ function CalenderEdit({ id, setShowViewModal }) {
           }
         );
         if (response.status === 200) {
+          getData()
           toast.success(response.data.message);
           handleClose();
           formik.resetForm();

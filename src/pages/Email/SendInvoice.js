@@ -12,6 +12,9 @@ import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
+  files: yup.array()
+      .min(1, "Attacment is Must")
+      .required("Attacment is Must"),
 });
 
 function SendInvoice({ invoiceData, id, generatePDF }) {
@@ -329,20 +332,33 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
 
       try {
         // const pdfBase64 = await generatePDF("download");
+        const formData = new FormData();
+        formData.append("to",invoiceData.email);
+        formData.append("from", userEmail);
+        formData.append("subject", values.subject);
+        formData.append("body", values.subject);
+        formData.append("htmlContent",generateInvoice(invoiceData.transactionInvoiceModels));
+        values.files.forEach((file) => {
+          formData.append("files", file);
+        });
         setLoadIndicator(true);
-        const response = await axios.post(`${API_URL}sendMail`, {
-          toMail: invoiceData.email,
-          fromMail: userEmail,
-          subject: values.subject,
-          htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
+        const response = await axios.post(`${API_URL}sendMailWithAttachment`,formData,{
+          // toMail: invoiceData.email,                        
+          // fromMail: userEmail,
+          // subject: values.subject,
+          // htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
+          // files:values.files,
           // attachment: {
           //       filename: 'invoice.pdf',
           //       content: pdfBase64,
           //       encoding: 'base64'
           //   }
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success("Mail sent successfully");
           handleHide();
         } else {
@@ -364,10 +380,10 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
     setSubject("");
   };
 
-  // const handleFileChange = (event) => {
-  //   const files = Array.from(event.target.files);
-  //   formik.setFieldValue("files", [...formik.values.files, ...files]);
-  // };
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    formik.setFieldValue("files", [...formik.values.files, ...files]);
+  };
 
   // useEffect(() => {
   //   // This effect triggers the email sending process when HTML content is set and we're ready to send.
@@ -999,7 +1015,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
                 style={{ minHeight: "80px", gap: "10px" }}
                 className="d-flex align-items-end"
               >
-                {/* <span>
+                <span>
                   <label
                     htmlFor="file-input"
                     className="btn btn-outline-primary"
@@ -1026,7 +1042,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
                       &nbsp;{formik.errors.files}
                     </span>
                   )}
-                </span> */}
+                </span>
               </div>
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button type="submit" className="btn btn-primary mt-4">
