@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link, useNavigate } from "react-router-dom";
-import USER from "../../assets/user.png";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
-import CompanyLogo from "../../assets/Logo.png";
+import CompanyLogo from "../../assets/CMPLogoNew.png";
 import { IoArrowBack } from "react-icons/io5";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import { toast } from "react-toastify";
-import SendInvoice from "../Email/SendInvoice";
-import SendEmail from "../Email/SendEmail";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// import { toast } from "react-toastify";
+
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function InvoiceShow() {
   const { id } = useParams();
@@ -24,10 +24,9 @@ function InvoiceShow() {
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-  console.log("invoiceData",invoiceData)
+  console.log("invoiceData", invoiceData);
 
-
-  const invoiceItems= [
+  const invoiceItems = [
     {
       productName: "Product Name",
       itemDescription: "Item Description",
@@ -68,6 +67,7 @@ function InvoiceShow() {
       </tr>
     ));
   };
+
   useEffect(() => {
     const userData = async () => {
       try {
@@ -126,326 +126,178 @@ function InvoiceShow() {
   const handelEdit = () => {
     navigate(`/invoices/edit/${id}`);
   };
-    // console.log("CompanyLogo:", CompanyLogo);
+
   //  PDF Generate
-  const generatePDF = (action = "open") => {
-    return new Promise((resolve, reject) => {
-    const docDefinition = {
-     
-      header: {
-        canvas: [
-          {
-            image: CompanyLogo,
-           
-          },
-          {
-            type: "rect",
-            x: 0,
-            y: 0,
-            w: 850, // landscape
-            h: 120,
-          },
+  const generatePDF = (action = "download") => {
+    const doc = new jsPDF();
+    doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(28);
+    doc.text("INVOICE", 155, 22);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
+
+    doc.setFont("helvetica", "small");
+    doc.setFontSize(10);
+    doc.text("The Alexcier", 13, 35);
+    doc.text("237 Alexandra Road #04-10", 13, 40);
+    doc.text("Singapore 159929", 13, 45);
+    doc.text("Singapore", 13, 50);
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("Bill To", 13, 65);
+    // doc.setFontSize(10);
+    // doc.setFont("helvetica", "bold");
+    // doc.text("Manoj Prabhakar", 13, 65);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "small");
+    doc.text(`${invoiceData.billingStreet}`, 13, 70);
+    doc.text(`${invoiceData.billingCity}`, 13, 75);
+    doc.text(`${invoiceData.billingCode}`, 13, 80);
+    doc.text(`${invoiceData.billingCountry}`, 13, 85);
+
+    // Add the table
+    const tableData =
+      invoiceData.invoiceItemList &&
+      invoiceData.invoiceItemList.map((invoiceItem, index) => [
+        index + 1,
+        invoiceItem.productName,
+        invoiceItem.quantity,
+        invoiceItem.listPrice,
+        invoiceItem.amount,
+        invoiceItem.discount,
+        invoiceItem.tax,
+        invoiceItem.total,
+      ]);
+    doc.autoTable({
+      startY: 110,
+      headStyles: {
+        fillColor: [50, 50, 50],
+        textColor: [255, 255, 255],
+        fontStyle: "normal",
+      },
+      bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+      head: [
+        [
+          "S.No",
+          "Product Name",
+          "Quantity",
+          "Price",
+          "Amount",
+          "Discount",
+          "Tax",
+          "Total",
         ],
-      },
-
-      content: [
-      
-        {
-          text: "TAX INVOICE",
-          fontSize: 25,
-          alignment: "center",
-          color: "#000000",
-          bold: true,
-          margin: [0, 0, 0, 20],
-        },
-
-        {
-          columns: [
-            [
-              {
-                text: `ECS Cloud Infotech pte ltd
-                 The Alexcier,
-                 237 Alexandra Road, 
-                 #04-10, Singapore-159929.`,
-              },
-            ],
-            [
-              {
-                text: `Date: ${new Date().toLocaleDateString()}`,
-                alignment: "right",
-              },
-              // {
-              //   text: `Time: ${new Date().toLocaleTimeString([], {
-              //     hour: "2-digit",
-              //     minute: "2-digit",
-              //   })}`,
-              //   alignment: "right",
-              // },
-            ],
-          ],
-        },
-
-
-        // 1, Invoice Information
-        {
-          text: "Invoice Information",
-          style: "sectionHeader",
-        },
-        {
-          columns: [
-            [
-              { text: `Invoice Owner ` },
-              { text: `Subject ` },
-              { text: `Invoice Date ` },
-              { text: `Due Date ` },
-              { text: `Sales Commission ` },
-              { text: `Sales Order ` },
-              { text: `Purchase Order ` },
-              { text: `Status ` },
-              { text: `Account Name ` },
-              { text: `Deal Name ` },
-              { text: `Contact Name ` },
-            ],
-
-            [
-              { text: `: ${invoiceData.invoiceOwner || "--"}`, bold: true },
-              { text: `: ${invoiceData.subject || "--"}` },
-              { text: `: ${invoiceData.invoiceDate || "--"}` },
-              { text: `: ${invoiceData.dueDate || "--"}` },
-              { text: `: ${invoiceData.salesCommission || "--"}` },
-              { text: `: ${invoiceData.salesOrder || "--"}` },
-              { text: `: ${invoiceData.purchaseOrder || "--"}` },
-              { text: `: ${invoiceData.status || "--"}` },
-              { text: `: ${invoiceData.accountName || "--"}` },
-              { text: `: ${invoiceData.dealName || "--"}` },
-              { text: `: ${invoiceData.contactName || "--"}` },
-            ],
-          ],
-        },
-
-        // 2, Address Information
-        {
-          text: "Address Information",
-          style: "sectionHeader",
-        },
-
-        {
-          text: "Billing Details",
-          bold: true,
-          style: "sectionHeader",
-        },
-
-        {
-          columns: [
-            [
-              { text: `Billing Street ` },
-              { text: `Billing City ` },
-              { text: `Billing State ` },
-              { text: `Billing Code ` },
-              { text: `Billing Country ` },
-            ],
-
-            [
-              { text: `: ${invoiceData.billingStreet || "--"}` },
-              { text: `: ${invoiceData.billingCity || "--"}` },
-              { text: `: ${invoiceData.billingState || "--"}` },
-              { text: `: ${invoiceData.billingCode || "--"}` },
-              { text: `: ${invoiceData.billingCountry || "--"}` },
-            ],
-          ],
-        },
-
-        {
-          text: "Shipping Details",
-          bold: true,
-          style: "sectionHeader",
-        },
-
-        {
-          columns: [
-            [
-              { text: `Shipping Street ` },
-              { text: `Shipping City ` },
-              { text: `Shipping State ` },
-              { text: `Shipping Code  ` },
-              { text: `Shipping Country ` },
-            ],
-
-            [
-              { text: `: ${invoiceData.shippingStreet || "--"}` },
-              { text: `: ${invoiceData.shippingCity || "--"}` },
-              { text: `: ${invoiceData.shippingState || "--"}` },
-              { text: `: ${invoiceData.shippingCode || "--"}` },
-              { text: `: ${invoiceData.shippingCountry || "--"}` },
-            ],
-          ],
-        },
-
-        // 3, Invoiced Items Table
-        {
-          text: "Invoiced Items",
-          style: "sectionHeader",
-        },
-        {
-          table: {
-            headerRows: 1,
-            widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
-            body: [
-              [
-                { text: "Product Name", bold: true, fillColor: "#dedede" },
-                { text: "Price", bold: true, fillColor: "#dedede" },
-                { text: "Quantity", bold: true, fillColor: "#dedede" },
-                { text: "Amount", bold: true, fillColor: "#dedede" },
-                { text: "Discount", bold: true, fillColor: "#dedede" },
-                { text: "Tax", bold: true, fillColor: "#dedede" },
-                { text: "Total Amount", bold: true, fillColor: "#dedede" },
-              ],
-              ...(invoiceData.invoiceItemList || []).map((item) => [
-                item.productName || "--",
-                item.listPrice || "--",
-                item.quantity || "--",
-                item.amount || "--",
-                // item.discount || "--",
-                `${item.discount} % `|| "--",
-                item.tax || "--",
-                item.total || "--",
-                ]),
-            ],
-          },
-        },
-
-        // {
-        //   table: {
-        //     headerRows: 1,
-        //     widths: ["*", "auto", "auto", "auto", "auto", "auto", "auto"],
-        //     body: [
-        //       [
-        //         { text: "Product Name", bold: true, fillColor: "#dedede" },
-        //         { text: "Price", bold: true, fillColor: "#dedede" },
-        //         { text: "Quantity", bold: true, fillColor: "#dedede" },
-        //         { text: "Amount", bold: true, fillColor: "#dedede" },
-        //         { text: "Discount", bold: true, fillColor: "#dedede" },
-        //         { text: "Tax", bold: true, fillColor: "#dedede" },
-        //         { text: "Total Amount", bold: true, fillColor: "#dedede" },
-        //       ],
-        //       ...(invoiceData.invoiceItemList || []).map((item)=> [
-        //         item.productName || "--",
-        //         item.listPrice,
-        //         item.quantity ,
-        //         item.productName,
-        //         item.amount,
-        //         item.quantity,
-        //         item.total,
-        //         `${item.discount} %`,
-        //         `${item.tax} %`,
-        //       ]),
-        //     ],
-        //   },
-        // },
-        {
-          columns: [
-            [
-              { text: `Sub Total(SGT) `, style: ["column"] },
-              { text: `Discount(%) `, style: ["column"] },
-              { text: `Tax(%) `, style: ["column"] },
-              // { text: `Adjustment(Rs.) `, style: ["column"] },
-              { text: `Grand Total(SGT) `, style: ["column"] },
-            ],
-            [
-              {
-                text: `: ${invoiceData.subTotal || "--"}`,
-                style: ["column"],
-              },
-              {
-                text: `: ${invoiceData.txnDiscount || "--"} `,
-                style: ["column"],
-              },
-              {
-                text: `: ${invoiceData.txnTax || "--"} `,
-                style: ["column"],
-              },
-              {
-                text: `: ${invoiceData.adjustment || "--"}`,
-                style: ["column"],
-              },
-              {
-                text: `: ${invoiceData.grandTotal || "--"}`,
-                style: ["column"],
-              },
-              // { text: `: ${quoteData.subTotal || "--"}` style: ['column'] } },
-              // { text: `: ${quoteData.discount || "--"}` },
-              // { text: `: ${quoteData.tax || "--"}` },
-              // { text: `: ${quoteData.adjustment || "--"}` },
-              // { text: `: ${quoteData.grandTotal || "--"}` },
-            ],
-          ],
-        },
-
-
-        // 4 ,Terms and Conditions
-        {
-          text: "Terms and Conditions",
-          style: "sectionHeader",
-        },
-        {
-          // text: this.itemDescription,
-          text: `Invoice Amount transfer to the below details, Bank : Axis Bank Branch : xxx Branch, Chennai-600 002. A/c No : 9...............67 . IFSC : AXIS0004.
-            Just for Demo Purpose`,
-          margin: [0, 10, 0, 15],
-        },
-
-        // 5 ,Description Information
-        {
-          text: "Description Information",
-          style: "sectionHeader",
-        },
-        {
-          text: "",
-          margin: [0, 0, 0, 15],
-        },
-
-        {
-          columns: [
-            [{ qr: `${invoiceData.invoiceOwner}`, fit: "100" }],
-            [
-              {
-                text: "Authorized Signature",
-                alignment: "right",
-                italics: true,
-              },
-            ],
-          ],
-        },
       ],
-
-      styles: {
-        sectionHeader: {
-          bold: true,
-          decoration: "underline",
-          fontSize: 14,
-          margin: [0, 25, 0, 15],
-        },
-        column: {
-          margin: [0, 10, 0, 0], // Margin top is set to 10
-          border: "1px solid black", // Border style
-        },
+      body: tableData,
+      footStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: "normal",
       },
-    };
+      body: tableData,
+      foot: [
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Sub Total(SGT)",
+          `: ${invoiceData.subTotal || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Discount(%)",
+          `: ${invoiceData.txnDiscount || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Tax(%)",
+          `: ${invoiceData.txnTax || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Grand Total(SGT)",
+          `: ${invoiceData.grandTotal || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+      ],
+    });
 
-    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    pdfDocGenerator.getBase64((data) => {
-      resolve(data);
-  });
+    // Add Company Footer Information
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("Notes", 13, finalY);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `${invoiceData.description}`,
+      13,
+      finalY + 5
+    );
+    doc.text("Bank Details:", 13, finalY + 12);
+    doc.text("Account No : 1000010001", 13, finalY + 17);
+    doc.text("IFSC Code: MJ21397", 13, finalY + 22);
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("Terms & Conditions", 13, finalY + 30);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `${invoiceData.termsAndConditions}`,
+      13,
+      finalY + 24
+    );
+
+    // Save the PDF
     if (action === "download") {
-      pdfDocGenerator.download("invoice.pdf");
+      doc.save("invoice.pdf");
     } else if (action === "print") {
-      pdfDocGenerator.print();
-    } else {
-      pdfDocGenerator.open();
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    } else if (action === "open") {
+      window.open(doc.output("bloburl"), "_blank");
     }
-  });
-}
- 
+  };
+
   return (
     <>
       {/* header section */}
@@ -477,7 +329,7 @@ function InvoiceShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-        {/* <SendInvoice invoiceData={invoiceData} id={id} generatePDF={() => generatePDF("download")} /> */}
+          {/* <SendInvoice invoiceData={invoiceData} id={id} generatePDF={() => generatePDF("download")} /> */}
 
           {/* <SendEmail /> */}
 
@@ -506,7 +358,7 @@ function InvoiceShow() {
               >
                 Download PDF
               </li>
-              <li className="dropdown-item" onClick={() => generatePDF()}>
+              <li className="dropdown-item" onClick={() => generatePDF("open")}>
                 Open PDF
               </li>
               <li
@@ -730,13 +582,19 @@ function InvoiceShow() {
               <div>
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{invoiceData.createdAt ?invoiceData.createdAt.split("T")[0]: "--"}
+                  &nbsp; : &nbsp;
+                  {invoiceData.createdAt
+                    ? invoiceData.createdAt.split("T")[0]
+                    : "--"}
                 </span>
               </div>
               <div>
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{invoiceData.updatedAt ?invoiceData.updatedAt.split("T")[0]: "--"}
+                  &nbsp; : &nbsp;
+                  {invoiceData.updatedAt
+                    ? invoiceData.updatedAt.split("T")[0]
+                    : "--"}
                 </span>
               </div>
 
@@ -857,20 +715,23 @@ function InvoiceShow() {
                         </thead>
                         {/* Table body */}
                         <tbody>
-                          {invoiceData?.invoiceItemList.map((product, index) =>{ 
-                            console.log("object",product)
-                            return(
-                            <tr key={product.id}>
-                              <td>{index + 1}</td>
-                              <td>{product.productName || "--"}</td>
-                              <td>{product.quantity || "--"}</td>
-                              <td>{product.listPrice || "0"}</td>
-                              <td>{product.amount || "0"}</td>
-                              <td>{product.discount || "0"}</td>
-                              <td>{product.tax || "0"}</td>
-                              <td>{product.total || "0"}</td>
-                            </tr>
-                          )})}
+                          {invoiceData?.invoiceItemList.map(
+                            (product, index) => {
+                              console.log("object", product);
+                              return (
+                                <tr key={product.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{product.productName || "--"}</td>
+                                  <td>{product.quantity || "--"}</td>
+                                  <td>{product.listPrice || "0"}</td>
+                                  <td>{product.amount || "0"}</td>
+                                  <td>{product.discount || "0"}</td>
+                                  <td>{product.tax || "0"}</td>
+                                  <td>{product.total || "0"}</td>
+                                </tr>
+                              );
+                            }
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -880,44 +741,36 @@ function InvoiceShow() {
                 </div>
               </div>
 
-               {/*Invoice Items List */}
-               <div className="container-fluid">
-                  <div className="container-fluid row mt-5 mx-2">
-                    <div className="container-fluid p-3 col-md-8"></div>
-                    <div className="container-fluid p-3 col-md-4 col-12 border rounded">
+              {/*Invoice Items List */}
+              <div className="container-fluid">
+                <div className="container-fluid row mt-5 mx-2">
+                  <div className="container-fluid p-3 col-md-8"></div>
+                  <div className="container-fluid p-3 col-md-4 col-12 border rounded">
                     <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">
-                        Sub Total(SGT)
-                        </label>
-                        <span>: {invoiceData.subTotal}</span>
-                      </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">
-                          Discount(%)
-                        </label>
-                        <span>: {invoiceData.txnDiscount}</span>
-                      </div>
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">
-                          Tax(%) 
-                        </label>
-                        <span>: {invoiceData.txnTax}</span>
-                      </div>
-                      {/* <div className="container-fluid d-flex justify-content-between py-2">
+                      <label className="text-dark ">Sub Total(SGT)</label>
+                      <span>: {invoiceData.subTotal}</span>
+                    </div>
+                    <div className="container-fluid d-flex justify-content-between py-2">
+                      <label className="text-dark ">Discount(%)</label>
+                      <span>: {invoiceData.txnDiscount}</span>
+                    </div>
+                    <div className="container-fluid d-flex justify-content-between py-2">
+                      <label className="text-dark ">Tax(%)</label>
+                      <span>: {invoiceData.txnTax}</span>
+                    </div>
+                    {/* <div className="container-fluid d-flex justify-content-between py-2">
                         <label className="text-dark ">
                           Adjustment(Rs.) 
                         </label>
                         <span>: {invoiceData.adjustment || "0" }.00</span>
                       </div> */}
-                      <div className="container-fluid d-flex justify-content-between py-2">
-                        <label className="text-dark ">
-                          Grand Total(SGT) 
-                        </label>
-                        <span>: {invoiceData.grandTotal}</span>
-                      </div>
+                    <div className="container-fluid d-flex justify-content-between py-2">
+                      <label className="text-dark ">Grand Total(SGT)</label>
+                      <span>: {invoiceData.grandTotal}</span>
                     </div>
                   </div>
                 </div>
+              </div>
               {/* Quotes Information Table*/}
               <div className="container-fluid row" id="Details">
                 <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
