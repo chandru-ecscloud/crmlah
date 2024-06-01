@@ -13,7 +13,7 @@ import { IoMdMailOpen } from "react-icons/io";
 import { FaUserTie } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-
+import { Button, Modal } from 'react-bootstrap';
 // import Women from "../../assets/women 1.jpg";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
@@ -385,7 +385,9 @@ const Section = ({
         }}
       >
         {tasksToMap.length > 0 &&
-          filteredTasks(tasksToMap, status).map((task) => (
+          filteredTasks(tasksToMap, status).map((task) => 
+            { 
+              return(
             <Task
               key={task.id}
               task={task}
@@ -397,7 +399,24 @@ const Section = ({
               fetchDealData={fetchDealData}
               getAllData={getAllData}
             />
-          ))}
+          )})}
+        {/* {tasksToMap.length > 0 &&
+          filteredTasks(tasksToMap, status).map((task) => 
+            { 
+              return(
+            <Task
+              key={task.id}
+              task={task}
+              tasks={tasks}
+              setTasks={setTasks}
+              fetchLeadData={fetchLeadData}
+              fetchContactData={fetchContactData}
+              fetchAcconutData={fetchAcconutData}
+              fetchDealData={fetchDealData}
+              getAllData={getAllData}
+            />
+          )})} */}
+           
       </div>
     </div>
   );
@@ -495,8 +514,10 @@ const Header = ({
 
 const Task = ({
   task,
-  getAllData
+  getAllData,
+  tasks
 }) => {
+  const [showModal, setShowModal] = useState(false);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task.id, status: task.status },
@@ -506,52 +527,97 @@ const Task = ({
   }));
 
   const handleRemove = async (id, status) => {
-    let apiEndpoint = "";
-    let fetchFunction = null;
+    console.log("object", status);
+    if (status === "New") {
+      // console.log("New", id);
+      try {
+        const response = await axios.post(
+          `${API_URL}deleteMultipleClientData`,
+          [task.data],
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    switch (status) {
-      case "New":
-        apiEndpoint = "deleteMultipleClientData";
-        fetchFunction = getAllData;
-        break;
-      case "Qualified":
-        apiEndpoint = `contactToLeadConvert/${id}`;
-        fetchFunction = getAllData;
-        break;
-      case "Proposition":
-        apiEndpoint = `accountToContactConvert/${id}`;
-        fetchFunction = getAllData;
-        break;
-      case "Won":
-        apiEndpoint = `dealToAccountConvert/${id}`;
-        fetchFunction = getAllData;
-        break;
-      default:
-        return;
-    }
-
-    try {
-      const response = await axios.post(
-        `${API_URL}${apiEndpoint}`,
-        [task.data],
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success(response.data.message, {
-          icon: <CiCircleRemove color="green" size={20} />,
-        });
-        if (fetchFunction) fetchFunction();
-      } else {
-        toast.error(response.data.message);
+        if (response.status === 200) {
+          toast.success(response.data.message, {
+            icon: <CiCircleRemove color="green" size={20} />,
+          });
+          getAllData()
+        } 
+      } catch (error) {
+        toast.error("Failed: " + error.message);
       }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
+    } else if (status === "Qualified") {
+      // console.log("Qualified", id);
+      try {
+        const response = await axios.post(
+          `${API_URL}contactToLeadConvert/${id}`,
+
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          toast.success(response.data.message, {
+            icon: <CiCircleRemove color="green" size={20} />,
+          });
+          getAllData()
+        } 
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    } else if (status === "Proposition") {
+      // console.log("Proposition",id);
+      try {
+        const response = await axios.post(
+          `${API_URL}accountToContactConvert/${id}`,
+
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          toast.success(response.data.message, {
+            icon: <CiCircleRemove color="green" size={20} />,
+          });
+          getAllData()
+        } 
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
+    } else if (status === "Won") {
+      // console.log("Won", id);
+      try {
+        const response = await axios.post(
+          `${API_URL}dealToAccountConvert/${id}`,
+
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          toast.success(response.data.message, {
+            icon: <CiCircleRemove color="green" size={20} />,
+          });
+          getAllData()
+        } 
+      } catch (error) {
+        toast.error("Failed: " + error.message);
+      }
     }
+    // toast("Task removed", { icon: <CiCircleRemove color="red" size={20} /> });
   };
 
   let badgeColor;
@@ -610,62 +676,35 @@ const Task = ({
         </span>
         <br />
         <button
-          className="btn btn-outline-danger px-2 py-1"
-          data-bs-toggle="modal"
-          data-bs-target={`#deleteModal-${task.id}`}
-          style={{
-            border: "none",
-          }}
-        >
-          <IoMdTrash />
+           variant="outline-danger"
+           className="btn btn-outline-danger px-2 py-1"
+           style={{ border: 'none' }}
+           onClick={() => setShowModal(true)}
+         >
+           <IoMdTrash />
         </button>
       </div>
 
-      <div
-        className="modal fade"
-        id={`deleteModal-${task.id}`}
-        tabIndex="-1"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="fw-bold" id="deleteModalLabel">
-                Delete Confirmation
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <hr />
-            <div className="modal-body p-1 px-3">
-              Are you sure you want to delete?
-            </div>
-            <hr />
-            <div className="modal-footer p-1">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                No
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleRemove(task.id, task.status)}
-                data-bs-dismiss="modal"
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            No
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleRemove(task.id, task.status);
+              setShowModal(false);
+            }}
+          >
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
