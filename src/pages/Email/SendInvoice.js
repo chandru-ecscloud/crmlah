@@ -32,7 +32,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      generatePDF()
+      // generatePDF()
       // try {
       //   const generateHtmlContent = () => {
       //     setLoadIndicator(true);
@@ -328,18 +328,18 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       // }
 
       try {
-        const pdfBase64 = await generatePDF("download");
+        // const pdfBase64 = await generatePDF("download");
         setLoadIndicator(true);
         const response = await axios.post(`${API_URL}sendMail`, {
           toMail: invoiceData.email,
           fromMail: userEmail,
           subject: values.subject,
           htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
-          attachment: {
-                filename: 'invoice.pdf',
-                content: pdfBase64,
-                encoding: 'base64'
-            }
+          // attachment: {
+          //       filename: 'invoice.pdf',
+          //       content: pdfBase64,
+          //       encoding: 'base64'
+          //   }
         });
 
         if (response.status === 200) {

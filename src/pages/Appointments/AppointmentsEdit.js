@@ -85,6 +85,7 @@ function AppointmentsCreate({ name, id, getData }) {
       // data.serviceName = selectedServiceName;
       data.appointmentOwner = userName;
       data.reminder = 2;
+      data.appointmentName =data.appointmentName;
       // console.log(data);
 
       try {
