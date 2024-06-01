@@ -17,7 +17,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -50,7 +50,7 @@ const AllClient = () => {
         accessorKey: "name",
         enableHiding: false,
         header: "Name",
-        Cell: ({ row }) => (
+        Cell: ({ row }) =>
           row.original.stage === "Lead" ? (
             <Link to={`/leads/show/${row.original.id}`} className="rowName">
               {row.original.name}
@@ -71,8 +71,7 @@ const AllClient = () => {
             <Link to="#" className="rowName">
               {row.original.name}
             </Link>
-          )
-        )
+          ),
       },
       {
         accessorKey: "companyName",
@@ -99,7 +98,6 @@ const AllClient = () => {
       //   enableHiding: false,
       //   header: "Account Id",
       // },
-
     ],
     []
   );
@@ -117,7 +115,7 @@ const AllClient = () => {
         }
       );
       setData(response.data);
-      console.log("response",response.data)
+      console.log("response", response.data);
     } catch (error) {
       toast.error("Error fetching data:", error);
     } finally {
@@ -353,7 +351,8 @@ const AllClient = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -367,7 +366,8 @@ const AllClient = () => {
           </button>
         </OverlayTrigger>
 
-        <button className="btn text-secondary"
+        <button
+          className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             handleExportRowsPDF(table.getPrePaginationRowModel().rows)
@@ -375,7 +375,8 @@ const AllClient = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -383,13 +384,29 @@ const AllClient = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
         </OverlayTrigger>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        const basePath =
+          {
+            Lead: `/leads/show/${row.original.id}`,
+            Contact: `/contacts/show/${row.original.id}`,
+            Account: `/accounts/show/${row.original.id}`,
+            Deal: `/deals/show/${row.original.id}`,
+          }[row.original.stage] || "#";
+
+        navigate(basePath);
+      },
+      style: { cursor: 'pointer' },
+    }),
   });
 
   return (
