@@ -23,7 +23,7 @@ function Activity({ id }) {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}getAccountActivityWithClientDataByAccountId/610`
+        `${API_URL}getAccountActivityWithClientDataByAccountId/${id}`
       );
       if (response.data && Array.isArray(response.data)) {
         setData(response.data);
@@ -59,7 +59,7 @@ function Activity({ id }) {
           <Modal.Title>Recent Activity</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <ActivityAdd id={id} onClick={handleClose} />
+          <ActivityAdd id={id} onClick={handleClose} fetchData={fetchData} />
         </Modal.Footer>
         <Modal.Body className={viewAll ? "scrollable-modal-body" : ""}>
           <Accordion
@@ -73,9 +73,28 @@ function Activity({ id }) {
                 .map((activity, index) => (
                   <Accordion.Item eventKey={index.toString()} key={activity.id}>
                     <Accordion.Header>
-                      <div className="iconDesign">
-                        <FaUserTie className="me-2" />
-                      </div>
+                      {activity.status === "NEW" ? (
+                        <div
+                          className="iconDesign"
+                          style={{ backgroundColor: "blue" }}
+                        >
+                          new
+                        </div>
+                      ) : activity.status === "WON" ? (
+                        <div
+                          className="iconDesign"
+                          style={{ backgroundColor: "green" }}
+                        >
+                          won
+                        </div>
+                      ) : (
+                        <div
+                          className="iconDesign"
+                          style={{ backgroundColor: "red" }}
+                        >
+                          No
+                        </div>
+                      )}
                       <div className="flex-group-1">
                         <b>{activity.activityOwner || ""}</b>
                         <br />

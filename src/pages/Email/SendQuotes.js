@@ -14,9 +14,7 @@ import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object({
   subject: yup.string().required("*Subject is required"),
-  files: yup.array()
-  .min(1, "Attacment is Must")
-  .required("Attacment is Must"),
+  // files: yup.array().min(1, "Attacment is Must").required("Attacment is Must"),
 });
 function SendQuotes({ accountData }) {
   const [show, setShow] = useState(false);
@@ -30,31 +28,35 @@ function SendQuotes({ accountData }) {
   const formik = useFormik({
     initialValues: {
       subject: "",
-      files:[],
+      files: [],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         const formData = new FormData();
-        formData.append("to",accountData.email);
+        formData.append("to", accountData.email);
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
-        formData.append("body", values.subject);
-        formData.append("htmlContent",generateInvoice(accountData.quotes));
+        // formData.append("body", values.subject);
+        formData.append("htmlContent", generateInvoice(accountData.quotes));
         values.files.forEach((file) => {
           formData.append("files", file);
         });
         setLoadIndicator(true);
-        const response = await axios.post(`${API_URL}sendMailWithAttachment`,formData, {
-          // toMail: accountData.email,
-          // fromMail: userEmail,
-          // subject: values.subject,
-          // htmlContent: generateInvoice(accountData.quotes),
-          // file:values.files,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await axios.post(
+          `${API_URL}sendMailWithHtmlContentAndAttachment`,
+          formData,
+          {
+            // toMail: accountData.email,
+            // fromMail: userEmail,
+            // subject: values.subject,
+            // htmlContent: generateInvoice(accountData.quotes),
+            // file:values.files,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         if (response.status === 201) {
           toast.success("Mail sent successfully");
@@ -80,7 +82,6 @@ function SendQuotes({ accountData }) {
     const files = Array.from(event.target.files);
     formik.setFieldValue("files", [...formik.values.files, ...files]);
   };
-
 
   useEffect(() => {
     if (formik.values.subject && accountData.quotes) {
@@ -535,14 +536,18 @@ function SendQuotes({ accountData }) {
                   ) : (
                     <span className="text-danger">
                       &nbsp;
-                      <MdErrorOutline className="text-danger" />
+                      {/* <MdErrorOutline className="text-danger" /> */}
                       &nbsp;{formik.errors.files}
                     </span>
                   )}
                 </span>
               </div>
               <span className="d-flex" style={{ gap: "10px" }}>
-                <button type="submit" className="btn btn-primary mt-4" onClick={formik.handleSubmit}>
+                <button
+                  type="submit"
+                  className="btn btn-primary mt-4"
+                  onClick={formik.handleSubmit}
+                >
                   {loadIndicator && (
                     <span
                       class="spinner-border spinner-border-sm me-2"

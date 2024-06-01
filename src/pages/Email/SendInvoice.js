@@ -12,9 +12,7 @@ import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
-  files: yup.array()
-      .min(1, "Attacment is Must")
-      .required("Attacment is Must"),
+  // files: yup.array().min(1, "Attacment is Must").required("Attacment is Must"),
 });
 
 function SendInvoice({ invoiceData, id, generatePDF }) {
@@ -25,8 +23,8 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
   const [subject, setSubject] = useState("");
-  const [htmlContent, setHtmlContent] = useState("");
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  // const [htmlContent, setHtmlContent] = useState("");
+  // const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -59,50 +57,50 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //             color: #555;
       //             min-height: 100vh;
       //           }
-    
+
       //         .invoice-box table {
       //           width: 100%;
       //           line-height: inherit;
       //           text-align: left;
       //         }
-    
+
       //         .invoice-box table td {
       //           padding: 5px;
       //           vertical-align: top;
       //         }
-    
+
       //         .invoice-box table td.third {
       //           text-align: right;
       //         }
-    
+
       //         .invoice-box table tr.heading td {
       //           background: #eee;
       //           border-bottom: 1px solid #ddd;
       //           font-weight: bold;
       //         }
-    
+
       //         .invoice-box table tr.item td {
       //           border-bottom: 1px solid #eee;
       //         }
-    
+
       //         .invoice-box table tr.item.last td {
       //           border-bottom: none;
       //         }
-    
+
       //         .invoice-box table tr.total td:nth-child(2) {
       //           border-top: 2px solid #eee;
       //           font-weight: bold;
       //         }
-    
+
       //         #scan {
       //           float: right;
       //         }
-    
+
       //         #scan img {
       //           max-width: 100%;
       //           height: auto;
       //         }
-    
+
       //         @media print {
       //           .invoice-box {
       //             border: 0;
@@ -118,7 +116,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //           width: 20%;
       //           padding: 5px;
       //         }
-    
+
       //         #LABEL2 label {
       //           display: inline-block;
       //           width: 15%;
@@ -152,26 +150,26 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //               </td>
       //             </tr>
       //           </table>
-    
+
       //           <div  id="LABEL1" id="LABEL2" style="width: 150% !important;">
       //           <strong>Address :</strong>
       //           <br />
       //           <div style="display: flex;">
       //             <label>Billing Street</label>
       //             <span>:&nbsp;&nbsp;${invoiceData.billingStreet || "--"}</span>
-          
+
       //             <label>Billing City</label>
       //             <span>:&nbsp;&nbsp;${invoiceData.billingCity || "--"}</span>
       //           </div>
-          
+
       //           <div style="display: flex">
       //             <label>Billing State</label>
       //             <span>:&nbsp;&nbsp;${invoiceData.billingState || "--"}</span>
-          
+
       //             <label>Billing Code</label>
       //             <span>:&nbsp;&nbsp;${invoiceData.billingCode || "--"}</span>
       //           </div>
-                
+
       //           <div style="display: flex">
       //             <label>Billing Country</label>
       //             <span>:&nbsp;&nbsp;${
@@ -181,29 +179,29 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //         </div>
       //         <br/>
       //         <div  id="LABEL2" style="width: 150% !important;">
-               
+
       //             <div style="display: flex;">
       //             <label>Shipping Street</label>
       //             <span>:&nbsp;&nbsp;${
       //               invoiceData.shippingStreet || "--"
       //             }</span>
-          
+
       //             <label>Shipping City</label>
       //             <span>:&nbsp;&nbsp;${invoiceData.shippingCity || "--"}</span>
       //             </div>
-          
+
       //             <div style="display: flex">
       //               <label>Shipping State</label>
       //               <span>:&nbsp;&nbsp;${
       //                 invoiceData.shippingState || "--"
       //               }</span>
-          
+
       //               <label>Shipping Code</label>
       //               <span>:&nbsp;&nbsp;${
       //                 invoiceData.shippingCode || "--"
       //               }</span>
       //             </div>
-                    
+
       //             <div style="display: flex">
       //               <label>Shipping Country</label>
       //               <span>:&nbsp;&nbsp;${
@@ -211,9 +209,9 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //               }</span>
       //             </div>
       //           </div>
-              
+
       //           <br />
-    
+
       //           <div style="max-width: 590px; overflow: auto">
       //             <table>
       //               <tr class="heading">
@@ -244,7 +242,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //                 .join("")}
       //             </table>
       //           </div>
-    
+
       //           <table style="margin-top: 20px; border: 1px solid #eee">
       //             <tr>
       //               <td style="width: 75%">
@@ -254,7 +252,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //               </td>
       //             </tr>
       //           </table>
-    
+
       //           <table style="margin-top: 20px; border: 1px solid #eee">
       //             <tr>
       //               <td style="width: 75%">
@@ -263,7 +261,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //               <td> ${invoiceData.txnTax || "--"}</td>
       //             </tr>
       //           </table>
-    
+
       //           <table style="margin-top: 20px; border: 1px solid #eee">
       //             <tr>
       //               <td style="width: 75%">
@@ -272,7 +270,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //               <td>${invoiceData.grandTotal || "--"}</td>
       //             </tr>
       //           </table>
-    
+
       //           <div
       //             style="
       //               display: flex;
@@ -284,7 +282,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //             <div style="width: 50%"></div>
       //             <div style="width: 50%; text-align: end">
       //             <div><strong style="margin-right: 34px;margin-bottom: 10px;">ECSCloud CRM</strong><br/></div>
-                  
+
       //               <div>
       //                 <img
       //                   src="https://www.sgitjobs.com/HomeInsteadFinalUI/public/assets/images/QR.png"
@@ -298,7 +296,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       //         </div>
       //       </body>
       //     </html>
-    
+
       //   `;
       //       html += htmlContent;
       //     }
@@ -333,30 +331,36 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       try {
         // const pdfBase64 = await generatePDF("download");
         const formData = new FormData();
-        formData.append("to",invoiceData.email);
+        formData.append("to", "chandru08112000@gmail.com");
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
-        formData.append("body", values.subject);
-        formData.append("htmlContent",generateInvoice(invoiceData.transactionInvoiceModels));
+        formData.append(
+          "htmlContent",
+          generateInvoice(invoiceData.transactionInvoiceModels)
+        );
         values.files.forEach((file) => {
           formData.append("files", file);
         });
         setLoadIndicator(true);
-        const response = await axios.post(`${API_URL}sendMailWithAttachment`,formData,{
-          // toMail: invoiceData.email,                        
-          // fromMail: userEmail,
-          // subject: values.subject,
-          // htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
-          // files:values.files,
-          // attachment: {
-          //       filename: 'invoice.pdf',
-          //       content: pdfBase64,
-          //       encoding: 'base64'
-          //   }
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await axios.post(
+          `${API_URL}sendMailWithHtmlContentAndAttachment`,
+          formData,
+          {
+            // toMail: invoiceData.email,
+            // fromMail: userEmail,
+            // subject: values.subject,
+            // htmlContent: generateInvoice(invoiceData.transactionInvoiceModels),
+            // files:values.files,
+            // attachment: {
+            //       filename: 'invoice.pdf',
+            //       content: pdfBase64,
+            //       encoding: 'base64'
+            //   }
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         if (response.status === 201) {
           toast.success("Mail sent successfully");
@@ -417,7 +421,6 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
   //   }
   // };
 
-
   useEffect(() => {
     if (formik.values.subject && invoiceData.transactionInvoiceModels) {
       const htmlContent = generateInvoice(invoiceData.transactionInvoiceModels);
@@ -425,7 +428,6 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
       formik.setFieldValue("isSendingEmail", true);
     }
   }, [formik.values.subject, invoiceData.transactionInvoiceModels]);
-
 
   const generateInvoice = (invoice) => {
     if (!invoice || invoice.length === 0) {
@@ -666,9 +668,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
              
             <div style="display: flex">
               <label>Billing Country</label>
-              <span>:&nbsp;&nbsp;${
-                invoiceData.billingCountry || "--"
-              }</span>
+              <span>:&nbsp;&nbsp;${invoiceData.billingCountry || "--"}</span>
             </div>
           </div>
           <br/>
@@ -676,9 +676,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
             
               <div style="display: flex;">
               <label>Shipping Street</label>
-              <span>:&nbsp;&nbsp;${
-                invoiceData.shippingStreet || "--"
-              }</span>
+              <span>:&nbsp;&nbsp;${invoiceData.shippingStreet || "--"}</span>
        
               <label>Shipping City</label>
               <span>:&nbsp;&nbsp;${invoiceData.shippingCity || "--"}</span>
@@ -686,21 +684,15 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
        
               <div style="display: flex">
                 <label>Shipping State</label>
-                <span>:&nbsp;&nbsp;${
-                  invoiceData.shippingState || "--"
-                }</span>
+                <span>:&nbsp;&nbsp;${invoiceData.shippingState || "--"}</span>
        
                 <label>Shipping Code</label>
-                <span>:&nbsp;&nbsp;${
-                  invoiceData.shippingCode || "--"
-                }</span>
+                <span>:&nbsp;&nbsp;${invoiceData.shippingCode || "--"}</span>
               </div>
                  
               <div style="display: flex">
                 <label>Shipping Country</label>
-                <span>:&nbsp;&nbsp;${
-                  invoiceData.shippingCountry || "--"
-                }</span>
+                <span>:&nbsp;&nbsp;${invoiceData.shippingCountry || "--"}</span>
               </div>
             </div>
            
@@ -723,7 +715,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
 
       <Offcanvas
         show={show}
-      //  onHide={handleHide}
+        //  onHide={handleHide}
         className="emailHeader"
         placement="end"
       >
@@ -1038,7 +1030,7 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
                   ) : (
                     <span className="text-danger">
                       &nbsp;
-                      <MdErrorOutline className="text-danger" />
+                      {/* <MdErrorOutline className="text-danger" /> */}
                       &nbsp;{formik.errors.files}
                     </span>
                   )}

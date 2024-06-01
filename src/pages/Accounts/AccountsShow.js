@@ -19,7 +19,6 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import Activity from "./Activity";
 
-
 function AccountsShow() {
   const { id } = useParams();
 
@@ -98,7 +97,7 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <Activity />
+          <Activity id={id} />
           <SendQuotes accountData={accountData} />
           <Appointment
             name={"schedule"}

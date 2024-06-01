@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
   note: Yup.string().required("*Notes are required"),
 });
 
-const ActivityAdd = ({ id }) => {
+const ActivityAdd = ({ id, fetchData }) => {
   const [show, setShow] = useState(false);
   const [rows, setRows] = useState([
     {
@@ -54,16 +54,14 @@ const ActivityAdd = ({ id }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      data.accountId = id;
-      data.activityOwner = userName;
       const payload = {
         accountActivity: {
-          accountId: data.accountId,
-          activityOwner: data.activityOwner,
+          accountId: id,
+          activityOwner: userName,
           status: data.status,
           note: data.note,
-          clientDataList: data.clientData,
         },
+        clientData: data.clientData,
       };
       try {
         const response = await axios.post(
@@ -77,21 +75,22 @@ const ActivityAdd = ({ id }) => {
         );
         if (response.status === 201) {
           toast.success("Activity Created Successfully.");
+          fetchData();
+          formik.resetForm();
+          setRows([
+            {
+              id: 1,
+              clientName: "",
+              clientPhone: "",
+              clientEmail: "",
+              clientCountryCode: "65",
+            },
+          ]);
+          handleClose();
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
-      formik.resetForm();
-      setRows([
-        {
-          id: 1,
-          clientName: "",
-          clientPhone: "",
-          clientEmail: "",
-          clientCountryCode: "65",
-        },
-      ]);
-      handleClose();
     },
   });
 
@@ -259,18 +258,18 @@ const ActivityAdd = ({ id }) => {
                       : ""
                   }`}
                 >
-                  <option value=""></option>
-                  <option value="New">New</option>
-                  <option value="Contacted">Contacted</option>
-                  <option value="Qualified">Qualified</option>
-                  <option value="Proposal Sent">Proposal Sent</option>
-                  <option value="Negotiation">Negotiation</option>
-                  <option value="Won">Won</option>
-                  <option value="Lost">Lost</option>
-                  <option value="On Hold">On Hold</option>
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Delivery">Delivery</option>
-                  <option value="Follow Up">Follow Up</option>
+                  <option></option>
+                  <option value="NEW">New</option>
+                  <option value="CONTACTED">Contacted</option>
+                  <option value="QUALIFIED">Qualified</option>
+                  <option value="PROPOSAL_SENT">Proposal Sent</option>
+                  <option value="NEGOTIATION">Negotiation</option>
+                  <option value="WON">Won</option>
+                  <option value="LOST">Lost</option>
+                  <option value="ON_HOLD">On Hold</option>
+                  <option value="CANCELLED">Cancelled</option>
+                  <option value="DELIVERY">Delivery</option>
+                  <option value="FOLLOW_UP">Follow Up</option>
                 </select>
                 {formik.touched.status && formik.errors.status ? (
                   <div className="invalid-feedback">{formik.errors.status}</div>
