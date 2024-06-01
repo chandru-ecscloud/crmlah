@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -15,7 +15,7 @@ const validationSchema = Yup.object({
       clientPhone: Yup.string()
         .matches(/^\+?[1-9]\d{1,14}$/, "*Phone number is not valid")
         .notRequired(),
-      cilentEmail: Yup.string().email("*Invalid email format").notRequired(),
+      clientEmail: Yup.string().email("*Invalid email format").notRequired(),
     })
   ),
   status: Yup.string().required("*Status is required"),
@@ -24,13 +24,16 @@ const validationSchema = Yup.object({
 
 const ActivityAdd = ({ id }) => {
   const [show, setShow] = useState(false);
-  const [rows, setRows] = useState([{
-    id: 1,
-    clientName: "",
-    clientPhone: "",
-    cilentEmail: "",
-    clientCountryCode: "65",
-  }]);
+  const [rows, setRows] = useState([
+    {
+      id: 1,
+      clientName: "",
+      clientPhone: "",
+      clientEmail: "",
+      clientCountryCode: "65",
+    },
+  ]);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const userName = sessionStorage.getItem("user_name");
@@ -42,7 +45,7 @@ const ActivityAdd = ({ id }) => {
           id: 1,
           clientName: "",
           clientPhone: "",
-          cilentEmail: "",
+          clientEmail: "",
           clientCountryCode: "65",
         },
       ],
@@ -51,11 +54,17 @@ const ActivityAdd = ({ id }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      // Handle form submission
       data.accountId = id;
       data.activityOwner = userName;
-      const payload={accountActivity:data}
-      console.log(data);
+      const payload = {
+        accountActivity: {
+          accountId: data.accountId,
+          activityOwner: data.activityOwner,
+          status: data.status,
+          note: data.note,
+          clientDataList: data.clientData,
+        },
+      };
       try {
         const response = await axios.post(
           `${API_URL}createAccountActivityWithClientData`,
@@ -67,13 +76,22 @@ const ActivityAdd = ({ id }) => {
           }
         );
         if (response.status === 201) {
-          toast.success("Appointment Created Successfully.");
+          toast.success("Activity Created Successfully.");
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
       formik.resetForm();
-      // setRows({})
+      setRows([
+        {
+          id: 1,
+          clientName: "",
+          clientPhone: "",
+          clientEmail: "",
+          clientCountryCode: "65",
+        },
+      ]);
+      handleClose();
     },
   });
 
@@ -86,7 +104,7 @@ const ActivityAdd = ({ id }) => {
         id: newRow.id,
         clientName: "",
         clientPhone: "",
-        cilentEmail: "",
+        clientEmail: "",
         clientCountryCode: "65",
       },
     ]);
@@ -108,10 +126,10 @@ const ActivityAdd = ({ id }) => {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header
           closeButton
-          closeVariant="white "
+          closeVariant="white"
           style={{ backgroundColor: "#0073fa" }}
         >
-          <Modal.Title className="text-light">Activity Add</Modal.Title>
+          <Modal.Title className="text-light">Add Activity</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={formik.handleSubmit}>
@@ -175,29 +193,29 @@ const ActivityAdd = ({ id }) => {
                     </div>
                   </div>
                   <div className="form-group mt-2">
-                    <label htmlFor={`cilentEmail${index}`}>Email</label>
+                    <label htmlFor={`clientEmail${index}`}>Email</label>
                     <input
-                      type="cilentEmail"
-                      name={`cilentEmail${index}`}
-                      id={`cilentEmail${index}`}
+                      type="clientEmail"
+                      name={`clientEmail${index}`}
+                      id={`clientEmail${index}`}
                       {...formik.getFieldProps(
-                        `clientData[${index}].cilentEmail`
+                        `clientData[${index}].clientEmail`
                       )}
                       className={`form-control ${
                         formik.touched.clientData &&
-                        formik.touched.clientData[index]?.cilentEmail &&
+                        formik.touched.clientData[index]?.clientEmail &&
                         formik.errors.clientData &&
-                        formik.errors.clientData[index]?.cilentEmail
+                        formik.errors.clientData[index]?.clientEmail
                           ? "is-invalid"
                           : ""
                       }`}
                     />
                     {formik.touched.clientData &&
-                      formik.touched.clientData[index]?.cilentEmail &&
+                      formik.touched.clientData[index]?.clientEmail &&
                       formik.errors.clientData &&
-                      formik.errors.clientData[index]?.cilentEmail && (
+                      formik.errors.clientData[index]?.clientEmail && (
                         <div className="invalid-feedback">
-                          {formik.errors.clientData[index]?.cilentEmail}
+                          {formik.errors.clientData[index]?.clientEmail}
                         </div>
                       )}
                   </div>

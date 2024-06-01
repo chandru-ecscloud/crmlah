@@ -18,7 +18,7 @@ import SendQuotes from "../Email/SendQuotes";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import Activity from "./Activity";
-import "../../styles/custom.css";
+
 
 function AccountsShow() {
   const { id } = useParams();
@@ -37,12 +37,6 @@ function AccountsShow() {
     id: id,
     appointmentName: accountData.accountName,
     email: accountData.email,
-    phone:accountData.phone,
-    city: accountData.city,
-    state:accountData.state,
-    street:accountData.street,
-    zipCode:accountData.zipCode,
-    country:accountData.country
   };
   const userData = async () => {
     try {
@@ -104,10 +98,10 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <Activity id={id}/>
+          <Activity />
           <SendQuotes accountData={accountData} />
           <Appointment
-            name={"Schedule"}
+            name={"schedule"}
             schedule={scheduleData}
             getData={userData}
           />

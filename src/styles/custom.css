@@ -747,7 +747,7 @@ nav .nav-link Link {
 
 
 .scrollable-modal-body {
-  max-height: 400px; /* Adjust as needed */
+  max-height: 300px; /* Adjust as needed */
   overflow-y: auto;
 }
 

@@ -1,21 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Accordion from "react-bootstrap/Accordion";
 import { FaUserTie } from "react-icons/fa";
 import "../../styles/custom.css";
-import { date } from "yup";
 import { MdOutlineClose } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { API_URL } from "../../Config/URL";
+import axios from "axios";
+import ActivityAdd from "./ActivityAdd";
 
-function Activity() {
+function Activity({ id }) {
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(null);
   const [viewAll, setViewAll] = useState(false);
+  const [data, setData] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // Define truncateText function inside the component
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAccountActivityWithClientDataByAccountId/610`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        setData(response.data);
+      } else {
+        setData([]);
+        toast.error("Unexpected response format: data is not an array");
+      }
+    } catch (error) {
+      toast.error(`Error fetching data: ${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
   const truncateText = (text, wordLimit) => {
     const words = text.split(" ");
     if (words.length <= wordLimit) {
@@ -23,64 +47,6 @@ function Activity() {
     }
     return words.slice(0, wordLimit).join(" ") + "...";
   };
-
-  const content = [
-    {
-      icon: <FaUserTie className="me-2" />,
-      title: "Naveen",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      details: {
-        name: "Suriya",
-        email: "suriyaecs22@gmail.com",
-        phone: "9876543456",
-      },
-      date: "01/06/2024",
-    },
-    {
-      icon: <FaUserTie className="me-2" />,
-      title: "Naveen",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      details: {
-        name: "Suriya",
-        email: "suriyaecs22@gmail.com",
-        phone: "9876543456",
-      },
-      date: "02/06/2024",
-    },
-    {
-      icon: <FaUserTie className="me-2" />,
-      title: "Naveen",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      details: {
-        name: "Suriya",
-        email: "suriyaecs22@gmail.com",
-        phone: "9876543456",
-      },
-      date: "03/06/2024",
-    },
-    {
-      icon: <FaUserTie className="me-2" />,
-      title: "Naveen",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      details: {
-        name: "Suriya",
-        email: "suriyaecs22@gmail.com",
-        phone: "9876543456",
-      },
-      date: "04/06/2024",
-    },
-    {
-      icon: <FaUserTie className="me-2" />,
-      title: "Naveen",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      details: {
-        name: "Suriya",
-        email: "suriyaecs22@gmail.com",
-        phone: "9876543456",
-      },
-      date: "05/06/2024",
-    },
-  ];
 
   return (
     <>
@@ -93,56 +59,62 @@ function Activity() {
           <Modal.Title>Recent Activity</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <Button variant="danger" className="me-2">
-            New Activity
-          </Button>
+          <ActivityAdd id={id} onClick={handleClose} />
         </Modal.Footer>
         <Modal.Body className={viewAll ? "scrollable-modal-body" : ""}>
-          {/* Add dotted line outside the Accordion */}
-
           <Accordion
             activeKey={expanded}
             onSelect={(e) => setExpanded(e)}
             className="custom-accordion"
           >
-            {content
-              .slice(0, viewAll ? content.length : 3)
-              .map((item, index) => (
-                <Accordion.Item eventKey={index.toString()} key={index}>
-                  <Accordion.Header>
-                    <div className="iconDesign">{item.icon}</div>
-                    <div className="flex-group-1">
-                      <b>{item.title}</b>
-                      <br />
-                      <span className="text-muted small">
-                        {expanded !== index.toString() &&
-                          truncateText(item.text, 10)}
-                      </span>
-                    </div>
-                    <div className="text-end ms-auto">
-                      <span className="text-muted small text-end">
-                        {item.date}
-                      </span>
-                    </div>
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    {item.text}
-                    <div className="mt-3">
-                      <span>
-                        <b>Name:</b> {item.details.name}
-                      </span>
-                      <br />
-                      <span>
-                        <b>Email:</b> {item.details.email}
-                      </span>
-                      <br />
-                      <span>
-                        <b>Phone no:</b> {item.details.phone}
-                      </span>
-                    </div>
-                  </Accordion.Body>
-                </Accordion.Item>
-              ))}
+            {data.length > 0 ? (
+              data
+                .slice(0, viewAll ? data.length : 3)
+                .map((activity, index) => (
+                  <Accordion.Item eventKey={index.toString()} key={activity.id}>
+                    <Accordion.Header>
+                      <div className="iconDesign">
+                        <FaUserTie className="me-2" />
+                      </div>
+                      <div className="flex-group-1">
+                        <b>{activity.activityOwner || ""}</b>
+                        <br />
+                        <span className="text-muted small">
+                          {expanded !== index.toString() &&
+                            truncateText(activity.note, 10)}
+                        </span>
+                      </div>
+                      <div className="text-end ms-auto">
+                        <span className="text-muted small text-end">
+                          {new Date(activity.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      {activity.note}
+                      {activity.clientData &&
+                        activity.clientData.map((client, clientIndex) => (
+                          <div className="mt-3" key={client.id}>
+                            <span>
+                              <b>Name:</b> {client.clientName}
+                            </span>
+                            <br />
+                            <span>
+                              <b>Email:</b> {client.clientEmail}
+                            </span>
+                            <br />
+                            <span>
+                              <b>Phone no:</b> {client.clientCountryCode}{" "}
+                              {client.clientPhone}
+                            </span>
+                          </div>
+                        ))}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ))
+            ) : (
+              <p>No activities available.</p>
+            )}
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
