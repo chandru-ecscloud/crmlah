@@ -30,6 +30,7 @@ const Lead = () => {
   console.log(data);
   const [loading, setLoading] = useState(true);
   const role = sessionStorage.getItem("role");
+  const Id = sessionStorage.getItem("Id");
   // console.log(role);
   const navigate = useNavigate();
   const companyId = sessionStorage.getItem("companyId");
@@ -340,12 +341,16 @@ const Lead = () => {
   const handleBulkConvert = async (rows) => {
     rows.forEach((row) => {
       row.original.company_id = companyId;
-    });
+    }); 
 
-    console.log(rows);
+
+    
     const rowData = rows.map((row) => row.original);
+    const rowDataid = rows.map((row) => row.original.id).toString();
+    
+    console.log("12",rowDataid);
     try {
-      const response = await axios.post(`${API_URL}transferBulkData`, rowData, {
+      const response = await axios.post(`${API_URL}leadToContactConvert/${rowDataid}`, rowData, {
         headers: {
           "Content-Type": "application/json",
           // //Authorization: `Bearer ${token}`,

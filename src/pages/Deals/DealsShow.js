@@ -364,7 +364,7 @@ function DealsShow() {
               <div>
                 <label className="text-dark Label">Phone Number</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;+{dealData.countryCode || ""} {dealData.phone || ""}
+                  &nbsp; : &nbsp;{dealData.countryCode || ""} {dealData.phone || ""}
                 </span>
               </div>
 

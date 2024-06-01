@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import { GrAttachment } from "react-icons/gr";
 import { IoMdSend, IoIosSend } from "react-icons/io";
-import { MdErrorOutline } from "react-icons/md";
+import { MdErrorOutline, MdDelete } from "react-icons/md";
 import user from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -15,18 +15,12 @@ const role = sessionStorage.getItem("role");
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject"),
   body: yup.string().required("*Main Body"),
-  // files: yup.array()
-  //     .min(1, "Attacment is Must")
-  //     .required("Attacment is Must"),
 });
 
 function SendEmail({ toEmail }) {
-  // console.log("To Mail:",toEmail);
-
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
-  const [selectedFile, setSelectedFile] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
@@ -37,11 +31,6 @@ function SendEmail({ toEmail }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("To Mail:", toEmail);
-      // console.log("From Mail:", userEmail);
-      // console.log("Subject:", values.subject);
-      // console.log("Main Body:", values.body);
-      // console.log("Files:", values.files);
       setLoadIndicator(true);
 
       try {
@@ -60,7 +49,6 @@ function SendEmail({ toEmail }) {
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              //Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -83,51 +71,18 @@ function SendEmail({ toEmail }) {
   const handleShow = () => setShow(true);
   const handleHide = () => {
     formik.resetForm();
-    setSelectedFile(null);
     setShow(false);
   };
-
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  // };
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     formik.setFieldValue("files", [...formik.values.files, ...files]);
   };
 
-  // const sendEmail = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("toMail", "chandru08112000@gmail.com");
-  //     formData.append("fromMail", userEmail);
-  //     formData.append("subject", subject);
-  //     formData.append("body", mainBody);
-  //     formData.append("attachment", selectedFile);
-
-  //     const response = await axios.post(
-  //       `${API_URL}sendMailWithAttachment`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data", // Set the content type
-  //           //Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message);
-  //       toast.success("Mail Send Successfully");
-  //       handleHide();
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const handleFileRemove = (index) => {
+    const files = formik.values.files.filter((_, i) => i !== index);
+    formik.setFieldValue("files", files);
+  };
 
   return (
     <div>
@@ -183,9 +138,8 @@ function SendEmail({ toEmail }) {
                 name="subject"
                 id="subject"
                 placeholder="Subject"
-                // onChange={(e) => setSubject(e.target.value)}
                 style={{ border: "none" }}
-                className={`form-control  ${
+                className={`form-control ${
                   formik.touched.subject && formik.errors.subject
                     ? "is-invalid"
                     : ""
@@ -200,9 +154,8 @@ function SendEmail({ toEmail }) {
               <textarea
                 name="body"
                 placeholder="Mail Body"
-                // onChange={(e) => setMainBody(e.target.value)}
                 style={{ height: "250px", border: "none" }}
-                className={`form-control  ${
+                className={`form-control ${
                   formik.touched.body && formik.errors.body ? "is-invalid" : ""
                 }`}
                 {...formik.getFieldProps("body")}
@@ -246,7 +199,7 @@ function SendEmail({ toEmail }) {
                 <button className="btn btn-primary" type="submit">
                   {loadIndicator && (
                     <span
-                      class="spinner-border spinner-border-sm me-3"
+                      className="spinner-border spinner-border-sm me-3"
                       aria-hidden="true"
                     ></span>
                   )}
@@ -255,11 +208,20 @@ function SendEmail({ toEmail }) {
                 </button>
               </span>
             </div>
-            {selectedFile && (
-              <p className="mt-2" style={{ marginBottom: "0px" }}>
-                File selected: {selectedFile.name}
-              </p>
-            )}
+            <div className="mt-3">
+              {formik.values.files.map((file, index) => (
+                <div key={index} className="d-flex align-items-center">
+                  <span>{file.name}</span>
+                  <button
+                    type="button"
+                    className="btn btn-danger ms-2"
+                    onClick={() => handleFileRemove(index)}
+                  >
+                    <MdDelete />
+                  </button>
+                </div>
+              ))}
+            </div>
           </form>
         </Offcanvas.Body>
       </Offcanvas>

@@ -18,7 +18,8 @@ const validationSchema = yup.object().shape({
   // vendor_name: yup.string().required("*Vendor name is required."),
   product_category: yup.string().required("*Product category is required."),
   sales_start_date: yup.date().required("*Date is required"),
-  sales_end_date: yup.date().required("*Date is required"),
+  sales_end_date: yup.date().required("*Date is required")
+  .min(yup.ref('sales_start_date'), 'Sales end date should not be before start date'),
   // support_start_date: yup.date().required("*Date is required"),
   // support_end_date: yup.date().required("*Date is required"),
   unit_price: yup.string()
