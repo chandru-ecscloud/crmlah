@@ -6,8 +6,7 @@ import USER from "../../assets/user.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { GrAttachment } from "react-icons/gr";
 import { IoLink, IoSend } from "react-icons/io5";
@@ -18,6 +17,8 @@ import SendEmail from "../Email/SendEmail";
 import SendQuotes from "../Email/SendQuotes";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
+import Activity from "./Activity";
+import "../../styles/custom.css";
 
 function AccountsShow() {
   const { id } = useParams();
@@ -27,8 +28,7 @@ function AccountsShow() {
   // const [selectedFile, setSelectedFile] = useState(null);
   // const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
-  console.log(accountData)
-
+  console.log(accountData);
 
   const navigate = useNavigate();
 
@@ -62,6 +62,11 @@ function AccountsShow() {
     navigate(`/accounts/edit/${id}`);
   };
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <>
       {/* header section */}
@@ -93,6 +98,7 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
+          <Activity />
           <SendQuotes accountData={accountData} />
           <Appointment
             name={"schedule"}
@@ -168,8 +174,6 @@ function AccountsShow() {
                 </span>
               </div>
 
-             
-
               {/* <div>
                 <label className="text-dark Label">Mobile</label>
                 <span className="text-dark">
@@ -222,16 +226,23 @@ function AccountsShow() {
               <div>
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;{accountData.createdAt ? accountData.createdAt.split("T")[0]:""}&nbsp;
-                 </span>
+                  &nbsp; : &nbsp;&nbsp;
+                  {accountData.createdAt
+                    ? accountData.createdAt.split("T")[0]
+                    : ""}
+                  &nbsp;
+                </span>
               </div>
               <div>
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;&nbsp;{accountData.updatedAt ? accountData.updatedAt.split("T")[0]:""}&nbsp;
-                  </span>
+                  &nbsp; : &nbsp;&nbsp;
+                  {accountData.updatedAt
+                    ? accountData.updatedAt.split("T")[0]
+                    : ""}
+                  &nbsp;
+                </span>
               </div>
-
 
               {/* <div>
                 <label className="text-dark Label">Title</label>
