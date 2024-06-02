@@ -20,15 +20,22 @@ const validationSchema = yup.object().shape({
   role: yup.string().required("*Select the Role"),
   appointmentRoleType: yup.string().required("*Select the Appointment Role"),
   countryCode: yup.string().required("*Country Code is required"),
-  phone: yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
       const { countryCode } = this.parent;
-      if (countryCode === '+65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      if (countryCode === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (countryCode === '+91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      if (countryCode === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
       }
       return true; // Default validation for other country codes
     }),
@@ -148,7 +155,7 @@ function UserEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Name</lable> 
+                <lable>Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -174,7 +181,7 @@ function UserEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Company Name</lable> 
+                <lable>Company Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -200,7 +207,7 @@ function UserEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Email</lable> 
+                <lable>Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
@@ -225,13 +232,14 @@ function UserEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Role</lable> 
+                <lable>Role</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${formik.touched.role && formik.errors.role
-                    ? "is-invalid"
-                    : ""
+                  className={`form-size form-select  ${
+                    formik.touched.role && formik.errors.role
+                      ? "is-invalid"
+                      : ""
                   }`}
                   {...formik.getFieldProps("role")}
                   id="role"
@@ -295,27 +303,31 @@ function UserEdit() {
                       {...formik.getFieldProps("countryCode")}
                       id="countryCode"
                       name="countryCode"
-                      className={`form-size form-control  ${formik.touched.countryCode && formik.errors.countryCode
+                      className={`form-size form-control  ${
+                        formik.touched.countryCode && formik.errors.countryCode
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="+65" selected>+65</option>
-                      <option value="+91">+91</option>
+                      <option value="65" selected>
+                        +65
+                      </option>
+                      <option value="91">+91</option>
                     </select>
                   </div>
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -332,7 +344,6 @@ function UserEdit() {
                 </div>
               </div>
             </div>
-
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
@@ -475,7 +486,7 @@ function UserEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Country</lable> 
+                <lable>Country</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"

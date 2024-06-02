@@ -31,10 +31,10 @@ const validationSchema = Yup.object().shape({
     if (value && /\s/.test(value)) {
       return this.createError({ message: 'Phone number should not contain spaces' });
     }
-    if (country_code === '+65') {
+    if (country_code === '65') {
       return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
     }
-    if (country_code === '+91') {
+    if (country_code === '91') {
       return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
     }
     return true; 
@@ -62,7 +62,7 @@ function AccountsEdit() {
       account_name: "",
       firstName: "",
       lastName: "",
-      country_code: "+65",
+      country_code: "65",
       phone: "",
       company: "",
       email: "",
@@ -152,7 +152,7 @@ function AccountsEdit() {
           company: getData.companyName,
           lastName: getData.lastName,
           account_name: getData.accountName,
-          country_code: getData.countryCode  || "+65",
+          country_code: getData.countryCode  || "65",
           phone: getData.phone,
           email: getData.email,
           amount:getData.amount,

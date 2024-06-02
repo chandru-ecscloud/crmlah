@@ -34,8 +34,14 @@ function AccountsShow() {
   const scheduleData = {
     model: "Accounts",
     id: id,
-    appointmentName: accountData.accountName,
+    appointmentName: `${accountData.firstName} ${accountData.lastName}`,
     email: accountData.email,
+    phone: accountData.phone,
+    city: accountData.shippingCity,
+    state: accountData.shippingState,
+    street: accountData.shippingStreet,
+    zipCode: accountData.shippingCode,
+    country: accountData.shippingCountry,
   };
   const userData = async () => {
     try {
@@ -100,7 +106,7 @@ function AccountsShow() {
           <Activity id={id} />
           <SendQuotes accountData={accountData} />
           <Appointment
-            name={"schedule"}
+            name={"Schedule"}
             schedule={scheduleData}
             getData={userData}
           />
@@ -143,7 +149,7 @@ function AccountsShow() {
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
 
-            <div className="container-fluid col-md-6">
+            <div className="container-fluid col-md-12">
               <div>
                 <label className="text-dark Label">Account Owner</label>
                 <span className="text-dark">

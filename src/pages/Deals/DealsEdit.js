@@ -27,10 +27,10 @@ const validationSchema = yup.object().shape({
     .required('Phone number is required')
     .test('phone-length', function (value) {
       const { country_code } = this.parent;
-      if (country_code === '+65') {
+      if (country_code === '65') {
         return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
       }
-      if (country_code === '+91') {
+      if (country_code === '91') {
         return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
       }
       return true; // Default validation for other country codes
@@ -188,7 +188,7 @@ function DealsEdit() {
           closing_date: closingDate,
           stage: getData.stage,
           company :getData.companyName,
-          country_code: getData.countryCode || "+65",
+          country_code: getData.countryCode || "65",
           phone: getData.phone,
           probability: getData.probability,
           campaign_source: getData.campaignSource,

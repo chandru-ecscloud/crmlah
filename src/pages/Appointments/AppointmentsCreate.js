@@ -36,9 +36,9 @@ function AppointmentsCreate({ name, schedule, getData }) {
     appointmentMode: Yup.string().required("*Appointment mode is required"),
     additionalInformation: Yup.string().required("*Description is required"),
   });
-console.log("object",schedule)
-  const currentData =  new Date().toISOString().split("T")[0];
- 
+  console.log("object", schedule);
+  const currentData = new Date().toISOString().split("T")[0];
+
   const formik = useFormik({
     initialValues: {
       // serviceId: "",
@@ -68,7 +68,7 @@ console.log("object",schedule)
       if (name === "Create Appointment") {
         let selectedLeadName = "";
         // let selectedServiceName = "";
-       
+
         leadData.forEach((lead) => {
           if (parseInt(data.leadId) === lead.id) {
             selectedLeadName = lead || "--";
@@ -453,11 +453,8 @@ console.log("object",schedule)
 
   const openModal = () => {
     setShow(true);
-    formik.setFieldValue(
-      "appointmentStartDate",
-      currentData
-    );
-    
+    formik.setFieldValue("appointmentStartDate", currentData);
+
     console.log("scheduleDataM", schedule);
 
     if (name === "Schedule") {
@@ -518,25 +515,43 @@ console.log("object",schedule)
   useEffect(() => {
     fetchServiceData();
     fetchLeadData();
-    formik.setFieldValue(
-      "appointmentStartDate",
-      currentData
-    );
+    formik.setFieldValue("appointmentStartDate", currentData);
 
-    if(name==="Schedule"){
-    formik.setFieldValue("phoneNumber",schedule.phone)
-    formik.setFieldValue("street",schedule.street )
-    formik.setFieldValue("city",schedule.city )
-    formik.setFieldValue("state",schedule.state )
-    formik.setFieldValue("zipCode",schedule.zipCode )
-    formik.setFieldValue("country",schedule.country )
+    if (name === "Schedule") {
+      formik.setFieldValue("phoneNumber", schedule.phone);
+      formik.setFieldValue("street", schedule.street);
+      formik.setFieldValue("city", schedule.city);
+      formik.setFieldValue("state", schedule.state);
+      formik.setFieldValue("zipCode", schedule.zipCode);
+      formik.setFieldValue("country", schedule.country);
     }
   }, [show]);
-  
 
   useEffect(() => {
     fetchAppointmentTime();
   }, [formik.values.appointmentStartDate]);
+
+  const userData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}allClients/${formik.values.leadId}`
+      );
+      formik.setFieldValue("phoneNumber", response.data.phone);
+      formik.setFieldValue("street", response.data.street);
+      formik.setFieldValue("city", response.data.city);
+      formik.setFieldValue("state", response.data.state);
+      formik.setFieldValue("zipCode", response.data.zipCode);
+      formik.setFieldValue("country", response.data.country);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (name !== "Schedule" && formik.values.leadId !== "") {
+      userData();
+    }
+  }, [formik.values.leadId]);
 
   const handleClose = () => {
     setShow(false);
@@ -604,10 +619,11 @@ console.log("object",schedule)
               <div className="container">
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    {name == "schedule" ? (
+                    {name === "Schedule" ? (
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
-                          <lable>Appointment</lable> <span className=" text-danger">*</span>
+                          <lable>Appointment</lable>{" "}
+                          <span className=" text-danger">*</span>
                           <input
                             type="text"
                             name="appointmentFor"
@@ -631,7 +647,8 @@ console.log("object",schedule)
                     ) : (
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
-                          <lable>Appointment </lable> <span className=" text-danger">*</span>
+                          <lable>Appointment </lable>{" "}
+                          <span className=" text-danger">*</span>
                           <select
                             name="leadId"
                             className={`form-select form-size ${
@@ -696,9 +713,10 @@ console.log("object",schedule)
                       </div>
                     </div>
                   </div> */}
-                   <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment Name</lable><span className=" text-danger">*</span>
+                      <lable>Appointment Name</lable>
+                      <span className=" text-danger">*</span>
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -727,7 +745,8 @@ console.log("object",schedule)
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Start Date</lable><span className=" text-danger">*</span>
+                      <lable>Start Date</lable>
+                      <span className=" text-danger">*</span>
                       <input
                         type="date"
                         name="appointmentStartDate"
@@ -756,7 +775,8 @@ console.log("object",schedule)
 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label>Start Time</label><span className=" text-danger">*</span>
+                      <label>Start Time</label>
+                      <span className=" text-danger">*</span>
                       <select
                         type="text"
                         name="timeSlotId"
@@ -839,10 +859,11 @@ console.log("object",schedule)
                       </div>
                     </div>
                   </div> */}
-                 
+
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="leadowner">Location</label><span className=" text-danger">*</span>&nbsp;&nbsp;
+                      <label htmlFor="leadowner">Location</label>
+                      <span className=" text-danger">*</span>&nbsp;&nbsp;
                       <select
                         id="location"
                         //className="form-size form-select"
@@ -875,7 +896,8 @@ console.log("object",schedule)
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Phone Number</lable><span className=" text-danger">*</span>
+                      <lable>Phone Number</lable>
+                      <span className=" text-danger">*</span>
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -1216,7 +1238,8 @@ console.log("object",schedule)
                 <div className="row">
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Description</lable><span className=" text-danger">*</span>
+                      <lable>Description</lable>
+                      <span className=" text-danger">*</span>
                       <textarea
                         rows={5}
                         type="text"

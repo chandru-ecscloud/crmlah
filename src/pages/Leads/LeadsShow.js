@@ -36,14 +36,14 @@ function LeadsShow() {
   const scheduleData = {
     model: "Leads",
     id: id,
-    appointmentName: clientData.first_name,
+    appointmentName: `${clientData.first_name} ${clientData.last_name}`,
     email: clientData.email,
-    phone:clientData.phone,
+    phone: clientData.phone,
     city: clientData.city,
-    state:clientData.state,
-    street:clientData.street,
-    zipCode:clientData.zipCode,
-    country:clientData.country
+    state: clientData.state,
+    street: clientData.street,
+    zipCode: clientData.zipCode,
+    country: clientData.country,
   };
 
   const userData = async () => {
@@ -55,11 +55,11 @@ function LeadsShow() {
         },
       });
       const { first_name, last_name } = response.data;
-      const concatenatedName = `${first_name || ''} ${last_name || ''}`.trim(); 
+      const concatenatedName = `${first_name || ""} ${last_name || ""}`.trim();
       setClientData(response.data);
       setLeadName(concatenatedName);
       console.log("Lead Show :", response.data);
-      console.log("setLeadName :",concatenatedName);
+      console.log("setLeadName :", concatenatedName);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -124,10 +124,18 @@ function LeadsShow() {
           {clientData.email && (
             <OverlayTrigger
               placement="bottom"
-              overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
+              overlay={
+                <Tooltip id="button-tooltip-2" className="mailtip">
+                  Send Email
+                </Tooltip>
+              }
             >
               <span>
-                <SendEmailFollowUp toEmail={clientData.email} leadId={id} leadName={leadName}/>
+                <SendEmailFollowUp
+                  toEmail={clientData.email}
+                  leadId={id}
+                  leadName={leadName}
+                />
               </span>
             </OverlayTrigger>
           )}
@@ -218,7 +226,7 @@ function LeadsShow() {
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
 
-            <div className="container-fluid col-md-6">
+            <div className="container-fluid col-md-12">
               <div>
                 <label className="text-dark Label">Lead Owner</label>
                 <span className="text-dark">
@@ -314,14 +322,19 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.created_at ? clientData.created_at.split("T")[0] : "--"}
-
+                  &nbsp; : &nbsp;
+                  {clientData.created_at
+                    ? clientData.created_at.split("T")[0]
+                    : "--"}
                 </span>
               </div>
               <div>
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.updated_at ? clientData.updated_at.split("T")[0] : "--"}
+                  &nbsp; : &nbsp;
+                  {clientData.updated_at
+                    ? clientData.updated_at.split("T")[0]
+                    : "--"}
                 </span>
               </div>
 
@@ -351,7 +364,7 @@ function LeadsShow() {
               <div>
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{leadName|| "--"}{" "}
+                  &nbsp; : &nbsp;{leadName || "--"}{" "}
                   {/* {clientData.last_name} */}
                 </span>
               </div>

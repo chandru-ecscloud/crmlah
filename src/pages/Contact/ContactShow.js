@@ -19,14 +19,14 @@ function ContactShow() {
   const scheduleData = {
     model: "Contacts",
     id: id,
-    appointmentName: contactData.firstName,
+    appointmentName: `${contactData.firstName} ${contactData.lastName}`,
     email: contactData.email,
-    phone:contactData.phone,
-    city: contactData.city,
-    state:contactData.state,
-    street:contactData.street,
-    zipCode:contactData.zipCode,
-    country:contactData.country
+    phone: contactData.phone,
+    city: contactData.mailingCity,
+    state: contactData.mailingState,
+    street: contactData.mailingStreet,
+    zipCode: contactData.mailingZip,
+    country: contactData.mailingCountry,
   };
 
   // console.log("scheduleData",scheduleData)
@@ -174,7 +174,7 @@ function ContactShow() {
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
 
-            <div className="container-fluid col-md-6">
+            <div className="container-fluid col-md-12">
               <div>
                 <label className="text-dark Label">Contact Owner</label>
                 <span className="text-dark">
@@ -200,14 +200,12 @@ function ContactShow() {
                 <label className="text-dark Label">Company Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.companyName || ""}
-                 
                 </span>
               </div>
               <div>
                 <label className="text-dark Label">Amount</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{contactData.amount || ""}
-                 
                 </span>
               </div>
 
@@ -271,13 +269,19 @@ function ContactShow() {
               <div>
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.createdAt ?contactData.createdAt.split("T")[0]:""}
+                  &nbsp; : &nbsp;
+                  {contactData.createdAt
+                    ? contactData.createdAt.split("T")[0]
+                    : ""}
                 </span>
               </div>
               <div>
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.updatedAt ?contactData.updatedAt.split("T")[0]:""}
+                  &nbsp; : &nbsp;
+                  {contactData.updatedAt
+                    ? contactData.updatedAt.split("T")[0]
+                    : ""}
                 </span>
               </div>
 

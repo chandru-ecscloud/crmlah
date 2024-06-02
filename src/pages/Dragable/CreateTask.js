@@ -176,8 +176,8 @@ const CreateTask = ({ tasks, setTasks, handelLeadFetch }) => {
                           borderBottomRightRadius: "0px",
                         }}
                       >
-                        <option value="+65">+65</option>
-                        <option value="+91">+91</option>
+                        <option value="65">+65</option>
+                        <option value="91">+91</option>
                       </select>
                     </div>
 

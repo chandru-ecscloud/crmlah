@@ -245,10 +245,10 @@ function CompanyEdit() {
                       }}
                       name="country_code"
                     >
-                      <option value="+65" selected>
+                      <option value="65" selected>
                         +65
                       </option>
-                      <option value="+91">+91</option>
+                      <option value="91">+91</option>
                     </select>
                   </div>
 

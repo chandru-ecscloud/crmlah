@@ -38,10 +38,10 @@ const validationSchema = yup.object().shape({
     .required('Phone number is required')
     .test('phone-length', function (value) {
       const { countryCode } = this.parent;
-      if (countryCode === '+65') {
+      if (countryCode === '65') {
         return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
       }
-      if (countryCode === '+91') {
+      if (countryCode === '91') {
         return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
       }
       return true; // Default validation for other country codes
@@ -80,7 +80,7 @@ function UserCreate() {
       appointmentRoleType: "",
       password: "",
       cpassword: "",
-      countryCode: "+65",
+      countryCode: "65",
       phone: "",
       address: "",
       city: "",
@@ -443,8 +443,8 @@ function UserCreate() {
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="+65" selected>+65</option>
-                      <option value="+91">+91</option>
+                      <option value="65" selected>+65</option>
+                      <option value="91">+91</option>
                     </select>
                   </div>
                   <input
