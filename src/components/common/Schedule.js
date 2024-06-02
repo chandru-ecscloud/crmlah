@@ -12,9 +12,7 @@ const validationSchema = Yup.object().shape({
   appointmentStartDate: Yup.string().required(
     "*Appointment start date is required"
   ),
-  timeSlotId: Yup.string().required(
-    "*Appointment start Time is required"
-  ),
+  timeSlotId: Yup.string().required("*Appointment start Time is required"),
 });
 
 const Schedule = () => {
@@ -22,11 +20,11 @@ const Schedule = () => {
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const email = searchParams.get("email");
-  console.log(name, email);
+  // console.log(name, email);
   // console.log("ID:",id);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loadIndicatorca, setLoadIndicatorca] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [appointmentStartTime, setAppointmentStartTime] = useState([]);
   // console.log("appoinment Time", appointmentStartTime);
   const [show, setShow] = useState(false);
@@ -170,11 +168,8 @@ const Schedule = () => {
                   <h1 style="color: black;">Hi, ${name}</h1>
                   <p style="margin: 2rem 0 0; font-size: 1rem;">We are pleased to inform you that your appointment has been successfully rescheduled. The appointment has been rescheduled for  ${data.appointmentStartDate} at ${data.appointmentStartTime}. We hope this new schedule is convenient for you. <br />
                   </p>
-  
-                      <hr />
-                  
+                  <hr />
                   <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
                   <p style=" margin: 0 ; ">ECS Cloud</p>
                   <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                   <hr />
@@ -481,10 +476,9 @@ const Schedule = () => {
                       ))}
                     </select>
                     {formik.touched.timeSlotId && formik.errors.timeSlotId && (
-                    <p className="text-danger">{formik.errors.timeSlotId}</p>
-                  )}
+                      <p className="text-danger">{formik.errors.timeSlotId}</p>
+                    )}
                   </div>
-
 
                   <div className="col-12 mt-4">
                     <button
