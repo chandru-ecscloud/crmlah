@@ -821,15 +821,15 @@ nav .nav-link Link {
 
 .iconDesign {
   background-color: #9887ef;
-  border-radius: 50%; /* Set border-radius to 50% for a circle */
-  width: 40px; /* Adjust width and height as needed */
+  border-radius: 50%;
+  width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #f8f9fb;
-  padding-left: 8px;
   margin-right: 5px;
+  transition: 0.2s;
 }
 
 .custom-accordion .accordion-item {
