@@ -119,10 +119,10 @@ const ActivityAdd = ({ id, fetchData }) => {
 
   return (
     <>
-      <Button variant="danger" className="me-2" onClick={handleShow}>
+      <Button variant="danger" className="me-2" onClick={handleShow} >
         New Activity
       </Button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
         <Modal.Header
           closeButton
           closeVariant="white"
