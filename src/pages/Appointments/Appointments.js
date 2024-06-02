@@ -289,17 +289,9 @@ const Appointments = () => {
         cellHeight: "auto",
       },
     });
-    const tableHeaders3 = [
-      "created_at",
-      "Updated_at",
-    
-    ];
+    const tableHeaders3 = ["created_at", "Updated_at"];
     const tableData3 = rows.map((row) => {
-      return [
-        row.original.created_at,
-        row.original.updated_at,
-       
-      ];
+      return [row.original.created_at, row.original.updated_at];
     });
     autoTable(doc, {
       head: [tableHeaders3],
@@ -431,9 +423,9 @@ const Appointments = () => {
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        navigate(`/appoinments/show/${row.original.id}`);
+        navigate(`/appointments/show/${row.original.id}`);
       },
-      style: { cursor: 'pointer' },
+      style: { cursor: "pointer" },
     }),
   });
 
