@@ -30,10 +30,10 @@ function Activity({ id }) {
         setData(response.data);
       } else {
         setData([]);
-        toast.error("Unexpected response format: data is not an array");
+        console.log("Unexpected response format: data is not an array");
       }
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
+      console.log(`Error fetching data: ${error.message}`);
     }
   };
 
