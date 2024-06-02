@@ -368,7 +368,7 @@ const Schedule = () => {
             toMail: email,
             fromMail: email,
             // subject: data.appointmentName,
-            subject: "Your Appointment Has Been Successfully Rescheduled",
+            subject: "Your Appointment Has Been Cancelled",
             htmlContent: mailContent,
           });
 
