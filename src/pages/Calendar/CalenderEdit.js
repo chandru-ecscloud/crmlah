@@ -190,7 +190,7 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
         onHide={() => setShowEditModal(false)}
         size="xl"
       >
-        <Modal.Header className="Calenderview" closeButton>
+        <Modal.Header className="Calenderview" closeVariant="white" closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">Edit</Modal.Title>
         </Modal.Header>
         <Modal.Body>

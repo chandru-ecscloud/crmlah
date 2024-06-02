@@ -100,7 +100,7 @@ function Activity({ id }) {
       </Button>
 
       <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton className="Calenderview">
+        <Modal.Header closeButton closeVariant="white" className="Calenderview">
           <Modal.Title>Recent Activity</Modal.Title>
         </Modal.Header>
         <Modal.Footer>

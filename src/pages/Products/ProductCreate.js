@@ -328,36 +328,6 @@ function ProductCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Product Category</lable> 
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.product_category &&
-                    formik.errors.product_category
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("product_category")}
-                  name="product_category"
-                  id="product_category"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6">
-                  {formik.touched.product_category &&
-                    formik.errors.product_category && (
-                      <p className="text-danger">
-                        {formik.errors.product_category}
-                      </p>
-                    )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Sales Start Date</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
@@ -410,6 +380,36 @@ function ProductCreate() {
                     formik.errors.sales_end_date && (
                       <p className="text-danger">
                         {formik.errors.sales_end_date}
+                      </p>
+                    )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Product Category</lable> 
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.product_category &&
+                    formik.errors.product_category
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("product_category")}
+                  name="product_category"
+                  id="product_category"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6">
+                  {formik.touched.product_category &&
+                    formik.errors.product_category && (
+                      <p className="text-danger">
+                        {formik.errors.product_category}
                       </p>
                     )}
                 </div>

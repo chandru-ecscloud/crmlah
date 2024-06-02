@@ -68,7 +68,7 @@ const TimeSlots = () => {
         onHide={closeMainModal}
         aria-labelledby="example-modal-sizes-title-lg"
       >
-        <Modal.Header closeButton className="Calenderview">
+        <Modal.Header closeButton closeVariant="white" className="Calenderview">
           <Modal.Title id="example-modal-sizes-title-lg">Time Slot</Modal.Title>
         </Modal.Header>
         <Modal.Body>

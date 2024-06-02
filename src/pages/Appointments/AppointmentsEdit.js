@@ -208,7 +208,7 @@ function AppointmentsCreate({ name, id, getData }) {
         onHide={handleClose}
         aria-labelledby="example-modal-sizes-title-lg"
       >
-        <Modal.Header closeButton className="Calenderview">
+        <Modal.Header closeButton closeVariant="white" className="Calenderview">
           <Modal.Title id="example-modal-sizes-title-lg">{name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>

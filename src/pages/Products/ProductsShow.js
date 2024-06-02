@@ -77,7 +77,7 @@ function ProductsShow() {
               <div className="image-container">
                 <OverlayTrigger
                   placement="bottom"
-                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                  overlay={<Tooltip id="button-tooltip-2" className="mailtip">Back</Tooltip>}
                 >
                   <button
                     className="btn fs-4 border-white"

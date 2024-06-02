@@ -538,7 +538,7 @@ const Lead = () => {
                         Convert Contact
                       </button>
                     </li>
-                    <li>
+                    {/* <li>
                       <button
                         className="btn"
                         style={{ width: "100%", border: "none" }}
@@ -552,7 +552,7 @@ const Lead = () => {
                       >
                         Mass Convert
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         className="btn"

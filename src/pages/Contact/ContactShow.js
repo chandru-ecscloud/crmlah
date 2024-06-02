@@ -87,7 +87,7 @@ function ContactShow() {
           {contactData.email && (
             <OverlayTrigger
               placement="bottom"
-              overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
+              overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
             >
               <span>
                 <SendEmail toEmail={contactData.email} />

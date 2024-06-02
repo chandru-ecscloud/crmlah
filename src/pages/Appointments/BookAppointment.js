@@ -19,7 +19,7 @@ function BookAppointment() {
       </Button>
 
       <Modal show={showModal} onHide={closeAppointmentModal} centered>
-        <Modal.Header closeButton style={{backgroundColor: "#0077ff", color: "white"}}>
+        <Modal.Header closeButton closeVariant="white" style={{backgroundColor: "#0077ff", color: "white"}}>
           <Modal.Title>Appointment Information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
