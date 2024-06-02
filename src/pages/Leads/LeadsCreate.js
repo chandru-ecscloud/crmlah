@@ -218,31 +218,6 @@ function LeadsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Company</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                    ? "is-invalid"
-                    : ""
-                    }`}
-                  {...formik.getFieldProps("company")}
-                  name="company"
-                  id="company"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.company && formik.errors.company && (
-                    <p className="text-danger">{formik.errors.company}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>First Name</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
@@ -272,6 +247,7 @@ function LeadsCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
+                  name="last_name"
                   className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
                     ? "is-invalid"
                     : ""
@@ -285,6 +261,31 @@ function LeadsCreate() {
                 <div className="col-6 sm-device">
                   {formik.touched.last_name && formik.errors.last_name && (
                     <p className="text-danger">{formik.errors.last_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Company</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("company")}
+                  name="company"
+                  id="company"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.company && formik.errors.company && (
+                    <p className="text-danger">{formik.errors.company}</p>
                   )}
                 </div>
               </div>

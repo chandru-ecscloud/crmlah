@@ -294,6 +294,55 @@ function ContactEdit() {
                 </div>
               </div>
             </div>
+            
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>First Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("first_name")}
+                  id="first_name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.first_name && formik.errors.first_name && (
+                    <p className="text-danger">{formik.errors.first_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Last Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("last_name")}
+                  id="last_name"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.last_name && formik.errors.last_name && (
+                    <p className="text-danger">{formik.errors.last_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable>
@@ -318,52 +367,7 @@ function ContactEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>First Name</lable>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  {...formik.getFieldProps("first_name")}
-                  id="first_name"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.first_name && formik.errors.first_name && (
-                    <p className="text-danger">{formik.errors.first_name}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Last Name</lable>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  {...formik.getFieldProps("last_name")}
-                  id="last_name"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.last_name && formik.errors.last_name && (
-                    <p className="text-danger">{formik.errors.last_name}</p>
-                  )}
-                </div>
-              </div>
-            </div>
+            
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Email</lable>

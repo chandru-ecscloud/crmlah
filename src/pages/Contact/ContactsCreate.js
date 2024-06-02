@@ -242,31 +242,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Lead Source</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${formik.touched.lead_source && formik.errors.lead_source
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  {...formik.getFieldProps("lead_source")}
-                  name="lead_source"
-                  id="lead_source"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.lead_source && formik.errors.lead_source && (
-                    <p className="text-danger">{formik.errors.lead_source}</p>
-                  )}
-                </div>
-              </div>
-            </div>
+           
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>First Name</lable>
@@ -290,6 +266,7 @@ function ContactsLead() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Last Name</lable>
@@ -309,6 +286,31 @@ function ContactsLead() {
                 <div className="col-6 sm-device">
                   {formik.touched.last_name && formik.errors.last_name && (
                     <p className="text-danger">{formik.errors.last_name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Lead Source</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${formik.touched.lead_source && formik.errors.lead_source
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                  {...formik.getFieldProps("lead_source")}
+                  name="lead_source"
+                  id="lead_source"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.lead_source && formik.errors.lead_source && (
+                    <p className="text-danger">{formik.errors.lead_source}</p>
                   )}
                 </div>
               </div>
