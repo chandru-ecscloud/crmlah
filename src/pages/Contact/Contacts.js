@@ -17,7 +17,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -137,13 +137,13 @@ const Contacts = () => {
       {
         accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) =>{ 
-        if (row.original.createdAt) {
-          return row.original.createdAt.substring(0, 10);
-        } else {
-          return "";
-        }
-      },
+        Cell: ({ row }) => {
+          if (row.original.createdAt) {
+            return row.original.createdAt.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
       {
         accessorKey: "createdBy",
@@ -214,7 +214,6 @@ const Contacts = () => {
       "Phone Number",
       "Contact Owner",
       "Last Name",
-
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -476,7 +475,8 @@ const Contacts = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -490,7 +490,8 @@ const Contacts = () => {
           </button>
         </OverlayTrigger>
 
-        <button className="btn text-secondary"
+        <button
+          className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             handleExportRowsPDF(table.getPrePaginationRowModel().rows)
@@ -498,7 +499,8 @@ const Contacts = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -506,17 +508,20 @@ const Contacts = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
           >
             <MdOutlinePictureAsPdf size={23} />
-          </button></OverlayTrigger>
+          </button>
+        </OverlayTrigger>
       </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
         navigate(`/contacts/show/${row.original.id}`);
       },
-      style: { cursor: 'pointer' },
+      style: { cursor: "pointer" },
     }),
   });
 
@@ -525,87 +530,95 @@ const Contacts = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            <div style={{ paddingRight: "10px" }}>
-              <button
-                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                  }`}
-                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
-                onClick={handelNavigateClick}
-              >
-                Create Contact
-              </button>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="text-start">
+              <span className="fs-4 fw-bold px-2">Contact</span>
             </div>
-            <div class="dropdown-center">
-              <button
-                class="btn btn-danger dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Action <FaSortDown style={{ marginTop: "-6px" }} />
-              </button>
-              <ul class="dropdown-menu">
-                {role === "CRM_SUPERADMIN" ? (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                )}
-              </ul>
+
+            <div className="d-flex align-items-center justify-content-end py-4 px-3">
+              <div style={{ paddingRight: "10px" }}>
+                <button
+                  className={`btn btn-primary ${
+                    role === "CMP_USER" && "disabled"
+                  }`}
+                  disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                  onClick={handelNavigateClick}
+                >
+                  Create Contact
+                </button>
+              </div>
+              <div class="dropdown-center">
+                <button
+                  class="btn btn-danger dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Action <FaSortDown style={{ marginTop: "-6px" }} />
+                </button>
+                <ul class="dropdown-menu">
+                  {role === "CRM_SUPERADMIN" ? (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
+
           <ThemeProvider theme={theme}>
             <MaterialReactTable table={table} />
           </ThemeProvider>

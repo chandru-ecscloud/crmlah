@@ -16,7 +16,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -43,7 +43,6 @@ const Accounts = () => {
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
             {row.original.firstName}
-
           </Link>
         ),
       },
@@ -67,7 +66,6 @@ const Accounts = () => {
           </span>
         ),
       },
-
 
       {
         accessorKey: "shippingStreet",
@@ -172,7 +170,6 @@ const Accounts = () => {
     ],
     []
   );
-
 
   const fetchData = async () => {
     try {
@@ -293,16 +290,9 @@ const Accounts = () => {
         cellHeight: "auto",
       },
     });
-    const tableHeaders4 = [
-      "Created At",
-      "Updated At",
-    ];
+    const tableHeaders4 = ["Created At", "Updated At"];
     const tableData4 = rows.map((row) => {
-      return [
-        row.original.createdAt,
-        row.original.updatedAt,
-
-      ];
+      return [row.original.createdAt, row.original.updatedAt];
     });
     autoTable(doc, {
       head: [tableHeaders3],
@@ -368,10 +358,9 @@ const Accounts = () => {
     } catch (error) {
       toast.error("Failed: " + error.message);
     }
-    
+
     fetchData();
   };
-
 
   const handleAccountConvert = async (rows) => {
     rows.forEach((row) => {
@@ -380,29 +369,29 @@ const Accounts = () => {
 
     const rowData = rows.map((row) => row.original);
     const rowDataid = rows.map((row) => row.original.id).toString();
-  try {
-    const response = await axios.post(
-      `${API_URL}accountToDealConvert/${rowDataid}`,
-      rowData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
+    try {
+      const response = await axios.post(
+        `${API_URL}accountToDealConvert/${rowDataid}`,
+        rowData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/accounts");
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
       }
-    );
-    if (response.status === 200) {
-      toast.success(response.data.message);
-      navigate("/accounts");
-      table.setRowSelection(false);
-    } else {
-      toast.error(response.data.message);
+    } catch (error) {
+      toast.error("Failed: " + error.message);
     }
-  } catch (error) {
-    toast.error("Failed: " + error.message);
-  }
-  fetchData();
-}
+    fetchData();
+  };
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
@@ -492,7 +481,8 @@ const Accounts = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -515,7 +505,8 @@ const Accounts = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -523,7 +514,9 @@ const Accounts = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
@@ -534,7 +527,7 @@ const Accounts = () => {
       onClick: () => {
         navigate(`/accounts/show/${row.original.id}`);
       },
-      style: { cursor: 'pointer' },
+      style: { cursor: "pointer" },
     }),
   });
   useEffect(() => {
@@ -546,222 +539,231 @@ const Accounts = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            <div style={{ paddingRight: "10px" }}>
-              <button
-                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                  }`}
-                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
-                onClick={handelNavigateClick}
-              >
-                Create Accounts
-              </button>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="text-start">
+              <span className="fs-4 fw-bold px-2">Accounts</span>
             </div>
-            <div class="dropdown-center">
-              <button
-                class="btn btn-danger dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Action <FaSortDown style={{ marginTop: "-6px" }} />
-              </button>
-              <ul class="dropdown-menu">
-                {role === "CRM_SUPERADMIN" ? (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleAssignQuote(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        <QuotesModel
-                          // onSuccess={refreshData}
-                          path={`associateQuotesWithAccount/${rowId}`}
-                        />
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleAccountConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Convert Deal
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                ) : role === "CRM_ADMIN" || role === "CMP_OWNER" ? (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleAssignQuote(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Assign Quote
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Assign Quote
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                )}
-              </ul>
+            <div className="d-flex align-items-center justify-content-end py-4 px-3">
+              <div style={{ paddingRight: "10px" }}>
+                <button
+                  className={`btn btn-primary ${
+                    role === "CMP_USER" && "disabled"
+                  }`}
+                  disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                  onClick={handelNavigateClick}
+                >
+                  Create Accounts
+                </button>
+              </div>
+              <div class="dropdown-center">
+                <button
+                  class="btn btn-danger dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Action <FaSortDown style={{ marginTop: "-6px" }} />
+                </button>
+                <ul class="dropdown-menu">
+                  {role === "CRM_SUPERADMIN" ? (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAssignQuote(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          <QuotesModel
+                            // onSuccess={refreshData}
+                            path={`associateQuotesWithAccount/${rowId}`}
+                          />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAccountConvert(
+                              table.getSelectedRowModel().rows
+                            )
+                          }
+                        >
+                          Convert Deal
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkConvert(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Mass Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  ) : role === "CRM_ADMIN" || role === "CMP_OWNER" ? (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAssignQuote(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Assign Quote
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Assign Quote
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
+
           <ThemeProvider theme={theme}>
             <MaterialReactTable table={table} />
           </ThemeProvider>

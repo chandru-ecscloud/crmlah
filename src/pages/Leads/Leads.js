@@ -307,7 +307,13 @@ const Lead = () => {
       },
     });
 
-    const tableHeaders4 = ["Description", "Skype ID", "Twitter","Created At","Updated At"];
+    const tableHeaders4 = [
+      "Description",
+      "Skype ID",
+      "Twitter",
+      "Created At",
+      "Updated At",
+    ];
     const tableData4 = rows.map((row) => {
       return [
         row.original.Description,
@@ -347,21 +353,23 @@ const Lead = () => {
   const handleBulkConvert = async (rows) => {
     rows.forEach((row) => {
       row.original.company_id = companyId;
-    }); 
+    });
 
-
-    
     const rowData = rows.map((row) => row.original);
     const rowDataid = rows.map((row) => row.original.id).toString();
-    
-    console.log("12",rowDataid);
+
+    console.log("12", rowDataid);
     try {
-      const response = await axios.post(`${API_URL}leadToContactConvert/${rowDataid}`, rowData, {
-        headers: {
-          "Content-Type": "application/json",
-          // //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}transferBulkData`,
+        rowData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/leads");
@@ -488,7 +496,7 @@ const Lead = () => {
       onClick: () => {
         navigate(`/leads/show/${row.original.id}`);
       },
-      style: { cursor: 'pointer' },
+      style: { cursor: "pointer" },
     }),
   });
 
@@ -497,137 +505,143 @@ const Lead = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            <div style={{ paddingRight: "10px" }}>
-              <button
-                className={`btn btn-primary ${
-                  role === "CMP_USER" && "disabled"
-                }`}
-                disabled={role === "CMP_USER"}
-                onClick={handelNavigateClick}
-              >
-                Create Lead
-              </button>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="text-start">
+              <span className="fs-4 fw-bold px-2">Lead</span>
             </div>
-            <div class="dropdown-center">
-              <button
-                class="btn btn-danger dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Action <FaSortDown style={{ marginTop: "-6px" }} />
-              </button>
-              <ul class="dropdown-menu">
-                {role === "CRM_SUPERADMIN" ? (
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Convert Contact
-                      </button>
-                    </li>
-                    {/* <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkConvert(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Convert
-                      </button>
-                    </li> */}
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !table.getIsSomeRowsSelected() &&
-                          !table.getIsAllRowsSelected()
-                        }
-                        onClick={() =>
-                          handleBulkDelete(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  // Render disabled buttons for CMP_USER
-                  <>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Convert
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled
-                      >
-                        Mass Delete
-                      </button>
-                    </li>
-                  </>
-                )}
-              </ul>
+
+            <div className="d-flex align-items-center justify-content-end py-4 px-3">
+              <div style={{ paddingRight: "10px" }}>
+                <button
+                  className={`btn btn-primary ${
+                    role === "CMP_USER" && "disabled"
+                  }`}
+                  disabled={role === "CMP_USER"}
+                  onClick={handelNavigateClick}
+                >
+                  Create Lead
+                </button>
+              </div>
+              <div className="dropdown-center">
+                <button
+                  class="btn btn-danger dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Action <FaSortDown style={{ marginTop: "-6px" }} />
+                </button>
+                <ul class="dropdown-menu">
+                  {role === "CRM_SUPERADMIN" ? (
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkConvert(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Convert Contact
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkConvert(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Mass Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    // Render disabled buttons for CMP_USER
+                    <>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Convert
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Delete
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled
+                        >
+                          Mass Delete
+                        </button>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
           <ThemeProvider theme={theme}>

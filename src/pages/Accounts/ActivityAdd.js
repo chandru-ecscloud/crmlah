@@ -12,9 +12,37 @@ import { API_URL } from "../../Config/URL";
 const validationSchema = Yup.object({
   clientData: Yup.array().of(
     Yup.object().shape({
+      clientCountryCode: Yup.string().required("*Country Code is required"),
       clientPhone: Yup.string()
-        .matches(/^\+?[1-9]\d{1,14}$/, "*Phone number is not valid")
-        .notRequired(),
+        .required("Phone number is required")
+        .test("clientPhone-length", function (value) {
+          const { clientCountryCode } = this.parent;
+          if (value && /\s/.test(value)) {
+            return this.createError({
+              message: "Phone number should not contain spaces",
+            });
+          }
+          if (clientCountryCode === "65") {
+            if (!/^\d{8}$/.test(value)) {
+              return this.createError({
+                message: "Phone number must be exactly 8 digits",
+              });
+            }
+          } else if (clientCountryCode === "91") {
+            if (!/^\d{10}$/.test(value)) {
+              return this.createError({
+                message: "Phone number must be exactly 10 digits",
+              });
+            }
+          } else {
+            if (!/^\d+$/.test(value)) {
+              return this.createError({
+                message: "Phone number must be digits only",
+              });
+            }
+          }
+          return true;
+        }),
       clientEmail: Yup.string().email("*Invalid email format").notRequired(),
     })
   ),
@@ -30,7 +58,7 @@ const ActivityAdd = ({ id, fetchData }) => {
       clientName: "",
       clientPhone: "",
       clientEmail: "",
-      clientCountryCode: "65",
+      clientCountryCode: "",
     },
   ]);
 
@@ -46,7 +74,7 @@ const ActivityAdd = ({ id, fetchData }) => {
           clientName: "",
           clientPhone: "",
           clientEmail: "",
-          clientCountryCode: "65",
+          clientCountryCode: "",
         },
       ],
       status: "",
@@ -63,6 +91,7 @@ const ActivityAdd = ({ id, fetchData }) => {
         },
         clientData: data.clientData,
       };
+      console.log("Payload:", payload);
       try {
         const response = await axios.post(
           `${API_URL}createAccountActivityWithClientData`,
@@ -83,7 +112,7 @@ const ActivityAdd = ({ id, fetchData }) => {
               clientName: "",
               clientPhone: "",
               clientEmail: "",
-              clientCountryCode: "65",
+              clientCountryCode: "",
             },
           ]);
           handleClose();
@@ -104,7 +133,7 @@ const ActivityAdd = ({ id, fetchData }) => {
         clientName: "",
         clientPhone: "",
         clientEmail: "",
-        clientCountryCode: "65",
+        clientCountryCode: "",
       },
     ]);
   };
@@ -119,7 +148,7 @@ const ActivityAdd = ({ id, fetchData }) => {
 
   return (
     <>
-      <Button variant="danger" className="me-2" onClick={handleShow} >
+      <Button variant="danger" className="me-2" onClick={handleShow}>
         New Activity
       </Button>
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
@@ -163,7 +192,8 @@ const ActivityAdd = ({ id, fetchData }) => {
                           </div>
                         )}
                     </div>
-                    <div className="form-group mt-2">
+
+                    {/* <div className="form-group mt-2">
                       <label htmlFor={`clientPhone${index}`}>Phone</label>
                       <input
                         type="text"
@@ -189,8 +219,64 @@ const ActivityAdd = ({ id, fetchData }) => {
                             {formik.errors.clientData[index]?.clientPhone}
                           </div>
                         )}
+                    </div> */}
+
+                    <div className="form-group mt-2">
+                      <label>Phone</label>
+                      <div className="input-group ms-1">
+                        <div>
+                          <select
+                            {...formik.getFieldProps(
+                              `clientData[${index}].clientCountryCode`
+                            )}
+                            id={`clientCountryCode${index}`}
+                            name={`clientData[${index}].clientCountryCode`}
+                            className={`form-size form-control ${
+                              formik.touched.clientData &&
+                              formik.touched.clientData[index]
+                                ?.clientCountryCode &&
+                              formik.errors.clientData &&
+                              formik.errors.clientData[index]?.clientCountryCode
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            style={{
+                              borderTopRightRadius: "0px",
+                              borderBottomRightRadius: "0px",
+                            }}
+                          >
+                            <option value="65">+65</option>
+                            <option value="91">+91</option>
+                          </select>
+                        </div>
+                        <input
+                          type="text"
+                          name={`clientData[${index}].clientPhone`}
+                          id={`clientPhone${index}`}
+                          {...formik.getFieldProps(
+                            `clientData[${index}].clientPhone`
+                          )}
+                          className={`form-control ${
+                            formik.touched.clientData &&
+                            formik.touched.clientData[index]?.clientPhone &&
+                            formik.errors.clientData &&
+                            formik.errors.clientData[index]?.clientPhone
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        />
+                        {formik.touched.clientData &&
+                          formik.touched.clientData[index]?.clientPhone &&
+                          formik.errors.clientData &&
+                          formik.errors.clientData[index]?.clientPhone && (
+                            <div className="invalid-feedback">
+                              {formik.errors.clientData[index]?.clientPhone}
+                            </div>
+                          )}
+                      </div>
                     </div>
                   </div>
+
                   <div className="form-group mt-2">
                     <label htmlFor={`clientEmail${index}`}>Email</label>
                     <input

@@ -287,7 +287,8 @@ function InvoiceShow() {
 
     // Save the PDF
     if (action === "download") {
-      doc.save("invoice.pdf");
+      // doc.sav4e("invoice.pdf");
+      doc.save(`Invoice ECSCLOUD.pdf`);
     } else if (action === "print") {
       doc.autoPrint();
       window.open(doc.output("bloburl"), "_blank");
@@ -769,8 +770,8 @@ function InvoiceShow() {
                   </div>
                 </div>
               </div>
-              {/* Quotes Information Table*/}
-              <div className="container-fluid row" id="Details">
+              {/* Deal Information Table*/}
+              {/* <div className="container-fluid row" id="Details">
                 <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
                   <div>
                     <span className="my-3 fs-6 fw-bold my-3">Deal</span>
@@ -807,7 +808,7 @@ function InvoiceShow() {
                     <p>No Invoice available.</p>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* <div
                 className="container-fluid col-12"
