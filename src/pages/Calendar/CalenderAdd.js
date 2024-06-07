@@ -244,7 +244,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
                       <p style="margin: 2rem 0 0;">
                         You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.appointmentStartTime}
-                        <br />(Asia/Kolkata GMT +05:30).
+                        <br />(Asia/Singapore).
                       </p>
                       <h3 style="margin-bottom: 0;">You can join:</h3>
                       <h4 style="margin:0;">${zoomResponse.data.message}</h4>
@@ -359,7 +359,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                   <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
                   <p style="margin: 2rem 0 0;">
                     You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On ${data.appointmentStartDate} at ${data.appointmentStartTime}
-                    <br />(Asia/Kolkata GMT +05:30).
+                    <br />(Asia/Singapore).
                   </p>
                   <h3 style="margin-bottom: 0;">Location details:</h3>
                   <h4 style="margin:0;">${data.state}</h4>

@@ -9,7 +9,7 @@ import user from "../../assets/user.png";
 import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { MdErrorOutline } from "react-icons/md";
+import { FaDownload } from "react-icons/fa6";
 import { GrAttachment } from "react-icons/gr";
 
 const validationSchema = yup.object({
@@ -342,11 +342,68 @@ function SendQuotes({ accountData }) {
             </button>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <div className="d-flex align-items-center pb-3">
-              <img className="img-fluid" src={user} width={40} alt="user" />
-              <p style={{ marginBottom: "0px" }}>
-                {userName || "--"}( {userEmail || "--"} )
-              </p>
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center pb-3">
+                <img className="img-fluid" src={user} width={40} alt="user" />
+                <p style={{ marginBottom: "0px" }}>
+                  {userName || "--"}( {userEmail || "--"} )
+                </p>
+              </div>
+              <div className="d-flex align-items-center justify-content-end">
+                <div
+                  style={{ minHeight: "80px", gap: "10px" }}
+                  className="d-flex align-items-center"
+                >
+                  <span>
+                    {formik.values.files.length > 0 ? (
+                      <span>&nbsp;{formik.values.files.length} files</span>
+                    ) : (
+                      <span className="text-danger">
+                        &nbsp;
+                        {/* <MdErrorOutline className="text-danger" /> */}
+                        &nbsp;{formik.errors.files}
+                      </span>
+                    )}{" "}
+                    &nbsp;
+                    <label
+                      htmlFor="file-input"
+                      className="btn btn-outline-primary"
+                    >
+                      <GrAttachment />
+                    </label>
+                    <input
+                      id="file-input"
+                      type="file"
+                      name="files"
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                      multiple
+                      accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
+                    />
+                  </span>
+                </div>
+                <div className="mx-2">
+                  <button className="btn btn-outline-danger">
+                    <FaDownload />
+                  </button>
+                </div>
+                <span className="d-flex" style={{ gap: "10px" }}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary "
+                    onClick={formik.handleSubmit}
+                  >
+                    {loadIndicator && (
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Send
+                    <IoMdSend className="ms-2 mb-1" />
+                  </button>
+                </span>
+              </div>
             </div>
             <div className="d-flex align-items-center py-3">
               <p className="m-0">
@@ -508,57 +565,7 @@ function SendQuotes({ accountData }) {
                 )}
               </div>
             </div>
-            <div className="d-flex align-items-end justify-content-between">
-              <div
-                style={{ minHeight: "80px", gap: "10px" }}
-                className="d-flex align-items-end"
-              >
-                <span>
-                  <label
-                    htmlFor="file-input"
-                    className="btn btn-outline-primary"
-                  >
-                    <GrAttachment />
-                  </label>
-                  <input
-                    id="file-input"
-                    type="file"
-                    name="files"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                    multiple
-                    accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
-                  />
-                  {formik.values.files.length > 0 ? (
-                    <span>
-                      &nbsp;{formik.values.files.length} files selected
-                    </span>
-                  ) : (
-                    <span className="text-danger">
-                      &nbsp;
-                      {/* <MdErrorOutline className="text-danger" /> */}
-                      &nbsp;{formik.errors.files}
-                    </span>
-                  )}
-                </span>
-              </div>
-              <span className="d-flex" style={{ gap: "10px" }}>
-                <button
-                  type="submit"
-                  className="btn btn-primary mt-4"
-                  onClick={formik.handleSubmit}
-                >
-                  {loadIndicator && (
-                    <span
-                      class="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Send
-                  <IoMdSend className="ms-2 mb-1" />
-                </button>
-              </span>
-            </div>
+
             {/* <div className="d-flex align-items-end justify-content-end">
               <span className="d-flex" style={{ gap: "10px" }}>
                 <button

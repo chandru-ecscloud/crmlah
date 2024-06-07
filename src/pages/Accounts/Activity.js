@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Accordion from "react-bootstrap/Accordion";
-import { FaUserTie } from "react-icons/fa";
 import "../../styles/custom.css";
-import { MdOutlineClose } from "react-icons/md";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
 import ActivityAdd from "./ActivityAdd";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { MdEdit } from "react-icons/md";
+import Delete from "../../components/common/DeleteModel";
 
 function Activity({ id }) {
   const [show, setShow] = useState(false);
@@ -39,6 +37,8 @@ function Activity({ id }) {
 
   useEffect(() => {
     fetchData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const truncateText = (text, wordLimit) => {
@@ -58,9 +58,17 @@ function Activity({ id }) {
       case "QUALIFIED":
         return { backgroundColor: "purple", text: "Q", fullText: "Qualified" };
       case "PROPOSAL_SENT":
-        return { backgroundColor: "teal", text: "PS", fullText: "Proposal Sent" };
+        return {
+          backgroundColor: "teal",
+          text: "PS",
+          fullText: "Proposal Sent",
+        };
       case "NEGOTIATION":
-        return { backgroundColor: "rgb(32 199 128)", text: "N", fullText: "Negotiation" };
+        return {
+          backgroundColor: "rgb(32 199 128)",
+          text: "N",
+          fullText: "Negotiation",
+        };
       case "WON":
         return { backgroundColor: "green", text: "W", fullText: "Won" };
       case "LOST":
@@ -74,7 +82,11 @@ function Activity({ id }) {
       case "FOLLOW_UP":
         return { backgroundColor: "teal", text: "FU", fullText: "Follow Up" };
       default:
-        return { backgroundColor: "lightgray", text: "NS", fullText: "No Status" };
+        return {
+          backgroundColor: "lightgray",
+          text: "NS",
+          fullText: "No Status",
+        };
     }
   };
 
@@ -118,12 +130,17 @@ function Activity({ id }) {
                 .map((activity, index) => {
                   const statusStyle = getStatusStyle(activity.status);
                   return (
-                    <Accordion.Item eventKey={index.toString()} key={activity.id}>
+                    <Accordion.Item
+                      eventKey={index.toString()}
+                      key={activity.id}
+                    >
                       <Accordion.Header>
-                         <CustomTooltip tooltipText={statusStyle.fullText}>
+                        <CustomTooltip tooltipText={statusStyle.fullText}>
                           <div
                             className="iconDesign"
-                            style={{ backgroundColor: statusStyle.backgroundColor }}
+                            style={{
+                              backgroundColor: statusStyle.backgroundColor,
+                            }}
                           >
                             {statusStyle.text}
                           </div>
@@ -147,18 +164,34 @@ function Activity({ id }) {
                         {activity.clientData &&
                           activity.clientData.map((client, clientIndex) => (
                             <div className="mt-3" key={client.id}>
-                              <span>
-                                <b>Name:</b> {client.clientName}
-                              </span>
-                              <br />
-                              <span>
-                                <b>Email:</b> {client.clientEmail}
-                              </span>
-                              <br />
-                              <span>
-                                <b>Phone no:</b> {client.clientCountryCode}{" "}
-                                {client.clientPhone}
-                              </span>
+                              <div className="row">
+                                <div className="col-10">
+                                  <span>
+                                    <b>Name:</b> {client.clientName}
+                                  </span>
+                                  <br />
+                                  <span>
+                                    <b>Email:</b> {client.clientEmail}
+                                  </span>
+                                  <br />
+                                  <span>
+                                    <b>Phone no:</b>{" "}
+                                    {client.clientCountryCode
+                                      ? `+${client.clientCountryCode}`
+                                      : ""}{" "}
+                                    {client.clientPhone}
+                                  </span>
+                                </div>
+                                <div className="col-2">
+                                  <button className="btn text-primary">
+                                    <MdEdit />
+                                  </button>
+                                  <Delete
+                                    onSuccess={fetchData}
+                                    path={`deleteAccountActivity/${activity.id}`}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           ))}
                       </Accordion.Body>

@@ -12,37 +12,28 @@ import { API_URL } from "../../Config/URL";
 const validationSchema = Yup.object({
   clientData: Yup.array().of(
     Yup.object().shape({
-      clientCountryCode: Yup.string().required("*Country Code is required"),
-      clientPhone: Yup.string()
-        .required("Phone number is required")
-        .test("clientPhone-length", function (value) {
-          const { clientCountryCode } = this.parent;
-          if (value && /\s/.test(value)) {
+      clientPhone: Yup.string().test("clientPhone-length", function (value) {
+        const { clientCountryCode } = this.parent;
+        if (value && /\s/.test(value)) {
+          return this.createError({
+            message: "Phone number should not contain spaces",
+          });
+        }
+        if (clientCountryCode === "65") {
+          if (!/^\d{8}$/.test(value)) {
             return this.createError({
-              message: "Phone number should not contain spaces",
+              message: "Phone number must be exactly 8 digits",
             });
           }
-          if (clientCountryCode === "65") {
-            if (!/^\d{8}$/.test(value)) {
-              return this.createError({
-                message: "Phone number must be exactly 8 digits",
-              });
-            }
-          } else if (clientCountryCode === "91") {
-            if (!/^\d{10}$/.test(value)) {
-              return this.createError({
-                message: "Phone number must be exactly 10 digits",
-              });
-            }
-          } else {
-            if (!/^\d+$/.test(value)) {
-              return this.createError({
-                message: "Phone number must be digits only",
-              });
-            }
+        } else if (clientCountryCode === "91") {
+          if (!/^\d{10}$/.test(value)) {
+            return this.createError({
+              message: "Phone number must be exactly 10 digits",
+            });
           }
-          return true;
-        }),
+        }
+        return true;
+      }),
       clientEmail: Yup.string().email("*Invalid email format").notRequired(),
     })
   ),
@@ -62,8 +53,6 @@ const ActivityAdd = ({ id, fetchData }) => {
     },
   ]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const userName = sessionStorage.getItem("user_name");
 
   const formik = useFormik({
@@ -123,6 +112,14 @@ const ActivityAdd = ({ id, fetchData }) => {
     },
   });
 
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+
   const addRow = () => {
     const newRow = { id: rows.length + 1 };
     setRows([...rows, newRow]);
@@ -164,7 +161,7 @@ const ActivityAdd = ({ id, fetchData }) => {
             {rows &&
               rows.map((row, index) => (
                 <div key={row.id}>
-                  <div className="d-flex justify-content-between">
+                  <div className="">
                     <div className="form-group mt-2">
                       <label htmlFor={`clientName${index}`}>Name</label>
                       <input
@@ -245,6 +242,7 @@ const ActivityAdd = ({ id, fetchData }) => {
                               borderBottomRightRadius: "0px",
                             }}
                           >
+                            <option></option>
                             <option value="65">+65</option>
                             <option value="91">+91</option>
                           </select>

@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
@@ -38,7 +37,6 @@ const validationSchema = yup.object().shape({
       }
       return true; // Default validation for other country codes
     }),
-  country_code: yup.string().required('Country code is required'),
 
   email: yup.string().email("*Invalid Email").required("*Email is required"),
   lead_owner: yup.string().required("*Lead owner is required"),

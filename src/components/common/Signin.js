@@ -37,12 +37,31 @@ const validationSchema = yup.object().shape({
   country_code: yup.string().required("*Enter Country Code Number"),
   phone: yup
     .string()
-    .required("*Phone number is required")
-    .min(8, "*phone must be at atleast 8 characters")
-    .max(10, "*phone must be at most 10 characters"),
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
+      const { country_code } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
+      }
+      if (country_code === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
+      }
+      if (country_code === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
+      }
+      return true; // Default validation for other country codes
+    }),
+
   address: yup.string().required("*Enter Address"),
   city: yup.string().required("*Enter city"),
-  state: yup.string().required("*Enter state"),
   zipCode: yup
     .string()
     .required("*Enter zipcode")
@@ -85,7 +104,7 @@ const CompanyRegistrationForm = () => {
       data.role = "CMP_OWNER";
       data.jwtRole = "CMP_OWNER";
       data.appointmentRoleType = "OWNER";
-     
+
       try {
         let response;
         if (userNameAvailable) {
@@ -107,7 +126,7 @@ const CompanyRegistrationForm = () => {
       } catch (error) {
         // toast.error("Failed: " + error.message);
         toast.warning("Email is already in use!");
-      }finally {
+      } finally {
         setLoadIndicator(false); // Set loading indicator back to false after request completes
       }
     },
@@ -149,12 +168,15 @@ const CompanyRegistrationForm = () => {
     if (formik.values.userName) {
       fetchUserData();
     }
+    formik.setFieldValue("country_code", "65");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.userName]);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
         <label htmlfor="userName" className="form-label">
-          Name:
+          Full Name:
         </label>
         <input
           type="text"
