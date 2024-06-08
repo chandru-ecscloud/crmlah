@@ -6,8 +6,8 @@ import "../../styles/custom.css";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
 import ActivityAdd from "./ActivityAdd";
+import ActivityEdit from "./ActivityEdit";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { MdEdit } from "react-icons/md";
 import Delete from "../../components/common/DeleteModel";
 
 function Activity({ id }) {
@@ -183,9 +183,9 @@ function Activity({ id }) {
                                   </span>
                                 </div>
                                 <div className="col-2">
-                                  <button className="btn text-primary">
-                                    <MdEdit />
-                                  </button>
+                                  <ActivityEdit fetchData={fetchData} id={id}
+                                     path={`updateAccountActivityWithClientData/${activity.id}`}/>
+
                                   <Delete
                                     onSuccess={fetchData}
                                     path={`deleteAccountActivity/${activity.id}`}

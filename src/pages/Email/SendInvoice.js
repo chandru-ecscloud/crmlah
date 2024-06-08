@@ -7,18 +7,21 @@ import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { MdErrorOutline } from "react-icons/md";
+import { FaDownload } from "react-icons/fa6";
 import { GrAttachment } from "react-icons/gr";
+import CompanyLogo from "../../assets/CMPLogoNew.png";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
   // files: yup.array().min(1, "Attacment is Must").required("Attacment is Must"),
 });
 
-function SendInvoice({ invoiceData, id, generatePDF }) {
+function SendInvoice({ invoiceData, id }) {
   const [show, setShow] = useState(false);
 
-  console.log("Invoice Data Mail:", invoiceData.email);
+  console.log("Invoice Data Mail:", invoiceData);
   console.log("Invoice Data Mail ID:", id);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
@@ -34,9 +37,8 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        // const pdfBase64 = await generatePDF("download");
         const formData = new FormData();
-        formData.append("to",invoiceData.email);
+        formData.append("to", invoiceData.email);
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
         formData.append(
@@ -173,6 +175,19 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
           </div>
         </div>
       </div>
+
+       <div id="LABEL1" id="LABEL2" style="width: 150% !important">
+          <br />
+          <div>
+            <label><b>Customer Note :</b></label>
+            <div>&nbsp;&nbsp;${row.description || "--"}</div>
+          </div>
+          <br />
+          <div>
+            <label><b>Terms And Conditions :</b></label>
+            <div>&nbsp;&nbsp;${row.termsAndConditions || "--"}</div>
+          </div>
+        </div>
       
     `
     );
@@ -367,6 +382,166 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
     `;
   };
 
+  const generatePDF = () => { 
+    const dealData = invoiceData?.transactionInvoiceModels;
+    console.log("quotesData -> Quotes List:", dealData);
+  
+    if (!dealData || dealData.length === 0) {
+      return "No Invoice available";
+    }
+  
+    const doc = new jsPDF();
+    doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+  
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(28);
+    doc.text("INVOICE", 155, 22);
+  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
+  
+    doc.setFont("helvetica", "small");
+    doc.setFontSize(10);
+    doc.text("The Alexcier", 13, 35);
+    doc.text("237 Alexandra Road #04-10", 13, 40);
+    doc.text("Singapore 159929", 13, 45);
+    doc.text("Singapore", 13, 50);
+  
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("Bill To", 13, 65);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "small");
+    doc.text(`${invoiceData.billingStreet}`, 13, 70);
+    doc.text(`${invoiceData.billingCity}`, 13, 75);
+    doc.text(`${invoiceData.billingCode}`, 13, 80);
+    doc.text(`${invoiceData.billingCountry}`, 13, 85);
+  
+    let startY = 95; // Starting Y position for the quotes tables
+  
+    dealData.forEach((invoice, index) => {
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Invoice ${index + 1}`, 13, startY);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "small");
+      doc.text(`Subject: ${invoice.subject}`, 13, startY + 5);
+      doc.text(`Deal Name: ${invoice.dealName}`, 13, startY + 10);
+  
+      // Add the table
+      const tableData = invoice.invoiceItemList?.map((row, rowIndex) => [
+        rowIndex + 1,
+        row.productName,
+        row.quantity,
+        row.listPrice,
+        row.amount,
+        row.discount,
+        row.tax,
+        row.total,
+      ]);
+  
+      doc.autoTable({
+        startY: startY + 20,
+        headStyles: {
+          fillColor: [50, 50, 50],
+          textColor: [255, 255, 255],
+          fontStyle: "normal",
+        },
+        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        head: [
+          [
+            "S.No",
+            "Product Name",
+            "Quantity",
+            "Price",
+            "Amount",
+            "Discount",
+            "Tax",
+            "Total",
+          ],
+        ],
+        body: tableData,
+        footStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: "normal",
+        },
+        foot: [
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Sub Total(SGT)",
+            `: ${invoice.subTotal || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Discount(%)",
+            `: ${invoice.txnDiscount || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Tax(%)",
+            `: ${invoice.txnTax || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Grand Total(SGT)",
+            `: ${invoice.grandTotal || "--"}`,
+          ],
+        ],
+      });
+  
+      const finalY = doc.lastAutoTable.finalY + 10;
+  
+      // Wrap the Notes text
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Customer Notes", 13, finalY);
+  
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const notesText = doc.splitTextToSize(`${invoice.description}`, 180); // 180 is the width
+      doc.text(notesText, 13, finalY + 6);
+  
+      const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
+  
+      // Wrap the Terms & Conditions text
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Terms & Conditions", 13, nextY);
+  
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const termsText = doc.splitTextToSize(`${invoice.termsAndConditions}`, 180); // 180 is the width
+      doc.text(termsText, 13, nextY + 6);
+  
+      startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next invoice
+    });
+  
+    // Save the PDF
+    doc.save("Invoice.pdf");
+  };
+
   return (
     <div>
       <Button
@@ -395,13 +570,75 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
 
         <Offcanvas.Body>
           <form onSubmit={formik.handleSubmit}>
-            <div className="d-flex align-items-center pb-3">
-              <img className="img-fluid" src={user} width={40} alt="user" />
-              &nbsp;
-              <p style={{ marginBottom: "0px" }}>
-                {userName || "--"}( {userEmail || "--"} )
-              </p>
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center pb-3">
+                <img className="img-fluid" src={user} width={40} alt="user" />
+                &nbsp;
+                <p style={{ marginBottom: "0px" }}>
+                  {userName || "--"}( {userEmail || "--"} )
+                </p>
+              </div>
+              <div className="d-flex align-items-center justify-content-end">
+                <div
+                  style={{ minHeight: "80px", gap: "10px" }}
+                  className="d-flex align-items-center"
+                >
+                  <span>
+                    {formik.values.files.length > 0 ? (
+                      <span>&nbsp;{formik.values.files.length} files</span>
+                    ) : (
+                      <span className="text-danger">
+                        &nbsp;
+                        {/* <MdErrorOutline className="text-danger" /> */}
+                        &nbsp;{formik.errors.files}
+                      </span>
+                    )}{" "}
+                    &nbsp;
+                    <label
+                      htmlFor="file-input"
+                      className="btn btn-outline-primary"
+                    >
+                      <GrAttachment />
+                    </label>
+                    <input
+                      id="file-input"
+                      type="file"
+                      name="files"
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                      multiple
+                      accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
+                    />
+                  </span>
+                </div>
+                <div className="mx-2">
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger"
+                    onClick={generatePDF}
+                  >
+                    <FaDownload />
+                  </button>
+                </div>
+                <span className="d-flex" style={{ gap: "10px" }}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary "
+                    onClick={formik.handleSubmit}
+                  >
+                    {loadIndicator && (
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Send
+                    <IoMdSend className="ms-2 mb-1" />
+                  </button>
+                </span>
+              </div>
             </div>
+
             <div className="d-flex align-items-center py-3">
               <p className="m-0">
                 <b style={{ color: "#424242" }}>To : &nbsp;</b>
@@ -665,53 +902,6 @@ function SendInvoice({ invoiceData, id, generatePDF }) {
               </div>
             </div>
 
-            <div className="d-flex align-items-end justify-content-between">
-              <div
-                style={{ minHeight: "80px", gap: "10px" }}
-                className="d-flex align-items-end"
-              >
-                <span>
-                  <label
-                    htmlFor="file-input"
-                    className="btn btn-outline-primary"
-                  >
-                    <GrAttachment />
-                  </label>
-                  <input
-                    id="file-input"
-                    type="file"
-                    name="files"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                    multiple
-                    accept=".jpg, .jpeg, .png, .gif, .pdf, .txt"
-                  />
-                  {formik.values.files.length > 0 ? (
-                    <span>
-                      &nbsp;{formik.values.files.length} files selected
-                    </span>
-                  ) : (
-                    <span className="text-danger">
-                      &nbsp;
-                      {/* <MdErrorOutline className="text-danger" /> */}
-                      &nbsp;{formik.errors.files}
-                    </span>
-                  )}
-                </span>
-              </div>
-              <span className="d-flex" style={{ gap: "10px" }}>
-                <button type="submit" className="btn btn-primary mt-4">
-                  {loadIndicator && (
-                    <span
-                      class="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Send
-                  <IoMdSend className="ms-2 mb-1" />
-                </button>
-              </span>
-            </div>
           </form>
         </Offcanvas.Body>
       </Offcanvas>

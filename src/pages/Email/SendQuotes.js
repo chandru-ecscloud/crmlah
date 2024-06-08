@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import { toast } from "react-toastify";
-
 import { Button, Offcanvas } from "react-bootstrap";
 import { IoMdSend, IoMdTime } from "react-icons/io";
 import user from "../../assets/user.png";
@@ -11,6 +9,9 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { FaDownload } from "react-icons/fa6";
 import { GrAttachment } from "react-icons/gr";
+import CompanyLogo from "../../assets/CMPLogoNew.png";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const validationSchema = yup.object({
   subject: yup.string().required("*Subject is required"),
@@ -24,6 +25,8 @@ function SendQuotes({ accountData }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
+
+  console.log("Account Data:",accountData);
 
   const formik = useFormik({
     initialValues: {
@@ -78,6 +81,7 @@ function SendQuotes({ accountData }) {
   const handleHide = () => {
     setShow(false);
   };
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     formik.setFieldValue("files", [...formik.values.files, ...files]);
@@ -172,6 +176,19 @@ function SendQuotes({ accountData }) {
           </div>
         </div>
       </div>
+
+        <div id="LABEL1" id="LABEL2" style="width: 150% !important">
+          <br />
+          <div>
+            <label><b>Customer Note :</b></label>
+            <div>&nbsp;&nbsp;${row.description || "--"}</div>
+          </div>
+          <br />
+          <div>
+            <label><b>Terms And Conditions :</b></label>
+            <div>&nbsp;&nbsp;${row.termsAndConditions || "--"}</div>
+          </div>
+        </div>
       
     `
     );
@@ -315,6 +332,168 @@ function SendQuotes({ accountData }) {
     `;
   };
 
+  console.log("Account Maped Qoutes List:",accountData.quotes);
+
+  const generatePDF = () => {
+    const quotesData = accountData?.quotes;
+    console.log("quotesData -> Quotes List:", quotesData);
+  
+    if (!quotesData || quotesData.length === 0) {
+      return "No quotes available";
+    }
+  
+    const doc = new jsPDF();
+    doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+  
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(28);
+    doc.text("ESTIMATE", 155, 22);
+  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
+  
+    doc.setFont("helvetica", "small");
+    doc.setFontSize(10);
+    doc.text("The Alexcier", 13, 35);
+    doc.text("237 Alexandra Road #04-10", 13, 40);
+    doc.text("Singapore 159929", 13, 45);
+    doc.text("Singapore", 13, 50);
+  
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("Bill To", 13, 65);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "small");
+    doc.text(`${accountData.billingStreet}`, 13, 70);
+    doc.text(`${accountData.billingCity}`, 13, 75);
+    doc.text(`${accountData.billingCode}`, 13, 80);
+    doc.text(`${accountData.billingCountry}`, 13, 85);
+  
+    let startY = 95; // Starting Y position for the quotes tables
+  
+    quotesData.forEach((quote, index) => {
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Quote ${index + 1}`, 13, startY);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "small");
+      doc.text(`Subject: ${quote.subject}`, 13, startY + 5);
+      doc.text(`Deal Name: ${quote.dealName}`, 13, startY + 10);
+  
+      // Add the table
+      const tableData = quote.quotesItemList?.map((row, rowIndex) => [
+        rowIndex + 1,
+        row.productName,
+        row.quantity,
+        row.listPrice,
+        row.amount,
+        row.discount,
+        row.tax,
+        row.total,
+      ]);
+  
+      doc.autoTable({
+        startY: startY + 20,
+        headStyles: {
+          fillColor: [50, 50, 50],
+          textColor: [255, 255, 255],
+          fontStyle: "normal",
+        },
+        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        head: [
+          [
+            "S.No",
+            "Product Name",
+            "Quantity",
+            "Price",
+            "Amount",
+            "Discount",
+            "Tax",
+            "Total",
+          ],
+        ],
+        body: tableData,
+        footStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: "normal",
+        },
+        foot: [
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Sub Total(SGT)",
+            `: ${quote.subTotal || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Discount(%)",
+            `: ${quote.txnDiscount || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Tax(%)",
+            `: ${quote.txnTax || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Grand Total(SGT)",
+            `: ${quote.grandTotal || "--"}`,
+          ],
+        ],
+      });
+  
+      const finalY = doc.lastAutoTable.finalY + 10;
+  
+      // Wrap the Notes text
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Customer Notes", 13, finalY);
+  
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const notesText = doc.splitTextToSize(`${quote.description}`, 180); // 180 is the width
+      doc.text(notesText, 13, finalY + 6);
+  
+      const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
+  
+      // Wrap the Terms & Conditions text
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text("Terms & Conditions", 13, nextY);
+  
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const termsText = doc.splitTextToSize(`${quote.termsAndConditions}`, 180); // 180 is the width
+      doc.text(termsText, 13, nextY + 6);
+  
+      startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next quote
+    });
+  
+    // Save the PDF
+    doc.save("ESTIMATE.pdf");
+  };
+  
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -383,7 +562,7 @@ function SendQuotes({ accountData }) {
                   </span>
                 </div>
                 <div className="mx-2">
-                  <button className="btn btn-outline-danger">
+                  <button className="btn btn-outline-danger" onClick={generatePDF}>
                     <FaDownload />
                   </button>
                 </div>

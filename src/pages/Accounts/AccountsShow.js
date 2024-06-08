@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import { Button, Modal } from "react-bootstrap";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { GrAttachment } from "react-icons/gr";
-import { IoLink, IoSend } from "react-icons/io5";
-import { FaShareAlt, FaEllipsisV } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import SendEmail from "../Email/SendEmail";

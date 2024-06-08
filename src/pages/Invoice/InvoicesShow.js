@@ -147,18 +147,18 @@ function InvoiceShow() {
     doc.text("Singapore 159929", 13, 45);
     doc.text("Singapore", 13, 50);
 
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.text("Bill To", 13, 65);
-    // doc.setFontSize(10);
+    // doc.setFontSize(11);
     // doc.setFont("helvetica", "bold");
-    // doc.text("Manoj Prabhakar", 13, 65);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "small");
-    doc.text(`${invoiceData.billingStreet}`, 13, 70);
-    doc.text(`${invoiceData.billingCity}`, 13, 75);
-    doc.text(`${invoiceData.billingCode}`, 13, 80);
-    doc.text(`${invoiceData.billingCountry}`, 13, 85);
+    // doc.text("Bill To", 13, 65);
+    // // doc.setFontSize(10);
+    // // doc.setFont("helvetica", "bold");
+    // // doc.text("Manoj Prabhakar", 13, 65);
+    // doc.setFontSize(10);
+    // doc.setFont("helvetica", "small");
+    // doc.text(`${invoiceData.billingStreet}`, 13, 70);
+    // doc.text(`${invoiceData.billingCity}`, 13, 75);
+    // doc.text(`${invoiceData.billingCode}`, 13, 80);
+    // doc.text(`${invoiceData.billingCountry}`, 13, 85);
 
     // Add the table
     const tableData =
@@ -174,7 +174,7 @@ function InvoiceShow() {
         invoiceItem.total,
       ]);
     doc.autoTable({
-      startY: 110,
+      startY: 65,
       headStyles: {
         fillColor: [50, 50, 50],
         textColor: [255, 255, 255],
