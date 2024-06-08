@@ -84,7 +84,7 @@ const ActivityEdit = ({ id, fetchData ,path }) => {
       };
       console.log("Payload:", payload);
       try {
-        const response = await axios.post(`${API_URL}${path}`,
+        const response = await axios.put(`${API_URL}${path}`,
           payload,
           {
             headers: {
