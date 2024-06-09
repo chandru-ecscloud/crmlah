@@ -13,7 +13,7 @@ import { IoMdMailOpen } from "react-icons/io";
 import { FaUserTie } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal } from "react-bootstrap";
 // import Women from "../../assets/women 1.jpg";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
@@ -26,6 +26,8 @@ const ListTasks = () => {
   const [qualifiedTasks, setQualifiedTasks] = useState([]);
   const [propositionTasks, setPropositionTasks] = useState([]);
   const [wonTasks, setWonTasks] = useState([]);
+  const owner = sessionStorage.getItem("user_name");
+
   const [hoveredSection, setHoveredSection] = useState(null);
   const companyId = sessionStorage.getItem("companyId");
   const [search, setSearch] = useState({
@@ -143,15 +145,15 @@ const ListTasks = () => {
     }
   };
 
-  const getAllData = ()=>{
+  const getAllData = () => {
     fetchLeadData();
     fetchContactData();
     fetchAcconutData();
     fetchDealData();
-  }
-  
+  };
+
   useEffect(() => {
-    getAllData()
+    getAllData();
   }, []);
   // useEffect(() => {
   //   if (tasks) {
@@ -282,11 +284,12 @@ const Section = ({
     // console.log( id,"id")
     // console.log( itemStatus,"itemStatus")
     // console.log( status,"status")
+    const owner = sessionStorage.getItem("user_name");
 
     if (itemStatus === "New" && status === "Qualified") {
       try {
         const response = await axios.post(
-          `${API_URL}leadToContactConvert/${id}`,
+          `${API_URL}leadToContactConvert/${id}?ownerName=${owner}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -309,7 +312,7 @@ const Section = ({
     if (itemStatus === "Qualified" && status === "Proposition") {
       try {
         const response = await axios.post(
-          `${API_URL}contactToAccountConvert/${id}`,
+          `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -332,7 +335,7 @@ const Section = ({
     if (itemStatus === "Proposition" && status === "Won") {
       try {
         const response = await axios.post(
-          `${API_URL}accountToDealConvert/${id}`,
+          `${API_URL}accountToDealConvert/${id}?ownerName=${owner}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -385,21 +388,21 @@ const Section = ({
         }}
       >
         {tasksToMap.length > 0 &&
-          filteredTasks(tasksToMap, status).map((task) => 
-            { 
-              return(
-            <Task
-              key={task.id}
-              task={task}
-              tasks={tasks}
-              setTasks={setTasks}
-              fetchLeadData={fetchLeadData}
-              fetchContactData={fetchContactData}
-              fetchAcconutData={fetchAcconutData}
-              fetchDealData={fetchDealData}
-              getAllData={getAllData}
-            />
-          )})}
+          filteredTasks(tasksToMap, status).map((task) => {
+            return (
+              <Task
+                key={task.id}
+                task={task}
+                tasks={tasks}
+                setTasks={setTasks}
+                fetchLeadData={fetchLeadData}
+                fetchContactData={fetchContactData}
+                fetchAcconutData={fetchAcconutData}
+                fetchDealData={fetchDealData}
+                getAllData={getAllData}
+              />
+            );
+          })}
         {/* {tasksToMap.length > 0 &&
           filteredTasks(tasksToMap, status).map((task) => 
             { 
@@ -416,7 +419,6 @@ const Section = ({
               getAllData={getAllData}
             />
           )})} */}
-           
       </div>
     </div>
   );
@@ -512,11 +514,7 @@ const Header = ({
   );
 };
 
-const Task = ({
-  task,
-  getAllData,
-  tasks
-}) => {
+const Task = ({ task, getAllData, tasks }) => {
   const [showModal, setShowModal] = useState(false);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
@@ -527,6 +525,7 @@ const Task = ({
   }));
 
   const handleRemove = async (id, status) => {
+    const owner = sessionStorage.getItem("user_name");
     console.log("object", status);
     if (status === "New") {
       // console.log("New", id);
@@ -545,8 +544,8 @@ const Task = ({
           toast.success(response.data.message, {
             icon: <CiCircleRemove color="green" size={20} />,
           });
-          getAllData()
-        } 
+          getAllData();
+        }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
@@ -554,7 +553,7 @@ const Task = ({
       // console.log("Qualified", id);
       try {
         const response = await axios.post(
-          `${API_URL}contactToLeadConvert/${id}`,
+          `${API_URL}contactToLeadConvert/${id}?ownerName=${owner}`,
 
           {
             headers: {
@@ -567,8 +566,8 @@ const Task = ({
           toast.success(response.data.message, {
             icon: <CiCircleRemove color="green" size={20} />,
           });
-          getAllData()
-        } 
+          getAllData();
+        }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
@@ -576,7 +575,7 @@ const Task = ({
       // console.log("Proposition",id);
       try {
         const response = await axios.post(
-          `${API_URL}accountToContactConvert/${id}`,
+          `${API_URL}accountToContactConvert/${id}?ownerName=${owner}`,
 
           {
             headers: {
@@ -589,8 +588,8 @@ const Task = ({
           toast.success(response.data.message, {
             icon: <CiCircleRemove color="green" size={20} />,
           });
-          getAllData()
-        } 
+          getAllData();
+        }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
@@ -598,7 +597,7 @@ const Task = ({
       // console.log("Won", id);
       try {
         const response = await axios.post(
-          `${API_URL}dealToAccountConvert/${id}`,
+          `${API_URL}dealToAccountConvert/${id}?ownerName=${owner}`,
 
           {
             headers: {
@@ -611,8 +610,8 @@ const Task = ({
           toast.success(response.data.message, {
             icon: <CiCircleRemove color="green" size={20} />,
           });
-          getAllData()
-        } 
+          getAllData();
+        }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
@@ -676,12 +675,12 @@ const Task = ({
         </span>
         <br />
         <button
-           variant="outline-danger"
-           className="btn btn-outline-danger px-2 py-1"
-           style={{ border: 'none' }}
-           onClick={() => setShowModal(true)}
-         >
-           <IoMdTrash />
+          variant="outline-danger"
+          className="btn btn-outline-danger px-2 py-1"
+          style={{ border: "none" }}
+          onClick={() => setShowModal(true)}
+        >
+          <IoMdTrash />
         </button>
       </div>
 

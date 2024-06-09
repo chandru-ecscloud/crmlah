@@ -48,6 +48,8 @@ const Schedule = () => {
         }
       });
       data.appointmentStartTime = selectedTimeSlot;
+      data.appointmentstatus = "RESCHEDULED";
+
       setLoadIndicator(true);
       try {
         const response = await axios.put(`${API_URL}reschedule/${id}`, data, {
@@ -62,11 +64,13 @@ const Schedule = () => {
           //   window.location.href = "https://crmlah.com/"; // Redirect to the external site
           // }, 2000);
 
-          const zoomLink = link  ? `
+          const zoomLink = link
+            ? `
               <h3 style="margin-bottom: 0;">you can join:</h3>
               <h4 style="margin:0 ;">${link}</h4>      
               <p style="margin: 1.5rem 0px 2rem 0px;">You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${id}&name=${name}&email=${email}&link=${link}">Reschedule or Cancel</a> Your Appointment</p>
-              `: '';
+              `
+            : "";
 
           const mailContent = `
           <!DOCTYPE html>

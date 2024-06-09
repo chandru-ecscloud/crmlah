@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
@@ -14,8 +11,7 @@ import SendEmail from "../Email/SendEmail";
 function AppointmentsShow() {
   const { id } = useParams();
   const [clientData, setClientData] = useState({});
-  const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
+
   const navigate = useNavigate();
 
   const userData = async () => {
@@ -139,46 +135,55 @@ function AppointmentsShow() {
 
         {/* Right Side Content */}
         <div className=" container-fluid row justify-content-center ">
-        <div
-          className="container-fluid col-md-9 m-0"
-          id="userDetails-container"
-        >
-          {/* Details */}
-          <div className="container-fluid row" id="Details">
-            <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Details</span>
-            </div>
-
-            <div className="container-fluid col-md-6 mt-3">
-              <div>
-                <label className="text-dark Label">Appointment For</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointmentFor || "--"}
-                </span>
+          <div
+            className="container-fluid col-md-9 m-0"
+            id="userDetails-container"
+          >
+            {/* Details */}
+            <div className="container-fluid row" id="Details">
+              <div className="border-bottom py-3">
+                <span className="fs-6 fw-bold my-3">Details</span>
               </div>
 
-              {/* <div>
+              <div className="container-fluid col-md-12 mt-3">
+                <div>
+                  <label className="text-dark Label">Appointment For</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{clientData.appointmentFor || "--"}
+                  </span>
+                </div>
+
+                {/* <div>
                 <label className="text-dark Label">Service Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.serviceName || "--"}
                 </span>
               </div> */}
 
-              {/* <div>
+                {/* <div>
                 <label className="text-dark Label">Duration</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.duration || "--"}
                 </span>
               </div> */}
-              
-              <div>
-                <label className="text-dark Label">Appointment Mode</label>
-                <span className="text-dark">
-                &nbsp;&nbsp;&nbsp; : &nbsp;{clientData.appointmentMode || "--"}
-                </span>
-              </div>
 
-              {/* <div>
+                <div>
+                  <label className="text-dark Label">Appointment Mode</label>
+                  <span className="text-dark">
+                    &nbsp;&nbsp;&nbsp; : &nbsp;
+                    {clientData.appointmentMode || "--"}
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-dark Label">Appointment Status</label>
+                  <span className="text-dark">
+                    &nbsp;&nbsp;&nbsp; : &nbsp;
+                    {clientData.appointmentstatus || "--"}
+                  </span>
+                </div>
+
+                {/* <div>
                 <label className="text-dark Label">Lead Source</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.lead_source || "--"}
@@ -198,51 +203,51 @@ function AppointmentsShow() {
                   &nbsp; : &nbsp;{clientData.country || "--"}
                 </span>
               </div> */}
-            </div>
-
-            <div className="container-fluid col-md-6"></div>
-          </div>
-
-          {/* Hide Details */}
-          <div className="container-fluid row" id="Details">
-            <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Hide Details</span>
-            </div>
-
-            <div className="py-3">
-              <span className="fs-6 fw-bold"> Appointment Information</span>
-            </div>
-
-            <div className="container-fluid col-md-6">
-              <div>
-                <label className="text-dark Label">Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointmentName || "--"}
-                </span>
               </div>
 
-              <div>
-                <label className="text-dark Label">Start Time</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointmentStartTime || "--"}
-                </span>
+              <div className="container-fluid col-md-6"></div>
+            </div>
+
+            {/* Hide Details */}
+            <div className="container-fluid row" id="Details">
+              <div className="border-bottom py-3">
+                <span className="fs-6 fw-bold my-3">Hide Details</span>
               </div>
 
-              {/* <div>
+              <div className="py-3">
+                <span className="fs-6 fw-bold"> Appointment Information</span>
+              </div>
+
+              <div className="container-fluid col-md-6">
+                <div>
+                  <label className="text-dark Label">Name</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{clientData.appointmentName || "--"}
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-dark Label">Start Time</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{clientData.appointmentStartTime || "--"}
+                  </span>
+                </div>
+
+                {/* <div>
                 <label className="text-dark Label">Member</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.member || "--"}
                 </span>
               </div> */}
 
-              {/* <div>
+                {/* <div>
                 <label className="text-dark Label">Remainder</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.location || "--"}
                 </span>
               </div> */}
 
-              {/* <div>
+                {/* <div>
                 <label className="text-dark Label">Member</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.member || "--"}
@@ -255,36 +260,42 @@ function AppointmentsShow() {
                   &nbsp; : &nbsp;{clientData.remainder || "--"}
                 </span>
               </div> */}
-            </div>
-
-            <div className="container-fluid col-md-6">
-              <div>
-                <label className="text-dark Label">Start Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.appointmentStartDate || "--"}
-                </span>
               </div>
 
-              <div>
-                <label className="text-dark Label">Location</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.location || "--"}
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Created At</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.created_at ?clientData.created_at.split("T")[0]:"--"}
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Updated At</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.updated_at  ?clientData.updated_at.split("T")[0]:"--"}
-                </span>
-              </div>
+              <div className="container-fluid col-md-6">
+                <div>
+                  <label className="text-dark Label">Start Date</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{clientData.appointmentStartDate || "--"}
+                  </span>
+                </div>
 
-              {/* <div>
+                <div>
+                  <label className="text-dark Label">Location</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{clientData.location || "--"}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Created At</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;
+                    {clientData.created_at
+                      ? clientData.created_at.split("T")[0]
+                      : "--"}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Updated At</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;
+                    {clientData.updated_at
+                      ? clientData.updated_at.split("T")[0]
+                      : "--"}
+                  </span>
+                </div>
+
+                {/* <div>
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.email || "--"}
@@ -343,78 +354,78 @@ function AppointmentsShow() {
                 <label className="text-dark Label">Secondary Email</label>
                 <span className="text-dark">&nbsp; : &nbsp; --</span>
               </div> */}
-            </div>
+              </div>
 
-            {/* Address Information */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
-                <span className="my-3 fs-6 fw-bold col-10 my-3">
-                  Address Information
-                </span>
-                {/* <button className="btn bg-info col-2 text-white">
+              {/* Address Information */}
+              <div className="container-fluid row" id="Details">
+                <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
+                  <span className="my-3 fs-6 fw-bold col-10 my-3">
+                    Address Information
+                  </span>
+                  {/* <button className="btn bg-info col-2 text-white">
                   Locate Map
                 </button> */}
+                </div>
+
+                <div className="my-3"></div>
+
+                <div className="container col-md-6">
+                  <div>
+                    <label className="text-dark Label">Street</label>
+                    <span className="text-dark">
+                      &nbsp; : &nbsp;{clientData.street || "--"}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="text-dark Label">State</label>
+                    <span className="text-dark">
+                      &nbsp; : &nbsp;{clientData.state || "--"}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="text-dark Label">Country</label>
+                    <span className="text-dark">
+                      &nbsp; : &nbsp;{clientData.country || "--"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="container col-md-6">
+                  <div>
+                    <label className="text-dark Label">City</label>
+                    <span className="text-dark">
+                      &nbsp; : &nbsp;{clientData.city || "--"}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="text-dark Label">Zip Code</label>
+                    <span className="text-dark">
+                      &nbsp; : &nbsp;{clientData.zipCode || "--"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className="my-3"></div>
-
-              <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">Street</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.street || "--"}
-                  </span>
-                </div>
-                <div>
-                  <label className="text-dark Label">State</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.state || "--"}
-                  </span>
-                </div>
-                <div>
-                  <label className="text-dark Label">Country</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.country || "--"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">City</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.city || "--"}
+              {/* Description Information */}
+              <div className="container-fluid row" id="Details">
+                <div className="my-3 container-fluid row">
+                  <span className="my-3 fs-6 fw-bold my-3">
+                    Description Information
                   </span>
                 </div>
 
                 <div>
-                  <label className="text-dark Label">Zip Code</label>
+                  <label className="text-dark Label">Description</label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.zipCode || "--"}
+                    &nbsp; : &nbsp;{clientData.additionalInformation || "--"}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Description Information */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row">
-                <span className="my-3 fs-6 fw-bold my-3">
-                  Description Information
-                </span>
-              </div>
-
-              <div>
-                <label className="text-dark Label">Description</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.additionalInformation || "--"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Notes */}
-          {/* <div className="container-fluid row" id="Details">
+            {/* Notes */}
+            {/* <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
               <div>
                 <span className="my-3 fs-6 fw-bold my-3">Notes</span>
@@ -441,7 +452,7 @@ function AppointmentsShow() {
               ></textarea>
             </div>
           </div> */}
-        </div>
+          </div>
         </div>
       </section>
     </>

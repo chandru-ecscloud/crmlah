@@ -54,6 +54,8 @@ const EntryAppointment = () => {
         }
       });
       data.appointmentStartTime = selectedTimeSlot;
+      data.appointmentstatus = "PENDING";
+
       data.appointmentFor = `${data.first_name}${data.last_name}`;
       setLoadIndicator(true);
       const payload = {

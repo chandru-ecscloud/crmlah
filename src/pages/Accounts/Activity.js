@@ -155,7 +155,7 @@ function Activity({ id }) {
                         </div>
                         <div className="text-end ms-auto">
                           <span className="text-muted small text-end">
-                            {new Date(activity.createdAt).toLocaleDateString()}
+                            {activity.date}
                           </span>
                         </div>
                       </Accordion.Header>
@@ -183,8 +183,11 @@ function Activity({ id }) {
                                   </span>
                                 </div>
                                 <div className="col-2">
-                                  <ActivityEdit fetchData={fetchData} id={id}
-                                     path={`updateAccountActivityWithClientData/${activity.id}`}/>
+                                  {/* <ActivityEdit
+                                    fetchData={fetchData}
+                                    id={id}
+                                    path={`updateAccountActivityWithClientData/${activity.id}`}
+                                  /> */}
 
                                   <Delete
                                     onSuccess={fetchData}

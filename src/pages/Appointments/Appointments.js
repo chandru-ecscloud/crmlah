@@ -115,6 +115,28 @@ const Appointments = () => {
           ),
       },
       {
+        accessorKey: "appointmentstatus",
+        enableHiding: false,
+        header: "Appointment Status",
+        Cell: ({ row }) =>
+          row.original.appointmentstatus === "CONFIRMED" ? (
+            <span
+              className="badge bg-warning py-2 "
+              style={{ color: "#1f1f1f !important" }}
+            >
+              CONFIRMED
+            </span>
+          ) : row.original.appointmentstatus === "COMPLETED" ? (
+            <span className="badge bg-success py-2 ">COMPLETED</span>
+          ) : row.original.appointmentstatus === "CANCELLED" ? (
+            <span className="badge bg-danger py-2">CANCELLED</span>
+          ) : row.original.appointmentstatus === "RESCHEDULED" ? (
+            <span className="badge bg-info py-2">RESCHEDULED</span>
+          ) : (
+            <span className="badge bg-primary py-2">PENDING</span>
+          ),
+      },
+      {
         accessorKey: "serviceName",
         header: "Service Name",
       },
@@ -361,6 +383,8 @@ const Appointments = () => {
         state: false,
         zipCode: false,
         additionalInformation: false,
+        created_at: false,
+        updated_at: false,
       },
     },
     enableRowSelection: true,

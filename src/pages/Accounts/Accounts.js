@@ -32,6 +32,8 @@ const Accounts = () => {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const accountId = sessionStorage.getItem("accountId");
+  const owner = sessionStorage.getItem("user_name");
+
   const navigate = useNavigate();
 
   const columns = useMemo(
@@ -371,7 +373,7 @@ const Accounts = () => {
     const rowDataid = rows.map((row) => row.original.id).toString();
     try {
       const response = await axios.post(
-        `${API_URL}accountToDealConvert/${rowDataid}`,
+        `${API_URL}accountToDealConvert/${rowDataid}?ownerName=${owner}`,
         rowData,
         {
           headers: {

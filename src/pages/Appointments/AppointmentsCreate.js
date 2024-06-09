@@ -85,6 +85,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
         data.appointmentFor = selectedLeadName.name;
         data.email = selectedLeadName.email;
         data.typeOfAppointment = "Leads";
+        data.typeOfAppointment = "Leads";
       }
       let selectedTimeSlot = "";
       appointmentTime.forEach((time) => {
@@ -93,6 +94,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
         }
       });
       data.appointmentStartTime = selectedTimeSlot;
+      data.appointmentstatus = "PENDING";
       data.companyId = companyId;
       data.appointmentOwner = userName;
       data.reminder = 2;
@@ -439,7 +441,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}getTodayAvailableSlotsByCompanyId/${companyId}?date=${formik.values.appointmentStartDate}`,
+        `${API_URL}getTodayAvailableSlotsByCompanyId/${companyId}?date=${formik.values.appointmentStartDate}&userId=1`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -744,6 +746,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       </div>
                     </div>
                   </div>
+
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Date</lable>
