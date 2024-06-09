@@ -192,7 +192,7 @@ function ContactShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;+{contactData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp;{contactData.countryCode || ""}&nbsp;
                   {contactData.phone || ""}
                 </span>
               </div>
@@ -411,7 +411,6 @@ function ContactShow() {
                 </button> */}
               </div>
 
-              <div className="my-3"></div>
 
               <div className="container col-md-6">
                 <div>
@@ -448,6 +447,66 @@ function ContactShow() {
                     &nbsp; : &nbsp;{contactData.mailingZip || ""}
                   </span>
                 </div>
+              </div>
+            </div>
+
+             {/* Appointment Modal  */}
+             <div className="container-fluid row" id="Details">
+              <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
+                <span className="my-3 fs-6 fw-bold col-10 my-3">
+                  Appointment
+                </span>
+                {/* <button className="btn bg-info col-2 text-white">
+                  Locate Map
+                </button> */}
+              </div>
+
+              <div className="my-3"></div>
+
+              <div className="container">
+                <table className="table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">S No</th>
+                      <th scope="col">Appointment name</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col">End Date</th>
+                      <th scope="col">Appointment Owner</th>
+                      <th scope="col">Mode</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contactData.appointmentModels?.length > 0 ? (
+                      contactData.appointmentModels.map((appointment, index) => (
+                        <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{appointment.appointmentName}</td>
+                          <td>{appointment.appointmentStartDate}</td>
+                          <td>{appointment.appointmentStartTime}</td>
+                          <td>{appointment.appointmentOwner}</td>
+                          <td>
+                            {appointment.appointmentMode === "ONLINE" ? (
+                              <span className="badge text-bg-success">Online</span>
+                            ) : (
+                              <span className="badge text-bg-danger">Offline</span>
+                            )}
+                          </td>
+                          <td>
+                            <span>
+                              {appointment.appointmentstatus !== null
+                                ? appointment.appointmentstatus
+                                : "Pending"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>                       
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
 
