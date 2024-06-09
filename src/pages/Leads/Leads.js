@@ -27,10 +27,11 @@ const csvConfig = mkConfig({
 
 const Lead = () => {
   const [data, setData] = useState([]);
-  console.log(data);
+  // console.log(data);
   const [loading, setLoading] = useState(true);
   const role = sessionStorage.getItem("role");
   const Id = sessionStorage.getItem("Id");
+  const owner = sessionStorage.getItem("user_name");
   // console.log(role);
   const navigate = useNavigate();
   const companyId = sessionStorage.getItem("companyId");
@@ -361,7 +362,7 @@ const Lead = () => {
     console.log("12", rowDataid);
     try {
       const response = await axios.post(
-        `${API_URL}transferBulkData`,
+        `${API_URL}transferBulkData?ownerName=${owner}`,
         rowData,
         {
           headers: {
@@ -548,7 +549,7 @@ const Lead = () => {
                             handleBulkConvert(table.getSelectedRowModel().rows)
                           }
                         >
-                          Convert Contact
+                          Convert
                         </button>
                       </li>
                       <li>

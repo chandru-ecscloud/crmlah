@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
 import { Link, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
-import SendEmail from "../Email/SendEmail";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import SendInvoice from "../Email/SendInvoice";
+import Delete from "../../components/common/DeleteModel";
 function DealsShow() {
   const { id } = useParams();
   const [dealData, setdealData] = useState({});
 
   const [invoiceData, setInvoiceData] = useState({});
-  console.log("Invoice Data:", invoiceData.transactionInvoiceModels);
-  const token = sessionStorage.getItem("token");
+  console.log("Deal Data:", dealData);
+  // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
   const scheduleData = {
@@ -555,6 +553,67 @@ function DealsShow() {
               </div>
             </div>
 
+            {/* {/ Appointment Modal  /} */}
+            <div className="container-fluid row" id="Details">
+              <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
+                <span className="my-3 fs-6 fw-bold col-10 my-3">
+                  Appointment
+                </span>
+                {/* <button className="btn bg-info col-2 text-white">
+                  Locate Map
+                </button> */}
+              </div>
+
+              <div className="container">
+                <table className="table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">S No</th>
+                      <th scope="col">Appointment name</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col">End Date</th>
+                      <th scope="col">Appointment Owner</th>
+                      <th scope="col">Mode</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dealData.appointmentModels?.length > 0 ? (
+                      dealData.appointmentModels.map((appointment, index) => (
+                        <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{appointment.appointmentName}</td>
+                          <td>{appointment.appointmentStartDate}</td>
+                          <td>{appointment.appointmentStartTime}</td>
+                          <td>{appointment.appointmentOwner}</td>
+                          <td>
+                            {appointment.appointmentMode === "ONLINE" ? (
+                              <span className="badge text-bg-success">
+                                Online
+                              </span>
+                            ) : (
+                              <span className="badge text-bg-danger">
+                                Offline
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <span>
+                              {appointment.appointmentstatus !== null
+                                ? appointment.appointmentstatus
+                                : "Pending"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             {/* Invoice Information Table*/}
             <div className="container-fluid row" id="Details">
               <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
@@ -564,128 +623,139 @@ function DealsShow() {
               </div>
 
               <div className="container  col-12">
-                {invoiceData.transactionInvoiceModels ? (
+                {dealData.invoice ? (
                   <div>
-                    {invoiceData.transactionInvoiceModels.map((invoice) => (
-                      <div key={invoice.id} className="row mt-4">
-                        <div className="col-md-6 col-12">
-                          <label className="text-dark">
-                            <b>Invoice Owner</b>
-                          </label>
-                          <span className="text-dark">
-                            &nbsp; : &nbsp;{invoice.invoiceOwner || "--"}
-                          </span>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <label className="text-dark Label">
-                            <b>Subject</b>
-                          </label>
-                          <span className="text-dark">
-                            &nbsp; : &nbsp;{invoice.subject || "--"}
-                          </span>
-                        </div>
+                    {dealData.invoice &&
+                      dealData.invoice.map((invoice) => (
+                        <div key={invoice.id} className="row mt-4">
+                          <div className="col-12 d-flex justify-content-end">
+                            <Delete
+                              onSuccess={userData}
+                              path={`unassignInvoiceFromDeal/${id}?invoiceId=${invoice.id}`}
+                            />
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <label className="text-dark">
+                              <b>Invoice Owner</b>
+                            </label>
+                            <span className="text-dark">
+                              &nbsp; : &nbsp;{invoice.invoiceOwner || "--"}
+                            </span>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <label className="text-dark Label">
+                              <b>Subject</b>
+                            </label>
+                            <span className="text-dark">
+                              &nbsp; : &nbsp;{invoice.subject || "--"}
+                            </span>
+                          </div>
 
-                        <div className="table-responsive">
-                          <table className="table table-bordered">
-                            <thead className="table-secondary">
-                              <tr>
-                                <th scope="col">S.No</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">List Price</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Discount</th>
-                                <th scope="col">Tax</th>
-                                <th scope="col">Total</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {invoice.invoiceItemList &&
-                                invoice.invoiceItemList.map((item, index) => (
-                                  <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.productName || "--"}</td>
-                                    <td>{item.quantity || "--"}</td>
-                                    <td>{item.listPrice || "--"}</td>
-                                    <td>{item.amount || "--"}</td>
-                                    <td>{item.discount || 0}</td>
-                                    <td>{item.tax || "--"}</td>
-                                    <td>{item.total || "--"}</td>
-                                  </tr>
-                                ))}
-                            </tbody>
-                          </table>
-                        </div>
+                          <div className="table-responsive">
+                            <table className="table table-bordered">
+                              <thead className="table-secondary">
+                                <tr>
+                                  <th scope="col">S.No</th>
+                                  <th scope="col">Product Name</th>
+                                  <th scope="col">Quantity</th>
+                                  <th scope="col">List Price</th>
+                                  <th scope="col">Amount</th>
+                                  <th scope="col">Discount</th>
+                                  <th scope="col">Tax</th>
+                                  <th scope="col">Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {invoice.invoiceItemList &&
+                                  invoice.invoiceItemList.map((item, index) => (
+                                    <tr key={item.id}>
+                                      <td>{index + 1}</td>
+                                      <td>{item.productName || "--"}</td>
+                                      <td>{item.quantity || "--"}</td>
+                                      <td>{item.listPrice || "--"}</td>
+                                      <td>{item.amount || "--"}</td>
+                                      <td>{item.discount || 0}</td>
+                                      <td>{item.tax || "--"}</td>
+                                      <td>{item.total || "--"}</td>
+                                    </tr>
+                                  ))}
+                              </tbody>
+                            </table>
+                          </div>
 
-                        <div className="container-fluid p-3">
-                          <div className="row">
-                            <div className="col-md-7 col-12"></div>
-                            <div className="col-md-5 col-12 border rounded">
-                              <div className="container-fluid py-2">
-                                <div className="row">
-                                  <div className="col-md-8 col-12">
-                                    {" "}
-                                    <label className="text-dark ">
-                                      Sub Total(SGT)
-                                    </label>
-                                  </div>
-                                  <div className="col-md-4 col-12">
-                                    {" "}
-                                    <span>: {invoice.subTotal || "0"}.00</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="container-fluid py-2">
-                                <div className="row">
-                                  <div className="col-md-8 col-12">
-                                    {" "}
-                                    <label className="text-dark ">
-                                      Discount(%)
-                                    </label>
-                                  </div>
-                                  <div className="col-md-4 col-12">
-                                    {" "}
-                                    <span>
-                                      : {invoice.txnDiscount || "0"}.00
-                                    </span>
+                          <div className="container-fluid p-3">
+                            <div className="row">
+                              <div className="col-md-7 col-12"></div>
+                              <div className="col-md-5 col-12 border rounded">
+                                <div className="container-fluid py-2">
+                                  <div className="row">
+                                    <div className="col-md-8 col-12">
+                                      {" "}
+                                      <label className="text-dark ">
+                                        Sub Total(SGT)
+                                      </label>
+                                    </div>
+                                    <div className="col-md-4 col-12">
+                                      {" "}
+                                      <span>
+                                        : {invoice.subTotal || "0"}.00
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="container-fluid py-2">
-                                <div className="row">
-                                  <div className="col-md-8 col-12">
-                                    {" "}
-                                    <label className="text-dark ">Tax(%)</label>
-                                  </div>
-                                  <div className="col-md-4 col-12">
-                                    {" "}
-                                    <span>: {invoice.txnTax || "0"}.00</span>
+                                <div className="container-fluid py-2">
+                                  <div className="row">
+                                    <div className="col-md-8 col-12">
+                                      {" "}
+                                      <label className="text-dark ">
+                                        Discount(%)
+                                      </label>
+                                    </div>
+                                    <div className="col-md-4 col-12">
+                                      {" "}
+                                      <span>
+                                        : {invoice.txnDiscount || "0"}.00
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="container-fluid py-2">
-                                <div className="row">
-                                  <div className="col-md-8 col-12">
-                                    <label className="text-dark ">
-                                      Grand Total(SGT)
-                                    </label>
+                                <div className="container-fluid py-2">
+                                  <div className="row">
+                                    <div className="col-md-8 col-12">
+                                      {" "}
+                                      <label className="text-dark ">
+                                        Tax(%)
+                                      </label>
+                                    </div>
+                                    <div className="col-md-4 col-12">
+                                      {" "}
+                                      <span>: {invoice.txnTax || "0"}.00</span>
+                                    </div>
                                   </div>
-                                  <div className="col-md-4 col-12">
-                                    <span>
-                                      : {invoice.grandTotal || "0"}.00
-                                    </span>
+                                </div>
+                                <div className="container-fluid py-2">
+                                  <div className="row">
+                                    <div className="col-md-8 col-12">
+                                      <label className="text-dark ">
+                                        Grand Total(SGT)
+                                      </label>
+                                    </div>
+                                    <div className="col-md-4 col-12">
+                                      <span>
+                                        : {invoice.grandTotal || "0"}.00
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 ) : (
                   // <div></div>
-                  <p>No quotes available.</p>
+                  <p>No Invoice available.</p>
                 )}
               </div>
             </div>

@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   appointmentStartDate: Yup.date().required("*Start date is required"),
   timeSlotId: Yup.string().required("*Start Time is required"),
   location: Yup.string().required("*Location is required"),
-  // member: Yup.string().required("*Member is required"),
+  appointmentstatus: Yup.string().required("*Appointment Status is required"),
   appointmentMode: Yup.string().required("*Appointment mode is required"),
   additionalInformation: Yup.string().required("*Description is required"),
 });
@@ -43,6 +43,7 @@ function AppointmentsCreate({ name, id, getData }) {
       phoneNumber: "",
       timeSlotId: "",
       duration: "",
+      appointmentstatus: "",
       appointmentName: "",
       location: "",
       member: "",
@@ -85,7 +86,7 @@ function AppointmentsCreate({ name, id, getData }) {
       // data.serviceName = selectedServiceName;
       data.appointmentOwner = userName;
       data.reminder = 2;
-      data.appointmentName =data.appointmentName;
+      data.appointmentName = data.appointmentName;
       // console.log(data);
 
       try {
@@ -228,11 +229,7 @@ function AppointmentsCreate({ name, id, getData }) {
                     </span>
                     &nbsp;
                     <span>
-                      <button
-                        className="btn btn-primary"
-                        type="submit"
-                        onClick={formik.handleSubmit}
-                      >
+                      <button className="btn btn-primary" type="submit">
                         Update
                       </button>
                     </span>
@@ -397,6 +394,41 @@ function AppointmentsCreate({ name, id, getData }) {
                           formik.errors.appointmentStartTime && (
                             <p className="text-danger ">
                               {formik.errors.appointmentStartTime}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <label htmlFor="leadowner">Appointment Status</label>
+                      &nbsp;&nbsp;
+                      <select
+                        id="appointmentstatus"
+                        //className="form-size form-select"
+                        name="appointmentstatus"
+                        {...formik.getFieldProps("appointmentstatus")}
+                        className={`form-size form-select   ${
+                          formik.touched.appointmentstatus &&
+                          formik.errors.appointmentstatus
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="PENDING">Pending</option>
+                        <option value="CONFIRMED">Confirmed</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                      </select>
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.appointmentstatus &&
+                          formik.errors.appointmentstatus && (
+                            <p className="text-danger ">
+                              {formik.errors.appointmentstatus}
                             </p>
                           )}
                       </div>

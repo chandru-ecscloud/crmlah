@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -38,6 +38,7 @@ const validationSchema = Yup.object({
     })
   ),
   status: Yup.string().required("*Status is required"),
+  date: Yup.string().required("*Date is required"),
   note: Yup.string().required("*Notes are required"),
 });
 
@@ -68,6 +69,7 @@ const ActivityAdd = ({ id, fetchData }) => {
       ],
       status: "",
       note: "",
+      date: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -77,6 +79,7 @@ const ActivityAdd = ({ id, fetchData }) => {
           activityOwner: userName,
           status: data.status,
           note: data.note,
+          date: data.date,
         },
         clientData: data.clientData,
       };
@@ -142,6 +145,12 @@ const ActivityAdd = ({ id, fetchData }) => {
       formik.setFieldValue("clientData", formik.values.clientData.slice(0, -1));
     }
   };
+  const currentData = new Date().toISOString().split("T")[0];
+
+  useEffect(() => {
+    formik.setFieldValue("date", currentData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -305,18 +314,19 @@ const ActivityAdd = ({ id, fetchData }) => {
                 </div>
               ))}
             <div className="my-2 me-2 text-end">
-              <button
-                onClick={addRow}
-                type="button"
-                className=" btn addrow d-inline-flex align-items-center fw-bold "
-                style={{
-                  cursor: "pointer",
-                  color: "#4d5357",
-                }}
-              >
-                <LuUserPlus2 size={20} className="mb-1" /> Add
-              </button>
-
+              {rows.length < 10 && (
+                <button
+                  onClick={addRow}
+                  type="button"
+                  className=" btn addrow d-inline-flex align-items-center fw-bold "
+                  style={{
+                    cursor: "pointer",
+                    color: "#4d5357",
+                  }}
+                >
+                  <LuUserPlus2 size={20} className="mb-1" /> Add
+                </button>
+              )}
               {rows.length > 1 && (
                 <button
                   className="btn mb-2 "
@@ -357,6 +367,23 @@ const ActivityAdd = ({ id, fetchData }) => {
                 </select>
                 {formik.touched.status && formik.errors.status ? (
                   <div className="invalid-feedback">{formik.errors.status}</div>
+                ) : null}
+              </div>
+              <div className="form-group mt-2">
+                <label htmlFor="status">Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  id="date"
+                  {...formik.getFieldProps("date")}
+                  className={`form-control ${
+                    formik.touched.date && formik.errors.date
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                ></input>
+                {formik.touched.date && formik.errors.date ? (
+                  <div className="invalid-feedback">{formik.errors.date}</div>
                 ) : null}
               </div>
               <div className="form-group mt-2">

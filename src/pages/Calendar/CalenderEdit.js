@@ -18,6 +18,8 @@ const validationSchema = Yup.object().shape({
     .required("*Phone Number is required")
     .matches(/^[0-9]{8,10}$/, "*Phone Number must be 8 to 10 digits"),
   // location: Yup.string().required("*Location is required"),
+  appointmentstatus: Yup.string().required("*Appointment Status is required"),
+
   // // member: Yup.string().required("*Member is required"),
   // street: Yup.string().required("*Street is required"),
   // city: Yup.string().required("*City is required"),
@@ -30,7 +32,7 @@ const validationSchema = Yup.object().shape({
   // appointmentMode: Yup.string().required("*Appointment Mode is required"),
 });
 
-function CalenderEdit({ id, setShowViewModal,getData }) {
+function CalenderEdit({ id, setShowViewModal, getData }) {
   const companyId = sessionStorage.getItem("companyId");
   const [showEditModal, setShowEditModal] = useState(false);
   const [serviceData, setServiceData] = useState([]);
@@ -56,6 +58,7 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
       leadId: "",
       // serviceId: "",
       appointmentStartDate: "",
+      appointmentstatus: "",
       timeSlotId: "",
       duration: "",
       appointmentName: "",
@@ -79,6 +82,7 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
       const payload = {
         companyId: data.companyId,
         leadId: data.leadId,
+        appointmentstatus: data.appointmentstatus,
         // serviceId: data.serviceId,
         appointmentName: data.appointmentName,
         duration: data.duration,
@@ -105,7 +109,7 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
           }
         );
         if (response.status === 200) {
-          getData()
+          getData();
           toast.success(response.data.message);
           handleClose();
           formik.resetForm();
@@ -210,11 +214,7 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
                     </span>
                     &nbsp;
                     <span>
-                      <button
-                        className="btn btn-primary"
-                        type="submit"
-                        onClick={formik.handleSubmit}
-                      >
+                      <button className="btn btn-primary" type="submit">
                         Update
                       </button>
                     </span>
@@ -418,6 +418,42 @@ function CalenderEdit({ id, setShowViewModal,getData }) {
                       </div>
                     </div>
                   </div>
+
+                  <div className="col-lg-6 col-md-6 col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-end sm-device">
+                      <label htmlFor="leadowner">Appointment Status</label>
+                      &nbsp;&nbsp;
+                      <select
+                        id="appointmentstatus"
+                        //className="form-size form-select"
+                        name="appointmentstatus"
+                        {...formik.getFieldProps("appointmentstatus")}
+                        className={`form-size form-select   ${
+                          formik.touched.appointmentstatus &&
+                          formik.errors.appointmentstatus
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="PENDING">Pending</option>
+                        <option value="CONFIRMED">Confirmed</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                      </select>
+                    </div>
+                    <div className="row sm-device">
+                      <div className="col-5"></div>
+                      <div className="col-6 sm-device">
+                        {formik.touched.appointmentstatus &&
+                          formik.errors.appointmentstatus && (
+                            <p className="text-danger ">
+                              {formik.errors.appointmentstatus}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Pnone Number</lable>{" "}

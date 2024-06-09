@@ -115,6 +115,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       data.appointmentEndtDate = EndDate;
       // data.phoneNumber = 9941286931;
       data.companyName = "ECS";
+      data.appointmentstatus = "PENDING";
 
       data.companyId = companyId;
       data.appointmentOwner = userName;

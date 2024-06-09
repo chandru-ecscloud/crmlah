@@ -19,6 +19,10 @@ function Delete({ onSuccess, path }) {
         onSuccess();
         handleClose();
         toast.success(response.data.message);
+      } else if (response.status === 200) {
+        onSuccess();
+        handleClose();
+        toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
@@ -33,7 +37,7 @@ function Delete({ onSuccess, path }) {
         <BsTrash />
       </button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
         <Modal.Header closeButton>
           <Modal.Title>
             <b>Delete</b>

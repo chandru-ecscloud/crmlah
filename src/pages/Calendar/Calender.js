@@ -223,6 +223,7 @@ function Calendar() {
         appointmentStartDate: startDate,
         appointmentEndDate: endDate,
         appointmentStartTime: `${startTime12} - ${endTime12}`,
+        appointmentstatus: "RESCHEDULED",
       };
 
       if (newResource) {
@@ -303,6 +304,7 @@ function Calendar() {
         appointmentStartDate: startDate,
         appointmentEndDate: endDate,
         appointmentStartTime: `${startTime12} - ${endTime12}`,
+        appointmentstatus: "RESCHEDULED",
       };
 
       // console.log("Event Resize Payload is", payload);

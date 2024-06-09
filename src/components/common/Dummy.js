@@ -130,6 +130,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
       data.appointmentStartTime = `${startTime} - ${endTime}`;
       data.appointmentStartDate = StartDate;
       data.appointmentEndtDate = EndDate;
+      data.appointmentstatus = "PENDING";
 
       data.companyId = companyId;
       data.appointmentOwner = userName;

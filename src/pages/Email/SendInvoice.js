@@ -41,10 +41,7 @@ function SendInvoice({ invoiceData, id }) {
         formData.append("to", invoiceData.email);
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
-        formData.append(
-          "htmlContent",
-          generateInvoice(invoiceData.transactionInvoiceModels)
-        );
+        formData.append("htmlContent", generateInvoice(invoiceData.invoice));
         values.files.forEach((file) => {
           formData.append("files", file);
         });
@@ -87,12 +84,12 @@ function SendInvoice({ invoiceData, id }) {
   };
 
   useEffect(() => {
-    if (formik.values.subject && invoiceData.transactionInvoiceModels) {
-      const htmlContent = generateInvoice(invoiceData.transactionInvoiceModels);
+    if (formik.values.subject && invoiceData.invoice) {
+      const htmlContent = generateInvoice(invoiceData.invoice);
       formik.setFieldValue("htmlContent", htmlContent);
       formik.setFieldValue("isSendingEmail", true);
     }
-  }, [formik.values.subject, invoiceData.transactionInvoiceModels]);
+  }, [formik.values.subject, invoiceData.invoice]);
 
   const generateInvoice = (invoice) => {
     if (!invoice || invoice.length === 0) {
@@ -382,32 +379,32 @@ function SendInvoice({ invoiceData, id }) {
     `;
   };
 
-  const generatePDF = () => { 
-    const dealData = invoiceData?.transactionInvoiceModels;
+  const generatePDF = () => {
+    const dealData = invoiceData?.invoice;
     console.log("quotesData -> Quotes List:", dealData);
-  
+
     if (!dealData || dealData.length === 0) {
       return "No Invoice available";
     }
-  
+
     const doc = new jsPDF();
     doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
-  
+
     doc.setFont("helvetica", "normal");
     doc.setFontSize(28);
     doc.text("INVOICE", 155, 22);
-  
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
     doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
-  
+
     doc.setFont("helvetica", "small");
     doc.setFontSize(10);
     doc.text("The Alexcier", 13, 35);
     doc.text("237 Alexandra Road #04-10", 13, 40);
     doc.text("Singapore 159929", 13, 45);
     doc.text("Singapore", 13, 50);
-  
+
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.text("Bill To", 13, 65);
@@ -417,9 +414,9 @@ function SendInvoice({ invoiceData, id }) {
     doc.text(`${invoiceData.billingCity}`, 13, 75);
     doc.text(`${invoiceData.billingCode}`, 13, 80);
     doc.text(`${invoiceData.billingCountry}`, 13, 85);
-  
+
     let startY = 95; // Starting Y position for the quotes tables
-  
+
     dealData.forEach((invoice, index) => {
       doc.setFontSize(11);
       doc.setFont("helvetica", "bold");
@@ -428,7 +425,7 @@ function SendInvoice({ invoiceData, id }) {
       doc.setFont("helvetica", "small");
       doc.text(`Subject: ${invoice.subject}`, 13, startY + 5);
       doc.text(`Deal Name: ${invoice.dealName}`, 13, startY + 10);
-  
+
       // Add the table
       const tableData = invoice.invoiceItemList?.map((row, rowIndex) => [
         rowIndex + 1,
@@ -440,7 +437,7 @@ function SendInvoice({ invoiceData, id }) {
         row.tax,
         row.total,
       ]);
-  
+
       doc.autoTable({
         startY: startY + 20,
         headStyles: {
@@ -488,16 +485,7 @@ function SendInvoice({ invoiceData, id }) {
             "Discount(%)",
             `: ${invoice.txnDiscount || "--"}`,
           ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Tax(%)",
-            `: ${invoice.txnTax || "--"}`,
-          ],
+          ["", "", "", "", "", "", "Tax(%)", `: ${invoice.txnTax || "--"}`],
           [
             "",
             "",
@@ -510,34 +498,37 @@ function SendInvoice({ invoiceData, id }) {
           ],
         ],
       });
-  
+
       const finalY = doc.lastAutoTable.finalY + 10;
-  
+
       // Wrap the Notes text
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text("Customer Notes", 13, finalY);
-  
+
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       const notesText = doc.splitTextToSize(`${invoice.description}`, 180); // 180 is the width
       doc.text(notesText, 13, finalY + 6);
-  
+
       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
-  
+
       // Wrap the Terms & Conditions text
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text("Terms & Conditions", 13, nextY);
-  
+
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const termsText = doc.splitTextToSize(`${invoice.termsAndConditions}`, 180); // 180 is the width
+      const termsText = doc.splitTextToSize(
+        `${invoice.termsAndConditions}`,
+        180
+      ); // 180 is the width
       doc.text(termsText, 13, nextY + 6);
-  
+
       startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next invoice
     });
-  
+
     // Save the PDF
     doc.save("Invoice.pdf");
   };
@@ -776,9 +767,9 @@ function SendInvoice({ invoiceData, id }) {
             </p>
             <div className="container-fluid row" id="Details">
               <div className="container  col-12">
-                {invoiceData.transactionInvoiceModels ? (
+                {invoiceData.invoice ? (
                   <div>
-                    {invoiceData.transactionInvoiceModels.map((invoice) => (
+                    {invoiceData.invoice.map((invoice) => (
                       <div key={invoice.id} className="row mt-4">
                         <div className="col-md-6 col-12">
                           <label className="text-dark">
@@ -901,7 +892,6 @@ function SendInvoice({ invoiceData, id }) {
                 )}
               </div>
             </div>
-
           </form>
         </Offcanvas.Body>
       </Offcanvas>
