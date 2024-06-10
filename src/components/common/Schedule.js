@@ -440,7 +440,7 @@ const Schedule = () => {
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <h3 className="registerWord text-center">
-                Reschedule Appointment
+                Reschedule Appointmen
               </h3>
               <div className="container px-5">
                 <form onSubmit={formik.handleSubmit}>
