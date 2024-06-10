@@ -560,7 +560,7 @@ const Quotes = () => {
                   className={`btn btn-primary ${
                     role === "CMP_USER" && "disabled"
                   }`}
-                  disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                  disabled={role === "CMP_USER"}
                   onClick={handelNavigateClick}
                 >
                   Create Quotes
@@ -572,106 +572,43 @@ const Quotes = () => {
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  disabled={role === "CMP_USER"}
                 >
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {role === "CRM_SUPERADMIN" ? (
-                    <>
-                      {/* <li>
-                      <button
-                        className="btn"
-                        style={{ width: "100%", border: "none" }}
-                        disabled={
-                          !(
-                            table.getIsSomeRowsSelected() ||
-                            table.getIsAllRowsSelected()
-                          ) || table.getSelectedRowModel().rows.length !== 1
-                        }
-                        onClick={() =>
-                          handleAssignProducts(table.getSelectedRowModel().rows)
-                        }
-                      >
-                        <ProductModel
-                          // onSuccess={refreshData}
-                          path={`associateProductsWithQuote/${rowId}`}
-                        />
-                      </button>
-                    </li> */}
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
-                            !(
-                              table.getIsSomeRowsSelected() ||
-                              table.getIsAllRowsSelected()
-                            ) || table.getSelectedRowModel().rows.length !== 1
-                          }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Delete
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
-                            !table.getIsSomeRowsSelected() &&
-                            !table.getIsAllRowsSelected()
-                          }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Mass Delete
-                        </button>
-                      </li>
-                    </>
-                  ) : (
-                    // Render disabled buttons for CMP_USER
-                    <>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Assign Products
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Send Quote
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Delete
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Mass Delete
-                        </button>
-                      </li>
-                    </>
-                  )}
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Mass Delete
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>

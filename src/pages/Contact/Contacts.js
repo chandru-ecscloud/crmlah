@@ -558,63 +558,38 @@ const Contacts = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {role === "CRM_USER"  ? (
-                    <>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
-                            !(
-                              table.getIsSomeRowsSelected() ||
-                              table.getIsAllRowsSelected()
-                            ) || table.getSelectedRowModel().rows.length !== 1
-                          }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Delete
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
-                            !table.getIsSomeRowsSelected() &&
-                            !table.getIsAllRowsSelected()
-                          }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Mass Delete
-                        </button>
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Delete
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled
-                        >
-                          Mass Delete
-                        </button>
-                      </li>
-                    </>
-                  )}
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Mass Delete
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>

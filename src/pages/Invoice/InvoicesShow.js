@@ -334,7 +334,7 @@ function InvoiceShow() {
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
-            disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+            disabled={role === "CMP_USER"}
             onClick={handelEdit}
           >
             Edit
