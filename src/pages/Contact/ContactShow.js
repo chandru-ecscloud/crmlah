@@ -400,56 +400,6 @@ function ContactShow() {
               </div> */}
             </div>
 
-            {/* Address Information */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
-                <span className="my-3 fs-6 fw-bold col-10 my-3">
-                  Address Information
-                </span>
-                {/* <button className="btn bg-info col-2 text-white">
-                  Locate Map
-                </button> */}
-              </div>
-
-
-              <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">Street</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{contactData.mailingStreet || ""}
-                  </span>
-                </div>
-                <div>
-                  <label className="text-dark Label">State</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{contactData.mailingState || ""}
-                  </span>
-                </div>
-                <div>
-                  <label className="text-dark Label">Country</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{contactData.mailingCountry || ""}
-                  </span>
-                </div>
-              </div>
-
-              <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">City</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{contactData.mailingCity || ""}
-                  </span>
-                </div>
-
-                <div>
-                  <label className="text-dark Label">Zip Code</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{contactData.mailingZip || ""}
-                  </span>
-                </div>
-              </div>
-            </div>
-
              {/* Appointment Modal  */}
              <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
@@ -460,18 +410,15 @@ function ContactShow() {
                   Locate Map
                 </button> */}
               </div>
-
-              <div className="my-3"></div>
-
               <div className="container">
                 <table className="table">
                   <thead class="table-light">
                     <tr>
-                      <th scope="col">S No</th>
-                      <th scope="col">Appointment name</th>
-                      <th scope="col">Start Date</th>
-                      <th scope="col">End Date</th>
-                      <th scope="col">Appointment Owner</th>
+                      <th scope="col" style={{whiteSpace: "nowrap"}}>S No</th>
+                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment name</th>
+                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Date</th>
+                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Time</th>
+                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment Owner</th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
                     </tr>
@@ -493,16 +440,23 @@ function ContactShow() {
                             )}
                           </td>
                           <td>
-                            <span>
-                              {appointment.appointmentstatus !== null
-                                ? appointment.appointmentstatus
-                                : "Pending"}
-                            </span>
+                          {appointment.appointmentstatus === "CONFIRMED" ? (
+                              <span className="badge bg-warning">CONFIRMED</span>
+                            ) : appointment.appointmentstatus === "COMPLETED" ?  (
+                              <span className="badge bg-successr">COMPLETED</span>
+                            ) : appointment.appointmentstatus === "CANCELLED" ? (
+                              <span className="badge bg-danger py-2">CANCELLED</span>
+                            ) : appointment.appointmentstatus === "RESCHEDULED" ? (
+                              <span className="badge bg-info py-2">RESCHEDULED</span>
+                            ) : (
+                              <span className="badge bg-primary py-2">PENDING</span>
+                            )}
                           </td>
                         </tr>
                       ))
                     ) : (
-                      <tr>                       
+                      <tr>
+                        <td colSpan="7" className="text-center"> No Appointment</td>
                       </tr>
                     )}
                   </tbody>

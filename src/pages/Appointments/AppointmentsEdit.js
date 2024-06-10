@@ -245,7 +245,8 @@ function AppointmentsCreate({ name, id, getData }) {
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appointment </lable> &nbsp;&nbsp;
+                      <lable>Appointment</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <select
                         name="leadId"
                         className={`form-select form-size ${
@@ -308,7 +309,8 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appoint Name</lable> &nbsp;&nbsp;
+                      <lable>Appoint Name</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -337,7 +339,8 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Start Date</lable> &nbsp;&nbsp;
+                      <lable>Start Date</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="date"
                         // className="form-size form-control"
@@ -367,7 +370,8 @@ function AppointmentsCreate({ name, id, getData }) {
 
                   <div className="col-lg-6 col-md-6 col-12  mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Start Time</lable> &nbsp;&nbsp;
+                      <lable>Start Time</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <select
                         type="text"
                         name="timeSlotId"
@@ -403,6 +407,7 @@ function AppointmentsCreate({ name, id, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Status</label>
+                      <span className="text-danger">*</span>
                       &nbsp;&nbsp;
                       <select
                         id="appointmentstatus"
@@ -468,7 +473,8 @@ function AppointmentsCreate({ name, id, getData }) {
 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
+                      <label htmlFor="leadowner">Location</label>
+                      <span className="text-danger">*</span>&nbsp;&nbsp;
                       <select
                         id="location"
                         //className="form-size form-select"
@@ -501,7 +507,8 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Phone Number</lable> &nbsp;&nbsp;
+                      <lable>Phone Number</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -741,7 +748,7 @@ function AppointmentsCreate({ name, id, getData }) {
                 <div className="row">
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Description</lable> &nbsp;&nbsp;
+                      <lable>Description</lable><span className="text-danger">*</span> &nbsp;&nbsp;
                       <textarea
                         type="text"
                         rows={5}

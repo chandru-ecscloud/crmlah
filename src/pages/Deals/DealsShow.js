@@ -553,7 +553,7 @@ function DealsShow() {
               </div>
             </div>
 
-            {/* {/ Appointment Modal  /} */}
+            {/* Appointment Modal  */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
@@ -563,16 +563,25 @@ function DealsShow() {
                   Locate Map
                 </button> */}
               </div>
-
               <div className="container">
                 <table className="table">
                   <thead class="table-light">
                     <tr>
-                      <th scope="col">S No</th>
-                      <th scope="col">Appointment name</th>
-                      <th scope="col">Start Date</th>
-                      <th scope="col">End Date</th>
-                      <th scope="col">Appointment Owner</th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        S No
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment name
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Date
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Time
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment Owner
+                      </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
                     </tr>
@@ -598,16 +607,40 @@ function DealsShow() {
                             )}
                           </td>
                           <td>
-                            <span>
-                              {appointment.appointmentstatus !== null
-                                ? appointment.appointmentstatus
-                                : "Pending"}
-                            </span>
+                            {appointment.appointmentstatus === "CONFIRMED" ? (
+                              <span className="badge bg-warning">
+                                CONFIRMED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "COMPLETED" ? (
+                              <span className="badge bg-successr">
+                                COMPLETED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "CANCELLED" ? (
+                              <span className="badge bg-danger py-2">
+                                CANCELLED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "RESCHEDULED" ? (
+                              <span className="badge bg-info py-2">
+                                RESCHEDULED
+                              </span>
+                            ) : (
+                              <span className="badge bg-primary py-2">
+                                PENDING
+                              </span>
+                            )}
                           </td>
                         </tr>
                       ))
                     ) : (
-                      <tr></tr>
+                      <tr>
+                        <td colSpan="7" className="text-center">
+                          {" "}
+                          No Appointment
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>

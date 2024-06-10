@@ -651,7 +651,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
                           <lable>Appointment </lable>{" "}
-                          <span className=" text-danger">*</span>
+                          <span className=" text-danger">*</span> &nbsp;&nbsp;
                           <select
                             name="leadId"
                             className={`form-select form-size ${
@@ -719,7 +719,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment Name</lable>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -750,7 +750,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Start Date</lable>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="date"
                         name="appointmentStartDate"
@@ -780,7 +780,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label>Start Time</label>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <select
                         type="text"
                         name="timeSlotId"
@@ -901,7 +901,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Phone Number</lable>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="text"
                         //className="form-size form-control"
@@ -932,7 +932,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Appointment Mode</label>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <select
                         id="appointmentMode"
                         //className="form-size form-select"
@@ -1243,7 +1243,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Description</lable>
-                      <span className=" text-danger">*</span>
+                      <span className=" text-danger">*</span> &nbsp;&nbsp;
                       <textarea
                         rows={5}
                         type="text"

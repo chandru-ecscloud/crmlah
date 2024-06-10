@@ -207,13 +207,15 @@ function Activity({ id }) {
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            className="viewBtn"
-            variant="primary"
-            onClick={() => setViewAll(!viewAll)}
-          >
-            {viewAll ? "Show Less" : "View All"}
-          </Button>
+          {data.length > 3 && (
+            <Button
+              className="viewBtn"
+              variant="primary"
+              onClick={() => setViewAll(!viewAll)}
+            >
+              {viewAll ? "Show Less" : "View All"}
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>
