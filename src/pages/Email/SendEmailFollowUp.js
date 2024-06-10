@@ -27,8 +27,10 @@ function SendEmailFollowUp({ toEmail, leadId, leadName }) {
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
+  const role = sessionStorage.getItem("role");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const formik = useFormik({
     initialValues: {
@@ -138,6 +140,7 @@ function SendEmailFollowUp({ toEmail, leadId, leadName }) {
         className="fs-4 btn bg-primary bg-gradient mx-2 text-white shadow-none rounded-5"
         onClick={handleShow}
         style={{ padding: "2px 8px" }}
+        disabled={role === "CMP_USER"}
       >
         <IoIosSend className="mb-1" />
       </Button>

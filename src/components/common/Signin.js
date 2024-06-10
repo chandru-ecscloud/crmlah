@@ -34,23 +34,23 @@ const validationSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("*Confirm Password is required"),
-  country_code: yup.string().required("*Enter Country Code Number"),
+  countryCode: yup.string().required("*Enter Country Code Number"),
   phone: yup
     .string()
     .required("Phone number is required")
     .test("phone-length", function (value) {
-      const { country_code } = this.parent;
+      const { countryCode } = this.parent;
       if (value && /\s/.test(value)) {
         return this.createError({
           message: "Phone number should not contain spaces",
         });
       }
-      if (country_code === "65") {
+      if (countryCode === "65") {
         return value && value.length === 8
           ? true
           : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (country_code === "91") {
+      if (countryCode === "91") {
         return value && value.length === 10
           ? true
           : this.createError({
@@ -85,7 +85,7 @@ const CompanyRegistrationForm = () => {
       role: "",
       password: "",
       cpassword: "",
-      country_code: "",
+      countryCode: "",
       phone: "",
       address: "",
       city: "",
@@ -168,7 +168,7 @@ const CompanyRegistrationForm = () => {
     if (formik.values.userName) {
       fetchUserData();
     }
-    formik.setFieldValue("country_code", "65");
+    formik.setFieldValue("countryCode", "65");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.userName]);
 
@@ -389,7 +389,7 @@ const CompanyRegistrationForm = () => {
           <div>
             <select
               className="form-select"
-              {...formik.getFieldProps("country_code")}
+              {...formik.getFieldProps("countryCode")}
               style={{
                 width: "80px",
                 borderTopRightRadius: "0px",

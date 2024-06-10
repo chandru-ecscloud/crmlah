@@ -14,11 +14,22 @@ import { toast } from "react-toastify";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*User Name is required"),
   companyName: Yup.string().required("*Company Name is required"),
+  countryCode: Yup.string().required("*Country Code is required"),
   phone: Yup.string()
-    .matches(/^\d+$/, "Must be only digits")
-    .min(8)
-    .max(10)
-    .required("*Phone Number is required is required"),
+    .required('Phone number is required')
+    .test('phone-length', function (value) {
+      const { countryCode } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({ message: 'Phone number should not contain spaces' });
+      }
+      if (countryCode === '65') {
+        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      }
+      if (countryCode === '91') {
+        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      }
+      return true; // Default validation for other country codes
+    }),
   email: Yup.string().email("Invalid email").required("*Email is required"),
   registrationStatus: Yup.string().required("*Status is required"),
   role: Yup.string().required("*Role is required"),
@@ -36,13 +47,14 @@ const validationSchema = Yup.object().shape({
 function CompanyEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const companyId = sessionStorage.getItem("companyId");
+  // const companyId = sessionStorage.getItem("companyId");
 
   const formik = useFormik({
     initialValues: {
-      company_id: companyId,
+      companyId: id,
       name: "",
       companyName: "",
+      countryCode:"",
       phone: "",
       email: "",
       registrationStatus: "",
@@ -66,7 +78,7 @@ function CompanyEdit() {
             },
           }),
           axios.put(
-            `${API_URL}updateCompanyRegister/${companyId}`,
+            `${API_URL}updateCompanyRegister/${formik.values.companyId}`,
             {
               licenseLimit: data.licenseLimit,
             },
@@ -182,9 +194,9 @@ function CompanyEdit() {
           <div className="row">
             <input
               type="hidden"
-              {...formik.getFieldProps("company_id")}
-              value={companyId}
-              name="company_id"
+              {...formik.getFieldProps("companyId")}
+              value={id}
+              name="companyId"
             />
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -222,7 +234,7 @@ function CompanyEdit() {
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.companyName && formik.errors.companyName && (
-                    <div className="text-danger ">
+                    <div className="text-danger">
                       {formik.errors.companyName}
                     </div>
                   )}
@@ -232,42 +244,47 @@ function CompanyEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Phone</lable> &nbsp;&nbsp;
+                <lable>Phone</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
-                      className="form-size form-select form-control"
-                      {...formik.getFieldProps("country_code")}
+                      {...formik.getFieldProps("countryCode")}
+                      id="countryCode"
+                      name="countryCode"
+                      className={`form-size form-control  ${formik.touched.countryCode && formik.errors.countryCode
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
-                      name="country_code"
                     >
-                      <option value="65" selected>
-                        +65
-                      </option>
+                      <option value="65" selected>+65</option>
                       <option value="91">+91</option>
                     </select>
                   </div>
-
                   <input
-                    {...formik.getFieldProps("phone")}
                     type="tel"
                     name="phone"
+                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("phone")}
                     id="phone"
-                    className="form-control form-size"
                     aria-label="Text input with checkbox"
                   />
                 </div>
               </div>
 
-              <div className="row sm-device pb-4">
+              <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.phone && formik.errors.phone && (
-                    <div className="text-danger ">{formik.errors.phone}</div>
+                    <p className="text-danger">{formik.errors.phone}</p>
                   )}
                 </div>
               </div>
@@ -379,6 +396,7 @@ function CompanyEdit() {
                   className="form-size form-control"
                   id="role"
                   name="role"
+                  readOnly
                 />
               </div>
               <div className="row sm-device pb-4">

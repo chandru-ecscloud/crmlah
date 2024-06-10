@@ -21,12 +21,13 @@ function SendQuotes({ accountData }) {
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
+  const role = sessionStorage.getItem("role");
   const [subject, setSubject] = useState("");
   const [loadIndicator, setLoadIndicator] = useState(false);
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
 
-  console.log("Account Data:",accountData);
+  console.log("Account Data:", accountData);
 
   const formik = useFormik({
     initialValues: {
@@ -332,34 +333,34 @@ function SendQuotes({ accountData }) {
     `;
   };
 
-  console.log("Account Maped Qoutes List:",accountData.quotes);
+  console.log("Account Maped Qoutes List:", accountData.quotes);
 
-  const generatePDF = () => {
+  const generatePDF = (action = "download") => {
     const quotesData = accountData?.quotes;
     console.log("quotesData -> Quotes List:", quotesData);
-  
+
     if (!quotesData || quotesData.length === 0) {
       return "No quotes available";
     }
-  
+
     const doc = new jsPDF();
     doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
-  
+
     doc.setFont("helvetica", "normal");
     doc.setFontSize(28);
     doc.text("ESTIMATE", 155, 22);
-  
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
     doc.text("ECS Cloud Infotech Pte Ltd", 13, 30);
-  
+
     doc.setFont("helvetica", "small");
     doc.setFontSize(10);
     doc.text("The Alexcier", 13, 35);
     doc.text("237 Alexandra Road #04-10", 13, 40);
     doc.text("Singapore 159929", 13, 45);
     doc.text("Singapore", 13, 50);
-  
+
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.text("Bill To", 13, 65);
@@ -369,9 +370,9 @@ function SendQuotes({ accountData }) {
     doc.text(`${accountData.billingCity}`, 13, 75);
     doc.text(`${accountData.billingCode}`, 13, 80);
     doc.text(`${accountData.billingCountry}`, 13, 85);
-  
+
     let startY = 95; // Starting Y position for the quotes tables
-  
+
     quotesData.forEach((quote, index) => {
       doc.setFontSize(11);
       doc.setFont("helvetica", "bold");
@@ -380,7 +381,7 @@ function SendQuotes({ accountData }) {
       doc.setFont("helvetica", "small");
       doc.text(`Subject: ${quote.subject}`, 13, startY + 5);
       doc.text(`Deal Name: ${quote.dealName}`, 13, startY + 10);
-  
+
       // Add the table
       const tableData = quote.quotesItemList?.map((row, rowIndex) => [
         rowIndex + 1,
@@ -392,7 +393,7 @@ function SendQuotes({ accountData }) {
         row.tax,
         row.total,
       ]);
-  
+
       doc.autoTable({
         startY: startY + 20,
         headStyles: {
@@ -440,16 +441,7 @@ function SendQuotes({ accountData }) {
             "Discount(%)",
             `: ${quote.txnDiscount || "--"}`,
           ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "Tax(%)",
-            `: ${quote.txnTax || "--"}`,
-          ],
+          ["", "", "", "", "", "", "Tax(%)", `: ${quote.txnTax || "--"}`],
           [
             "",
             "",
@@ -462,44 +454,53 @@ function SendQuotes({ accountData }) {
           ],
         ],
       });
-  
+
       const finalY = doc.lastAutoTable.finalY + 10;
-  
+
       // Wrap the Notes text
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text("Customer Notes", 13, finalY);
-  
+
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       const notesText = doc.splitTextToSize(`${quote.description}`, 180); // 180 is the width
       doc.text(notesText, 13, finalY + 6);
-  
+
       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
-  
+
       // Wrap the Terms & Conditions text
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text("Terms & Conditions", 13, nextY);
-  
+
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       const termsText = doc.splitTextToSize(`${quote.termsAndConditions}`, 180); // 180 is the width
       doc.text(termsText, 13, nextY + 6);
-  
+
       startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next quote
     });
-  
+
     // Save the PDF
-    doc.save("ESTIMATE.pdf");
+    // doc.save("ESTIMATE.pdf");
+    if (action === "download") {
+      doc.save("quotes.pdf");
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    } else if (action === "open") {
+      window.open(doc.output("bloburl"), "_blank");
+    }
   };
-  
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
         <Button
           className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
           onClick={handleShow}
+          disabled={role === "CMP_USER"}
         >
           Send Quotes
         </Button>
@@ -562,9 +563,36 @@ function SendQuotes({ accountData }) {
                   </span>
                 </div>
                 <div className="mx-2">
-                  <button className="btn btn-outline-danger" onClick={generatePDF}>
-                    <FaDownload />
-                  </button>
+                  <div className="dropdown btn-outline-danger mx-1" style={{ cursor: "pointer" }}>
+                    <button
+                      className="btn btn-outline-danger bg-white shadow-none dropdown-toggle pdfdowenload"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <FaDownload className="mx-1 text-danger fs-5 pdf" />
+                    </button>
+                    <ul className="dropdown-menu">
+                      <li
+                        className="dropdown-item"
+                        onClick={() => generatePDF("download")}
+                      >
+                        Download PDF
+                      </li>
+                      <li
+                        className="dropdown-item"
+                        onClick={() => generatePDF("open")}
+                      >
+                        Open PDF
+                      </li>
+                      <li
+                        className="dropdown-item"
+                        onClick={() => generatePDF("print")}
+                      >
+                        Print PDF
+                      </li>
+                    </ul>
+                  </div>
                 </div>
                 <span className="d-flex" style={{ gap: "10px" }}>
                   <button
@@ -584,6 +612,7 @@ function SendQuotes({ accountData }) {
                 </span>
               </div>
             </div>
+
             <div className="d-flex align-items-center py-3">
               <p className="m-0">
                 <b style={{ color: "#424242" }}>To :</b>

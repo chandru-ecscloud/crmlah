@@ -551,7 +551,7 @@ const Accounts = () => {
                   className={`btn btn-primary ${
                     role === "CMP_USER" && "disabled"
                   }`}
-                  disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                  disabled={role === "CMP_USER"}
                   onClick={handelNavigateClick}
                 >
                   Create Accounts
@@ -563,11 +563,12 @@ const Accounts = () => {
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  disabled={role === "CMP_USER"}
                 >
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {role === "CRM_SUPERADMIN" ? (
+                  {role === "CRM_USER" ?  (
                     <>
                       <li>
                         <button
@@ -656,7 +657,7 @@ const Accounts = () => {
                         </button>
                       </li>
                     </>
-                  ) : role === "CRM_ADMIN" || role === "CMP_OWNER" ? (
+                  ) : role === "CRM_ADMIN" || role === "CMP_OWNER" || role === "CMP_ADMIN" ? (
                     <>
                       <li>
                         <button
@@ -672,23 +673,42 @@ const Accounts = () => {
                             handleAssignQuote(table.getSelectedRowModel().rows)
                           }
                         >
-                          Assign Quote
+                          <QuotesModel
+                            // onSuccess={refreshData}
+                            path={`associateQuotesWithAccount/${rowId}`}
+                          />
                         </button>
                       </li>
                       <li>
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAccountConvert(
+                              table.getSelectedRowModel().rows
+                            )
+                          }
                         >
-                          Convert
+                          Convert Deal
                         </button>
                       </li>
                       <li>
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkConvert(table.getSelectedRowModel().rows)
+                          }
                         >
                           Mass Convert
                         </button>
@@ -697,7 +717,15 @@ const Accounts = () => {
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
                         >
                           Delete
                         </button>
@@ -706,7 +734,13 @@ const Accounts = () => {
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
                         >
                           Mass Delete
                         </button>
@@ -718,25 +752,52 @@ const Accounts = () => {
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAssignQuote(table.getSelectedRowModel().rows)
+                          }
                         >
-                          Assign Quote
+                          <QuotesModel
+                            // onSuccess={refreshData}
+                            path={`associateQuotesWithAccount/${rowId}`}
+                          />
                         </button>
                       </li>
                       <li>
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleAccountConvert(
+                              table.getSelectedRowModel().rows
+                            )
+                          }
                         >
-                          Convert
+                          Convert Deal
                         </button>
                       </li>
                       <li>
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkConvert(table.getSelectedRowModel().rows)
+                          }
                         >
                           Mass Convert
                         </button>
@@ -745,7 +806,15 @@ const Accounts = () => {
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
                         >
                           Delete
                         </button>
@@ -754,7 +823,13 @@ const Accounts = () => {
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
-                          disabled
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
                         >
                           Mass Delete
                         </button>

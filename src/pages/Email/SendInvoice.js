@@ -25,6 +25,7 @@ function SendInvoice({ invoiceData, id }) {
   console.log("Invoice Data Mail ID:", id);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
+  const role = sessionStorage.getItem("role");
   const [subject, setSubject] = useState("");
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -379,7 +380,7 @@ function SendInvoice({ invoiceData, id }) {
     `;
   };
 
-  const generatePDF = () => {
+  const generatePDF = (action = "download") => {
     const dealData = invoiceData?.invoice;
     console.log("quotesData -> Quotes List:", dealData);
 
@@ -530,7 +531,15 @@ function SendInvoice({ invoiceData, id }) {
     });
 
     // Save the PDF
-    doc.save("Invoice.pdf");
+    // doc.save("Invoice.pdf");
+    if (action === "download") {
+      doc.save("quotes.pdf");
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    } else if (action === "open") {
+      window.open(doc.output("bloburl"), "_blank");
+    }
   };
 
   return (
@@ -538,6 +547,7 @@ function SendInvoice({ invoiceData, id }) {
       <Button
         className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
         onClick={handleShow}
+        disabled={role === "CMP_USER"}
       >
         Send Invoice
       </Button>
@@ -603,13 +613,41 @@ function SendInvoice({ invoiceData, id }) {
                   </span>
                 </div>
                 <div className="mx-2">
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger"
-                    onClick={generatePDF}
-                  >
-                    <FaDownload />
-                  </button>
+                  <div className="mx-2">
+                    <div
+                      className="dropdown btn-outline-danger mx-1"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <button
+                        className="btn btn-outline-danger bg-white shadow-none dropdown-toggle pdfdowenload"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <FaDownload className="mx-1 text-danger fs-5 pdf" />
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li
+                          className="dropdown-item"
+                          onClick={() => generatePDF("download")}
+                        >
+                          Download PDF
+                        </li>
+                        <li
+                          className="dropdown-item"
+                          onClick={() => generatePDF("open")}
+                        >
+                          Open PDF
+                        </li>
+                        <li
+                          className="dropdown-item"
+                          onClick={() => generatePDF("print")}
+                        >
+                          Print PDF
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <span className="d-flex" style={{ gap: "10px" }}>
                   <button

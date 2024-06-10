@@ -42,7 +42,9 @@ const validationSchema = Yup.object({
   note: Yup.string().required("*Notes are required"),
 });
 
-const ActivityEdit = ({ id, fetchData ,path }) => {
+const ActivityEdit = ({ accountId, fetchData }) => {
+
+  console.log("Account ID :",accountId);
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [rows, setRows] = useState([
@@ -75,7 +77,7 @@ const ActivityEdit = ({ id, fetchData ,path }) => {
     onSubmit: async (data) => {
       const payload = {
         accountActivity: {
-          accountId: id,
+          accountId: accountId,
           activityOwner: userName,
           status: data.status,
           note: data.note,
@@ -84,7 +86,7 @@ const ActivityEdit = ({ id, fetchData ,path }) => {
       };
       console.log("Payload:", payload);
       try {
-        const response = await axios.put(`${API_URL}${path}`,
+        const response = await axios.put(`${API_URL}updateAccountActivityWithClientData/${accountId}`,
           payload,
           {
             headers: {
@@ -143,30 +145,35 @@ const ActivityEdit = ({ id, fetchData ,path }) => {
       formik.setFieldValue("clientData", formik.values.clientData.slice(0, -1));
     }
   };
-
-   const getData = async () => {
+  const getData = async () => {
     try {
-      const response = await axios.get(`${API_URL}getAccountActivityWithClientDataByAccountId/${id}`);
-      if (response.data && Array.isArray(response.data.clientData)) {
-        formik.setValues({
-          clientData: response.data.clientData,
-          status: response.data.status,
-          note: response.data.note,
-        });
-        setRows(response.data.clientData);
-      } else {
-        console.log("Unexpected response format: data is not an array");
-      }
+      const response = await axios.get(
+        `${API_URL}getAccountActivityWithClientDataByAccountId/${accountId}`
+      );
+      const clientData = response.data.clientData.map((client, index) => ({
+        id: client.id || "",
+        clientName: client.clientName || "",
+        clientPhone: client.clientPhone || "",
+        clientEmail: client.clientEmail || "",
+        clientCountryCode: client.clientCountryCode || "",
+      }));
+
+      formik.setValues({
+        clientData: clientData,
+        status: response.data.status || "",
+        note: response.data.note || "",
+      });
+
+      setRows(clientData);
+      console.log("Response Data:", response.data);
     } catch (error) {
       console.log(`Error fetching data: ${error.message}`);
     }
   };
 
   useEffect(() => {
-    if (id) {
-      getData();
-    }
-  }, [id]);
+    getData();
+  }, [accountId]);
 
   return (
     <>
@@ -179,7 +186,7 @@ const ActivityEdit = ({ id, fetchData ,path }) => {
           closeVariant="white"
           style={{ backgroundColor: "#0073fa" }}
         >
-          <Modal.Title className="text-light">Add Activity</Modal.Title>
+          <Modal.Title className="text-light">Edit Activity</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={formik.handleSubmit}>

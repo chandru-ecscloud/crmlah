@@ -364,6 +364,12 @@ const UserActivation = () => {
         </Tooltip>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/users/show/${row.original.id}`);
+      },
+      style: { cursor: "pointer" },
+    }),
   });
 
   return (

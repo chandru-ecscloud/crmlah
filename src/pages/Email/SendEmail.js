@@ -21,6 +21,7 @@ function SendEmail({ toEmail }) {
   const [show, setShow] = useState(false);
   const userName = sessionStorage.getItem("user_name");
   const userEmail = sessionStorage.getItem("email");
+  const role = sessionStorage.getItem("role");
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
@@ -90,6 +91,7 @@ function SendEmail({ toEmail }) {
         className="fs-4 btn bg-primary bg-gradient mx-2 text-white shadow-none rounded-5"
         onClick={handleShow}
         style={{ padding: "2px 8px" }}
+        disabled={role === "CMP_USER"}
       >
         <IoIosSend className="mb-1" />
       </Button>

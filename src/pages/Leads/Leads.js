@@ -51,7 +51,7 @@ const Lead = () => {
             {row.original.first_name} &nbsp;
             {row.original.newLead && (
               <div className="newCircle">
-                <span class="badge text-bg-danger">New</span>
+                <span className="badge text-bg-danger">New</span>
               </div>
             )}
           </Link>
@@ -523,17 +523,22 @@ const Lead = () => {
                   Create Lead
                 </button>
               </div>
-              <div className="dropdown-center">
+              <div
+                className={`dropdown-center ${
+                  role === "CMP_USER" && "disabled"
+                }`}
+              >
                 <button
-                  class="btn btn-danger dropdown-toggle"
+                  className="btn btn-danger dropdown-toggle"
+                  disabled={role === "CMP_USER"}
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
-                <ul class="dropdown-menu">
-                  {role === "CRM_SUPERADMIN" ? (
+                <ul className="dropdown-menu">
+                  {/* {role === "CRM_USER" ? (
                     <>
                       <li>
                         <button
@@ -640,7 +645,71 @@ const Lead = () => {
                         </button>
                       </li>
                     </>
-                  )}
+                  )} */}
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleBulkConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Convert
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                      onClick={() =>
+                        handleBulkConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Mass Convert
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Mass Delete
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -91,10 +91,6 @@ function CompanyShow() {
           >
             Edit
           </button>
-
-          <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
-            <BsThreeDots />
-          </button>
         </div>
       </section>
 

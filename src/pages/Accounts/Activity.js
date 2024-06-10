@@ -183,11 +183,10 @@ function Activity({ id }) {
                                   </span>
                                 </div>
                                 <div className="col-2">
-                                  {/* <ActivityEdit
+                                  <ActivityEdit
                                     fetchData={fetchData}
-                                    id={id}
-                                    path={`updateAccountActivityWithClientData/${activity.id}`}
-                                  /> */}
+                                    accountId={id}
+                                  />
 
                                   <Delete
                                     onSuccess={fetchData}

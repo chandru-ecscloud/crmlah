@@ -101,9 +101,9 @@ function ContactShow() {
           />
           <button
             className={`btn btn-warning ms-2 ${
-              role === "CMP_USER" && "disabled"
+              role === "CMP_USER"
             }`}
-            disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+            disabled={role === "CMP_USER"}
             onClick={handelEdit}
           >
             Edit

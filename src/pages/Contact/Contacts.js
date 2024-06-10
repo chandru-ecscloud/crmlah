@@ -541,7 +541,7 @@ const Contacts = () => {
                   className={`btn btn-primary ${
                     role === "CMP_USER" && "disabled"
                   }`}
-                  disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                  disabled={role === "CMP_USER"}
                   onClick={handelNavigateClick}
                 >
                   Create Contact
@@ -553,11 +553,12 @@ const Contacts = () => {
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  disabled={role === "CMP_USER"}
                 >
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {role === "CRM_SUPERADMIN" ? (
+                  {role === "CRM_USER"  ? (
                     <>
                       <li>
                         <button

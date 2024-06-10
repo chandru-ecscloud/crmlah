@@ -347,6 +347,12 @@ const Company = () => {
         </Tooltip>
       </Box>
     ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        navigate(`/company/show/${row.original.id}`);
+      },
+      style: { cursor: "pointer" },
+    }),
   });
   useEffect(() => {
     fetchData();
