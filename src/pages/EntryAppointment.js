@@ -15,6 +15,13 @@ const getCurrentLocalDate = () => {
   return localISOTime;
 };
 
+const getCurrentLocalTime = () => {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  const localISOTime = new Date(now.getTime() - offset).toISOString();
+  return localISOTime;
+};
+
 const validationSchema = Yup.object().shape({
   // appointmentFor: Yup.string().required("*Appointment for is required"),
   first_name: Yup.string().required("*First Name is required"),
@@ -30,6 +37,8 @@ const validationSchema = Yup.object().shape({
 const EntryAppointment = () => {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [appointmentTime, setAppointmentTime] = useState([]);
+
+  console.log(appointmentTime);
 
   const formik = useFormik({
     initialValues: {
@@ -258,6 +267,39 @@ const EntryAppointment = () => {
     },
   });
 
+  const filterAvailableSlots = (slots, selectedDate) => {
+    const currentTime = new Date();
+
+    // If the selected date is not today, return all slots
+    if (new Date(selectedDate).toDateString() !== currentTime.toDateString()) {
+      return slots;
+    }
+
+    // Convert slotTime to a Date object for comparison
+    const convertSlotToDate = (slotTime) => {
+      const [time, period] = slotTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (period.toLowerCase() === "pm" && hours !== 12) {
+        hours += 12;
+      } else if (period.toLowerCase() === "am" && hours === 12) {
+        hours = 0;
+      }
+
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(hours, minutes, 0, 0);
+
+      return slotDate;
+    };
+
+    // Filter out past slots
+    const availableSlots = slots.filter(
+      (slot) => convertSlotToDate(slot.slotTime) > currentTime
+    );
+
+    return availableSlots;
+  };
+
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
@@ -270,7 +312,14 @@ const EntryAppointment = () => {
           },
         }
       );
-      setAppointmentTime(response.data);
+      console.log("Response Time", response.data);
+
+      const availableSlots = filterAvailableSlots(
+        response.data,
+        formik.values.appointmentStartDate
+      );
+      formik.setFieldValue("timeSlotId", "");
+      setAppointmentTime(availableSlots);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -278,10 +327,12 @@ const EntryAppointment = () => {
 
   useEffect(() => {
     formik.setFieldValue("appointmentStartDate", getCurrentLocalDate());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     fetchAppointmentTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.appointmentStartDate]);
 
   console.log("appointmentTime", appointmentTime);
@@ -358,6 +409,7 @@ const EntryAppointment = () => {
                             type="date"
                             name="appointmentStartDate"
                             id="appointmentStartDate"
+                            min={getCurrentLocalDate()}
                             {...formik.getFieldProps("appointmentStartDate")}
                             className={`form-size form-control mt-1  ${
                               formik.touched.appointmentStartDate &&
