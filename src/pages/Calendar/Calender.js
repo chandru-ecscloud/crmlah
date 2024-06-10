@@ -229,11 +229,12 @@ function Calendar() {
       if (newResource) {
         const updaterole = newResource._resource.extendedProps.role || null;
         const updateroleId = newResource.id;
-        if (updaterole !== "GENERAL") {
-          payload.appointmentRoleType = updaterole;
-          payload.userId = updateroleId;
-        }
+        // if (updaterole !== "GENERAL") {
+        payload.appointmentRoleType = updaterole;
+        payload.userId = updateroleId;
+        // }
       }
+      
       console.log("Payload is", payload);
       try {
         const updateResponse = await axios.put(
