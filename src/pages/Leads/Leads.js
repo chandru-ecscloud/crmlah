@@ -101,8 +101,10 @@ const Lead = () => {
             <span className="badge bg-success py-2">Win</span>
           ) : row.original.lead_status === "Junk" ? (
             <span className="badge bg-warning py-2">Junk</span>
-          ) : (
+          ) : row.original.lead_status === "Lost" ? (
             <span className="badge bg-danger  py-2">Lost</span>
+          ) : (
+            <span className="badge bg-warning  py-2">Pending</span>
           ),
       },
       {

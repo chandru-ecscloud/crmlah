@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   ),
   timeSlotId: Yup.string().required("*Appointment start Time is required"),
 });
-
+const currentData = new Date().toISOString().split("T")[0];
 const Schedule = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -35,7 +35,7 @@ const Schedule = () => {
 
   const formik = useFormik({
     initialValues: {
-      appointmentStartDate: "",
+      appointmentStartDate: currentData,
       appointmentStartTime: "",
     },
     validationSchema: validationSchema,
@@ -60,9 +60,9 @@ const Schedule = () => {
         if (response.status === 200) {
           // console.log(response.data.appointmentId)
           toast.success(response.data.message);
-          // setTimeout(() => {
-          //   window.location.href = "https://crmlah.com/"; // Redirect to the external site
-          // }, 2000);
+          setTimeout(() => {
+            window.location.href = "https://crmlah.com/"; // Redirect to the external site
+          }, 2000);
 
           const zoomLink = link
             ? `
@@ -202,6 +202,9 @@ const Schedule = () => {
 
             if (response.status === 200) {
               toast.success(response.data.message);
+              setTimeout(() => {
+                window.location.href = "https://crmlah.com/";
+              }, 2000);
               // toast.success("Mail Send Successfully");
             } else {
               toast.error(response.data.message);
@@ -223,6 +226,38 @@ const Schedule = () => {
       resetForm();
     },
   });
+  const filterAvailableSlots = (slots, selectedDate) => {
+    const currentTime = new Date();
+
+    // If the selected date is not today, return all slots
+    if (new Date(selectedDate).toDateString() !== currentTime.toDateString()) {
+      return slots;
+    }
+
+    // Convert slotTime to a Date object for comparison
+    const convertSlotToDate = (slotTime) => {
+      const [time, period] = slotTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (period.toLowerCase() === "pm" && hours !== 12) {
+        hours += 12;
+      } else if (period.toLowerCase() === "am" && hours === 12) {
+        hours = 0;
+      }
+
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(hours, minutes, 0, 0);
+
+      return slotDate;
+    };
+
+    // Filter out past slots
+    const availableSlots = slots.filter(
+      (slot) => convertSlotToDate(slot.slotTime) > currentTime
+    );
+
+    return availableSlots;
+  };
 
   const fetchAppointmentTime = async () => {
     try {
@@ -236,7 +271,12 @@ const Schedule = () => {
           },
         }
       );
-      setAppointmentStartTime(response.data);
+      const availableSlots = filterAvailableSlots(
+        response.data,
+        formik.values.appointmentStartDate
+      );
+      formik.setFieldValue("timeSlotId", "");
+      setAppointmentStartTime(availableSlots);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -428,6 +468,7 @@ const Schedule = () => {
   useEffect(() => {
     fetchAppointmentTime();
     // getData();
+    formik.setFieldValue("appointmentStartDate", currentData);
   }, [formik.values.appointmentStartDate]);
 
   return (
@@ -440,7 +481,7 @@ const Schedule = () => {
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <h3 className="registerWord text-center">
-                Reschedule Appointmen
+                Reschedule Appointment
               </h3>
               <div className="container px-5">
                 <form onSubmit={formik.handleSubmit}>
@@ -451,6 +492,7 @@ const Schedule = () => {
                       type="date"
                       name="appointmentStartDate"
                       id="appointmentStartDate"
+                      min={currentData}
                       {...formik.getFieldProps("appointmentStartDate")}
                       className={`form-size form-control   ${
                         formik.touched.appointmentStartDate &&

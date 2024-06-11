@@ -6,7 +6,7 @@ import "../../styles/custom.css";
 import { API_URL } from "../../Config/URL";
 import axios from "axios";
 import ActivityAdd from "./ActivityAdd";
-import ActivityEdit from "./ActivityEdit";
+// import ActivityEdit from "./ActivityEdit";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Delete from "../../components/common/DeleteModel";
 
@@ -183,10 +183,10 @@ function Activity({ id }) {
                                   </span>
                                 </div>
                                 <div className="col-2">
-                                  <ActivityEdit
+                                  {/* <ActivityEdit
                                     fetchData={fetchData}
                                     accountId={id}
-                                  />
+                                  /> */}
 
                                   <Delete
                                     onSuccess={fetchData}

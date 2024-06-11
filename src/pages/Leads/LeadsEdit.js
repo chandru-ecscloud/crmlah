@@ -21,7 +21,7 @@ const validationSchema = yup.object().shape({
     .typeError('Land line must be a number')
     .integer('Land line must be an integer'),
   first_name: yup.string().required("*First Name is required"),
-  last_name: yup.string().required("*Last Name is required"),
+  // last_name: yup.string().required("*Last Name is required"),
   country_code: yup.string().required("*Country Code is required"),
   phone: yup.string()
   .required('Phone number is required')
@@ -282,8 +282,7 @@ function LeadsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Last Name</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <lable>Last Name</lable>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="last_name"
@@ -482,7 +481,7 @@ function LeadsEdit() {
                   {...formik.getFieldProps("lead_status")}
                   id="lead_status"
                 >
-                  <option value="Processed" selected>
+                  <option value="Processed">
                     Pending
                   </option>
                   <option value="Contacted">Contacted</option>

@@ -16,12 +16,14 @@ const validationSchema = yup.object().shape({
   subject: yup.string().required("*Enter the Subject"),
   quoteStage: yup.string().required("*Enter the Quotes Stage"),
   validUntil: yup.string().required("*Select Valid Until"),
-  shippingCode: yup.number()
-    .typeError('Shipping code must be a number')
-    .integer('Shipping code must be an integer'),
-  billingCode: yup.number()
-    .typeError('Billing code must be a number')
-    .integer('Billing code must be an integer'),
+  shippingCode: yup
+    .number()
+    .typeError("Shipping code must be a number")
+    .integer("Shipping code must be an integer"),
+  billingCode: yup
+    .number()
+    .typeError("Billing code must be a number")
+    .integer("Billing code must be an integer"),
 });
 
 function QuotesEdit() {
@@ -44,6 +46,7 @@ function QuotesEdit() {
   // console.log(contactOption);
   const [userImage, setUserImage] = useState(User);
   const navigate = useNavigate();
+  const [sameAsShipping, setSameAsShipping] = useState(false);
 
   const addRow = () => {
     const updatedRows = [...rows, {}];
@@ -161,7 +164,7 @@ function QuotesEdit() {
           tax: parseInt(item.tax),
           total: parseInt(item.total),
         })),
-        deletedQuotesItemIds: []
+        deletedQuotesItemIds: [],
       };
       console.log("Payload is ", payload);
 
@@ -185,20 +188,19 @@ function QuotesEdit() {
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
-
-    }
+    },
   });
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setUserImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const AccountList = async () => {
     try {
@@ -260,6 +262,8 @@ function QuotesEdit() {
   };
 
   const handleSelectChange = async (index, value) => {
+    const updatedRows = [...rows];
+    updatedRows[index].selectedOption = value;
     try {
       const response = await axios.get(`${API_URL}allProducts/${value}`, {
         headers: {
@@ -270,21 +274,21 @@ function QuotesEdit() {
       const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
+      updatedRows[index].ProductName = productName;
+      updatedRows[index].productId = response.data.id;
+      updatedRows[index].listPrice = listPrice;
+      updatedRows[index].quantity = 1;
+      updatedRows[index].amount = listPrice; // Update amount based on list price
+      updatedRows[index].tax = tax;
+      updatedRows[index].discount = 0;
 
-      const updatedRows = [...rows];
-      updatedRows[index] = {
-        ...updatedRows[index],
-        selectedOption: value,
-        productName: productName,
-        productId: response.data.id,
-        listPrice: listPrice,
-        quantity: 1,
-        amount: listPrice,
-        tax: tax,
-        discount: 0,
-        total: listPrice,
-      };
+      const amount = listPrice;
+      const discount = 0;
+      const taxAmount = (amount * tax) / 100;
+      updatedRows[index].total = amount - (amount * discount) / 100 + taxAmount;
+
       setRows(updatedRows);
+      calculateTotals();
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
@@ -299,14 +303,15 @@ function QuotesEdit() {
 
     updatedRows[index].amount = listPrice * quantity;
 
-    // Calculate the total based on listPrice, quantity, discount, and tax
-    updatedRows[index].total =
-      (updatedRows[index].amount *
-        (100 - updatedRows[index].discount) *
-        (100 + updatedRows[index].tax)) /
-      10000;
+    const amount = updatedRows[index].amount;
+    const discount = updatedRows[index].discount || 0;
+    const tax = updatedRows[index].tax || 0;
+    const taxAmount = (amount * tax) / 100;
+
+    updatedRows[index].total = amount - (amount * discount) / 100 + taxAmount;
 
     setRows(updatedRows);
+    calculateTotals();
   };
 
   const handleDiscountChange = (index, value) => {
@@ -320,12 +325,10 @@ function QuotesEdit() {
 
     updatedRows[index].amount = listPrice * quantity;
 
-    // Calculate the total amount considering the discount and tax
-    const totalAmountBeforeTax =
-      updatedRows[index].amount * (1 - discount / 100);
-    const totalAmount = totalAmountBeforeTax * (1 + tax / 100);
+    const amount = updatedRows[index].amount;
+    const taxAmount = (amount * tax) / 100;
 
-    updatedRows[index].total = totalAmount;
+    updatedRows[index].total = amount - (amount * discount) / 100 + taxAmount;
 
     setRows(updatedRows);
     calculateTotals();
@@ -340,20 +343,11 @@ function QuotesEdit() {
     const discount = updatedRows[index].discount || 0;
     const taxPercentage = value || 0;
 
-    let taxAmount = 0;
-    if (taxPercentage < 18) {
-      // For tax below 18%, calculate tax amount
-      taxAmount = (listPrice * quantity * taxPercentage) / 100;
-    } else {
-      // For tax 18% or above, calculate tax amount including cess
-      const taxAmountBeforeCess = (listPrice * quantity * taxPercentage) / 100;
-      taxAmount = taxAmountBeforeCess + (taxAmountBeforeCess * 1) / 100;
-    }
-
     updatedRows[index].amount = listPrice * quantity;
-    updatedRows[index].total =
-      (updatedRows[index].amount * (100 - discount) * (100 + taxAmount)) /
-      10000;
+    const amount = updatedRows[index].amount;
+    const taxAmount = (amount * taxPercentage) / 100;
+
+    updatedRows[index].total = amount - (amount * discount) / 100 + taxAmount;
 
     setRows(updatedRows);
     calculateTotals();
@@ -366,10 +360,11 @@ function QuotesEdit() {
     let grandTotal = 0;
 
     rows.forEach((row) => {
-      subtotal += parseInt(row.amount);
-      totalDiscount += parseInt(row.discount);
-      totalTax += parseInt(row.tax);
-      grandTotal += parseInt(row.total);
+      subtotal += parseInt(row.amount) || 0;
+      totalDiscount +=
+        parseInt(row.amount) * (parseInt(row.discount) / 100) || 0;
+      totalTax += parseInt(row.amount) * (parseInt(row.tax) / 100) || 0;
+      grandTotal += parseInt(row.total) || 0;
     });
 
     formik.setFieldValue("subTotal", isNaN(subtotal) ? 0 : subtotal);
@@ -381,12 +376,23 @@ function QuotesEdit() {
     formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
-  // const handleAdjustmentChange = (e) => {
-  //   const adjustmentValue = parseFloat(e.target.value);
-  //   const newGrandTotal = (parseFloat(grandTotal) - adjustmentValue).toFixed(2);
-  //   setAdjustment(adjustmentValue);
-  //   formik.setFieldValue("grandTotal", newGrandTotal);
-  // };
+  useEffect(() => {
+    calculateTotals();
+  }, [rows]);
+
+  const handleSameAsShippingChange = () => {
+    setSameAsShipping(!sameAsShipping);
+    if (!sameAsShipping) {
+      formik.setValues({
+        ...formik.values,
+        billingStreet: formik.values.shippingStreet,
+        billingCity: formik.values.shippingCity,
+        billingState: formik.values.shippingState,
+        billingCode: formik.values.shippingCode,
+        billingCountry: formik.values.shippingCountry,
+      });
+    }
+  };
 
   useEffect(() => {
     const userData = async () => {
@@ -419,10 +425,6 @@ function QuotesEdit() {
 
     userData();
   }, [id]);
-
-  useEffect(() => {
-    calculateTotals();
-  }, [rows]);
 
   useEffect(() => {
     ProductList();
@@ -509,13 +511,12 @@ function QuotesEdit() {
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-control form-size ${formik.touched.dealName && formik.errors.dealName
-                    ? "is-invalid"
-                    : ""
-                    }`}
-               />
-                  
-                  
+                  className={`form-control form-size ${
+                    formik.touched.dealName && formik.errors.dealName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
@@ -535,10 +536,11 @@ function QuotesEdit() {
                   type="text"
                   name="subject"
                   {...formik.getFieldProps("subject")}
-                  className={`form-control form-size ${formik.touched.subject && formik.errors.subject
+                  className={`form-control form-size ${
+                    formik.touched.subject && formik.errors.subject
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="subject"
                 />
               </div>
@@ -560,10 +562,11 @@ function QuotesEdit() {
                   name="quoteStage"
                   {...formik.getFieldProps("quoteStage")}
                   type="text"
-                  className={`form-select form-size ${formik.touched.quoteStage && formik.errors.quoteStage
+                  className={`form-select form-size ${
+                    formik.touched.quoteStage && formik.errors.quoteStage
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="quoteStage"
                 >
                   <option value=""></option>
@@ -593,10 +596,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("validUntil")}
                   type="date"
-                  className={`form-control form-size ${formik.touched.validUntil && formik.errors.validUntil
+                  className={`form-control form-size ${
+                    formik.touched.validUntil && formik.errors.validUntil
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="validUntil"
                   id="validUntil"
                 />
@@ -700,6 +704,22 @@ function QuotesEdit() {
             <b>Address Information</b>
           </h4>
         </div>
+        <div className="col-lg-12 col-md-12 col-12 mb-3">
+          <div
+            className="d-flex justify-content-center align-items-center mb-4 gap-2"
+            style={{ marginLeft: "50rem" }}
+          >
+            <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+            <input
+              type="checkbox"
+              id="sameAsShipping"
+              checked={sameAsShipping}
+              onChange={handleSameAsShippingChange}
+              className="form-check-input"
+            />
+             
+          </div>
+        </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12  mb-3">
@@ -708,11 +728,12 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingStreet &&
-                      formik.errors.shippingStreet
+                  className={`form-control form-size ${
+                    formik.touched.shippingStreet &&
+                    formik.errors.shippingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -729,18 +750,28 @@ function QuotesEdit() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Street</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
+                  className={`form-control form-size ${
+                    formik.touched.billingStreet && formik.errors.billingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingStreet"
                   id="billingStreet"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingStreet
+                      : formik.values.billingStreet
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -755,16 +786,18 @@ function QuotesEdit() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Shipping City</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
+                  className={`form-control form-size ${
+                    formik.touched.shippingCity && formik.errors.shippingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -781,18 +814,28 @@ function QuotesEdit() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3 ">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing City</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
+                  className={`form-control form-size ${
+                    formik.touched.billingCity && formik.errors.billingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCity"
                   id="billingCity"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCity
+                      : formik.values.billingCity
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -813,10 +856,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.shippingCode && formik.errors.shippingCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -833,29 +877,38 @@ function QuotesEdit() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Billing Code</lable> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.billingCode && formik.errors.billingCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingCode"
                   id="billingCode"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCode
+                      : formik.values.billingCode
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billingCode &&
-                    formik.errors.billingCode && (
-                      <div className="text-danger ">
-                        {formik.errors.billingCode}
-                      </div>
-                    )}
+                  {formik.touched.billingCode && formik.errors.billingCode && (
+                    <div className="text-danger ">
+                      {formik.errors.billingCode}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -866,10 +919,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
+                  className={`form-control form-size ${
+                    formik.touched.shippingState && formik.errors.shippingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -893,12 +947,21 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
+                  className={`form-control form-size ${
+                    formik.touched.billingState && formik.errors.billingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingState"
                   id="billingState"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingState
+                      : formik.values.billingState
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -920,11 +983,12 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCountry &&
-                      formik.errors.shippingCountry
+                  className={`form-control form-size ${
+                    formik.touched.shippingCountry &&
+                    formik.errors.shippingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -948,13 +1012,22 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCountry &&
-                      formik.errors.billingCountry
+                  className={`form-control form-size ${
+                    formik.touched.billingCountry &&
+                    formik.errors.billingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCountry"
                   id="billingCountry"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCountry
+                      : formik.values.billingCountry
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -1015,10 +1088,7 @@ function QuotesEdit() {
                       >
                         <option></option>
                         {productOptions.map((option) => (
-                          <option
-                            key={option.id}
-                            value={option.id}
-                          >
+                          <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
@@ -1084,7 +1154,6 @@ function QuotesEdit() {
                           `quotesItemList[${index}].tax`
                         )}
                         value={row.tax}
-                        readOnly
                         className="form-control"
                         onChange={(e) => handleTaxChange(index, e.target.value)}
                       />
@@ -1189,7 +1258,8 @@ function QuotesEdit() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
-                <lable>Terms & Conditions</lable> &nbsp;&nbsp;
+                <lable>Terms & Conditions</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   rows="3"
                   type="text"
@@ -1201,19 +1271,31 @@ function QuotesEdit() {
               </div>
             </div>
           </div>
+          <div className="row  sm-device">
+            <div className="col-5"></div>
+            <div className="col-6  sm-device">
+              {formik.touched.termsAndConditions &&
+                formik.errors.termsAndConditions && (
+                  <div className="text-danger">
+                    {formik.errors.termsAndConditions}
+                  </div>
+                )}
+            </div>
+          </div>
         </div>
 
-        {/* Description Information */}
+        {/* Customer Notes Information */}
         <div className="container-fluid my-5">
           <h4>
-            <b>Description Information</b>
+            <b>Customer Notes Information</b>
           </h4>
         </div>
         <div className="container">
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
-                <lable>Description</lable> &nbsp;&nbsp;
+                <lable>Customer Notes</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
@@ -1223,6 +1305,14 @@ function QuotesEdit() {
                   id="description"
                 />
               </div>
+            </div>
+          </div>
+          <div className="row  sm-device">
+            <div className="col-5"></div>
+            <div className="col-6  sm-device">
+              {formik.touched.description && formik.errors.description && (
+                <div className="text-danger">{formik.errors.description}</div>
+              )}
             </div>
           </div>
         </div>

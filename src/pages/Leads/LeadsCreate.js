@@ -10,30 +10,42 @@ import "../../styles/dummy.css";
 
 const validationSchema = yup.object().shape({
   company: yup.string().required("*Company is required"),
-  amount: yup.number()
-    .typeError('Amount must be a number')
-    .integer('Amount must be an integer'),
-  zipCode: yup.number()
-    .typeError('Zip code must be a number')
-    .integer('Zip code must be an integer'),
-  landLine: yup.number()
-    .typeError('Land line must be a number')
-    .integer('Land line must be an integer'),
+  amount: yup
+    .number()
+    .typeError("Amount must be a number")
+    .integer("Amount must be an integer"),
+  zipCode: yup
+    .number()
+    .typeError("Zip code must be a number")
+    .integer("Zip code must be an integer"),
+  landLine: yup
+    .number()
+    .typeError("Land line must be a number")
+    .integer("Land line must be an integer"),
   first_name: yup.string().required("*First Name is required"),
-  last_name: yup.string().required("*Last Name is required"),
+  // last_name: yup.string().required("*Last Name is required"),
   country_code: yup.string().required("*Country Code is required"),
-  phone: yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
       const { country_code } = this.parent;
       if (value && /\s/.test(value)) {
-        return this.createError({ message: 'Phone number should not contain spaces' });
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
       }
-      if (country_code === '65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      if (country_code === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (country_code === '91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      if (country_code === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
       }
       return true; // Default validation for other country codes
     }),
@@ -109,9 +121,9 @@ function LeadsCreate() {
     }
   };
 
-  useEffect (() => {
-    formik.setFieldValue('lead_status','Processed')
-  },[])
+  useEffect(() => {
+    formik.setFieldValue("lead_status", "");
+  }, []);
 
   return (
     <section className="createLead">
@@ -175,7 +187,8 @@ function LeadsCreate() {
                   className="form-size form-control"
                   {...formik.getFieldProps("lead_owner")}
                   id="lead_owner"
-                  readOnly />
+                  readOnly
+                />
                 {/* <option selected value={owner}>
                     {owner}
                   </option>
@@ -199,10 +212,11 @@ function LeadsCreate() {
                 <lable>Amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -224,10 +238,11 @@ function LeadsCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("first_name")}
                   name="first_name"
                   id="first_name"
@@ -245,15 +260,15 @@ function LeadsCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Last Name</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <lable>Last Name</lable>&nbsp;&nbsp;
                 <input
                   type="text"
                   name="last_name"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("last_name")}
                   id="last_name"
                 />
@@ -274,10 +289,11 @@ function LeadsCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("company")}
                   name="company"
                   id="company"
@@ -303,27 +319,32 @@ function LeadsCreate() {
                       {...formik.getFieldProps("country_code")}
                       id="country_code"
                       name="country_code"
-                      className={`form-size form-control  ${formik.touched.country_code && formik.errors.country_code
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-size form-control  ${
+                        formik.touched.country_code &&
+                        formik.errors.country_code
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="65" selected>+65</option>
+                      <option value="65" selected>
+                        +65
+                      </option>
                       <option value="91">+91</option>
                     </select>
                   </div>
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -347,10 +368,11 @@ function LeadsCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -390,10 +412,11 @@ function LeadsCreate() {
                 <lable>Land Line</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.landLine && formik.errors.landLine
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.landLine && formik.errors.landLine
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("landLine")}
                   name="landLine"
                   id="landLine"
@@ -445,9 +468,8 @@ function LeadsCreate() {
                   {...formik.getFieldProps("lead_status")}
                   id="lead_status"
                 >
-                  <option value="Processed">
-                  Processed
-                  </option>
+                  <option selected></option>
+                  <option value="Processed">Processed</option>
                   <option value="Contacted">Contacted</option>
                   <option value="Qualified">Qualified</option>
                   <option value="Junk">Junk</option>
@@ -607,10 +629,11 @@ function LeadsCreate() {
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.zipCode && formik.errors.zipCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
@@ -649,14 +672,17 @@ function LeadsCreate() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center  sm-device">
-                <lable>Description</lable><span className=" text-danger">*</span> &nbsp;&nbsp;
+                <lable>Description</lable>
+                <span className=" text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
-                  className={`form-size form-control  ${formik.touched.description_info && formik.errors.description_info
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.description_info &&
+                    formik.errors.description_info
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("description_info")}
                   name="description_info"
                   id="description_info"
@@ -664,13 +690,16 @@ function LeadsCreate() {
               </div>
             </div>
             <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.description_info && formik.errors.description_info && (
-                    <p className="text-danger">{formik.errors.description_info}</p>
+              <div className="col-5"></div>
+              <div className="col-6 sm-device">
+                {formik.touched.description_info &&
+                  formik.errors.description_info && (
+                    <p className="text-danger">
+                      {formik.errors.description_info}
+                    </p>
                   )}
-                </div>
               </div>
+            </div>
           </div>
         </div>
       </form>
@@ -679,4 +708,3 @@ function LeadsCreate() {
 }
 
 export default LeadsCreate;
-
