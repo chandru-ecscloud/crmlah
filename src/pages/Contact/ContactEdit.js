@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
     .typeError('Zip code must be a number')
     .integer('Zip code must be an integer'),
   first_name: yup.string().required("*First Name is required"),
-  last_name: yup.string().required("*Last Name is required"),
+  // last_name: yup.string().required("*Last Name is required"),
   email: yup.string().required("*Email is required"),
   country_code: yup.string().required("*Country Code is required"),
   phone: yup.string()
@@ -322,7 +322,7 @@ function ContactEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Last Name</lable>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
+                 &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name

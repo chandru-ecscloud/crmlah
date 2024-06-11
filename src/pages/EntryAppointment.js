@@ -207,13 +207,13 @@ const EntryAppointment = () => {
           
                 
                <div class="invoice" >
-                <h1 style="color: black;">Hi there, ${data.appointmentFor}!</h1>
+                <h1 style="color: black;">Hi ${data.appointmentFor}!</h1>
           
                 <p style="margin: 3rem 0 2rem;">
                   You're welcome! I'm glad to hear you've booked an appointment.
                 </p>
           
-                <p style="margin: 3rem 0 5rem;">You've Scheduled An Appointment With ${data.appointmentFor} for ${data.appointmentName} On 
+                <p style="margin: 3rem 0 5rem;">You've Scheduled An Appointment for ${data.appointmentName} On 
                 ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Singapore).
                 </p>
 
@@ -227,7 +227,6 @@ const EntryAppointment = () => {
                 <hr />
           
                 <p style=" margin: 4rem 0 0;">See You Soon,</p>
-                <h4 style=" margin: 0; color: #000; ">${data.email}</h4>
                 <p style=" margin: 0 ; color: #016ce4;">ECS Cloud</p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />

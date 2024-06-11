@@ -31,7 +31,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     appointmentName: Yup.string().required("*Name is required"),
     appointmentStartDate: Yup.date().required("*Start date is required"),
     timeSlotId: Yup.string().required("*Start Time is required"),
-    location: Yup.string().required("*Location is required"),
+    // location: Yup.string().required("*Location is required"),
     // member: Yup.string().required("*Member is required"),
     appointmentMode: Yup.string().required("*Appointment mode is required"),
     additionalInformation: Yup.string().required("*Description is required"),
@@ -438,6 +438,40 @@ function AppointmentsCreate({ name, schedule, getData }) {
       }
     },
   });
+
+  const filterAvailableSlots = (slots, selectedDate) => {
+    const currentTime = new Date();
+
+    if (new Date(selectedDate).toDateString() !== currentTime.toDateString()) {
+      return slots;
+    }
+
+    // Convert slotTime to a Date object for comparison
+    const convertSlotToDate = (slotTime) => {
+      const [time, period] = slotTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (period.toLowerCase() === "pm" && hours !== 12) {
+        hours += 12;
+      } else if (period.toLowerCase() === "am" && hours === 12) {
+        hours = 0;
+      }
+
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(hours, minutes, 0, 0);
+
+      return slotDate;
+    };
+
+    // Filter out past slots
+    const availableSlots = slots.filter(
+      (slot) => convertSlotToDate(slot.slotTime) > currentTime
+    );
+
+    return availableSlots;
+  };
+
+
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
@@ -448,7 +482,13 @@ function AppointmentsCreate({ name, schedule, getData }) {
           },
         }
       );
-      setAppointmentTime(response.data);
+      const availableSlots = filterAvailableSlots(
+        response.data,
+        formik.values.appointmentStartDate
+      );
+      formik.setFieldValue("timeSlotId", "");
+      setAppointmentTime(availableSlots);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -458,7 +498,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     setShow(true);
     formik.setFieldValue("appointmentStartDate", currentData);
 
-    console.log("scheduleDataM", schedule);
+    // console.log("scheduleDataM", schedule);
 
     if (name === "Schedule") {
       let scheduleData = {
@@ -467,13 +507,13 @@ function AppointmentsCreate({ name, schedule, getData }) {
         typeOfAppointment: schedule.model,
       };
       if (schedule.model === "Contacts") {
-        scheduleData.contactid = schedule.id;
+        scheduleData.contactId = schedule.id;
       } else if (schedule.model === "Accounts") {
-        scheduleData.accountid = schedule.id;
+        scheduleData.accountId = schedule.id;
       } else if (schedule.model === "Deals") {
-        scheduleData.dealid = schedule.id;
+        scheduleData.dealId = schedule.id;
       } else if (schedule.model === "Leads") {
-        scheduleData.leadid = schedule.id;
+        scheduleData.leadId = schedule.id;
       }
       formik.setValues(scheduleData);
     }
@@ -755,6 +795,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         type="date"
                         name="appointmentStartDate"
                         id="appointmentStartDate"
+                        min={currentData}
                         {...formik.getFieldProps("appointmentStartDate")}
                         className={`form-size form-control   ${
                           formik.touched.appointmentStartDate &&
@@ -867,7 +908,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <label htmlFor="leadowner">Location</label>
-                      <span className=" text-danger">*</span>&nbsp;&nbsp;
+                      &nbsp;&nbsp;
                       <select
                         id="location"
                         //className="form-size form-select"

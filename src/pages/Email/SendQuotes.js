@@ -348,7 +348,7 @@ function SendQuotes({ accountData }) {
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(28);
-    doc.text("ESTIMATE", 155, 22);
+    doc.text("QUOTES", 155, 22);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);

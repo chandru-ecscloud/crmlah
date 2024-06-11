@@ -121,7 +121,7 @@ function LeadsShow() {
         <div className="col-9 mt-1" id="buttons-container">
           {/* <BookAppointment />  */}
 
-          {clientData.email && (
+          {/* {clientData.email && (
             <OverlayTrigger
               placement="bottom"
               overlay={
@@ -138,7 +138,7 @@ function LeadsShow() {
                 />
               </span>
             </OverlayTrigger>
-          )}
+          )} */}
           {/* <button
             className="btn bg-primary bg-gradient mx-2 text-white shadow-none"
             onClick={handleShow}

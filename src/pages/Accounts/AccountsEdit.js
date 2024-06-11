@@ -12,7 +12,7 @@ import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
-  lastName: Yup.string().required("*Last Name is required"),
+  // lastName: Yup.string().required("*Last Name is required"),
   // account_name: Yup.string().required("Account Name is required"),
   amount: Yup.number()
     .typeError('amount must be a number')
@@ -53,6 +53,7 @@ function AccountsEdit() {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
+  const [sameAsShipping, setSameAsShipping] = useState(false);
   // console.log(accountOption);
 
   const formik = useFormik({
@@ -133,6 +134,21 @@ function AccountsEdit() {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleSameAsShippingChange = () => {
+    setSameAsShipping(!sameAsShipping);
+    if (!sameAsShipping) {
+      formik.setValues({
+        ...formik.values,
+        billing_street: formik.values.shipping_street,
+        billing_city: formik.values.shipping_city,
+        billing_state: formik.values.shipping_state,
+        billing_code: formik.values.shipping_code,
+        billing_country: formik.values.shipping_country,
+      });
+    }
+  };
+
 
   useEffect(() => {
     const userData = async () => {
@@ -321,7 +337,7 @@ function AccountsEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Last Name</lable>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
+                 &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("lastName")}
                   type="text"
@@ -655,6 +671,19 @@ function AccountsEdit() {
             <b>Address Information</b>
           </h4>
         </div>
+        <div className="col-lg-12 col-md-12 col-12 mb-3">
+        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "48rem"}}>
+        <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+              <input
+                type="checkbox"
+                id="sameAsShipping"
+                checked={sameAsShipping}
+                onChange={handleSameAsShippingChange}
+                className="form-check-input"
+              />
+             
+            </div>
+            </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
@@ -689,6 +718,10 @@ function AccountsEdit() {
                   className="form-size form-control"
                   name="billing_street"
                   id="billing_street"
+                  value={sameAsShipping ? formik.values.shipping_street : formik.values.billing_street}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -735,6 +768,10 @@ function AccountsEdit() {
                   className="form-size form-control"
                   name="billing_city"
                   id="billing_city"
+                  value={sameAsShipping ? formik.values.shipping_city : formik.values.billing_city}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -781,6 +818,10 @@ function AccountsEdit() {
                   className="form-size form-control"
                   name="billing_state"
                   id="billing_state"
+                  value={sameAsShipping ? formik.values.shipping_state : formik.values.billing_state}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -833,6 +874,10 @@ function AccountsEdit() {
                     }`}
                   name="billing_code"
                   id="billing_code"
+                  value={sameAsShipping ? formik.values.shipping_code : formik.values.billing_code}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">
@@ -880,6 +925,10 @@ function AccountsEdit() {
                   className="form-size form-control"
                   name="billing_country"
                   id="billing_country"
+                  value={sameAsShipping ? formik.values.shipping_country : formik.values.billing_country}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
               <div className="row sm-device">

@@ -320,6 +320,7 @@ const Products = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/products");
+        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }

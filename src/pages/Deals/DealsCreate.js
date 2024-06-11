@@ -53,6 +53,7 @@ function DealsCreate() {
   const [contactOption, setContactOption] = useState([]);
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
+  const [sameAsShipping, setSameAsShipping] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -157,6 +158,19 @@ function DealsCreate() {
       setContactOption(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  };
+  const handleSameAsShippingChange = () => {
+    setSameAsShipping(!sameAsShipping);
+    if (!sameAsShipping) {
+      formik.setValues({
+        ...formik.values,
+        billing_street: formik.values.shipping_street,
+        billing_city: formik.values.shipping_city,
+        billing_state: formik.values.shipping_state,
+        billing_code: formik.values.shipping_code,
+        billing_country: formik.values.shipping_country,
+      });
     }
   };
 
@@ -665,6 +679,17 @@ function DealsCreate() {
             <b>Address Information</b>
           </h4>
         </div>
+        <div className="col-lg-12 col-md-12 col-12 mb-3">
+        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "48rem"}}>
+              <input
+                type="checkbox"
+                id="sameAsShipping"
+                checked={sameAsShipping}
+                onChange={handleSameAsShippingChange}
+              />
+              <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+            </div>
+            </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">

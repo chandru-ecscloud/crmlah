@@ -30,7 +30,7 @@ const Deals = () => {
   const [rowId, setRowId] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = sessionStorage.getItem("token");
+  const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
@@ -420,6 +420,30 @@ const Deals = () => {
     fetchData();
   };
 
+  const handleDealConvert = async (rows) => {
+    const id = rows.map((row) => row.original.id);
+
+    try{
+      const response = await axios.post(
+        `${API_URL}dealToAccountConvert/${id}?ownerName=${owner}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/deals");
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    }catch(error){
+      toast.error("Error Submiting Data");
+    }
+  }
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -570,6 +594,23 @@ const Deals = () => {
                       <InvoiceModel
                         path={`associateInvoiceWithDeals/${rowId}`}
                       />
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleDealConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      soft Delete
                     </button>
                   </li>
                   <li>

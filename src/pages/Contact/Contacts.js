@@ -28,7 +28,7 @@ const csvConfig = mkConfig({
 const Contacts = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = sessionStorage.getItem("token");
+  const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
 
@@ -362,6 +362,55 @@ const Contacts = () => {
     },
   });
 
+  const handleLeadConvert = async (rows) => {
+    const id = rows.map((row) => row.original.id);
+
+    try{
+      const response = await axios.post(
+        `${API_URL}contactToLeadConvert/${id}?ownerName=${owner}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/contacts");
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    }catch(error){
+      toast.error("Error Submiting Data");
+    }
+  }
+  const handleAccountConvert = async (rows) => {
+    const id = rows.map((row) => row.original.id);
+
+      try{
+        const response = await axios.post(
+          `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/contacts");
+          table.setRowSelection(false);
+        } else {
+          toast.error(response.data.message);
+        }
+      }catch(error){
+        toast.error("Error Submiting Data");
+      }
+    
+    }
+
+
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
     const keyMapping = {
@@ -558,6 +607,40 @@ const Contacts = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
+                <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleAccountConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Convert Account
+                    </button>
+                  </li>
+                <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleLeadConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Soft Delete
+                    </button>
+                  </li>
                   <li>
                     <button
                       className="btn"

@@ -84,7 +84,7 @@ function ContactShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          {contactData.email && (
+          {/* {contactData.email && (
             <OverlayTrigger
               placement="bottom"
               overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
@@ -93,7 +93,7 @@ function ContactShow() {
                 <SendEmail toEmail={contactData.email} />
               </span>
             </OverlayTrigger>
-          )}
+          )} */}
           <Appointment
             name={"Schedule"}
             schedule={scheduleData}

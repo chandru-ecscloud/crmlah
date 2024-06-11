@@ -364,16 +364,40 @@ const Accounts = () => {
     fetchData();
   };
 
-  const handleAccountConvert = async (rows) => {
+  const handleLeadConvert = async (rows) => {
+    const id = rows.map((row) => row.original.id);
+
+    try{
+      const response = await axios.post(
+        `${API_URL}contactToLeadConvert/${id}?ownerName=${owner}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/contacts");
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    }catch(error){
+      toast.error("Error Submiting Data");
+    }
+  }
+
+  const handleContactConvert = async (rows) => {
     rows.forEach((row) => {
       row.original.account_id = accountId;
     });
 
     const rowData = rows.map((row) => row.original);
-    const rowDataid = rows.map((row) => row.original.id).toString();
+    const id = rows.map((row) => row.original.id).toString();
     try {
       const response = await axios.post(
-        `${API_URL}accountToDealConvert/${rowDataid}?ownerName=${owner}`,
+        `${API_URL}accountToContactConvert/${id}?ownerName=${owner}`,
         rowData,
         {
           headers: {
@@ -791,7 +815,7 @@ const Accounts = () => {
                         ) || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
-                        handleAccountConvert(table.getSelectedRowModel().rows)
+                        handleLeadConvert(table.getSelectedRowModel().rows)
                       }
                     >
                       Convert Deal
@@ -810,6 +834,23 @@ const Accounts = () => {
                       }
                     >
                       Mass Convert
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleContactConvert(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Soft Delete
                     </button>
                   </li>
                   <li>

@@ -66,7 +66,7 @@ function AppointmentsShow() {
         <div className="col-md-9 mt-1" id="buttons-container">
           {/* <BookAppointment /> */}
 
-          {clientData.email && (
+          {/* {clientData.email && (
             <OverlayTrigger
               placement="bottom"
               overlay={<Tooltip id="button-tooltip-2">Send Email</Tooltip>}
@@ -75,7 +75,7 @@ function AppointmentsShow() {
                 <SendEmail toEmail={clientData.email} />
               </span>
             </OverlayTrigger>
-          )}
+          )} */}
 
           <AppointmentsEdit id={id} name="Edit" getData={userData} />
 

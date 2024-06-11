@@ -358,7 +358,8 @@ const Appointments = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/appointments");
-        
+        table.setRowSelection(false);
+
       //   const mailContent = `
       //   <!DOCTYPE html>
       //   <html lang="en">
