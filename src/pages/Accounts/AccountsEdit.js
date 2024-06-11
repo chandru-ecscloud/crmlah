@@ -672,7 +672,7 @@ function AccountsEdit() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "48rem"}}>
+        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "65rem"}}>
         <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
               <input
                 type="checkbox"

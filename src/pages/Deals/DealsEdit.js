@@ -691,14 +691,16 @@ function DealsEdit() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "48rem"}}>
+        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "65rem"}}>
+        <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
               <input
                 type="checkbox"
                 id="sameAsShipping"
                 checked={sameAsShipping}
                 onChange={handleSameAsShippingChange}
+                className="form-input-check"
               />
-              <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+             
             </div>
             </div>
         <div className="container">
@@ -724,6 +726,14 @@ function DealsEdit() {
                   {...formik.getFieldProps("billing_street")}
                   name="billing_street"
                   id="billing_street"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_street
+                      : formik.values.billing_street
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
             </div>
@@ -748,6 +758,14 @@ function DealsEdit() {
                   {...formik.getFieldProps("billing_city")}
                   name="billing_city"
                   id="billing_city"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_city
+                      : formik.values.billing_city
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
             </div>
@@ -772,6 +790,14 @@ function DealsEdit() {
                   {...formik.getFieldProps("billing_state")}
                   name="billing_state"
                   id="billing_state"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_state
+                      : formik.values.billing_state
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
             </div>
@@ -796,6 +822,14 @@ function DealsEdit() {
                   {...formik.getFieldProps("billing_code")}
                   name="billing_code"
                   id="billing_code"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_code
+                      : formik.values.billing_code
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
             </div>
@@ -820,6 +854,14 @@ function DealsEdit() {
                   {...formik.getFieldProps("billing_country")}
                   name="billing_country"
                   id="billing_country"
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_country
+                      : formik.values.billing_country
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsShipping}
                 />
               </div>
             </div>
