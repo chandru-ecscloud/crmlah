@@ -116,7 +116,7 @@ const QuotesModel = ({ path }) => {
         onHide={closeModal}
         aria-labelledby="example-modal-sizes-title-lg"
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="Calenderview">
           <Modal.Title id="example-modal-sizes-title-lg">
             Assign Quotes
           </Modal.Title>

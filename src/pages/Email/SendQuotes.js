@@ -563,7 +563,10 @@ function SendQuotes({ accountData }) {
                   </span>
                 </div>
                 <div className="mx-2">
-                  <div className="dropdown btn-outline-danger mx-1" style={{ cursor: "pointer" }}>
+                  <div
+                    className="dropdown btn-outline-danger mx-1"
+                    style={{ cursor: "pointer" }}
+                  >
                     <button
                       className="btn btn-outline-danger bg-white shadow-none dropdown-toggle pdfdowenload"
                       type="button"
