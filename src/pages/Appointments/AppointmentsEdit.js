@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
   appointmentName: Yup.string().required("*Name is required"),
   appointmentStartDate: Yup.date().required("*Start date is required"),
   timeSlotId: Yup.string().required("*Start Time is required"),
-  location: Yup.string().required("*Location is required"),
+  // location: Yup.string().required("*Location is required"),
   appointmentstatus: Yup.string().required("*Appointment Status is required"),
   appointmentMode: Yup.string().required("*Appointment mode is required"),
   additionalInformation: Yup.string().required("*Description is required"),
@@ -33,189 +33,227 @@ function AppointmentsCreate({ name, id, getData }) {
   const companyId = sessionStorage.getItem("companyId");
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
+  const [getTime, setGetTime] = useState(null);
+  const [getDate, setGetDate] = useState(null);
+  const currentData = new Date().toISOString().split("T")[0];
 
-  const formik = useFormik({
-    initialValues: {
-      companyId: companyId,
-      leadId: "",
-      serviceId: "",
-      appointmentStartDate: "",
-      phoneNumber: "",
-      timeSlotId: "",
-      duration: "",
-      appointmentstatus: "",
-      appointmentName: "",
-      location: "",
-      member: "",
-      street: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      country: "",
-      additionalInformation: "",
-      appointmentMode: "",
-    },
-    validationSchema: validationSchema,
+  const initialValues = {
+    companyId: companyId,
+    leadId: "",
+    serviceId: "",
+    appointmentStartDate: currentData,
+    phoneNumber: "",
+    timeSlotId: "",
+    duration: "",
+    appointmentstatus: "",
+    appointmentName: "",
+    location: "",
+    member: "",
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+    additionalInformation: "",
+    appointmentMode: "",
+  };
 
-    onSubmit: async (data) => {
-      let selectedLeadName = "";
-      let selectedServiceName = "";
+  const handleSubmit = async (data) => {
+    let selectedLeadName = "";
+    let selectedServiceName = "";
+    // let selectedtimeSlot = "";
 
-      leadData.forEach((lead) => {
-        if (parseInt(data.leadId) === lead.id) {
-          selectedLeadName = lead || "--";
+    leadData.forEach((lead) => {
+      if (parseInt(data.leadId) === lead.id) {
+        selectedLeadName = lead || "--";
+      }
+    });
+
+    // serviceData.forEach((service) => {
+    //   if (parseInt(data.serviceId) === service.id) {
+    //     selectedServiceName = service.serviceName || "--";
+    //   }
+    // });
+
+    let selectedTimeSlot = "";
+    appointmentTime.forEach((time) => {
+      if (parseInt(data.timeSlotId) === time.id) {
+        selectedTimeSlot = time.slotTime || "--";
+      }
+    });
+
+    data.appointmentFor = selectedLeadName.name;
+    data.appointmentStartTime = selectedTimeSlot;
+    data.email = selectedLeadName.email;
+    data.appointmentOwner = userName;
+    data.reminder = 2;
+    // data.appointmentName = data.appointmentName;
+
+    // const initialStartDate = initialValues.appointmentStartDate;
+    // const initialTimeSlotId = initialValues.timeSlotId;
+    // console.log(data);
+    try {
+      const response = await axios.put(
+        `${API_URL}updateAppointment/${id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+      if (response.status === 200) {
+        getData();
+        toast.success(response.data.message);
+        handleClose();
 
-      // serviceData.forEach((service) => {
-      //   if (parseInt(data.serviceId) === service.id) {
-      //     selectedServiceName = service.serviceName || "--";
-      //   }
-      // });
+        const initialDate = new Date(getDate); // Convert getDate to a Date object
+        const submittedDate = new Date(data.appointmentStartDate); // Convert data.appointmentStartDate to a Date object
 
-      let selectedTimeSlot = "";
-      appointmentTime.forEach((time) => {
-        if (parseInt(data.timeSlotId) === time.id) {
-          selectedTimeSlot = time.slotTime || "--";
+        const initialTime = getTime.substring(0, 5); // Assuming getTime is already in the desired format
+        const submittedTime = data?.appointmentStartTime?.substring(0, 5); // Assuming data.appointmentStartTime is already in the desired format
+        
+
+        console.log("GetDate ", initialDate);
+        console.log("getTime ", initialTime);
+        console.log("Get submitted date ", submittedDate);
+        console.log("Get submitted time ", submittedTime);
+
+        // Check if either date or time has changed
+        if (
+          initialDate.toISOString() !== submittedDate.toISOString() ||
+          initialTime !== submittedTime
+        ) {
+          // Date or time has changed
+          // alert("Mail function is working");
+          sendEmail(data);
         }
-      });
+        
 
-      data.appointmentFor = selectedLeadName.name;
-      data.appointmentStartTime = selectedTimeSlot;
-      data.email = selectedLeadName.email;
-      // data.serviceName = selectedServiceName;
-      data.appointmentOwner = userName;
-      data.reminder = 2;
-      data.appointmentName = data.appointmentName;
-      // console.log(data);
+        // Send email only if date or time has changed
+      } else {
+        toast.error("Appointment Created Unsuccessful.");
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.warning(error.response?.data.message);
+      } else {
+        toast.error(error.response?.data.message);
+      }
+    }
+  };
 
-      try {
-        const response = await axios.put(
-          `${API_URL}updateAppointment/${id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
+  const sendEmail = async (data) => {
+    const zoomLink = data.link
+      ? `
+      <h3 style="margin-bottom: 0;">you can join:</h3>
+      <h4 style="margin:0 ;">${data.link}</h4>      
+      <p style="margin: 1.5rem 0px 2rem 0px;">You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${id}&name=${data.name}&email=${data.email}&link=${data.link}">Reschedule or Cancel</a> Your Appointment</p>
+      `
+      : "";
+
+    const mailContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Invoice</title>
+      <style>
+        body{
+          background-color: #ddd;
+        }
+        .invoice-box {
+          font-size: 12px;
+          max-width: 600px;
+          background-color: #fff;
+          margin: auto;
+          padding: 30px;
+          border-bottom: 3px solid #0059ff;
+          line-height: 24px;
+          font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+          color: #555;
+          min-height: 85vh;
+        }
+
+        .invoice-box table {
+          width: 100%;
+          line-height: inherit;
+          text-align: left;
+        }
+
+        .invoice-box table td {
+          padding: 5px;
+          vertical-align: top;
+        }
+
+        .invoice-box table td.third {
+          text-align: right;
+        }
+
+        .invoice-box table tr.heading td {
+          background: #eee;
+          border-bottom: 1px solid #ddd;
+          font-weight: bold;
+        }
+
+        .invoice-box table tr.item td {
+          border-bottom: 1px solid #eee;
+        }
+
+        .invoice-box table tr.item.last td {
+          border-bottom: none;
+        }
+
+        .invoice-box table tr.total td:nth-child(2) {
+          border-top: 2px solid #eee;
+          font-weight: bold;
+        }
+        .invoice{
+            padding: 1rem;
+        }
+
+        #scan {
+          float: right;
+        }
+
+        #scan img {
+          max-width: 100%;
+          height: auto;
+        }
+
+        @media print {
+          .invoice-box {
+            border: 0;
           }
-        );
-        if (response.status === 200) {
-          getData();
-          toast.success(response.data.message);
-          handleClose();
-          
-          const zoomLink = data.link
-            ? `
-            <h3 style="margin-bottom: 0;">you can join:</h3>
-            <h4 style="margin:0 ;">${data.link}</h4>      
-            <p style="margin: 1.5rem 0px 2rem 0px;">You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${id}&name=${data.name}&email=${data.email}&link=${data.link}">Reschedule or Cancel</a> Your Appointment</p>
-            `
-            : "";
+        }
 
-          const mailContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <title>Invoice</title>
-          <style>
-            body{
-              background-color: #ddd;
-            }
-            .invoice-box {
-              font-size: 12px;
-              max-width: 600px;
-              background-color: #fff;
-              margin: auto;
-              padding: 30px;
-              border-bottom: 3px solid #0059ff;
-              line-height: 24px;
-              font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-              color: #555;
-              min-height: 85vh;
-            }
-
-          .invoice-box table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-          }
-
-          .invoice-box table td {
-            padding: 5px;
-            vertical-align: top;
-          }
-
-          .invoice-box table td.third {
-            text-align: right;
-          }
-
-          .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-          }
-
-          .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
-          }
-
-          .invoice-box table tr.item.last td {
-            border-bottom: none;
-          }
-
-          .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
-            font-weight: bold;
-          }
-          .invoice{
-              padding: 1rem;
-          }
-
-          #scan {
-            float: right;
-          }
-
-          #scan img {
-            max-width: 100%;
-            height: auto;
-          }
-
-          @media print {
-            .invoice-box {
-              border: 0;
-            }
-          }
-
-        </style>
-        </head>
-        <body >
-          <div class="invoice-box">
-            <table>
-              <tr class="top">
-                <td colspan="2">
-                  <table>
-                    <tr>
-                      <td class="title">
-                        <img
-                          src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                          style="width: 75%; max-width: 180px"
-                          alt="Logo"
-                        />
-                      </td>
-                      <td class="third">
-                        <b>Date:</b> 24-01-2024<br />
-                        The Alexcier, 237 Alexandra Road,<br />
-                        #04-10, Singapore-159929.
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-
-
-            <div class="invoice" >
+      </style>
+    </head>
+    <body >
+      <div class="invoice-box">
+        <table>
+          <tr class="top">
+            <td colspan="2">
+              <table>
+                <tr>
+                  <td class="title">
+                    <img
+                      src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                      style="width: 75%; max-width: 180px"
+                      alt="Logo"
+                    />
+                  </td>
+                  <td class="third">
+                    <b>Date:</b> 24-01-2024<br />
+                    The Alexcier, 237 Alexandra Road,<br />
+                    #04-10, Singapore-159929.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+                  <div class="invoice" >
             <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
             <p style="margin: 2rem 0 0; font-size: 1rem;">We are pleased to inform you that your appointment has been successfully rescheduled. The appointment has been rescheduled for  ${data.appointmentStartDate} at ${data.appointmentStartTime}. We hope this new schedule is convenient for you. <br />
             </p>
@@ -229,38 +267,22 @@ function AppointmentsCreate({ name, id, getData }) {
           </div>
         </body>
          </html>`;
-
-          try {
-            const response = await axios.post(`${API_URL}sendMail`, {
-              toMail: data.email,
-              fromMail: data.email,
-              // subject: data.appointmentName,
-              subject: "Your Appointment Has Been Successfully Rescheduled",
-              htmlContent: mailContent,
-            });
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              // toast.success("Mail Send Successfully");
-            } else {
-              toast.error(response.data.message);
-            }
-          } catch (error) {
-            // toast.error("Mail Not Send");
-            console.error("Failed to send email:", error);
-          }
-        } else {
-          toast.error("Appointment Created Unsuccessful.");
-        }
-      } catch (error) {
-        if (error.response?.status === 400) {
-          toast.warning(error.response?.data.message);
-        } else {
-          toast.error(error.response?.data.message);
-        }
+    try {
+      const response = await axios.post(`${API_URL}sendMail`, {
+        toMail: data.email,
+        fromMail: data.email,
+        subject: "Your Appointment Has Been Successfully Rescheduled",
+        htmlContent: mailContent,
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
       }
-    },
-  });
-
+    } catch (error) {
+      console.error("Failed to send email:", error);
+    }
+  };
   const findDataById = async () => {
     try {
       const response = await axios(`${API_URL}allAppointments/${id}`, {
@@ -269,7 +291,10 @@ function AppointmentsCreate({ name, id, getData }) {
           //Authorization: `Bearer ${token}`,
         },
       });
+
       formik.setValues(response.data);
+      setGetDate(response.data.appointmentStartDate);
+      setGetTime(response.data.appointmentStartTime);
       // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -290,6 +315,39 @@ function AppointmentsCreate({ name, id, getData }) {
     }
   };
 
+  const filterAvailableSlots = (slots, selectedDate) => {
+    const currentTime = new Date();
+
+    if (new Date(selectedDate).toDateString() !== currentTime.toDateString()) {
+      return slots;
+    }
+
+    // Convert slotTime to a Date object for comparison
+    const convertSlotToDate = (slotTime) => {
+      const [time, period] = slotTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (period.toLowerCase() === "pm" && hours !== 12) {
+        hours += 12;
+      } else if (period.toLowerCase() === "am" && hours === 12) {
+        hours = 0;
+      }
+
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(hours, minutes, 0, 0);
+
+      return slotDate;
+    };
+
+    // Filter out past slots
+    const availableSlots = slots.filter(
+      (slot) => convertSlotToDate(slot.slotTime) > currentTime
+    );
+
+    return availableSlots;
+  };
+
+
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
@@ -300,7 +358,12 @@ function AppointmentsCreate({ name, id, getData }) {
           },
         }
       );
-      setAppointmentTime(response.data);
+      const availableSlots = filterAvailableSlots(
+        response.data,
+        formik.values.appointmentStartDate
+      );
+      formik.setFieldValue("timeSlotId", "");
+      setAppointmentTime(availableSlots);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -329,7 +392,14 @@ function AppointmentsCreate({ name, id, getData }) {
     fetchServiceData();
     fetchLeadData();
     findDataById();
+    formik.setFieldValue("appointmentStartDate", currentData);
   }, []);
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: handleSubmit,
+  });
 
   useEffect(() => {
     fetchAppointmentTime();
@@ -454,7 +524,7 @@ function AppointmentsCreate({ name, id, getData }) {
                   </div> */}
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Appoint Name</lable>
+                      <lable>Appointment Name</lable>
                       <span className="text-danger">*</span> &nbsp;&nbsp;
                       <input
                         type="text"
@@ -491,6 +561,7 @@ function AppointmentsCreate({ name, id, getData }) {
                         // className="form-size form-control"
                         name="appointmentStartDate"
                         id="appointmentStartDate"
+                        min={currentData}
                         {...formik.getFieldProps("appointmentStartDate")}
                         className={`form-size form-control   ${
                           formik.touched.appointmentStartDate &&
@@ -539,10 +610,10 @@ function AppointmentsCreate({ name, id, getData }) {
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
-                        {formik.touched.appointmentStartTime &&
-                          formik.errors.appointmentStartTime && (
+                        {formik.touched.timeSlotId &&
+                          formik.errors.timeSlotId && (
                             <p className="text-danger ">
-                              {formik.errors.appointmentStartTime}
+                              {formik.errors.timeSlotId}
                             </p>
                           )}
                       </div>
@@ -618,8 +689,8 @@ function AppointmentsCreate({ name, id, getData }) {
 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="leadowner">Location</label>
-                      <span className="text-danger">*</span>&nbsp;&nbsp;
+                      <label htmlFor="leadowner">Location</label>&nbsp;&nbsp;
+                      {/* <span className="text-danger">*</span> */}
                       <select
                         id="location"
                         //className="form-size form-select"
@@ -893,7 +964,8 @@ function AppointmentsCreate({ name, id, getData }) {
                 <div className="row">
                   <div className="col-8 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Description</lable><span className="text-danger">*</span> &nbsp;&nbsp;
+                      <lable>Description</lable>
+                      <span className="text-danger">*</span> &nbsp;&nbsp;
                       <textarea
                         type="text"
                         rows={5}
