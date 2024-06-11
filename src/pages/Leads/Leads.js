@@ -84,10 +84,10 @@ const Lead = () => {
         Cell: ({ row }) =>
           row.original.lead_status === "Processed" ? (
             <span
-              className="badge bg-info py-2 "
+              className="badge bg-info py-2"
               style={{ color: "#1f1f1f !important" }}
             >
-              Pending
+              Processed
             </span>
           ) : row.original.lead_status === "Contacted" ? (
             <span className="badge bg-primary py-2 ">Contacted</span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -108,6 +108,10 @@ function LeadsCreate() {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect (() => {
+    formik.setFieldValue('lead_status','Processed')
+  },[])
 
   return (
     <section className="createLead">
@@ -441,8 +445,8 @@ function LeadsCreate() {
                   {...formik.getFieldProps("lead_status")}
                   id="lead_status"
                 >
-                  <option value="Pending" selected>
-                    Pending
+                  <option value="Processed">
+                  Processed
                   </option>
                   <option value="Contacted">Contacted</option>
                   <option value="Qualified">Qualified</option>
