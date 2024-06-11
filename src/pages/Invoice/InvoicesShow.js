@@ -266,7 +266,7 @@ function InvoiceShow() {
        // Wrap the Notes text
        doc.setFontSize(12);
        doc.setFont("helvetica", "normal");
-       doc.text("Notes", 13, finalY);
+       doc.text("Customer Notes", 13, finalY);
    
        doc.setFontSize(10);
        doc.setFont("helvetica", "normal");
@@ -842,11 +842,11 @@ function InvoiceShow() {
               </div> */}
             </div>
 
-            {/* Description Information */}
+            {/* Customer Notes */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
                 <span className="my-3 fs-6 fw-bold my-3">
-                  Description Information
+                  Customer Notes
                 </span>
               </div>
 

@@ -158,7 +158,7 @@ const Example = () => {
       },
       {
         accessorKey: "description",
-        header: "Description",
+        header: "Customer Notes",
       },
 
       {

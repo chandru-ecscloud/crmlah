@@ -141,6 +141,7 @@ function AdminHeader({ handleLogout }) {
                 <NavDropdown
                   title={<FiPlus className="text-white fs-5 mt-2" />}
                   className="navDropdowns"
+                  disabled = {role === "CMP_USER"}
                 >
                   <NavDropdown.Item as={NavLink} to="/leads/create">
                     <IoMdAdd /> create Lead
