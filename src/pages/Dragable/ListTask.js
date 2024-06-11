@@ -109,7 +109,7 @@ const ListTasks = () => {
         // console.log("apiAccount",response.data)
         const newTask = response.data.map((client) => ({
           id: client.id,
-          name: client.accountName,
+          name: client.firstName || client.accountName,
           phone: client.phone,
           email: client.email,
           status: "Proposition",
