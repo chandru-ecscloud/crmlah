@@ -25,6 +25,11 @@ const validationSchema = yup.object({
     .required("*Enter The Sales Commission"),
   termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
   description: yup.string().required("*Enter The Customer Notes"),
+  invoiceItemList: yup.array().of(
+    yup.object().shape({
+      productId: yup.string().required("*Product Name is required"),
+    })
+  ),
 });
 function InvoicesEdit() {
   const { id } = useParams();
@@ -280,7 +285,7 @@ function InvoicesEdit() {
       const productName = response.data.productName;
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
-      updatedRows[index].ProductName = productName;
+      updatedRows[index].productName = productName;
       updatedRows[index].productId = response.data.id;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
@@ -858,7 +863,7 @@ function InvoicesEdit() {
         <div className="col-lg-12 col-md-12 col-12 mb-3">
           <div
             className="d-flex justify-content-center align-items-center mb-4 gap-2"
-            style={{ marginLeft: "50rem" }}
+            style={{ marginLeft: "55rem" }}
           >
             <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
             <input
@@ -1227,26 +1232,36 @@ function InvoicesEdit() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className="form-select"
+                        className={`form-select ${
+                          formik.touched.invoiceItemList?.[index]?.productId &&
+                          formik.errors.invoiceItemList?.[index]?.productId
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name={`invoiceItemList[${index}].productId`}
-                        {...formik.getFieldProps(
-                          `invoiceItemList[${index}].productId`
-                        )}
                         value={row.productId}
-                        onChange={(e) =>
-                          handleSelectChange(index, e.target.value)
-                        }
+                        onChange={(e) => {
+                          formik.setFieldValue(
+                            `invoiceItemList[${index}].productId`,
+                            e.target.value
+                          );
+                          handleSelectChange(index, e.target.value);
+                        }}
+                        onBlur={formik.handleBlur}
                       >
-                        <option></option>
+                        <option value=""></option>
                         {productOptions.map((option) => (
-                          <option
-                            key={option.id}
-                            value={option.id}
-                          >
+                          <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
                       </select>
+                      {formik.touched.invoiceItemList?.[index]?.productName &&
+                      formik.errors.invoiceItemList?.[index]?.productName ? (
+                        <div className="text-danger fs-6">
+                          {formik.errors.invoiceItemList[index].productName}
+                        </div>
+                      ) : null}
                     </td>
                     <td>
                       <input

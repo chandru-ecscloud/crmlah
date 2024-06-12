@@ -24,6 +24,13 @@ const validationSchema = yup.object().shape({
     .number()
     .typeError("Billing code must be a number")
     .integer("Billing code must be an integer"),
+  termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
+  description: yup.string().required("*Enter The Customer Notes"),
+  quotesItemList: yup.array().of(
+    yup.object().shape({
+      productId: yup.string().required("*Product Name is required"),
+    })
+  ),
 });
 
 function QuotesEdit() {
@@ -272,9 +279,11 @@ function QuotesEdit() {
         },
       });
       const productName = response.data.productName;
+      console.log("Product Name is ", productName)
+
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
-      updatedRows[index].ProductName = productName;
+      updatedRows[index].productName = productName;
       updatedRows[index].productId = response.data.id;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
@@ -707,7 +716,7 @@ function QuotesEdit() {
         <div className="col-lg-12 col-md-12 col-12 mb-3">
           <div
             className="d-flex justify-content-center align-items-center mb-4 gap-2"
-            style={{ marginLeft: "50rem" }}
+            style={{ marginLeft: "55rem" }}
           >
             <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
             <input
@@ -1076,23 +1085,36 @@ function QuotesEdit() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className="form-select"
+                        className={`form-select ${
+                          formik.touched.quotesItemList?.[index]?.productId &&
+                          formik.errors.quotesItemList?.[index]?.productId
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name={`quotesItemList[${index}].productId`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].productId`
-                        )}
                         value={row.productId}
-                        onChange={(e) =>
-                          handleSelectChange(index, e.target.value)
-                        }
+                        onChange={(e) => {
+                          formik.setFieldValue(
+                            `quotesItemList[${index}].productId`,
+                            e.target.value
+                          );
+                          handleSelectChange(index, e.target.value);
+                        }}
+                        onBlur={formik.handleBlur}
                       >
-                        <option></option>
+                        <option value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
                       </select>
+                      {formik.touched.quotesItemList?.[index]?.productName &&
+                      formik.errors.quotesItemList?.[index]?.productName ? (
+                        <div className="text-danger fs-6">
+                          {formik.errors.quotesItemList[index].productName}
+                        </div>
+                      ) : ""}
                     </td>
                     <td>
                       <input

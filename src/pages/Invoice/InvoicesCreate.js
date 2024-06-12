@@ -21,6 +21,11 @@ const validationSchema = yup.object({
     .required("*Enter The Sales Commission"),
   description : yup.string().required("*Enter The Customer Note"),
   termsAndConditions: yup.string().required("*Enter The termsAndConditions "),
+  invoiceItemList: yup.array().of(
+    yup.object().shape({
+      productName: yup.string().required("*Product Name is required"),
+    })
+  ),
 });
 
 function InvoicesCreate() {
@@ -50,7 +55,6 @@ function InvoicesCreate() {
       ...formik.values.invoiceItemList,
       {
         productId: "",
-        productName: "",
         quantity: "",
         listPrice: "",
         amount: "",
@@ -111,6 +115,7 @@ function InvoicesCreate() {
       invoiceItemList: [
         {
           productName: "",
+          productId: "",
           quantity: "",
           listPrice: "",
           amount: "",
@@ -157,8 +162,8 @@ function InvoicesCreate() {
             txnTax: values.txnTax,
           },
           invoiceItemList: rows.map((item) => ({
+            productName: item.ProductName,
             productId: item.selectedOption,
-            productName: item.productName,
             quantity: item.quantity,
             listPrice: item.listPrice,
             amount: item.amount,
@@ -820,7 +825,7 @@ function InvoicesCreate() {
         <div className="col-lg-12 col-md-12 col-12 mb-3">
           <div
             className="d-flex justify-content-center align-items-center mb-4 gap-2"
-            style={{ marginLeft: "50rem" }}
+            style={{ marginLeft: "55rem" }}
           >
             <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
             <input
@@ -1189,23 +1194,36 @@ function InvoicesCreate() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className="form-select"
+                        className={`form-select ${
+                          formik.touched.invoiceItemList?.[index]?.productName &&
+                          formik.errors.invoiceItemList?.[index]?.productName
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name={`invoiceItemList[${index}].productName`}
-                        {...formik.getFieldProps(
-                          `invoiceItemList[${index}].productName`
-                        )}
-                        value={row.selectedOption}
-                        onChange={(e) =>
-                          handleSelectChange(index, e.target.value)
-                        }
+                        value={row.productName}
+                        onChange={(e) => {
+                          formik.setFieldValue(
+                            `invoiceItemList[${index}].productName`,
+                            e.target.value
+                          );
+                          handleSelectChange(index, e.target.value);
+                        }}
+                        onBlur={formik.handleBlur}
                       >
-                        <option selected value=""></option>
+                        <option value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
                       </select>
+                      {formik.touched.invoiceItemList?.[index]?.productName &&
+                      formik.errors.invoiceItemList?.[index]?.productName ? (
+                        <div className="text-danger fs-6">
+                          {formik.errors.invoiceItemList[index].productName}
+                        </div>
+                      ) : null}
                     </td>
                     <td>
                       <input
@@ -1262,9 +1280,9 @@ function InvoicesCreate() {
                     <td>
                       <input
                         type="text"
-                        name={`quotesItemList[${index}].tax`}
+                        name={`invoiceItemList[${index}].tax`}
                         {...formik.getFieldProps(
-                          `quotesItemList[${index}].tax`
+                          `invoiceItemList[${index}].tax`
                         )}
                         value={row.tax}
                         className="form-control"

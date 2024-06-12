@@ -462,6 +462,7 @@ const Example = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/invoices");
+        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }

@@ -364,12 +364,12 @@ const Accounts = () => {
     fetchData();
   };
 
-  const handleLeadConvert = async (rows) => {
+  const handleDealConvert = async (rows) => {
     const id = rows.map((row) => row.original.id);
 
     try{
       const response = await axios.post(
-        `${API_URL}contactToLeadConvert/${id}?ownerName=${owner}`,
+        `${API_URL}accountToDealConvert/${id}?ownerName=${owner}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -378,7 +378,7 @@ const Accounts = () => {
       );
       if (response.status === 200) {
         toast.success(response.data.message);
-        navigate("/contacts");
+        navigate("/accounts");
         table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
@@ -815,7 +815,7 @@ const Accounts = () => {
                         ) || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
-                        handleLeadConvert(table.getSelectedRowModel().rows)
+                        handleDealConvert(table.getSelectedRowModel().rows)
                       }
                     >
                       Convert Deal

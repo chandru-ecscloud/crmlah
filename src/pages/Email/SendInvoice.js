@@ -474,7 +474,7 @@ function SendInvoice({ invoiceData, id }) {
             "",
             "",
             "Sub Total(SGT)",
-            `: ${invoice.subTotal || "--"}`,
+            `: ${invoice.subTotal || "0"}`,
           ],
           [
             "",
@@ -484,9 +484,9 @@ function SendInvoice({ invoiceData, id }) {
             "",
             "",
             "Discount(%)",
-            `: ${invoice.txnDiscount || "--"}`,
+            `: ${invoice.txnDiscount || "0"}`,
           ],
-          ["", "", "", "", "", "", "Tax(%)", `: ${invoice.txnTax || "--"}`],
+          ["", "", "", "", "", "", "Tax(%)", `: ${invoice.txnTax || "0"}`],
           [
             "",
             "",
@@ -495,7 +495,7 @@ function SendInvoice({ invoiceData, id }) {
             "",
             "",
             "Grand Total(SGT)",
-            `: ${invoice.grandTotal || "--"}`,
+            `: ${invoice.grandTotal || "0"}`,
           ],
         ],
       });

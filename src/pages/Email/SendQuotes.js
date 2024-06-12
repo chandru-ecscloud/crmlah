@@ -429,7 +429,7 @@ function SendQuotes({ accountData }) {
             "",
             "",
             "Sub Total(SGT)",
-            `: ${quote.subTotal || "--"}`,
+            `: ${quote.subTotal || "0"}`,
           ],
           [
             "",
@@ -439,9 +439,9 @@ function SendQuotes({ accountData }) {
             "",
             "",
             "Discount(%)",
-            `: ${quote.txnDiscount || "--"}`,
+            `: ${quote.txnDiscount || "0"}`,
           ],
-          ["", "", "", "", "", "", "Tax(%)", `: ${quote.txnTax || "--"}`],
+          ["", "", "", "", "", "", "Tax(%)", `: ${quote.txnTax || "0"}`],
           [
             "",
             "",
@@ -450,7 +450,7 @@ function SendQuotes({ accountData }) {
             "",
             "",
             "Grand Total(SGT)",
-            `: ${quote.grandTotal || "--"}`,
+            `: ${quote.grandTotal || "0"}`,
           ],
         ],
       });

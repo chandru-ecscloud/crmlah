@@ -26,6 +26,11 @@ const validationSchema = yup.object().shape({
     .integer("Billing code must be an integer"),
   termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
   description: yup.string().required("*Enter The Customer Notes"),
+  quotesItemList: yup.array().of(
+    yup.object().shape({
+      productName: yup.string().required("*Product Name is required"),
+    })
+  ),
 });
 
 function QuotesCreate() {
@@ -674,7 +679,7 @@ function QuotesCreate() {
         <div className="col-lg-12 col-md-12 col-12 mb-3">
           <div
             className="d-flex justify-content-center align-items-center mb-4 gap-2"
-            style={{ marginLeft: "50rem" }}
+            style={{ marginLeft: "55rem" }}
           >
             <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
             <input
@@ -684,7 +689,6 @@ function QuotesCreate() {
               onChange={handleSameAsShippingChange}
               className="form-check-input"
             />
-             
           </div>
         </div>
         <div className="container">
@@ -731,7 +735,11 @@ function QuotesCreate() {
                   }`}
                   name="billingStreet"
                   id="billingStreet"
-                  value={sameAsShipping ? formik.values.shippingStreet : formik.values.billingStreet}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingStreet
+                      : formik.values.billingStreet
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -791,7 +799,11 @@ function QuotesCreate() {
                   }`}
                   name="billingCity"
                   id="billingCity"
-                  value={sameAsShipping ? formik.values.shippingCity : formik.values.billingCity}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCity
+                      : formik.values.billingCity
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -850,7 +862,11 @@ function QuotesCreate() {
                   }`}
                   name="billingCode"
                   id="billingCode"
-                  value={sameAsShipping ? formik.values.shippingCode : formik.values.billingCode}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCode
+                      : formik.values.billingCode
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -909,7 +925,11 @@ function QuotesCreate() {
                   }`}
                   name="billingState"
                   id="billingState"
-                  value={sameAsShipping ? formik.values.shippingState : formik.values.billingState}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingState
+                      : formik.values.billingState
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -971,7 +991,11 @@ function QuotesCreate() {
                   }`}
                   name="billingCountry"
                   id="billingCountry"
-                  value={sameAsShipping ? formik.values.shippingCountry : formik.values.billingCountry}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shippingCountry
+                      : formik.values.billingCountry
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -1023,23 +1047,36 @@ function QuotesCreate() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className="form-select"
+                        className={`form-select ${
+                          formik.touched.quotesItemList?.[index]?.productName &&
+                          formik.errors.quotesItemList?.[index]?.productName
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name={`quotesItemList[${index}].productName`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].productName`
-                        )}
                         value={row.productName}
-                        onChange={(e) =>
-                          handleSelectChange(index, e.target.value)
-                        }
+                        onChange={(e) => {
+                          formik.setFieldValue(
+                            `quotesItemList[${index}].productName`,
+                            e.target.value
+                          );
+                          handleSelectChange(index, e.target.value);
+                        }}
+                        onBlur={formik.handleBlur}
                       >
-                        <option selected value=""></option>
+                        <option value=""></option>
                         {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
                       </select>
+                      {formik.touched.quotesItemList?.[index]?.productName &&
+                      formik.errors.quotesItemList?.[index]?.productName ? (
+                        <div className="text-danger fs-6">
+                          {formik.errors.quotesItemList[index].productName}
+                        </div>
+                      ) : null}
                     </td>
                     <td>
                       <input

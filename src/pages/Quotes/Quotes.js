@@ -431,6 +431,7 @@ const Quotes = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/quotes");
+        table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
       }

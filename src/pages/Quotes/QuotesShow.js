@@ -19,7 +19,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 function QuotesShow() {
   const { id } = useParams();
   const [quoteData, setQuoteData] = useState({});
-  const [quotesItemList, setQuotesItemsList] = useState({});
+  // const [quotesItemList, setQuotesItemsList] = useState({});
   console.log("Quote Item list", quoteData);
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
@@ -188,7 +188,7 @@ function QuotesShow() {
           "",
           "",
           "Sub Total(SGT)",
-          `: ${quoteData.subTotal || "--"}`,
+          `: ${quoteData.subTotal || "0"}`,
           "",
           "",
           "",
@@ -202,7 +202,7 @@ function QuotesShow() {
           "",
           "",
           "Discount(%)",
-          `: ${quoteData.txnDiscount || "--"}`,
+          `: ${quoteData.txnDiscount || "0"}`,
           "",
           "",
           "",
@@ -216,7 +216,7 @@ function QuotesShow() {
           "",
           "",
           "Tax(%)",
-          `: ${quoteData.txnTax || "--"}`,
+          `: ${quoteData.txnTax || "0"}`,
           "",
           "",
           "",
@@ -230,7 +230,7 @@ function QuotesShow() {
           "",
           "",
           "Grand Total(SGT)",
-          `: ${quoteData.grandTotal || "--"}`,
+          `: ${quoteData.grandTotal || "0"}`,
           "",
           "",
           "",
@@ -666,12 +666,12 @@ function QuotesShow() {
                             <tr key={product.id}>
                               <td>{index + 1}</td>
                               <td>{product.productName || "--"}</td>
-                              <td>{product.quantity || "--"}</td>
-                              <td>{product.listPrice || "--"}</td>
-                              <td>{product.amount || "--"}</td>
-                              <td>{product.discount || "--"}</td>
-                              <td>{product.tax || "--"}</td>
-                              <td>{product.total || "--"}</td>
+                              <td>{product.quantity || "0"}</td>
+                              <td>{product.listPrice || "0"}</td>
+                              <td>{product.amount || "0"}</td>
+                              <td>{product.discount || "0"}</td>
+                              <td>{product.tax || "0"}</td>
+                              <td>{product.total || "0"}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -688,13 +688,17 @@ function QuotesShow() {
                     <div className="container-fluid p-3 col-md-5 col-12 border rounded">
                       <div className="container-fluid py-2">
                         <div className="row">
-                          <div className="col-md-8 col-12">
+                          <div className="col-md-7 col-12">
                             {" "}
                             <label className="text-dark ">Sub Total(SGT)</label>
                           </div>
+                          <div className="col-md-1 col-12">
+                            {" "}
+                            <span>:</span>
+                          </div>
                           <div className="col-md-4 col-12">
                             {" "}
-                            <span>: {quoteData.subTotal || "0"}.00</span>
+                            <span>{quoteData.subTotal || "0"}.00</span>
                           </div>
                         </div>
                       </div>
