@@ -147,11 +147,11 @@ function ContactsLead() {
     if (!sameAsMailing) {
       formik.setValues({
         ...formik.values,
-        mailing_street: formik.values.other_street,
-        mailing_city: formik.values.other_city,
-        mailing_state: formik.values.other_state,
-        mailing_zip: formik.values.other_zip,
-        mailing_country: formik.values.other_country,
+        other_street: formik.values. mailing_street,
+        other_city: formik.values. mailing_city,
+        other_state: formik.values. mailing_state,
+        other_zip: formik.values. mailing_zip,
+        other_country: formik.values. mailing_country,
       });
     }
   };
@@ -628,13 +628,14 @@ function ContactsLead() {
         </div>
 
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "48rem" }}>
+          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "65rem" }}>
             <label htmlFor="sameAsMailing"> Same as Mailing Address</label>
             <input
               type="checkbox"
               id="sameAsMailing"
               checked={sameAsMailing}
               onChange={handleSameAsMaillingChange}
+              className="form-check-input"
             />
           </div>
         </div>

@@ -192,7 +192,7 @@ function ContactShow() {
               <div>
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp;+{contactData.countryCode || ""}&nbsp;
                   {contactData.phone || ""}
                 </span>
               </div>
@@ -398,6 +398,85 @@ function ContactShow() {
                   &nbsp; : &nbsp;{contactData.secondary_email || ""}
                 </span>
               </div> */}
+            </div>
+
+            <div className="container-fluid row" id="Details">
+              <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
+                <span className="my-3 fs-6 fw-bold col-10 my-3">
+                  Address Information
+                </span>
+                {/* <button className="btn bg-info col-2 text-white">
+                  Locate Map
+                </button> */}
+              </div>
+
+              <div className="my-3"></div>
+
+              <div className="container col-md-6">
+                <div>
+                  <label className="text-dark Label">Mailing Street</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.mailingStreet || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Mailing State</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.mailingState || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Mailing City</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.mailingCity || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Mailing Zip Code</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.mailingZip || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Mailing Country</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.mailingCountry || ""}
+                  </span>
+                </div>
+              </div>
+
+              <div className="container col-md-6">
+                <div>
+                  <label className="text-dark Label">Other Street</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.otherStreet || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Other State</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.otherState || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Other City</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.otherCity || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Other Zip Code</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.otherZip || ""}
+                  </span>
+                </div>
+                <div>
+                  <label className="text-dark Label">Other Country</label>
+                  <span className="text-dark">
+                    &nbsp; : &nbsp;{contactData.otherCountry || ""}
+                  </span>
+                </div>
+              </div>
             </div>
 
              {/* Appointment Modal  */}
