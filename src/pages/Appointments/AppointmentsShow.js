@@ -145,7 +145,7 @@ function AppointmentsShow() {
                 <span className="fs-6 fw-bold my-3">Details</span>
               </div>
 
-              <div className="container-fluid col-md-12 mt-3">
+              <div className="container-fluid col-12 mt-3">
                 <div>
                   <label className="text-dark Label">Appointment For</label>
                   <span className="text-dark">

@@ -28,14 +28,14 @@ function AppointmentsCreate({ name, id, getData }) {
   const [lgShow, setLgShow] = useState(false);
   const [serviceData, setServiceData] = useState([]);
   const [leadData, setleadData] = useState([]);
-  const [apidata, setApiData] = useState([]);
+  // const [apidata, setApiData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
-  const [getTime, setGetTime] = useState(null);
-  const [getDate, setGetDate] = useState(null);
+  const [dateTimeChange, setDateTimeChange] = useState(false);
   const currentData = new Date().toISOString().split("T")[0];
+  console.log("Date time change ", dateTimeChange);
 
   const initialValues = {
     companyId: companyId,
@@ -107,28 +107,11 @@ function AppointmentsCreate({ name, id, getData }) {
         toast.success(response.data.message);
         handleClose();
 
-        const initialDate = new Date(getDate); // Convert getDate to a Date object
-        const submittedDate = new Date(data.appointmentStartDate); // Convert data.appointmentStartDate to a Date object
-
-        const initialTime = getTime.substring(0, 5); // Assuming getTime is already in the desired format
-        const submittedTime = data?.appointmentStartTime?.substring(0, 5); // Assuming data.appointmentStartTime is already in the desired format
-        
-
-        console.log("GetDate ", initialDate);
-        console.log("getTime ", initialTime);
-        console.log("Get submitted date ", submittedDate);
-        console.log("Get submitted time ", submittedTime);
-
         // Check if either date or time has changed
-        if (
-          initialDate.toISOString() !== submittedDate.toISOString() ||
-          initialTime !== submittedTime
-        ) {
-          // Date or time has changed
-          // alert("Mail function is working");
+        if (dateTimeChange) {
           sendEmail(data);
+          setDateTimeChange(false);
         }
-        
 
         // Send email only if date or time has changed
       } else {
@@ -283,6 +266,7 @@ function AppointmentsCreate({ name, id, getData }) {
       console.error("Failed to send email:", error);
     }
   };
+
   const findDataById = async () => {
     try {
       const response = await axios(`${API_URL}allAppointments/${id}`, {
@@ -293,13 +277,12 @@ function AppointmentsCreate({ name, id, getData }) {
       });
 
       formik.setValues(response.data);
-      setGetDate(response.data.appointmentStartDate);
-      setGetTime(response.data.appointmentStartTime);
       // console.log("response.data", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
@@ -347,7 +330,6 @@ function AppointmentsCreate({ name, id, getData }) {
     return availableSlots;
   };
 
-
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
@@ -393,6 +375,10 @@ function AppointmentsCreate({ name, id, getData }) {
     fetchLeadData();
     findDataById();
     formik.setFieldValue("appointmentStartDate", currentData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log("Date time change ", dateTimeChange);
+    console.log("Formik Values ", formik.values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formik = useFormik({
@@ -403,10 +389,21 @@ function AppointmentsCreate({ name, id, getData }) {
 
   useEffect(() => {
     fetchAppointmentTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.appointmentStartDate]);
 
   const handleClose = () => {
     setLgShow(false);
+  };
+
+  const handleDateChange = (event) => {
+    setDateTimeChange(true);
+    formik.setFieldValue("appointmentStartDate", event);
+  };
+
+  const handleTimeChange = (event) => {
+    setDateTimeChange(true);
+    formik.setFieldValue("timeSlotId", event);
   };
 
   return (
@@ -569,6 +566,7 @@ function AppointmentsCreate({ name, id, getData }) {
                             ? "is-invalid"
                             : ""
                         }`}
+                        onChange={(e) => handleDateChange(e.target.value)}
                       />
                     </div>
                     <div className="row sm-device">
@@ -594,6 +592,7 @@ function AppointmentsCreate({ name, id, getData }) {
                         className="form-select form-size"
                         {...formik.getFieldProps("timeSlotId")}
                         id="timeSlotId"
+                        onChange={(e) => handleTimeChange(e.target.value)}
                       >
                         <option value="">Select a start time</option>
                         {appointmentTime.map((option) => (
