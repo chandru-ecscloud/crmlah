@@ -159,6 +159,7 @@ const UserActivation = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleExportRows = (rows) => {
@@ -377,10 +378,13 @@ const UserActivation = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
-          <TimeSlots/>
-            <div style={{ paddingRight: "10px" }}>
-            {/* <button
+          <div className="d-flex align-items-center justify-content-between py-4 px-3">
+            <div className="text-start">
+              <span className="fs-4 fw-bold px-2">All User</span>
+            </div>
+
+            <div className="d-flex" style={{ paddingRight: "10px" }}>
+              {/* <button
                 className={`btn btn-danger mx-2 ${
                   role === "CMP_USER" && "disabled"
                 }`}
@@ -388,7 +392,7 @@ const UserActivation = () => {
               >
                 Time Slot
               </button> */}
-              
+              <TimeSlots />
               <button
                 className={`btn btn-primary ${
                   role === "CMP_USER" && "disabled"
