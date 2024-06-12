@@ -377,6 +377,7 @@ const Contacts = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/contacts");
+        fetchData();
         table.setRowSelection(false);
       } else {
         toast.error(response.data.message);
@@ -400,6 +401,7 @@ const Contacts = () => {
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/contacts");
+          fetchData();
           table.setRowSelection(false);
         } else {
           toast.error(response.data.message);
@@ -408,7 +410,7 @@ const Contacts = () => {
         toast.error("Error Submiting Data");
       }
     
-    }
+    };
 
 
   const handleBulkDelete = async (rows) => {
