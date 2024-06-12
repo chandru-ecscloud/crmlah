@@ -435,6 +435,7 @@ const Deals = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/deals");
+        fetchData();
         table.setRowSelection(false);
       } else {
         toast.error(response.data.message);

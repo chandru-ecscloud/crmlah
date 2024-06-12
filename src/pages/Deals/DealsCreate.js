@@ -37,8 +37,8 @@ const validationSchema = yup.object().shape({
         return value && value.length === 10
           ? true
           : this.createError({
-              message: "Phone number must be 10 digits only",
-            });
+            message: "Phone number must be 10 digits only",
+          });
       }
       return true; // Default validation for other country codes
     }),
@@ -64,7 +64,7 @@ function DealsCreate() {
       email: "",
       deal_name: "",
       contact_name: "",
-      company:"",
+      company: "",
       account_name: "",
       closing_date: "",
       country_code: "65",
@@ -255,8 +255,8 @@ function DealsCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("company")}
                   id="company"
@@ -278,11 +278,10 @@ function DealsCreate() {
                 {/* <span className="text-danger">*</span>&nbsp;&nbsp; */}
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.amount && formik.errors.amount
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -334,12 +333,11 @@ function DealsCreate() {
                       {...formik.getFieldProps("country_code")}
                       id="country_code"
                       name="country_code"
-                      className={`form-size form-control  ${
-                        formik.touched.country_code &&
+                      className={`form-size form-control  ${formik.touched.country_code &&
                         formik.errors.country_code
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
@@ -355,11 +353,10 @@ function DealsCreate() {
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${
-                      formik.touched.phone && formik.errors.phone
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -383,11 +380,10 @@ function DealsCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -423,11 +419,10 @@ function DealsCreate() {
                   type="text"
                   id="deal_name"
                   name="deal_name"
-                  className={`form-size form-control  ${
-                    formik.touched.deal_name && formik.errors.deal_name
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.deal_name && formik.errors.deal_name
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("deal_name")}
                 />
               </div>
@@ -563,11 +558,10 @@ function DealsCreate() {
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.stage && formik.errors.stage
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-select  ${formik.touched.stage && formik.errors.stage
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("stage")}
                   id="stage"
                 >
@@ -680,18 +674,18 @@ function DealsCreate() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "65rem"}}>
-        <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
-              <input
-                type="checkbox"
-                id="sameAsShipping"
-                checked={sameAsShipping}
-                onChange={handleSameAsShippingChange}
-                className="form-input-check"
-              />
-             
-            </div>
-            </div>
+
+          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "54rem" }}>
+            <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+            <input
+              type="checkbox"
+              id="sameAsShipping"
+              checked={sameAsShipping}
+              onChange={handleSameAsShippingChange}
+              className="form-check-input"
+            />
+          </div>
+        </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">

@@ -28,22 +28,22 @@ const validationSchema = yup.object().shape({
   email: yup.string().required("*Email is required"),
   country_code: yup.string().required("*Country Code is required"),
   phone: yup.string()
-  .required('Phone number is required')
-  .test('phone-length', function (value) {
-    const { country_code } = this.parent;
-    if (value && /\s/.test(value)) {
-      return this.createError({ message: 'Phone number should not contain spaces' });
-    }
-    if (country_code === '65') {
-      return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
-    }
-    if (country_code === '91') {
-      return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
-    }
-    return true; // Default validation for other country codes
-  }),
-country_code: yup.string().required('Country code is required'),
-company: yup.string().required('Company Name is required'),
+    .required('Phone number is required')
+    .test('phone-length', function (value) {
+      const { country_code } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({ message: 'Phone number should not contain spaces' });
+      }
+      if (country_code === '65') {
+        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      }
+      if (country_code === '91') {
+        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      }
+      return true; // Default validation for other country codes
+    }),
+  country_code: yup.string().required('Country code is required'),
+  company: yup.string().required('Company Name is required'),
 });
 
 function ContactEdit() {
@@ -53,6 +53,7 @@ function ContactEdit() {
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [account_name, setaccount_name] = useState([]);
+  const [sameAsMailing, setSameAsMailing] = useState(false);
   console.log(account_name);
 
   const [userImage, setUserImage] = useState(User);
@@ -191,6 +192,20 @@ function ContactEdit() {
       reader.readAsDataURL(file);
     }
   };
+  const handleSameAsMaillingChange = () => {
+    setSameAsMailing(!sameAsMailing);
+    if (!sameAsMailing) {
+      formik.setValues({
+        ...formik.values,
+        other_street: formik.values.mailing_street,
+        other_city: formik.values.mailing_city,
+        other_state: formik.values.mailing_state,
+        other_zip: formik.values.mailing_zip,
+        other_country: formik.values.mailing_country,
+      });
+    }
+  };
+
 
   return (
     <section className="createContacts">
@@ -277,8 +292,8 @@ function ContactEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
@@ -294,7 +309,7 @@ function ContactEdit() {
                 </div>
               </div>
             </div>
-            
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>First Name</lable>
@@ -302,8 +317,8 @@ function ContactEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("first_name")}
                   id="first_name"
@@ -322,12 +337,12 @@ function ContactEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Last Name</lable>
-                 &nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("last_name")}
                   id="last_name"
@@ -350,8 +365,8 @@ function ContactEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.lead_source && formik.errors.lead_source
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("lead_source")}
                   name="lead_source"
@@ -367,7 +382,7 @@ function ContactEdit() {
                 </div>
               </div>
             </div>
-            
+
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Email</lable>
@@ -375,8 +390,8 @@ function ContactEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("email")}
                   id="email"
@@ -402,8 +417,8 @@ function ContactEdit() {
                       id="country_code"
                       name="country_code"
                       className={`form-size form-control  ${formik.touched.country_code && formik.errors.country_code
-                          ? "is-invalid"
-                          : ""
+                        ? "is-invalid"
+                        : ""
                         }`}
                       style={{
                         width: "80px",
@@ -419,8 +434,8 @@ function ContactEdit() {
                     type="tel"
                     name="phone"
                     className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
@@ -445,8 +460,8 @@ function ContactEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("company")}
                   id="company"
@@ -654,12 +669,22 @@ function ContactEdit() {
           </div>
         </div>
         <div className="container-fluid my-5">
-          <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
-              <h4>
-                <b>Address Information</b>
-              </h4>
-            </div>
+
+          <h4>
+            <b>Address Information</b>
+          </h4>
+
+        </div>
+        <div className="col-lg-12 col-md-12 col-12 mb-3">
+          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "65rem" }}>
+            <label htmlFor="sameAsMailing"> Same as Mailing Address</label>
+            <input
+              type="checkbox"
+              id="sameAsMailing"
+              checked={sameAsMailing}
+              onChange={handleSameAsMaillingChange}
+              className="form-check-input"
+            />
           </div>
         </div>
         <div className="container">
@@ -685,6 +710,10 @@ function ContactEdit() {
                   {...formik.getFieldProps("other_street")}
                   name="other_street"
                   id="other_street"
+                  value={sameAsMailing ? formik.values.mailing_street : formik.values.other_street}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsMailing}
                 />
               </div>
             </div>
@@ -709,6 +738,10 @@ function ContactEdit() {
                   {...formik.getFieldProps("other_city")}
                   name="other_city"
                   id="other_city"
+                  value={sameAsMailing ? formik.values.mailing_city : formik.values.other_city}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsMailing}
                 />
               </div>
             </div>
@@ -733,6 +766,10 @@ function ContactEdit() {
                   {...formik.getFieldProps("other_state")}
                   name="other_state"
                   id="other_state"
+                  value={sameAsMailing ? formik.values.mailing_state : formik.values.other_state}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsMailing}
                 />
               </div>
             </div>
@@ -771,6 +808,10 @@ function ContactEdit() {
                   {...formik.getFieldProps("other_zip")}
                   name="other_zip"
                   id="other_zip"
+                  value={sameAsMailing ? formik.values.mailing_zip : formik.values.other_zip}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsMailing}
                 />
               </div>
               <div className="row sm-device">
@@ -803,6 +844,10 @@ function ContactEdit() {
                   {...formik.getFieldProps("other_country")}
                   name="other_country"
                   id="other_country"
+                  value={sameAsMailing ? formik.values.mailing_country : formik.values.other_country}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  disabled={sameAsMailing}
                 />
               </div>
             </div>

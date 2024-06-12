@@ -268,7 +268,7 @@ function ProductsEdit() {
                   }`}
                   {...formik.getFieldProps("product_owner")}
                   id="product_owner"
-                  
+                  readOnly
                 />
                   {/* <option value={owner}>{owner}</option>
                   <option value="Vignesh Devan">Vignesh Devan</option>

@@ -543,26 +543,26 @@ function LeadsShow() {
                           </td>
                           <td>
                             {appointment.appointmentstatus === "CONFIRMED" ? (
-                              <span className="badge bg-warning">
+                              <span className="badge text-bg-warning">
                                 CONFIRMED
                               </span>
                             ) : appointment.appointmentstatus ===
                               "COMPLETED" ? (
-                              <span className="badge bg-successr">
+                              <span className="badge text-bg-success">
                                 COMPLETED
                               </span>
                             ) : appointment.appointmentstatus ===
                               "CANCELLED" ? (
-                              <span className="badge bg-danger py-2">
+                              <span className="badge text-bg-danger">
                                 CANCELLED
                               </span>
                             ) : appointment.appointmentstatus ===
                               "RESCHEDULED" ? (
-                              <span className="badge bg-info py-2">
+                              <span className="badge text-bg-success">
                                 RESCHEDULED
                               </span>
                             ) : (
-                              <span className="badge bg-primary py-2">
+                              <span className="badge text-bg-primary">
                                 PENDING
                               </span>
                             )}

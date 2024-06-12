@@ -105,7 +105,7 @@ function AccountsShow() {
             schedule={scheduleData}
             getData={userData}
           />
-          {accountData.email && (
+          {/* {accountData.email && (
             <OverlayTrigger
               placement="bottom"
               overlay={<Tooltip id="button-tooltip-2" className="mailtip">Send Email</Tooltip>}
@@ -114,7 +114,7 @@ function AccountsShow() {
                 <SendEmail toEmail={accountData.email}/>
               </span>
             </OverlayTrigger>
-          )}
+          )} */}
           <button
             className={`btn btn-warning ms-2 ${
               role === "CMP_USER" && "disabled"
@@ -472,15 +472,15 @@ function AccountsShow() {
                           </td>
                           <td>
                           {appointment.appointmentstatus === "CONFIRMED" ? (
-                              <span className="badge bg-warning">CONFIRMED</span>
+                              <span className="badge text-bg-warning">CONFIRMED</span>
                             ) : appointment.appointmentstatus === "COMPLETED" ?  (
-                              <span className="badge bg-successr">COMPLETED</span>
+                              <span className="badge text-bg-successr">COMPLETED</span>
                             ) : appointment.appointmentstatus === "CANCELLED" ? (
-                              <span className="badge bg-danger py-2">CANCELLED</span>
+                              <span className="badge text-bg-danger">CANCELLED</span>
                             ) : appointment.appointmentstatus === "RESCHEDULED" ? (
-                              <span className="badge bg-info py-2">RESCHEDULED</span>
+                              <span className="badge text-bg-info">RESCHEDULED</span>
                             ) : (
-                              <span className="badge bg-primary py-2">PENDING</span>
+                              <span className="badge text-bg-primary">PENDING</span>
                             )}
                           </td>
                         </tr>

@@ -10,9 +10,9 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-   amount: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-   .required("*Amount is required"),
+  amount: yup.string()
+    .matches(/^\d+$/, "Must be only digits")
+    .required("*Amount is required"),
   email: yup
     .string()
     .email("*Enter valid email")
@@ -63,7 +63,7 @@ function DealsEdit() {
       closing_date: "",
       stage: "",
       probability: "",
-      country_code:"",
+      country_code: "",
       phone: "",
       campaign_source: "",
       lead_source: "",
@@ -188,9 +188,9 @@ function DealsEdit() {
         )
           .toString()
           .padStart(2, "0")}-${validUntilDate
-          .getDate()
-          .toString()
-          .padStart(2, "0")}`;
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`;
 
         const payload = {
           deal_owner: getData.dealOwner,
@@ -202,7 +202,7 @@ function DealsEdit() {
           account_name: getData.accountName,
           closing_date: closingDate,
           stage: getData.stage,
-          company :getData.companyName,
+          company: getData.companyName,
           country_code: getData.countryCode || "65",
           phone: getData.phone,
           probability: getData.probability,
@@ -287,7 +287,7 @@ function DealsEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Deal Owner</lable> 
+                <lable>Deal Owner</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -308,8 +308,8 @@ function DealsEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("company")}
                   id="company"
@@ -331,11 +331,10 @@ function DealsEdit() {
                 {/* <span className="text-danger">*</span>&nbsp;&nbsp; */}
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.amount && formik.errors.amount
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -352,7 +351,7 @@ function DealsEdit() {
             </div>
 
 
-             <div className="col-lg-6 col-md-6 col-12 mb-3">
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Phone</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
@@ -402,15 +401,14 @@ function DealsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable> 
+                <lable>Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -446,11 +444,10 @@ function DealsEdit() {
                   type="text"
                   id="deal_name"
                   name="deal_name"
-                  className={`form-size form-control  ${
-                    formik.touched.deal_name && formik.errors.deal_name
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-size form-control  ${formik.touched.deal_name && formik.errors.deal_name
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("deal_name")}
                 />
               </div>
@@ -582,7 +579,7 @@ function DealsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Stage</lable> 
+                <lable>Stage</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
@@ -691,18 +688,17 @@ function DealsEdit() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "65rem"}}>
-        <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
-              <input
-                type="checkbox"
-                id="sameAsShipping"
-                checked={sameAsShipping}
-                onChange={handleSameAsShippingChange}
-                className="form-input-check"
-              />
-             
-            </div>
-            </div>
+          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "54rem" }}>
+            <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+            <input
+              type="checkbox"
+              id="sameAsShipping"
+              checked={sameAsShipping}
+              onChange={handleSameAsShippingChange}
+              className="form-check-input"
+            />
+          </div>
+        </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
