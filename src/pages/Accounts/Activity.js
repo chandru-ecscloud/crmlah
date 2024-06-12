@@ -201,7 +201,7 @@ function Activity({ id }) {
                   );
                 })
             ) : (
-              <p>No activities available.</p>
+              <p className="text-center">No activities available.</p>
             )}
           </Accordion>
         </Modal.Body>

@@ -44,6 +44,7 @@ const validationSchema = Yup.object({
 
 const ActivityAdd = ({ id, fetchData }) => {
   const [show, setShow] = useState(false);
+  const role = sessionStorage.getItem("role");
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -154,7 +155,7 @@ const ActivityAdd = ({ id, fetchData }) => {
 
   return (
     <>
-      <Button variant="danger" className="me-2" onClick={handleShow}>
+      <Button variant="danger" disabled={role === "CMP_USER"} className="me-2" onClick={handleShow}>
         New Activity
       </Button>
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">

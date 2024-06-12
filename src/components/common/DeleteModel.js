@@ -8,6 +8,7 @@ import { API_URL } from "../../Config/URL";
 
 function Delete({ onSuccess, path }) {
   const [show, setShow] = useState(false);
+  const role = sessionStorage.getItem("role");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -33,7 +34,7 @@ function Delete({ onSuccess, path }) {
 
   return (
     <>
-      <button className="btn btn-sm text-danger" onClick={handleShow}>
+      <button disabled={role === "CMP_USER"} className="btn btn-sm text-danger" onClick={handleShow}>
         <BsTrash />
       </button>
 
