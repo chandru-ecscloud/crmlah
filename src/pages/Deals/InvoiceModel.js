@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const InvoiceModel = ({ path }) => {
   console.log(path);
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
   const [dealsdata, setDealsData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
@@ -25,20 +25,24 @@ const InvoiceModel = ({ path }) => {
 
   const fetchInvoiceData = async () => {
     try {
-      const response = await axios(`${API_URL}allInvoicesByCompanyId/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios(
+        `${API_URL}allInvoicesByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setDealsData(response.data);
       console.log("Invoice Data:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-    } 
+    }
   };
 
   useEffect(() => {
     fetchInvoiceData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDealsAssignToInvoice = async () => {
@@ -55,7 +59,14 @@ const InvoiceModel = ({ path }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed: " + error.message);
+      if (error?.response?.status === 409) {
+        toast.warning(error?.response?.data?.message);
+      } else {
+        toast.warning(
+          "Error assigning Quote to account ",
+          error?.response?.data?.message
+        );
+      }
     }
   };
 
@@ -108,7 +119,7 @@ const InvoiceModel = ({ path }) => {
                   <tbody>
                     {dealsdata.map((item, index) => (
                       <tr className="" key={item.id}>
-                         <td>
+                        <td>
                           <input
                             type="radio"
                             className="form-check-input"
@@ -118,7 +129,11 @@ const InvoiceModel = ({ path }) => {
                         </td>
                         <td>{item.subject}</td>
                         <td>{item.status}</td>
-                        <td>{new Date(item.invoiceDate).toISOString().substring(0, 10)}</td>
+                        <td>
+                          {new Date(item.invoiceDate)
+                            .toISOString()
+                            .substring(0, 10)}
+                        </td>
                         <td>{item.invoiceOwner}</td>
                       </tr>
                     ))}

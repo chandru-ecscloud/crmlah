@@ -7,13 +7,13 @@ import { toast } from "react-toastify";
 const QuotesModel = ({ path }) => {
   const [loading, setLoading] = useState(true);
 
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
   const [quotesdata, setQuotesData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
-  console.log(path);
+  // console.log(path);
 
   const openModal = () => {
     setIsOpen(true);
@@ -70,7 +70,14 @@ const QuotesModel = ({ path }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed: " + error.message);
+     if (error?.response?.status === 409) {
+       toast.warning(error?.response?.data?.message);
+     } else {
+       toast.warning(
+         "Error assigning Quote to account ",
+         error?.response?.data?.message
+       );
+     }
     }
   };
 
