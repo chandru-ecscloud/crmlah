@@ -21,19 +21,11 @@ import { IoPersonAdd } from "react-icons/io5";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 
 const menuItems = [
-  // { to: "/calls", label: "calls" },
-  // { to: "/meeting", label: "meeting" },
-  // { to: "/report", label: "report" },
-  // { to: "/task", label: "task" },
   { to: "/calendar", label: "Calendar" },
-  // { to: "/projects", label: "projects" },
   { to: "/quotes", label: "Quotes" },
   { to: "/products", label: "Products" },
   { to: "/invoices", label: "Invoices" },
-  // { to: "/services", label: "Services" },
   { to: "/allclient", label: "AllClient" },
-  // { to: "/cases", label: "cases" },
-  // { to: "/vendor", label: "vendor" },
 ];
 
 const mainMenu = [
@@ -67,15 +59,39 @@ function AdminHeader({ handleLogout }) {
   };
   const handleShow = () => setShow(true);
 
-  const filteredMenuItems = menuItems.filter((item) =>
-    item.label.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handelLogoutClick = () => {
     handleLogout();
     navigate("/");
     handleClose();
   };
+ 
+  const filteredMenuItems = menuItems.filter(
+    (item) =>
+      item.label.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !(role === "CMP_USER" && item.label === "Calendar")
+  );
+
+  const filteredMainMenu = mainMenu.filter(
+    (menuItem) => !(role === "CMP_USER" && menuItem.label === "PipeLine")
+  );
+
+  const renderContentBasedOnRole = (role) => {
+    switch(role) {
+      case "CRM_SUPERADMIN":
+        return "CRM Superadmin";
+      case "CRM_ADMIN":
+        return "CRM Admin";
+      case "CMP_OWNER":
+        return "Owner";
+      case "CMP_ADMIN":
+        return "Admin";
+      case "CMP_USER":
+        return "User";
+      default:
+        return role.split('_')[1]; // return the part after the underscore
+    }
+  };
+
   return (
     <>
       <Navbar expand={expand} className="adminNavbar">
@@ -88,7 +104,7 @@ function AdminHeader({ handleLogout }) {
           <Navbar.Toggle aria-controls={`navbar-expand-${expand}`} />
           <Navbar.Collapse id={`navbar-expand-${expand}`}>
             <Nav className=" flex-grow-1 pe-3">
-              {mainMenu.map((menuItem) => (
+              {filteredMainMenu.map((menuItem) => (
                 <NavLink
                   key={menuItem.to}
                   to={menuItem.to}
@@ -207,7 +223,7 @@ function AdminHeader({ handleLogout }) {
             Add user</button> */}
 
           <img className="img-fluid" src={User} alt="user" width={100} />
-          <p>Users</p>
+          <p>{renderContentBasedOnRole(role)}</p>
           {/* <p>Company Name : {company_name}</p> */}
           <p>User Name : {user_name}</p>
 
