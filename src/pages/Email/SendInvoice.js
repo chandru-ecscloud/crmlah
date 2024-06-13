@@ -533,7 +533,7 @@ function SendInvoice({ invoiceData, id }) {
     // Save the PDF
     // doc.save("Invoice.pdf");
     if (action === "download") {
-      doc.save("quotes.pdf");
+      doc.save("Invoice.pdf");
     } else if (action === "print") {
       doc.autoPrint();
       window.open(doc.output("bloburl"), "_blank");
