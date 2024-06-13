@@ -164,7 +164,7 @@ const Schedule = () => {
                           />
                         </td>
                         <td class="third">
-                          <b>Date:</b> 24-01-2024<br />
+                          <b>Date:</b> ${currentData}<br />
                           The Alexcier, 237 Alexandra Road,<br />
                           #04-10, Singapore-159929.
                         </td>
@@ -262,8 +262,7 @@ const Schedule = () => {
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
-        `https://crmlah.com/ecscrm/api/getTodayAvailableSlotsByCompanyId/${2}?date=${
-          formik.values.appointmentStartDate
+        `https://crmlah.com/ecscrm/api/getTodayAvailableSlotsByCompanyId/${2}?date=${formik.values.appointmentStartDate
         }`,
         {
           headers: {
@@ -389,7 +388,7 @@ const Schedule = () => {
                         />
                       </td>
                       <td class="third">
-                        <b>Date:</b> 24-01-2024<br />
+                        <b>Date:</b> ${currentData}<br />
                         The Alexcier, 237 Alexandra Road,<br />
                         #04-10, Singapore-159929.
                       </td>
@@ -494,12 +493,11 @@ const Schedule = () => {
                       id="appointmentStartDate"
                       min={currentData}
                       {...formik.getFieldProps("appointmentStartDate")}
-                      className={`form-size form-control   ${
-                        formik.touched.appointmentStartDate &&
-                        formik.errors.appointmentStartDate
+                      className={`form-size form-control   ${formik.touched.appointmentStartDate &&
+                          formik.errors.appointmentStartDate
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   {formik.touched.appointmentStartDate &&

@@ -30,6 +30,8 @@ function SendInvoice({ invoiceData, id }) {
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+
+  const currentData = new Date().toISOString().split("T")[0];
   const formik = useFormik({
     initialValues: {
       subject: "",
@@ -122,11 +124,10 @@ function SendInvoice({ invoiceData, id }) {
                 <td style="white-space: nowrap;">Total</td>
               </tr>
               
-              ${
-                row.invoiceItemList &&
-                row.invoiceItemList
-                  .map(
-                    (product, productIndex) => `
+              ${row.invoiceItemList &&
+        row.invoiceItemList
+          .map(
+            (product, productIndex) => `
                   <tr class="item">
                     <td>${productIndex + 1}</td>
                     <td>${product.productName || "--"}</td>
@@ -138,9 +139,9 @@ function SendInvoice({ invoiceData, id }) {
                     <td>${product.total || "--"}</td>
                   </tr>
                 `
-                  )
-                  .join("")
-              }
+          )
+          .join("")
+        }
             </table>
           </div>
 
@@ -312,7 +313,7 @@ function SendInvoice({ invoiceData, id }) {
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                       <td class="third">
-                        <b>Date:</b> 24-01-2024<br>
+                        <b>Date:</b> ${currentData}<br>
                         The Alexcier,
                         237 Alexandra Road,<br>
                         #04-10,
@@ -681,11 +682,10 @@ function SendInvoice({ invoiceData, id }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control  ${
-                  formik.touched.subject && formik.errors.subject
+                className={`form-control  ${formik.touched.subject && formik.errors.subject
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>

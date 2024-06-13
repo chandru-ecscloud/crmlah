@@ -19,6 +19,7 @@ import { IoSettings } from "react-icons/io5";
 import { BsBuildingAdd } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import TrialNotification from "./TrialNotification ";
 
 const menuItems = [
   { to: "/calendar", label: "Calendar" },
@@ -44,7 +45,12 @@ function AdminHeader({ handleLogout }) {
   const [show, setShow] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [showNotification, setShowNotification] = useState(true);
+  const daysLeft = 7; // Replace with dynamic value as needed
 
+  const closeNotification = () => {
+    setShowNotification(false);
+  };
   // const company_name = sessionStorage.getItem("company_name");
   const user_name = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
@@ -64,7 +70,7 @@ function AdminHeader({ handleLogout }) {
     navigate("/");
     handleClose();
   };
- 
+
   const filteredMenuItems = menuItems.filter(
     (item) =>
       item.label.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -76,7 +82,7 @@ function AdminHeader({ handleLogout }) {
   );
 
   const renderContentBasedOnRole = (role) => {
-    switch(role) {
+    switch (role) {
       case "CRM_SUPERADMIN":
         return "CRM Superadmin";
       case "CRM_ADMIN":
@@ -157,7 +163,7 @@ function AdminHeader({ handleLogout }) {
                 <NavDropdown
                   title={<FiPlus className="text-white fs-5 mt-2" />}
                   className="navDropdowns"
-                  disabled = {role === "CMP_USER"}
+                  disabled={role === "CMP_USER"}
                 >
                   <NavDropdown.Item as={NavLink} to="/leads/create">
                     <IoMdAdd /> create Lead
@@ -206,17 +212,20 @@ function AdminHeader({ handleLogout }) {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <div className="App">
+        {showNotification && <TrialNotification daysLeft={daysLeft} onClose={closeNotification} />}
+      </div>
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton className="d-flex align-items-center ">
           {(role === "CRM_SUPERADMIN" ||
             role === "CMP_OWNER" ||
             role === "CRM_ADMIN") && (
-            <div>
-              <button className="btn" onClick={handelNavigate}>
-                <IoPersonAdd /> User
-              </button>
-            </div>
-          )}
+              <div>
+                <button className="btn" onClick={handelNavigate}>
+                  <IoPersonAdd /> User
+                </button>
+              </div>
+            )}
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column align-items-center ">
           {/* <button onClick={handelNavigate}>

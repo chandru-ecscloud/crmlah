@@ -35,6 +35,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
   const userId = sessionStorage.getItem("userId");
   const userName = sessionStorage.getItem("user_name");
   const [appointmentTime, setAppointmentTime] = useState([]);
+  const currentData = new Date().toISOString().split("T")[0];
 
   const formik = useFormik({
     initialValues: {
@@ -232,7 +233,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                                 <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png" style="width: 75%; max-width: 180px" alt="Logo" />
                               </td>
                               <td class="third">
-                                <b>Date:</b> 24-01-2024<br />
+                                <b>Date:</b> ${currentData}<br />
                                 The Alexcier, 237 Alexandra Road,<br />
                                 #04-10, Singapore-159929.
                               </td>
@@ -347,7 +348,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                             <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png" style="width: 75%; max-width: 180px" alt="Logo" />
                           </td>
                           <td class="third">
-                            <b>Date:</b> 24-01-2024<br />
+                            <b>Date:</b> ${currentData}<br />
                             The Alexcier, 237 Alexandra Road,<br />
                             #04-10, Singapore-159929.
                           </td>
@@ -505,12 +506,11 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                           name="appointmentFor"
                           id="appointmentFor"
                           {...formik.getFieldProps("appointmentFor")}
-                          className={`form-size form-control   ${
-                            formik.touched.appointmentFor &&
-                            formik.errors.appointmentFor
+                          className={`form-size form-control   ${formik.touched.appointmentFor &&
+                              formik.errors.appointmentFor
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.appointmentFor &&
@@ -527,11 +527,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                         <span className=" text-danger">*</span>
                         <select
                           name="leadId"
-                          className={`form-select form-size ${
-                            formik.touched.leadId && formik.errors.leadId
+                          className={`form-select form-size ${formik.touched.leadId && formik.errors.leadId
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           {...formik.getFieldProps("leadId")}
                         >
                           <option value=""></option>
@@ -618,12 +617,11 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       name="appointmentName"
                       id="appointmentName"
                       {...formik.getFieldProps("appointmentName")}
-                      className={`form-size form-control   ${
-                        formik.touched.appointmentName &&
-                        formik.errors.appointmentName
+                      className={`form-size form-control   ${formik.touched.appointmentName &&
+                          formik.errors.appointmentName
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -648,11 +646,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       name="phoneNumber"
                       id="phoneNumber"
                       {...formik.getFieldProps("phoneNumber")}
-                      className={`form-size form-control   ${
-                        formik.touched.phoneNumber && formik.errors.phoneNumber
+                      className={`form-size form-control   ${formik.touched.phoneNumber && formik.errors.phoneNumber
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -676,11 +673,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       //className="form-size form-select"
                       name="location"
                       {...formik.getFieldProps("location")}
-                      className={`form-size form-select   ${
-                        formik.touched.location && formik.errors.location
+                      className={`form-size form-select   ${formik.touched.location && formik.errors.location
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     >
                       <option value=""></option>
                       <option value="Client Address">Client Address</option>
@@ -733,12 +729,11 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       //className="form-size form-select"
                       name="appointmentMode"
                       {...formik.getFieldProps("appointmentMode")}
-                      className={`form-size form-select   ${
-                        formik.touched.appointmentMode &&
-                        formik.errors.appointmentMode
+                      className={`form-size form-select   ${formik.touched.appointmentMode &&
+                          formik.errors.appointmentMode
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     >
                       <option value=""></option>
                       <option value="ONLINE">ONLINE</option>
@@ -776,11 +771,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       id="street"
                       // value={formData.street || ""}
                       {...formik.getFieldProps("street")}
-                      className={`form-size form-control   ${
-                        formik.touched.street && formik.errors.street
+                      className={`form-size form-control   ${formik.touched.street && formik.errors.street
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -802,11 +796,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       id="city"
                       //value={formData.city || ""}
                       {...formik.getFieldProps("city")}
-                      className={`form-size form-control   ${
-                        formik.touched.city && formik.errors.city
+                      className={`form-size form-control   ${formik.touched.city && formik.errors.city
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -828,11 +821,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       id="state"
                       // value={formData.state || ""}
                       {...formik.getFieldProps("state")}
-                      className={`form-size form-control   ${
-                        formik.touched.state && formik.errors.state
+                      className={`form-size form-control   ${formik.touched.state && formik.errors.state
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -854,11 +846,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       id="zipCode"
                       // value={formData.zipCode || ""}
                       {...formik.getFieldProps("zipCode")}
-                      className={`form-size form-control   ${
-                        formik.touched.zipCode && formik.errors.zipCode
+                      className={`form-size form-control   ${formik.touched.zipCode && formik.errors.zipCode
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -880,11 +871,10 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       id="country"
                       // value={formData.country || ""}
                       {...formik.getFieldProps("country")}
-                      className={`form-size form-control   ${
-                        formik.touched.country && formik.errors.country
+                      className={`form-size form-control   ${formik.touched.country && formik.errors.country
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">
@@ -917,12 +907,11 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                       //value={formData.additionalInformation || ""}
                       id="additionalInformation"
                       {...formik.getFieldProps("additionalInformation")}
-                      className={`form-control  ${
-                        formik.touched.additionalInformation &&
-                        formik.errors.additionalInformation
+                      className={`form-control  ${formik.touched.additionalInformation &&
+                          formik.errors.additionalInformation
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className="row sm-device">

@@ -13,9 +13,9 @@ import "../../styles/dummy.css";
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("*First Name is required"),
   // last_name: Yup.string().required("*Last Name is required"),
-  amount: Yup.number()
-    .typeError('Amount must be a number')
-    .integer('Amount must be an integer'),
+  // amount: Yup.number()
+  //   .typeError('Amount must be a number')
+  //   .integer('Amount must be an integer'),
   shipping_code: Yup.number()
     .typeError('Shipping code must be a number')
     .integer('Shipping code must be an integer'),

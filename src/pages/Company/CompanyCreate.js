@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
     .required("*Confirm password is required"),
   address: Yup.string().required("*Enter Your Address"),
   city: Yup.string().required("*Enter Your City"),
-  state: Yup.string().required("*Enter Your State"),
+  // state: Yup.string().required("*Enter Your State"),
   zipCode: Yup.string().required("*Enter Country Code Number"),
   country: Yup.string().required("*Enter Your Country "),
   name: Yup.string().required("*Name is required"), // Add validation for name field
@@ -202,15 +202,15 @@ function CompanyCreate() {
               <div className="row">
                 <div className="col-lg-6 col-md-6 col-12 mb-5">
                   <div className="d-flex align-items-center justify-content-end  sm-device">
-                    <lable>Name</lable> &nbsp;&nbsp;
+                    <lable>Name</lable>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       {...formik.getFieldProps("name")}
                       type="text"
-                      className={`form-size form-control ${
-                        formik.touched.name && formik.errors.name
+                      className={`form-size form-control ${formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       id="name"
                       name="name"
                     />
@@ -226,14 +226,14 @@ function CompanyCreate() {
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mb-5">
                   <div className="d-flex align-items-center justify-content-end sm-device">
-                    <lable>User Name</lable> &nbsp;&nbsp;
+                    <lable>User Name</lable>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${
-                        formik.touched.userName && formik.errors.userName
+                      className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       {...formik.getFieldProps("userName")}
                       name="userName"
                       id="userName"
@@ -263,14 +263,14 @@ function CompanyCreate() {
 
                 <div className="col-lg-6 col-md-6 col-12 mb-4">
                   <div className="d-flex align-items-center justify-content-end sm-device">
-                    <lable>Company Name</lable> &nbsp;&nbsp;
+                    <lable>Company Name</lable>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${
-                        formik.touched.companyName && formik.errors.companyName
+                      className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       {...formik.getFieldProps("companyName")}
                       name="companyName"
                       id="companyName"
@@ -290,7 +290,8 @@ function CompanyCreate() {
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mb-4">
                   <div className="d-flex align-items-center justify-content-end  sm-device">
-                    <lable>Phone</lable> &nbsp;&nbsp;
+                    <lable>Phone</lable>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <div className="input-group" style={{ width: "60%" }}>
                       <div>
                         <select
@@ -334,7 +335,8 @@ function CompanyCreate() {
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end  sm-device">
-                    <lable>Email</lable> &nbsp;&nbsp;
+                    <lable>Email</lable>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       {...formik.getFieldProps("email")}
                       type="text"
@@ -357,7 +359,8 @@ function CompanyCreate() {
 
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end  sm-device">
-                    <label>Password</label>&nbsp;&nbsp;
+                    <label>Password</label>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <div className="input-group " style={{ width: "60%" }}>
                       <input
                         {...formik.getFieldProps("password")}
@@ -388,7 +391,8 @@ function CompanyCreate() {
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mb-3">
                   <div className="d-flex align-items-center justify-content-end  sm-device">
-                    <label>Confrim Password</label>&nbsp;&nbsp;
+                    <label>Confrim Password</label>
+                    <span className="text-danger">*</span> &nbsp;&nbsp;
                     <div className="input-group " style={{ width: "60%" }}>
                       <input
                         {...formik.getFieldProps("cpassword")}
@@ -422,7 +426,8 @@ function CompanyCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Address</lable> &nbsp;&nbsp;
+                <lable>Address</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("address")}
                   type="text"
@@ -442,7 +447,8 @@ function CompanyCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>City</lable> &nbsp;&nbsp;
+                <lable>City</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("city")}
                   type="text"
@@ -482,7 +488,8 @@ function CompanyCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Zip Code</lable> &nbsp;&nbsp;
+                <lable>Zip Code</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("zipCode")}
                   type="text"
@@ -502,7 +509,8 @@ function CompanyCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Country</lable> &nbsp;&nbsp;
+                <lable>Country</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("country")}
                   type="text"

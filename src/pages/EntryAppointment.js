@@ -38,6 +38,8 @@ const EntryAppointment = () => {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [appointmentTime, setAppointmentTime] = useState([]);
 
+  const currentData = new Date().toISOString().split("T")[0];
+
   console.log(appointmentTime);
 
   const formik = useFormik({
@@ -195,7 +197,7 @@ const EntryAppointment = () => {
                             />
                           </td>
                           <td class="third">
-                            <b>Date:</b> 24-01-2024<br />
+                            <b>Date:</b> ${currentData}<br />
                             The Alexcier, 237 Alexandra Road,<br />
                             #04-10, Singapore-159929.
                           </td>
@@ -302,8 +304,7 @@ const EntryAppointment = () => {
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}getTodayAvailableSlotsByCompanyId/${2}?date=${
-          formik.values.appointmentStartDate
+        `${API_URL}getTodayAvailableSlotsByCompanyId/${2}?date=${formik.values.appointmentStartDate
         }`,
         {
           headers: {
@@ -366,12 +367,11 @@ const EntryAppointment = () => {
                           name="first_name"
                           id="first_name"
                           {...formik.getFieldProps("first_name")}
-                          className={`form-size form-control mt-1 ${
-                            formik.touched.first_name &&
-                            formik.errors.first_name
+                          className={`form-size form-control mt-1 ${formik.touched.first_name &&
+                              formik.errors.first_name
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.first_name &&
@@ -389,11 +389,10 @@ const EntryAppointment = () => {
                           name="last_name"
                           id="last_name"
                           {...formik.getFieldProps("last_name")}
-                          className={`form-size form-control mt-1 ${
-                            formik.touched.last_name && formik.errors.last_name
+                          className={`form-size form-control mt-1 ${formik.touched.last_name && formik.errors.last_name
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.last_name && formik.errors.last_name && (
@@ -410,12 +409,11 @@ const EntryAppointment = () => {
                             id="appointmentStartDate"
                             min={getCurrentLocalDate()}
                             {...formik.getFieldProps("appointmentStartDate")}
-                            className={`form-size form-control mt-1  ${
-                              formik.touched.appointmentStartDate &&
-                              formik.errors.appointmentStartDate
+                            className={`form-size form-control mt-1  ${formik.touched.appointmentStartDate &&
+                                formik.errors.appointmentStartDate
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                              }`}
                           />
 
                           {formik.touched.appointmentStartDate &&
@@ -465,11 +463,10 @@ const EntryAppointment = () => {
                           name="email"
                           id="email"
                           {...formik.getFieldProps("email")}
-                          className={`form-size form-control mt-1  ${
-                            formik.touched.email && formik.errors.email
+                          className={`form-size form-control mt-1  ${formik.touched.email && formik.errors.email
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.email && formik.errors.email && (
@@ -484,11 +481,10 @@ const EntryAppointment = () => {
                           name="phone"
                           id="phone"
                           {...formik.getFieldProps("phone")}
-                          className={`form-size form-control mt-1  ${
-                            formik.touched.phone && formik.errors.phone
+                          className={`form-size form-control mt-1  ${formik.touched.phone && formik.errors.phone
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.phone && formik.errors.phone && (
@@ -505,12 +501,11 @@ const EntryAppointment = () => {
                           //value={formData.additionalInformation || ""}
                           id="additionalInformation"
                           {...formik.getFieldProps("additionalInformation")}
-                          className={`form-control mt-1 ${
-                            formik.touched.additionalInformation &&
-                            formik.errors.additionalInformation
+                          className={`form-control mt-1 ${formik.touched.additionalInformation &&
+                              formik.errors.additionalInformation
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                       </div>
                       {formik.touched.additionalInformation &&

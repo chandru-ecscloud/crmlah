@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
   role: Yup.string().required("*Role is required"),
   address: Yup.string().required("*Enter Your Address"),
   city: Yup.string().required("*Enter Your City"),
-  state: Yup.string().required("*Enter Your State"),
+  // state: Yup.string().required("*Enter Your State"),
   zipCode: Yup.string().required("*Enter Country Code Number"),
   country: Yup.string().required("*Enter Your Country "),
   licenseLimit: Yup.number()
@@ -54,7 +54,7 @@ function CompanyEdit() {
       companyId: id,
       name: "",
       companyName: "",
-      countryCode:"",
+      countryCode: "",
       phone: "",
       email: "",
       registrationStatus: "",
@@ -68,7 +68,7 @@ function CompanyEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Company Edit Data:",data);
+      console.log("Company Edit Data:", data);
       try {
         // Make both API calls simultaneously
         const [userResponse, companyResponse] = await Promise.all([
@@ -201,7 +201,8 @@ function CompanyEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Name</lable> &nbsp;&nbsp;
+                <lable>Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("name")}
                   type="text"
@@ -221,7 +222,8 @@ function CompanyEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Company Name</lable> &nbsp;&nbsp;
+                <lable>Company Name</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("companyName")}
                   type="text"
@@ -292,7 +294,8 @@ function CompanyEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable> &nbsp;&nbsp;
+                <lable>Email</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("email")}
                   type="text"
@@ -365,7 +368,8 @@ function CompanyEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>License Limit</label> &nbsp;&nbsp;
+                <label>License Limit</label>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("licenseLimit")}
                   type="text"
@@ -470,7 +474,8 @@ function CompanyEdit() {
             </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Address</lable> &nbsp;&nbsp;
+                <lable>Address</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("address")}
                   type="text"
@@ -490,7 +495,8 @@ function CompanyEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>City</lable> &nbsp;&nbsp;
+                <lable>City</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("city")}
                   type="text"
@@ -510,7 +516,8 @@ function CompanyEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>State</lable> &nbsp;&nbsp;
+                <lable>State</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("state")}
                   type="text"
@@ -530,7 +537,8 @@ function CompanyEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Zip Code</lable> &nbsp;&nbsp;
+                <lable>Zip Code</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("zipCode")}
                   type="text"
@@ -550,7 +558,8 @@ function CompanyEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Country</lable> &nbsp;&nbsp;
+                <lable>Country</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   {...formik.getFieldProps("country")}
                   type="text"

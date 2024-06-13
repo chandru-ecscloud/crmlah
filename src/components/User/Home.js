@@ -114,12 +114,9 @@ function Home() {
               performance solution.
             </p>
             <div className="d-flex justify-content-center mt-3 ">
-              <button
-                className="btn  btn-lg "
-                style={{ backgroundColor: "#3D63EA" }}
-              >
-                <span className="text-white">Book Now</span>
-              </button>
+              <Link to={"/entryappointment"} className="mt-3">
+                <button class="btn donateBtn py-3">Book Demo</button>
+              </Link>
             </div>
           </div>
         </div>

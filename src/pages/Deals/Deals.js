@@ -611,7 +611,7 @@ const Deals = () => {
                         handleDealConvert(table.getSelectedRowModel().rows)
                       }
                     >
-                      soft Delete
+                      Soft Delete
                     </button>
                   </li>
                   <li>

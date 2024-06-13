@@ -48,7 +48,7 @@ const validationSchema = yup.object().shape({
     }),
   address: yup.string().required("*Enter Address"),
   city: yup.string().required("*Enter city"),
-  state: yup.string().required("*Enter state"),
+  // state: yup.string().required("*Enter state"),
   zipCode: yup
     .string()
     .required("*Enter zipcode")
@@ -226,8 +226,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("userName")}
                   name="userName"
@@ -263,8 +263,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.name && formik.errors.name
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("name")}
                   name="name"
@@ -288,12 +288,13 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
+                  readOnly
                 />
               </div>
               <div className="row sm-device">
@@ -313,8 +314,8 @@ function UserCreate() {
                 <input
                   type="email"
                   className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("email")}
                   id="email"
@@ -337,8 +338,8 @@ function UserCreate() {
                 <select
                   type="text"
                   className={`form-size form-select  ${formik.touched.role && formik.errors.role
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("role")}
                   id="role"
@@ -365,9 +366,9 @@ function UserCreate() {
                 <select
                   type="text"
                   className={`form-size form-select  ${formik.touched.appointmentRoleType &&
-                      formik.errors.appointmentRoleType
-                      ? "is-invalid"
-                      : ""
+                    formik.errors.appointmentRoleType
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("appointmentRoleType")}
                   id="appointmentRoleType"
@@ -398,8 +399,8 @@ function UserCreate() {
                 <select
                   id="registrationStatus"
                   className={`form-size form-select  ${formik.touched.registrationStatus && formik.errors.registrationStatus
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("registrationStatus")}
                 >
@@ -434,8 +435,8 @@ function UserCreate() {
                       id="countryCode"
                       name="countryCode"
                       className={`form-size form-control  ${formik.touched.countryCode && formik.errors.countryCode
-                          ? "is-invalid"
-                          : ""
+                        ? "is-invalid"
+                        : ""
                         }`}
                       style={{
                         width: "80px",
@@ -451,8 +452,8 @@ function UserCreate() {
                     type="tel"
                     name="phone"
                     className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
@@ -479,8 +480,8 @@ function UserCreate() {
                   <input
                     type={showPassword ? "text" : "password"}
                     className={`form-size form-control  ${formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("password")}
                     name="password"
@@ -514,8 +515,8 @@ function UserCreate() {
                   <input
                     type={showCPassword ? "text" : "password"}
                     className={`form-size form-control  ${formik.touched.cpassword && formik.errors.cpassword
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("cpassword")}
                     name="cpassword"
@@ -558,8 +559,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.address && formik.errors.address
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("address")}
                   name="address"
@@ -582,8 +583,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.city && formik.errors.city
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("city")}
                   name="city"
@@ -602,12 +603,12 @@ function UserCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>State</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.state && formik.errors.state
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("state")}
                   name="state"
@@ -630,8 +631,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
@@ -655,8 +656,8 @@ function UserCreate() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.country && formik.errors.country
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("country")}
                   name="country"

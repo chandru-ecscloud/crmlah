@@ -225,7 +225,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                                   />
                                 </td>
                                 <td class="third">
-                                  <b>Date:</b> 24-01-2024<br />
+                                  <b>Date:</b> ${currentData}<br />
                                   The Alexcier, 237 Alexandra Road,<br />
                                   #04-10, Singapore-159929.
                                 </td>
@@ -234,7 +234,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           </td>
                         </tr>
                       </table>
-
 
                     <div class="invoice" >
                       <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
@@ -373,7 +372,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                               />
                             </td>
                             <td class="third">
-                              <b>Date:</b> 24-01-2024<br />
+                              <b>Date:</b> ${currentData}<br />
                               The Alexcier, 237 Alexandra Road,<br />
                               #04-10, Singapore-159929.
                             </td>
@@ -672,12 +671,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                             name="appointmentFor"
                             id="appointmentFor"
                             {...formik.getFieldProps("appointmentFor")}
-                            className={`form-size form-control   ${
-                              formik.touched.appointmentFor &&
+                            className={`form-size form-control   ${formik.touched.appointmentFor &&
                               formik.errors.appointmentFor
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                              ? "is-invalid"
+                              : ""
+                              }`}
                           />
                         </div>
                         {formik.touched.appointmentFor &&
@@ -694,11 +692,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           <span className=" text-danger">*</span> &nbsp;&nbsp;
                           <select
                             name="leadId"
-                            className={`form-select form-size ${
-                              formik.touched.leadId && formik.errors.leadId
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                            className={`form-select form-size ${formik.touched.leadId && formik.errors.leadId
+                              ? "is-invalid"
+                              : ""
+                              }`}
                             {...formik.getFieldProps("leadId")}
                           >
                             <option value=""></option>
@@ -766,12 +763,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         name="appointmentName"
                         id="appointmentName"
                         {...formik.getFieldProps("appointmentName")}
-                        className={`form-size form-control   ${
-                          formik.touched.appointmentName &&
+                        className={`form-size form-control   ${formik.touched.appointmentName &&
                           formik.errors.appointmentName
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -797,12 +793,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="appointmentStartDate"
                         min={currentData}
                         {...formik.getFieldProps("appointmentStartDate")}
-                        className={`form-size form-control   ${
-                          formik.touched.appointmentStartDate &&
+                        className={`form-size form-control   ${formik.touched.appointmentStartDate &&
                           formik.errors.appointmentStartDate
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -914,11 +909,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //className="form-size form-select"
                         name="location"
                         {...formik.getFieldProps("location")}
-                        className={`form-size form-select   ${
-                          formik.touched.location && formik.errors.location
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-select   ${formik.touched.location && formik.errors.location
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       >
                         <option value=""></option>
                         <option value="Client Address">Client Address</option>
@@ -950,12 +944,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="phoneNumber"
                         value={"9797979797"}
                         {...formik.getFieldProps("phoneNumber")}
-                        className={`form-size form-control   ${
-                          formik.touched.phoneNumber &&
+                        className={`form-size form-control   ${formik.touched.phoneNumber &&
                           formik.errors.phoneNumber
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -979,12 +972,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //className="form-size form-select"
                         name="appointmentMode"
                         {...formik.getFieldProps("appointmentMode")}
-                        className={`form-size form-select   ${
-                          formik.touched.appointmentMode &&
+                        className={`form-size form-select   ${formik.touched.appointmentMode &&
                           formik.errors.appointmentMode
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       >
                         <option value=""></option>
                         <option value="ONLINE">ONLINE</option>
@@ -1152,11 +1144,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="street"
                         // value={formData.street || ""}
                         {...formik.getFieldProps("street")}
-                        className={`form-size form-control   ${
-                          formik.touched.street && formik.errors.street
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-control   ${formik.touched.street && formik.errors.street
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1178,11 +1169,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="city"
                         //value={formData.city || ""}
                         {...formik.getFieldProps("city")}
-                        className={`form-size form-control   ${
-                          formik.touched.city && formik.errors.city
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-control   ${formik.touched.city && formik.errors.city
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1204,11 +1194,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="state"
                         // value={formData.state || ""}
                         {...formik.getFieldProps("state")}
-                        className={`form-size form-control   ${
-                          formik.touched.state && formik.errors.state
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-control   ${formik.touched.state && formik.errors.state
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1230,11 +1219,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="zipCode"
                         // value={formData.zipCode || ""}
                         {...formik.getFieldProps("zipCode")}
-                        className={`form-size form-control   ${
-                          formik.touched.zipCode && formik.errors.zipCode
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-control   ${formik.touched.zipCode && formik.errors.zipCode
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1256,11 +1244,10 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="country"
                         // value={formData.country || ""}
                         {...formik.getFieldProps("country")}
-                        className={`form-size form-control   ${
-                          formik.touched.country && formik.errors.country
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-size form-control   ${formik.touched.country && formik.errors.country
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1294,12 +1281,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //value={formData.additionalInformation || ""}
                         id="additionalInformation"
                         {...formik.getFieldProps("additionalInformation")}
-                        className={`form-control  ${
-                          formik.touched.additionalInformation &&
+                        className={`form-control  ${formik.touched.additionalInformation &&
                           formik.errors.additionalInformation
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                     </div>
                     <div className="row sm-device">

@@ -841,6 +841,51 @@ nav .nav-link Link {
   color: #006ff5 !important;  
 }
 
+/* TrialNotification.css */
+.notification-bar {
+  display: flex;
+  font-size: smaller;
+  justify-content: space-between;
+  align-items: center;
+  /* background-color: #fff3cd; */
+  background-color: #fff3cd;
+  color: #4d3900;
+  /* padding: 5px 10px; */
+  border: 1px solid #ffeeba;
+  /* border-radius: 5px; */
+}
+
+.notification-bar p {
+  margin: 0;
+  flex-grow: 1;
+  font-size: 0.8em;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.upgradebutton{
+  background: none;
+  border: 1px solid #af8101;
+  color: #af8101;
+  white-space: nowrap;
+  font-size: small;
+  cursor: pointer;
+  margin-left: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.upgradebutton:hover{
+  background-color: #d19900;
+  color: #fff3cd;
+}
 
 
 

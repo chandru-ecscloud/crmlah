@@ -159,7 +159,7 @@ function LogIn({ handleLogin }) {
                 </p>
                 <p className="forgotWord text-center">
                   Don't have an account?{" "}
-                  <Link to="/signin" className="password-link">
+                  <Link to="/register" className="password-link">
                     Sign up
                   </Link>
                 </p>
