@@ -34,15 +34,22 @@ const validationSchema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("*Confirm Password is required"),
   countryCode: yup.string().required("*Country Code is required"),
-  phone: yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
       const { countryCode } = this.parent;
-      if (countryCode === '65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      if (countryCode === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (countryCode === '91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      if (countryCode === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
       }
       return true; // Default validation for other country codes
     }),
@@ -96,7 +103,6 @@ function UserCreate() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log(data);
       data.jwtRole = data.role;
       try {
         const response = await axios.post(`${API_URL}newUserRegister`, data, {
@@ -106,6 +112,7 @@ function UserCreate() {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+
           navigate("/users");
         } else {
           toast.error(response.data.message);
@@ -165,6 +172,30 @@ function UserCreate() {
       fetchUserData();
     }
   }, [formik.values.userName]);
+
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}getUserRegistrationDetailsByCompanyId/${companyId}`
+        );
+
+        formik.setFieldValue("companyName", response.data.companyName);
+        formik.setFieldValue("address", response.data.address);
+        formik.setFieldValue("city", response.data.city);
+        formik.setFieldValue("state", response.data.state);
+        formik.setFieldValue("zipCode", response.data.zipCode);
+        formik.setFieldValue("country", response.data.country);
+        // console.log("userData", response.data.companyName);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
+
+    userData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
@@ -225,10 +256,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.userName && formik.errors.userName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("userName")}
                   name="userName"
                   id="userName"
@@ -262,10 +294,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.name && formik.errors.name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.name && formik.errors.name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("name")}
                   name="name"
                   id="name"
@@ -287,10 +320,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.companyName && formik.errors.companyName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -313,10 +347,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -337,10 +372,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${formik.touched.role && formik.errors.role
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-select  ${
+                    formik.touched.role && formik.errors.role
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("role")}
                   id="role"
                 >
@@ -365,11 +401,12 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${formik.touched.appointmentRoleType &&
+                  className={`form-size form-select  ${
+                    formik.touched.appointmentRoleType &&
                     formik.errors.appointmentRoleType
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("appointmentRoleType")}
                   id="appointmentRoleType"
                 >
@@ -398,10 +435,12 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   id="registrationStatus"
-                  className={`form-size form-select  ${formik.touched.registrationStatus && formik.errors.registrationStatus
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-select  ${
+                    formik.touched.registrationStatus &&
+                    formik.errors.registrationStatus
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("registrationStatus")}
                 >
                   {/* <option value=""></option> */}
@@ -434,27 +473,31 @@ function UserCreate() {
                       {...formik.getFieldProps("countryCode")}
                       id="countryCode"
                       name="countryCode"
-                      className={`form-size form-control  ${formik.touched.countryCode && formik.errors.countryCode
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-size form-control  ${
+                        formik.touched.countryCode && formik.errors.countryCode
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="65" selected>+65</option>
+                      <option value="65" selected>
+                        +65
+                      </option>
                       <option value="91">+91</option>
                     </select>
                   </div>
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -479,10 +522,11 @@ function UserCreate() {
                 <div className="input-group" style={{ width: "60%" }}>
                   <input
                     type={showPassword ? "text" : "password"}
-                    className={`form-size form-control  ${formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.password && formik.errors.password
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("password")}
                     name="password"
                     id="password"
@@ -493,7 +537,11 @@ function UserCreate() {
                     onClick={togglePasswordVisibility}
                     style={{ borderLeft: "none !important" }}
                   >
-                    {showPassword ? <FaEyeSlash className="text-secondary" /> : <FaEye className="text-secondary" />}
+                    {showPassword ? (
+                      <FaEyeSlash className="text-secondary" />
+                    ) : (
+                      <FaEye className="text-secondary" />
+                    )}
                   </span>
                 </div>
               </div>
@@ -514,10 +562,11 @@ function UserCreate() {
                 <div className="input-group" style={{ width: "60%" }}>
                   <input
                     type={showCPassword ? "text" : "password"}
-                    className={`form-size form-control  ${formik.touched.cpassword && formik.errors.cpassword
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.cpassword && formik.errors.cpassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("cpassword")}
                     name="cpassword"
                     id="cpassword"
@@ -528,7 +577,11 @@ function UserCreate() {
                     onClick={toggleCPasswordVisibility}
                     style={{ borderLeft: "none !important" }}
                   >
-                    {showCPassword ? <FaEyeSlash className="text-secondary" /> : <FaEye className="text-secondary" />}
+                    {showCPassword ? (
+                      <FaEyeSlash className="text-secondary" />
+                    ) : (
+                      <FaEye className="text-secondary" />
+                    )}
                   </span>
                 </div>
               </div>
@@ -558,10 +611,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.address && formik.errors.address
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.address && formik.errors.address
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("address")}
                   name="address"
                   id="address"
@@ -582,10 +636,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.city && formik.errors.city
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.city && formik.errors.city
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("city")}
                   name="city"
                   id="city"
@@ -606,10 +661,11 @@ function UserCreate() {
                 &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.state && formik.errors.state
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.state && formik.errors.state
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("state")}
                   name="state"
                   id="state"
@@ -630,10 +686,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.zipCode && formik.errors.zipCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
@@ -655,10 +712,11 @@ function UserCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.country && formik.errors.country
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.country && formik.errors.country
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("country")}
                   name="country"
                   id="country"

@@ -9,14 +9,21 @@ import {
 import { TbPigMoney } from "react-icons/tb";
 import { LinearProgress } from "@mui/material";
 import { API_URL } from "../Config/URL";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Dashboard() {
+  const [searchParams] = useSearchParams();
+  const message = searchParams.get("message");
   const [dashboardData, setDashboardData] = useState(null);
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
   const companyId = sessionStorage.getItem("companyId");
 
   useEffect(() => {
+    if (message) {
+      toast.success(message);
+    }
     const fetchData = async () => {
       try {
         const response = await axios.get(

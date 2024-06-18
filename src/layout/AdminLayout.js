@@ -61,11 +61,13 @@ import CalenderEdit from "../pages/Calendar/CalenderEdit";
 import CalenderShow from "../pages/Calendar/CalenderShow";
 
 import AllClient from "../pages/AllClient";
+import TrialNotification from "../components/common/TrialNotification ";
 
 function AdminLayout({ handleLogout }) {
   return (
     <BrowserRouter>
       <AdminHeader handleLogout={handleLogout} />
+      <TrialNotification />
       <ScrollToTop />
       <ToastContainer position="top-center" />
       <Routes>

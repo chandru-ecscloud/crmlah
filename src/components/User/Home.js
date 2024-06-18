@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Mobile from "../../assets/mobile.png";
 import Lead from "../../assets/lead.png";
 import home from "../../assets/home.png";
@@ -9,9 +9,53 @@ import Speaker from "../../assets/speaker.png";
 import Rocket from "../../assets/rocket.png";
 import Calender from "../../assets/calender.png";
 import Sensex from "../../assets/sensex.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
-function Home() {
+function Home({ handleLogin }) {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("userId");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        if (userId) {
+          const response = await axios.post(
+            `${API_URL}verifyEmailByUserId/${userId}`
+          );
+          if (response.status === 200) {
+            sessionStorage.setItem("email", response.data.email);
+            sessionStorage.setItem("companyId", response.data.companyId);
+            sessionStorage.setItem("role", response.data.role);
+            sessionStorage.setItem("token", response.data.token);
+            sessionStorage.setItem("userId", response.data.userId);
+            sessionStorage.setItem(
+              "appointmentRole",
+              response.data.appointmentRole
+            );
+            handleLogin(); // Make sure handleLogin is defined somewhere in your component
+            navigate(`/dashboard?message=${response.data.message}`);
+            toast.success(response.data.message);
+          } else {
+            toast.error(response.data.message);
+          }
+        }
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+          navigate("/login");
+        } else {
+          toast.error("An error occurred while verifying the user.");
+        }
+      }
+    };
+
+    verifyUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <section className="container-fluid ">
       <div

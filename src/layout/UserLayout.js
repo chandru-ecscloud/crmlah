@@ -28,9 +28,8 @@ function UserLayout({ handleLogin }) {
         <Routes>
           <Route path="/about" element={<About />} />
           <Route path="/feature" element={<Feature />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home handleLogin={handleLogin} />} />
           <Route path="/register" element={<SignIn />} />
           <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />
           <Route path="/forgot" element={<Forgot />} />
@@ -42,7 +41,7 @@ function UserLayout({ handleLogin }) {
           />
           <Route path="/entryappointment" element={<EntryAppointment />} />
           <Route path="*" element={<Page404 />} />
-          <Route path="/privacyandpolicy" element={<PrivacyAndPolicy/>} />
+          <Route path="/privacyandpolicy" element={<PrivacyAndPolicy />} />
         </Routes>
         <a
           href="https://api.whatsapp.com/send/?phone=916379086118&text=Hello! I visited your website.&type=phone_number&app_absent=0"
