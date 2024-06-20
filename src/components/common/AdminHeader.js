@@ -10,7 +10,7 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import CRMLogo from "../../assets/CRMLogo.png";
 import User from "../../assets/user.png";
-import { IoMdAdd, IoMdAddCircleOutline } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 // import { Tooltip, Zoom } from "@mui/material";
 import { AiOutlineEllipsis } from "react-icons/ai";
@@ -18,7 +18,7 @@ import { FiPlus } from "react-icons/fi";
 import { IoSettings } from "react-icons/io5";
 import { BsBuildingAdd } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
-import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const menuItems = [
   { to: "/calendar", label: "Calendar" },
@@ -64,7 +64,7 @@ function AdminHeader({ handleLogout }) {
     navigate("/");
     handleClose();
   };
- 
+
   const filteredMenuItems = menuItems.filter(
     (item) =>
       item.label.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -76,7 +76,7 @@ function AdminHeader({ handleLogout }) {
   );
 
   const renderContentBasedOnRole = (role) => {
-    switch(role) {
+    switch (role) {
       case "CRM_SUPERADMIN":
         return "CRM Superadmin";
       case "CRM_ADMIN":
@@ -88,7 +88,7 @@ function AdminHeader({ handleLogout }) {
       case "CMP_USER":
         return "User";
       default:
-        return role.split('_')[1]; // return the part after the underscore
+        return role.split("_")[1]; // return the part after the underscore
     }
   };
 
@@ -157,7 +157,7 @@ function AdminHeader({ handleLogout }) {
                 <NavDropdown
                   title={<FiPlus className="text-white fs-5 mt-2" />}
                   className="navDropdowns"
-                  disabled = {role === "CMP_USER"}
+                  disabled={role === "CMP_USER"}
                 >
                   <NavDropdown.Item as={NavLink} to="/leads/create">
                     <IoMdAdd /> create Lead
@@ -206,6 +206,7 @@ function AdminHeader({ handleLogout }) {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton className="d-flex align-items-center ">
           {(role === "CRM_SUPERADMIN" ||

@@ -24,6 +24,7 @@ function SendQuotes({ accountData }) {
   const role = sessionStorage.getItem("role");
   const [subject, setSubject] = useState("");
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const currentData = new Date().toISOString().split("T")[0];
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
 
@@ -126,11 +127,10 @@ function SendQuotes({ accountData }) {
                 <td style="white-space: nowrap;">Total</td>
               </tr>
               
-              ${
-                row.quotesItemList &&
-                row.quotesItemList
-                  .map(
-                    (product, productIndex) => `
+              ${row.quotesItemList &&
+        row.quotesItemList
+          .map(
+            (product, productIndex) => `
                   <tr class="item">
                     <td>${productIndex + 1}</td>
                     <td>${product.productName || "--"}</td>
@@ -142,9 +142,9 @@ function SendQuotes({ accountData }) {
                     <td>${product.total || "--"}</td>
                   </tr>
                 `
-                  )
-                  .join("")
-              }
+          )
+          .join("")
+        }
             </table>
           </div>
 
@@ -314,7 +314,7 @@ function SendQuotes({ accountData }) {
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                       <td class="third">
-                        <b>Date:</b> 24-01-2024<br>
+                        <b>Date:</b> ${currentData}<br>
                         The Alexcier,
                         237 Alexandra Road,<br>
                         #04-10,
@@ -629,11 +629,10 @@ function SendQuotes({ accountData }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control form-size  ${
-                  formik.touched.subject && formik.errors.subject
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control form-size  ${formik.touched.subject && formik.errors.subject
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>

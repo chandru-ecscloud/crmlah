@@ -10,6 +10,7 @@ const Invoice = () => {
   const subject = "For Testing Purpose";
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
+  const currentData = new Date().toISOString().split("T")[0];
 
   const generateInvoice = (data) => {
     const tableRows = data.map(
@@ -104,7 +105,7 @@ const Invoice = () => {
                           style="width: 75%; max-width: 180px;" alt="Logo">
                       </td>
                       <td class="third">
-                        <b>Date:</b> 24-01-2024<br>
+                        <b>Date:</b> ${currentData}<br>
                         The Alexcier,
                         237 Alexandra Road,<br>
                         #04-10,

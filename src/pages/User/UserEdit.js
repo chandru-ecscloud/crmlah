@@ -41,7 +41,7 @@ const validationSchema = yup.object().shape({
     }),
   address: yup.string().required("*Enter Address"),
   city: yup.string().required("*Enter city"),
-  state: yup.string().required("*Enter state"),
+  // state: yup.string().required("*Enter state"),
   zipCode: yup
     .string()
     .required("*Enter zipcode")
@@ -193,6 +193,7 @@ function UserEdit() {
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
+                  readOnly
                 />
               </div>
               <div className="row sm-device">
@@ -436,7 +437,7 @@ function UserEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>State</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${

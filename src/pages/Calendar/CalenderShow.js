@@ -20,6 +20,7 @@ function CalenderShow({
   //   const { id } = useParams();
   const [clientData, setClientData] = useState({});
 
+  const currentData = new Date().toISOString().split("T")[0];
   // console.log("Ids is", clientData)
   // const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -87,7 +88,7 @@ function CalenderShow({
                         style="width: 75%; max-width: 180px" alt="Logo" />
                     </td>
                     <td class="third">
-                      <b>Date:</b> 24-01-2024<br />
+                      <b>Date:</b> ${currentData}<br />
                       The Alexcier, 237 Alexandra Road,<br />
                       #04-10, Singapore-159929.
                     </td>
