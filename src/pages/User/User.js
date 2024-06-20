@@ -302,6 +302,10 @@ const UserActivation = () => {
     navigate("/users/create");
   };
 
+  const handelProposalNavigate = () => {
+    navigate("/proposal");
+  };
+
   const table = useMaterialReactTable({
     columns,
     data,

@@ -44,6 +44,12 @@ const Lead = () => {
   const [show, setShow] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);
+  const [showRadios, setShowRadios] = useState(false);
+
+  const handleProposalTypeChange = (event) => {
+    formik.handleChange(event);
+    setShowRadios(!!event.target.value);
+  };
 
   const handleClose = () => {
     setShow(false);
@@ -58,16 +64,15 @@ const Lead = () => {
   };
 
   const validationSchema = yup.object().shape({
-    propasalType: yup.string().required("*Propasal Type is required"),
-    propasal: yup.array()
+    proposalType: yup.string().required("*proposal Type is required"),
+    proposal: yup.array()
       .of(yup.string().required("*Working Days is required!"))
       .min(1, "*Working Days is required!"),
   });
   console.log("object", datas)
   const formik = useFormik({
     initialValues: {
-      propasalType: "",
-      propasal: "",
+      proposalType: "",
       file: "",
       generateLink: "",
 
@@ -797,77 +802,73 @@ const Lead = () => {
                 closeVariant="white" className="Calenderview"
               >
                 <Modal.Title>
-                  <p className="headColor">Create Company</p>
+                  Send Proposal
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <div className="row">
                   <div className="mb-2">
-                    <label className="form-label">
-                      Proposal Type
-                    </label>
+                    <label className="form-label">Proposal Type</label>
                     <select
-                      {...formik.getFieldProps("propasalType")}
-                      class={`form-select  ${formik.touched.propasalType && formik.errors.propasalType
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      {...formik.getFieldProps("proposalType")}
+                      className={`form-select ${formik.touched.proposalType && formik.errors.proposalType ? "is-invalid" : ""}`}
                       aria-label="Default select example"
+                      onChange={handleProposalTypeChange}
                     >
-                      <option selected></option>
+                      <option selected value=""></option>
                       <option value="Company_Profile">Company Profile</option>
                       <option value="Other's">Other's</option>
                     </select>
-                    {formik.touched.propasalType && formik.errors.propasalType && (
+                    {formik.touched.proposalType && formik.errors.proposalType && (
                       <div className="invalid-feedback">
-                        {formik.errors.propasalType}
+                        {formik.errors.proposalType}
                       </div>
                     )}
                   </div>
 
-                  <div className="mb-2">
-
-                    <label className="form-label">
-                      Proposal
-                    </label>
-                    <div className="">
-                      <input class="form-check-input"
-                        type="radio"
-                        name="radio"
-                        id="1"
+                  {showRadios && (
+                    <div className="mb-2">
+                      <div className="">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="radio"
+                          id="1"
                         >
-                      </input>&nbsp;&nbsp;
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        Company Profile
-                      </label>
-                    </div>
-                    <div className="">
-                      <input class="form-check-input"
-                        type="radio"
-                        name="radio"
-                        id="2">
-                      </input>&nbsp;&nbsp;
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        Infrastructure
-                      </label>
-                    </div>
-                    <div className="">
-                      <input class="form-check-input"
-                        type="radio"
-                        name="radio"
-                        id="3">
-                      </input>&nbsp;&nbsp;
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        AWS
-                      </label>
-                    </div>
-                    {formik.touched.propasal && formik.errors.propasal && (
-                      <div className="invalid-feedback">
-                        {formik.errors.propasal}
+                        </input>&nbsp;&nbsp;
+                        <label className="form-check-label" htmlFor="1">
+                          Company Profile
+                        </label>
                       </div>
-                    )}
-                  </div>
-
+                      <div className="">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="radio"
+                          id="2">
+                        </input>&nbsp;&nbsp;
+                        <label className="form-check-label" htmlFor="2">
+                          Infrastructure
+                        </label>
+                      </div>
+                      <div className="">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="radio"
+                          id="3">
+                        </input>&nbsp;&nbsp;
+                        <label className="form-check-label" htmlFor="3">
+                          AWS
+                        </label>
+                      </div>
+                      {formik.touched.proposal && formik.errors.proposal && (
+                        <div className="invalid-feedback">
+                          {formik.errors.proposal}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div className="mb-2">
                     <label className="form-label">
                       Attachments

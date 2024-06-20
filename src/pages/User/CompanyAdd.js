@@ -138,7 +138,7 @@ function CompanyAdd() {
                             &nbsp;
                             <span>
                                 <button className="btn btn-primary" type="submit">
-                                    Save
+                                    Update
                                 </button>
                             </span>
                         </div>
@@ -146,14 +146,14 @@ function CompanyAdd() {
                 </div>
                 <div className="container-fluid my-5">
                     <h4>
-                        <b>Create Company</b>
+                        <b>Update Company</b>
                     </h4>
                 </div>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-6 col-md-6 col-12 mb-3">
                             <div className="d-flex align-items-center justify-content-end  sm-device">
-                                <lable>Account Owner</lable>
+                                <lable>Company Owner</lable>
                                 <span className="text-danger">*</span> &nbsp;&nbsp;
                                 <input
                                     {...formik.getFieldProps("companyOwnerName ")}
@@ -224,7 +224,7 @@ function CompanyAdd() {
                                 ) : null}
                             </div>
                             {selectedFile && (
-                                <div className="mb-2">
+                                <div className="d-flex justify-content-end align-items-center mt-2">
                                     {selectedFile.type.startsWith("image") && (
                                         <img
                                             src={URL.createObjectURL(selectedFile)}
