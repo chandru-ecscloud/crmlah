@@ -44,7 +44,7 @@ const Accounts = () => {
         header: "Account Name",
         Cell: ({ row }) => (
           <Link to={`/accounts/show/${row.original.id}`} className="rowName">
-            {row.original.firstName}
+            {row.original.firstName} {row.original.lastName}
           </Link>
         ),
       },
@@ -784,7 +784,7 @@ const Accounts = () => {
                     </li>
                   </>
                 )} */}
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -803,7 +803,7 @@ const Accounts = () => {
                         path={`associateQuotesWithAccount/${rowId}`}
                       />
                     </button>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       className="btn"
@@ -850,11 +850,11 @@ const Accounts = () => {
                         handleContactConvert(table.getSelectedRowModel().rows)
                       }
                     >
-                      Soft Delete
+                      Delete
                     </button>
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -868,10 +868,10 @@ const Accounts = () => {
                       }
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -883,7 +883,7 @@ const Accounts = () => {
                       }
                     >
                       Mass Delete
-                    </button>
+                    </button> */}
                   </li>
                 </ul>
               </div>

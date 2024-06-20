@@ -580,7 +580,7 @@ const Deals = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -596,7 +596,7 @@ const Deals = () => {
                         path={`associateInvoiceWithDeals/${rowId}`}
                       />
                     </button>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       className="btn"
@@ -611,11 +611,11 @@ const Deals = () => {
                         handleDealConvert(table.getSelectedRowModel().rows)
                       }
                     >
-                      Soft Delete
+                      Delete
                     </button>
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -629,10 +629,10 @@ const Deals = () => {
                       }
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -644,7 +644,7 @@ const Deals = () => {
                       }
                     >
                       Mass Delete
-                    </button>
+                    </button> */}
                   </li>
                 </ul>
               </div>
