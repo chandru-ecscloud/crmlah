@@ -18,6 +18,9 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { Button, Modal } from "react-bootstrap";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -32,10 +35,63 @@ const Lead = () => {
   const role = sessionStorage.getItem("role");
   const Id = sessionStorage.getItem("Id");
   const owner = sessionStorage.getItem("user_name");
+  const [datas, setDatas] = useState([]);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   // console.log(role);
   const navigate = useNavigate();
   const companyId = sessionStorage.getItem("companyId");
   const [count, setCount] = useState(0);
+  const [show, setShow] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleShow = () => setShow(true);
+
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+    setSelectedFile(null);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    formik.setFieldValue("files", file);
+  };
+
+  const validationSchema = yup.object().shape({
+    propasalType: yup.string().required("*Propasal Type is required"),
+    propasal: yup.array()
+      .of(yup.string().required("*Working Days is required!"))
+      .min(1, "*Working Days is required!"),
+  });
+  console.log("object", datas)
+  const formik = useFormik({
+    initialValues: {
+      propasalType: "",
+      propasal: "",
+      file: "",
+      generateLink: "",
+
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      console.log(data);
+      // try {
+      //   const response = await api.post(`/createNewsUpdatedSaveImages`, formData);
+      //   if (response.status === 201) {
+      //     setShow(false);
+      //     formik.resetForm();
+      //     toast.success(response.data.message);
+      //     refreshData()
+      //   } else {
+      //     toast.error(response.data.message);
+      //   }
+      // } catch (error) {
+      //   toast.error(error);
+      // } finally {
+      //   setLoadIndicator(false);
+      // }
+    },
+  });
 
   const columns = useMemo(
     () => [
@@ -516,9 +572,8 @@ const Lead = () => {
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
                 <button
-                  className={`btn btn-primary ${
-                    role === "CMP_USER" && "disabled"
-                  }`}
+                  className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                    }`}
                   disabled={role === "CMP_USER"}
                   onClick={handelNavigateClick}
                 >
@@ -526,9 +581,8 @@ const Lead = () => {
                 </button>
               </div>
               <div
-                className={`dropdown-center ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`dropdown-center ${role === "CMP_USER" && "disabled"
+                  }`}
               >
                 <button
                   className="btn btn-danger dropdown-toggle"
@@ -540,6 +594,7 @@ const Lead = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul className="dropdown-menu">
+
                   {/* {role === "CRM_USER" ? (
                     <>
                       <li>
@@ -712,10 +767,177 @@ const Lead = () => {
                       Mass Delete
                     </button>
                   </li>
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      onClick={handleShow}
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                    >
+                      Company Proposal
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
+
+          <Modal
+            show={show}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            onHide={handleClose}
+          >
+            <form onSubmit={formik.handleSubmit}>
+              <Modal.Header closeButton
+                closeVariant="white" className="Calenderview"
+              >
+                <Modal.Title>
+                  <p className="headColor">Create Company</p>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="row">
+                  <div className="mb-2">
+                    <label className="form-label">
+                      Proposal Type
+                    </label>
+                    <select
+                      {...formik.getFieldProps("propasalType")}
+                      class={`form-select  ${formik.touched.propasalType && formik.errors.propasalType
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      aria-label="Default select example"
+                    >
+                      <option selected></option>
+                      <option value="Company_Profile">Company Profile</option>
+                      <option value="Other's">Other's</option>
+                    </select>
+                    {formik.touched.propasalType && formik.errors.propasalType && (
+                      <div className="invalid-feedback">
+                        {formik.errors.propasalType}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mb-2">
+
+                    <label className="form-label">
+                      Proposal
+                    </label>
+                    <div className="">
+                      <input class="form-check-input"
+                        type="radio"
+                        name="radio"
+                        id="1"
+                        >
+                      </input>&nbsp;&nbsp;
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Company Profile
+                      </label>
+                    </div>
+                    <div className="">
+                      <input class="form-check-input"
+                        type="radio"
+                        name="radio"
+                        id="2">
+                      </input>&nbsp;&nbsp;
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Infrastructure
+                      </label>
+                    </div>
+                    <div className="">
+                      <input class="form-check-input"
+                        type="radio"
+                        name="radio"
+                        id="3">
+                      </input>&nbsp;&nbsp;
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        AWS
+                      </label>
+                    </div>
+                    {formik.touched.propasal && formik.errors.propasal && (
+                      <div className="invalid-feedback">
+                        {formik.errors.propasal}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mb-2">
+                    <label className="form-label">
+                      Attachments
+                    </label>
+                    <div className="input-group mb-3">
+                      <input
+                        type="file"
+                        className={`form-control ${formik.touched.file && formik.errors.file ? "is-invalid" : ""}`}
+                        onChange={handleFileChange}
+                      />
+                      {formik.touched.file && formik.errors.file && (
+                        <div className="invalid-feedback">
+                          {formik.errors.file}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {/* {selectedFile && (
+                    <div className="mb-2">
+                      {selectedFile.type.startsWith("image") && (
+                        <img
+                          src={URL.createObjectURL(selectedFile)}
+                          alt="Selected File"
+                          style={{ maxHeight: "100px" }}
+                        />
+                      )}
+                    </div>
+                  )} */}
+
+                  <div className="mb-2">
+                    <label className="form-label">
+                      Generate Appointment Link
+                    </label>
+                    <div className="form-check form-switch">
+                      <input
+                        type="checkbox"
+                        role="switch"
+                        id="yes"
+                        className={`form-check-input ${formik.touched.generateLink && formik.errors.generateLink ? "is-invalid" : ""}`}
+                        {...formik.getFieldProps("generateLink")}
+                        checked
+                      />
+                    </div>
+                    {formik.touched.generateLink && formik.errors.generateLink && (
+                      <div className="invalid-feedback">{formik.errors.generateLink}</div>
+                    )}
+                  </div>
+                </div>
+              </Modal.Body>
+
+              <Modal.Footer className="mt-5">
+                <Button className="btn btn-danger" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Save
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Modal>
           <ThemeProvider theme={theme}>
             <MaterialReactTable table={table} />
           </ThemeProvider>

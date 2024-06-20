@@ -392,6 +392,17 @@ const UserActivation = () => {
               >
                 Time Slot
               </button> */}
+              <div style={{ paddingRight: "10px" }}>
+                <Link to={"/companyadd"}>
+                  <button
+                    className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                      }`}
+                    disabled={role === "CMP_USER"}
+                  >
+                    Company Add
+                  </button>
+                </Link>
+              </div>
               <TimeSlots />
               <button
                 className={`btn btn-primary ${
