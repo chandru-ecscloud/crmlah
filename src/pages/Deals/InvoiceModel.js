@@ -3,8 +3,9 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import { Button } from "react-bootstrap";
 
-const InvoiceModel = ({ path }) => {
+const InvoiceModel = ({ path , getData}) => {
   console.log(path);
   // const token = sessionStorage.getItem("token");
   const [dealsdata, setDealsData] = useState([]);
@@ -54,6 +55,7 @@ const InvoiceModel = ({ path }) => {
       });
       if (response.status === 200) {
         toast.success(response.data.message);
+        getData();
         closeModal();
       } else {
         toast.error(response.data.message);
@@ -78,13 +80,13 @@ const InvoiceModel = ({ path }) => {
 
   return (
     <div>
-      <button
-        className="btn"
-        style={{ width: "100%", border: "none" }}
+      <Button variant="primary"
+        // className="btn"
+        // style={{ width: "100%", border: "none" }}
         onClick={openModal}
       >
         Assign Invoice
-      </button>
+      </Button>
       <Modal
         size="lg"
         show={isOpen}

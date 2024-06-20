@@ -3,8 +3,9 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import { Button } from "react-bootstrap";
 
-const QuotesModel = ({ path }) => {
+const QuotesModel = ({ path,userData }) => {
   const [loading, setLoading] = useState(true);
 
   // const token = sessionStorage.getItem("token");
@@ -34,7 +35,9 @@ const QuotesModel = ({ path }) => {
           //Authorization: `Bearer ${token}`,
         },
       });
-      setQuotesData(response.data);
+      if(response.status ===200){
+        setQuotesData(response.data);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -65,6 +68,7 @@ const QuotesModel = ({ path }) => {
       });
       if (response.status === 200) {
         toast.success(response.data.message);
+        userData();
         closeModal();
       } else {
         toast.error(response.data.message);
@@ -110,13 +114,13 @@ const QuotesModel = ({ path }) => {
 
   return (
     <div>
-      <button
-        className="btn"
-        style={{ width: "100%", border: "none" }}
+      <Button variant="primary"
+        // className="btn btn-primary "
+        // style={{ width: "100%", border: "none" }}
         onClick={openModal}
       >
         Assign Quote
-      </button>
+      </Button>
       <Modal
         size="lg"
         show={isOpen}

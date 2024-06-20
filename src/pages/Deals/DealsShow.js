@@ -10,6 +10,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import SendInvoice from "../Email/SendInvoice";
 import Delete from "../../components/common/DeleteModel";
+import InvoiceModel from "./InvoiceModel";
 function DealsShow() {
   const { id } = useParams();
   const [dealData, setdealData] = useState({});
@@ -112,6 +113,9 @@ function DealsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
+        <InvoiceModel getData={userData}
+                        path={`associateInvoiceWithDeals/${id}`}
+        />
           {dealData.email && (
             <OverlayTrigger
               placement="bottom"

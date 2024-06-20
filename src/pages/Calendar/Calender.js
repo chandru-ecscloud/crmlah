@@ -218,6 +218,18 @@ function Calendar() {
     const startTime12 = convertTo12Hour(startTime24);
     const endTime12 = convertTo12Hour(endTime24);
 
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+  
+    const newStart = new Date(event.start);
+    newStart.setHours(0, 0, 0, 0);
+  
+    if (newStart < currentDate) {
+      toast.warning('Cannot drop the event in the past.');
+      eventDropInfo.revert();
+      return;
+    }
+
     try {
       let payload = {
         appointmentStartDate: startDate,
@@ -377,6 +389,31 @@ function Calendar() {
     );
   };
 
+  const handleDateSelect = (info) => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(info.start);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate >= currentDate) {
+      const resourceId = info.resource ? info.resource.id : null;
+      const role =
+        info.resource && info.resource.extendedProps
+          ? info.resource.extendedProps.role
+          : null;
+      setNewEvent({
+        title: "",
+        start: info.start,
+        end: info.end,
+        allDay: info.allDay,
+        resourceId: resourceId,
+        role: role,
+      });
+      setShowModal(true);
+    } else {
+      toast.warning('Cannot select a past date for events.');
+    }
+  };
   return (
     <div className="calendar">
       {!(
@@ -531,207 +568,6 @@ function Calendar() {
         </div>
       )}
 
-      {/* <div className="d-flex justify-content-evenly align-items-center py-2">
-        <div className="px-2 d-flex">
-          <button
-            onClick={() => fetchData()}
-            className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_EXECUTIVE" &&
-              "GENERAL" &&
-              "FREELANCERS" &&
-              "disabled"
-            }`}
-            disabled={
-              appointmentRole === "SALES_EXECUTIVE" ||
-              appointmentRole === "GENERAL" ||
-              appointmentRole === "FREELANCERS"
-            }
-          >
-            All
-          </button>
-        </div>
-        <div className="px-2 d-flex">
-          <div className="d-flex justify-content-evenly align-items-center">
-            <span
-              className="color-circle"
-              style={{ backgroundColor: "#BFF6C3" }}
-            ></span>
-          </div>
-          <button
-            onClick={() => fetchRoleBasedAppointment("OWNER")}
-            className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_MANAGER" &&
-              "SALES_EXECUTIVE" &&
-              "GENERAL" &&
-              "FREELANCERS" &&
-              "disabled"
-            }`}
-            disabled={
-              appointmentRole === "SALES_MANAGER" ||
-              appointmentRole === "SALES_EXECUTIVE" ||
-              appointmentRole === "GENERAL" ||
-              appointmentRole === "FREELANCERS"
-            }
-          >
-            Owner
-          </button>
-        </div>
-        <div className="px-2 d-flex">
-          <div className="d-flex justify-content-evenly align-items-center">
-            <span
-              className="color-circle"
-              style={{ backgroundColor: "#FFD1E3" }}
-            ></span>
-          </div>
-          <div className="dropdown">
-            <button
-              // className="btn dropdown-toggle p-0 border-white ms-2"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              className={`btn dropdown-toggle p-0 border-white ms-2 ${
-                appointmentRole === "SALES_EXECUTIVE" &&
-                "GENERAL" &&
-                "FREELANCERS" &&
-                "disabled"
-              }`}
-              disabled={
-                appointmentRole === "SALES_EXECUTIVE" ||
-                appointmentRole === "GENERAL" ||
-                appointmentRole === "FREELANCERS"
-              }
-            >
-              Sales Manager
-            </button>
-            <ul className="dropdown-menu usersCalendor">
-              <li
-                className="dropdown-item"
-                onClick={() => fetchRoleBasedAppointment("SALES_MANAGER")}
-              >
-                All
-              </li>
-              {appointmentRoles?.SALES_MANAGER?.map((role) => (
-                <li
-                  key={role.id}
-                  className="dropdown-item"
-                  onClick={() => fetchAppointmentByUserId(role.id)}
-                >
-                  {role.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="px-2 d-flex">
-          <div className="d-flex justify-content-evenly align-items-center">
-            <span
-              className="color-circle"
-              style={{ backgroundColor: "#FFDDCC" }}
-            ></span>
-          </div>
-          <div className="dropdown">
-            <button
-              // className="btn dropdown-toggle p-0 border-white ms-2"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              className={`btn dropdown-toggle p-0 border-white ms-2 ${
-                appointmentRole === "GENERAL" && "FREELANCERS" && "disabled"
-              }`}
-              disabled={
-                appointmentRole === "GENERAL" ||
-                appointmentRole === "FREELANCERS"
-              }
-            >
-              Sales Executive
-            </button>
-            <ul className="dropdown-menu usersCalendor">
-              <li
-                className="dropdown-item"
-                onClick={() => fetchRoleBasedAppointment("SALES_EXECUTIVE")}
-              >
-                All
-              </li>
-              {appointmentRoles?.SALES_EXECUTIVE?.map((role) => (
-                <li
-                  key={role.id}
-                  className="dropdown-item"
-                  onClick={() => fetchAppointmentByUserId(role.id)}
-                >
-                  {role.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="px-2 d-flex">
-          <div className="d-flex justify-content-evenly align-items-center">
-            <span
-              className="color-circle"
-              style={{ backgroundColor: "#FFE79B" }}
-            ></span>
-          </div>
-          <div className="dropdown">
-            <button
-              // className="btn dropdown-toggle p-0 border-white ms-2"
-              className={`btn dropdown-toggle p-0 border-white ms-2 ${
-                appointmentRole === "SALES_EXECUTIVE" && "GENERAL" && "disabled"
-              }`}
-              disabled={
-                appointmentRole === "SALES_EXECUTIVE" ||
-                appointmentRole === "GENERAL"
-              }
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Freelancers
-            </button>
-            <ul className="dropdown-menu usersCalendor">
-              <li
-                className="dropdown-item"
-                onClick={() => fetchRoleBasedAppointment("FREELANCERS")}
-              >
-                All
-              </li>
-              {appointmentRoles?.FREELANCERS?.map((role) => (
-                <li
-                  key={role.id}
-                  className="dropdown-item"
-                  onClick={() => fetchAppointmentByUserId(role.id)}
-                >
-                  {role.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="px-2 d-flex">
-          <div className="d-flex justify-content-evenly align-items-center">
-            <span
-              className="color-circle"
-              style={{ backgroundColor: "#F8F4E1" }}
-            ></span>
-          </div>
-          <button
-            onClick={() => fetchRoleBasedAppointment("GENERAL")}
-            // className="btn btn-white shadow-none border-white"
-            className={`btn btn-white shadow-none border-white ${
-              appointmentRole === "SALES_EXECUTIVE" &&
-              "GENERAL" &&
-              "FREELANCERS" &&
-              "disabled"
-            }`}
-            disabled={
-              appointmentRole === "SALES_EXECUTIVE" ||
-              appointmentRole === "GENERAL" ||
-              appointmentRole === "FREELANCERS"
-            }
-          >
-            General
-          </button>
-        </div>
-      </div> */}
       <FullCalendar
         plugins={[
           dayGridPlugin,
@@ -787,22 +623,23 @@ function Calendar() {
             slotDuration: "01:00",
           },
         }}
-        select={(info) => {
-          const resourceId = info.resource ? info.resource.id : null;
-          const role =
-            info.resource && info.resource.extendedProps
-              ? info.resource.extendedProps.role
-              : null;
-          setNewEvent({
-            title: "",
-            start: info.start,
-            end: info.end,
-            allDay: info.allDay,
-            resourceId: resourceId,
-            role: role,
-          });
-          setShowModal(true);
-        }}
+        // select={(info) => {
+        //   const resourceId = info.resource ? info.resource.id : null;
+        //   const role =
+        //     info.resource && info.resource.extendedProps
+        //       ? info.resource.extendedProps.role
+        //       : null;
+        //   setNewEvent({
+        //     title: "",
+        //     start: info.start,
+        //     end: info.end,
+        //     allDay: info.allDay,
+        //     resourceId: resourceId,
+        //     role: role,
+        //   });
+        //   setShowModal(true);
+        // }}
+        select={handleDateSelect}
         eventAdd={handleEventAdd}
         eventClick={handleEventClick}
         eventChange={handleEventUpdate}

@@ -12,6 +12,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import Activity from "./Activity";
 import Delete from "../../components/common/DeleteModel";
+import QuotesModel from "./QuotesModel";
 
 
 function AccountsShow() {
@@ -97,7 +98,11 @@ function AccountsShow() {
           </div>
         </div>
 
-        <div className="col-9 mt-1" id="buttons-container">
+        <div className="col-9 mt-1 gap-1" id="buttons-container">
+        <QuotesModel  userData={userData}
+                        // onSuccess={refreshData}
+                        path={`associateQuotesWithAccount/${id}`}
+                      />
           <Activity id={id} />
           <SendQuotes accountData={accountData} />
           <Appointment
