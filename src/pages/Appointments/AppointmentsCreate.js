@@ -5,6 +5,7 @@ import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import appoinmentCreateTemplete from "../Email/AppoinmentCreateTemplete";
 
 function AppointmentsCreate({ name, schedule, getData }) {
   const [show, setShow] = useState(false);
@@ -60,7 +61,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       additionalInformation: "",
       appointmentMode: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
 
     onSubmit: async (data, { resetForm, setSubmitting }) => {
       console.log("Add appointment", data);
@@ -119,8 +120,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
           setShow(false);
           // console.log("Appoinment Created");
 
-          let mailContent;
-          if (data.appointmentMode === "ONLINE") {
+          // if (data.appointmentMode === "ONLINE") {
             try {
               // console.log("Link Generated function")
               const linkResponse = await axios.post(
@@ -133,298 +133,17 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 }
               );
               if (linkResponse.status === 200) {
-                mailContent = `
-                  <!DOCTYPE html>
-                  <html lang="en">
-                  <head>
-                    <meta charset="UTF-8" />
-                    <title>Invoice</title>
-                    <style>
-                      body{
-                        background-color: #ddd;
-                      }
-                      .invoice-box {
-                        font-size: 12px;
-                        max-width: 600px;
-                        background-color: #fff;
-                        margin: auto;
-                        padding: 30px;
-                        border-bottom: 3px solid #0059ff;
-                        line-height: 24px;
-                        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-                        color: #555;
-                        min-height: 85vh;
-                      }
-
-                    .invoice-box table {
-                      width: 100%;
-                      line-height: inherit;
-                      text-align: left;
-                    }
-
-                    .invoice-box table td {
-                      padding: 5px;
-                      vertical-align: top;
-                    }
-
-                    .invoice-box table td.third {
-                      text-align: right;
-                    }
-
-                    .invoice-box table tr.heading td {
-                      background: #eee;
-                      border-bottom: 1px solid #ddd;
-                      font-weight: bold;
-                    }
-
-                    .invoice-box table tr.item td {
-                      border-bottom: 1px solid #eee;
-                    }
-
-                    .invoice-box table tr.item.last td {
-                      border-bottom: none;
-                    }
-
-                    .invoice-box table tr.total td:nth-child(2) {
-                      border-top: 2px solid #eee;
-                      font-weight: bold;
-                    }
-                    .invoice{
-                        padding: 1rem;
-                    }
-
-                    #scan {
-                      float: right;
-                    }
-
-                    #scan img {
-                      max-width: 100%;
-                      height: auto;
-                    }
-
-                    @media print {
-                      .invoice-box {
-                        border: 0;
-                      }
-                    }
-
-                  </style>
-                  </head>
-                  <body >
-                    <div class="invoice-box">
-                      <table>
-                        <tr class="top">
-                          <td colspan="2">
-                            <table>
-                              <tr>
-                                <td class="title">
-                                  <img
-                                    src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                                    style="width: 75%; max-width: 180px"
-                                    alt="Logo"
-                                  />
-                                </td>
-                                <td class="third">
-                                  <b>Date:</b> ${currentData}<br />
-                                  The Alexcier, 237 Alexandra Road,<br />
-                                  #04-10, Singapore-159929.
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-
-                    <div class="invoice" >
-                      <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
-                      <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
-                        ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Singapore).
-                      </p>
-
-                      <h3 style="margin-bottom: 0;">you can join:</h3>
-                      <h4 style="margin:0 ;">${linkResponse.data.message}</h4>
-
-
-                      <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}&link=${linkResponse.data.message}">Reschedule or Cancel</a> Your Appointment</p>       
-                      <hr />
-                      <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                      <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
-                      <p style=" margin: 0 ; ">ECS Cloud</p>
-                      <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
-                      <hr />
-                    </div>
-                    </div>
-                  </body>
-                  </html>`;
-                try {
-                  const response = await axios.post(`${API_URL}sendMail`, {
-                    toMail: data.email,
-                    fromMail: data.email,
-                    subject: data.appointmentName,
-                    htmlContent: mailContent,
-                  });
-
-                  if (response.status === 200) {
-                    toast.success(response.data.message);
-                    toast.success("Mail Send Successfully");
-                  } else {
-                    toast.error(response.data.message);
-                  }
-                } catch (error) {
-                  toast.error("Mail Not Send");
-                  // console.error("Failed to send email:", error);
-                }
+                appoinmentCreateTemplete(
+                  data,
+                  appointmentId,
+                  linkResponse,
+                  currentData
+                );
+                
               }
             } catch (e) {
               toast.error("Error Generating Zoom Link ", e);
             }
-          } else {
-            mailContent = `
-              <!DOCTYPE html>
-              <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <title>Invoice</title>
-                <style>
-                  body{
-                    background-color: #ddd;
-                  }
-                  .invoice-box {
-                    font-size: 12px;
-                    max-width: 600px;
-                    background-color: #fff;
-                    margin: auto;
-                    padding: 30px;
-                    border-bottom: 3px solid #0059ff;
-                    line-height: 24px;
-                    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-                    color: #555;
-                    min-height: 85vh;
-                  }
-
-                .invoice-box table {
-                  width: 100%;
-                  line-height: inherit;
-                  text-align: left;
-                }
-
-                .invoice-box table td {
-                  padding: 5px;
-                  vertical-align: top;
-                }
-
-                .invoice-box table td.third {
-                  text-align: right;
-                }
-
-                .invoice-box table tr.heading td {
-                  background: #eee;
-                  border-bottom: 1px solid #ddd;
-                  font-weight: bold;
-                }
-
-                .invoice-box table tr.item td {
-                  border-bottom: 1px solid #eee;
-                }
-
-                .invoice-box table tr.item.last td {
-                  border-bottom: none;
-                }
-
-                .invoice-box table tr.total td:nth-child(2) {
-                  border-top: 2px solid #eee;
-                  font-weight: bold;
-                }
-                .invoice{
-                    padding: 1rem;
-                }
-
-                #scan {
-                  float: right;
-                }
-
-                #scan img {
-                  max-width: 100%;
-                  height: auto;
-                }
-
-                @media print {
-                  .invoice-box {
-                    border: 0;
-                  }
-                }
-
-              </style>
-              </head>
-              <body >
-                <div class="invoice-box">
-                  <table>
-                    <tr class="top">
-                      <td colspan="2">
-                        <table>
-                          <tr>
-                            <td class="title">
-                              <img
-                                src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                                style="width: 75%; max-width: 180px"
-                                alt="Logo"
-                              />
-                            </td>
-                            <td class="third">
-                              <b>Date:</b> ${currentData}<br />
-                              The Alexcier, 237 Alexandra Road,<br />
-                              #04-10, Singapore-159929.
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-
-
-                <div class="invoice" >
-                  <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
-                  <p style="margin: 2rem 0 0;">You've Scheduled An Appointment With ${data.appointmentOwner} for ${data.appointmentName} On 
-                    ${data.appointmentStartDate} at ${data.appointmentStartTime} <br />(Asia/Singapore).
-                  </p>
-
-                  <h3 style="margin-bottom: 0;">Location details:</h3>
-                  <h4 style="margin:0 ;">${data.state}</h4>
-
-                  <p style="margin: 1.5rem 0px 2rem 0px;"
-                      >You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${data.appointmentFor}&email=${data.email}">Reschedule or Cancel</a> Your Appointment</p>     
-                      <hr />
-                  
-                  <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                  <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
-                  <p style=" margin: 0 ; ">ECS Cloud</p>
-                  <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
-                  <hr />
-                </div>
-                </div>
-              </body>
-              </html>`;
-
-            try {
-              const response = await axios.post(`${API_URL}sendMail`, {
-                toMail: data.email,
-                fromMail: data.email,
-                subject: data.appointmentName,
-                htmlContent: mailContent,
-              });
-
-              if (response.status === 200) {
-                toast.success(response.data.message);
-                toast.success("Mail Send Successfully");
-              } else {
-                toast.error(response.data.message);
-              }
-            } catch (error) {
-              toast.error("Mail Not Send");
-              // console.error("Failed to send email:", error);
-            }
-          }
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
@@ -470,7 +189,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
     return availableSlots;
   };
 
-
   const fetchAppointmentTime = async () => {
     try {
       const response = await axios.get(
@@ -487,7 +205,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
       );
       formik.setFieldValue("timeSlotId", "");
       setAppointmentTime(availableSlots);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -671,11 +388,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                             name="appointmentFor"
                             id="appointmentFor"
                             {...formik.getFieldProps("appointmentFor")}
-                            className={`form-size form-control   ${formik.touched.appointmentFor &&
+                            className={`form-size form-control   ${
+                              formik.touched.appointmentFor &&
                               formik.errors.appointmentFor
-                              ? "is-invalid"
-                              : ""
-                              }`}
+                                ? "is-invalid"
+                                : ""
+                            }`}
                           />
                         </div>
                         {formik.touched.appointmentFor &&
@@ -692,10 +410,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           <span className=" text-danger">*</span> &nbsp;&nbsp;
                           <select
                             name="leadId"
-                            className={`form-select form-size ${formik.touched.leadId && formik.errors.leadId
-                              ? "is-invalid"
-                              : ""
-                              }`}
+                            className={`form-select form-size ${
+                              formik.touched.leadId && formik.errors.leadId
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             {...formik.getFieldProps("leadId")}
                           >
                             <option value=""></option>
@@ -763,11 +482,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         name="appointmentName"
                         id="appointmentName"
                         {...formik.getFieldProps("appointmentName")}
-                        className={`form-size form-control   ${formik.touched.appointmentName &&
+                        className={`form-size form-control   ${
+                          formik.touched.appointmentName &&
                           formik.errors.appointmentName
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -793,11 +513,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="appointmentStartDate"
                         min={currentData}
                         {...formik.getFieldProps("appointmentStartDate")}
-                        className={`form-size form-control   ${formik.touched.appointmentStartDate &&
+                        className={`form-size form-control   ${
+                          formik.touched.appointmentStartDate &&
                           formik.errors.appointmentStartDate
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -909,10 +630,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //className="form-size form-select"
                         name="location"
                         {...formik.getFieldProps("location")}
-                        className={`form-size form-select   ${formik.touched.location && formik.errors.location
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-select   ${
+                          formik.touched.location && formik.errors.location
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       >
                         <option value=""></option>
                         <option value="Client Address">Client Address</option>
@@ -944,11 +666,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="phoneNumber"
                         value={"9797979797"}
                         {...formik.getFieldProps("phoneNumber")}
-                        className={`form-size form-control   ${formik.touched.phoneNumber &&
+                        className={`form-size form-control   ${
+                          formik.touched.phoneNumber &&
                           formik.errors.phoneNumber
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -972,11 +695,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //className="form-size form-select"
                         name="appointmentMode"
                         {...formik.getFieldProps("appointmentMode")}
-                        className={`form-size form-select   ${formik.touched.appointmentMode &&
+                        className={`form-size form-select   ${
+                          formik.touched.appointmentMode &&
                           formik.errors.appointmentMode
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       >
                         <option value=""></option>
                         <option value="ONLINE">ONLINE</option>
@@ -1144,10 +868,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="street"
                         // value={formData.street || ""}
                         {...formik.getFieldProps("street")}
-                        className={`form-size form-control   ${formik.touched.street && formik.errors.street
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-control   ${
+                          formik.touched.street && formik.errors.street
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1169,10 +894,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="city"
                         //value={formData.city || ""}
                         {...formik.getFieldProps("city")}
-                        className={`form-size form-control   ${formik.touched.city && formik.errors.city
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-control   ${
+                          formik.touched.city && formik.errors.city
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1194,10 +920,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="state"
                         // value={formData.state || ""}
                         {...formik.getFieldProps("state")}
-                        className={`form-size form-control   ${formik.touched.state && formik.errors.state
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-control   ${
+                          formik.touched.state && formik.errors.state
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1219,10 +946,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="zipCode"
                         // value={formData.zipCode || ""}
                         {...formik.getFieldProps("zipCode")}
-                        className={`form-size form-control   ${formik.touched.zipCode && formik.errors.zipCode
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-control   ${
+                          formik.touched.zipCode && formik.errors.zipCode
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1244,10 +972,11 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         id="country"
                         // value={formData.country || ""}
                         {...formik.getFieldProps("country")}
-                        className={`form-size form-control   ${formik.touched.country && formik.errors.country
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-size form-control   ${
+                          formik.touched.country && formik.errors.country
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">
@@ -1281,11 +1010,12 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         //value={formData.additionalInformation || ""}
                         id="additionalInformation"
                         {...formik.getFieldProps("additionalInformation")}
-                        className={`form-control  ${formik.touched.additionalInformation &&
+                        className={`form-control  ${
+                          formik.touched.additionalInformation &&
                           formik.errors.additionalInformation
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="row sm-device">

@@ -62,6 +62,7 @@ import CalenderShow from "../pages/Calendar/CalenderShow";
 
 import AllClient from "../pages/AllClient";
 import TrialNotification from "../components/common/TrialNotification ";
+import CompanyAdd from "../pages/User/CompanyAdd";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -135,6 +136,7 @@ function AdminLayout({ handleLogout }) {
         <Route path="/users/create" element={<UserCreate />} />
         <Route path="/users/edit/:id" element={<UserEdit />} />
         <Route path="/users/show/:id" element={<UserShow />} />
+        <Route path="/companyadd" element={<CompanyAdd />} />
 
         {/* Appointments  */}
         <Route path="/appointments" element={<Appointments />} />
