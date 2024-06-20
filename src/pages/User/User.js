@@ -302,6 +302,10 @@ const UserActivation = () => {
     navigate("/users/create");
   };
 
+  const handelProposalNavigate = () => {
+    navigate("/proposal");
+  };
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -392,6 +396,15 @@ const UserActivation = () => {
               >
                 Time Slot
               </button> */}
+               <button
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
+                disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
+                onClick={handelProposalNavigate}
+              >
+                Proposal
+              </button>
               <TimeSlots />
               <button
                 className={`btn btn-primary ${
