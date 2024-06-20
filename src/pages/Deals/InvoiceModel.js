@@ -80,13 +80,13 @@ const InvoiceModel = ({ path , getData}) => {
 
   return (
     <div>
-      <Button variant="primary"
+      <span 
         // className="btn"
-        // style={{ width: "100%", border: "none" }}
+        style={{ width: "100%", border: "none" }}
         onClick={openModal}
       >
         Assign Invoice
-      </Button>
+      </span>
       <Modal
         size="lg"
         show={isOpen}

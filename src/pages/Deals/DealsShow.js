@@ -113,9 +113,10 @@ function DealsShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
+          <button className="btn btn-primary">
         <InvoiceModel getData={userData}
                         path={`associateInvoiceWithDeals/${id}`}
-        />
+        /></button>
           {dealData.email && (
             <OverlayTrigger
               placement="bottom"
