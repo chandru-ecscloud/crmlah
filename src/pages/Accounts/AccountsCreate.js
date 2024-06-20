@@ -86,7 +86,7 @@ function AccountsCreate() {
     validationSchema: validationSchema,
     validateOnMount: true,
     onSubmit: async (data) => {
-      // data.account_name = `${data.first_name}${data.last_name}`
+      data.account_name = `${data.first_name}${data.last_name}`
 
       console.log("Account Datas:", data);
       try {

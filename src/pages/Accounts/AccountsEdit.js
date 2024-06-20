@@ -11,8 +11,8 @@ import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required("*First Name is required"),
-  // lastName: Yup.string().required("*Last Name is required"),
+  first_name: Yup.string().required("*First Name is required"),
+  // last_name: Yup.string().required("*Last Name is required"),
   // account_name: Yup.string().required("Account Name is required"),
   // amount: Yup.number()
   //   .typeError('amount must be a number')
@@ -25,20 +25,20 @@ const validationSchema = Yup.object().shape({
     .integer('Billing code must be an integer'),
   country_code: Yup.string().required("*Country Code is required"),
   phone: Yup.string()
-  .required('Phone number is required')
-  .test('phone-length', function (value) {
-    const { country_code } = this.parent;
-    if (value && /\s/.test(value)) {
-      return this.createError({ message: 'Phone number should not contain spaces' });
-    }
-    if (country_code === '65') {
-      return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
-    }
-    if (country_code === '91') {
-      return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
-    }
-    return true; 
-  }),
+    .required('Phone number is required')
+    .test('phone-length', function (value) {
+      const { country_code } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({ message: 'Phone number should not contain spaces' });
+      }
+      if (country_code === '65') {
+        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      }
+      if (country_code === '91') {
+        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      }
+      return true;
+    }),
   country_code: Yup.string().required('Country code is required'),
   email: Yup.string().email("Invalid email").required("*Email is required"),
   company: Yup.string().required('Company Name is required'),
@@ -61,13 +61,13 @@ function AccountsEdit() {
       company_id: companyId,
       account_owner: owner,
       account_name: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       country_code: "65",
       phone: "",
       company: "",
       email: "",
-      amount:"",
+      amount: "",
       parent_account: "",
       account_number: "",
       account_type: "",
@@ -86,6 +86,7 @@ function AccountsEdit() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Account Datas:", data);
+      data.account_name = `${data.first_name}${data.last_name}`
       try {
         const response = await axios.put(
           `${API_URL}updateAccount/${id}`,
@@ -164,14 +165,14 @@ function AccountsEdit() {
         const payload = {
           company_id: companyId,
           account_owner: getData.accountOwner || owner,
-          firstName: getData.firstName,
+          first_name: getData.firstName,
           company: getData.companyName,
-          lastName: getData.lastName,
+          last_name: getData.lastName,
           account_name: getData.accountName,
-          country_code: getData.countryCode  || "65",
+          country_code: getData.countryCode || "65",
           phone: getData.phone,
           email: getData.email,
-          amount:getData.amount,
+          amount: getData.amount,
           parent_account: getData.parentAccount,
           account_number: getData.accountNumber,
           account_type: getData.accountType,
@@ -318,18 +319,18 @@ function AccountsEdit() {
                 <lable>First Name</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("firstName")}
+                  {...formik.getFieldProps("first_name")}
                   type="text"
                   className="form-size form-control"
-                  id="firstName"
-                  name="firstName"
+                  id="first_name"
+                  name="first_name"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.firstName && formik.errors.firstName && (
-                    <div className="text-danger ">{formik.errors.firstName}</div>
+                  {formik.touched.first_name && formik.errors.first_name && (
+                    <div className="text-danger ">{formik.errors.first_name}</div>
                   )}
                 </div>
               </div>
@@ -337,26 +338,26 @@ function AccountsEdit() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Last Name</lable>
-                 &nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("lastName")}
+                  {...formik.getFieldProps("last_name")}
                   type="text"
                   className="form-size form-control"
-                  id="lastName"
-                  name="lastName"
+                  id="last_name"
+                  name="last_name"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.lastName && formik.errors.lastName && (
-                    <div className="text-danger ">{formik.errors.lastName}</div>
+                  {formik.touched.last_name && formik.errors.last_name && (
+                    <div className="text-danger ">{formik.errors.last_name}</div>
                   )}
                 </div>
               </div>
             </div>
 
-{/* <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Account Name</lable>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
@@ -435,8 +436,8 @@ function AccountsEdit() {
                 <input
                   type="text"
                   className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("company")}
                   id="company"
@@ -672,18 +673,18 @@ function AccountsEdit() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-        <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{marginLeft: "55rem"}}>
-        <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
-              <input
-                type="checkbox"
-                id="sameAsShipping"
-                checked={sameAsShipping}
-                onChange={handleSameAsShippingChange}
-                className="form-check-input"
-              />
-             
-            </div>
-            </div>
+          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "55rem" }}>
+            <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
+            <input
+              type="checkbox"
+              id="sameAsShipping"
+              checked={sameAsShipping}
+              onChange={handleSameAsShippingChange}
+              className="form-check-input"
+            />
+
+          </div>
+        </div>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">

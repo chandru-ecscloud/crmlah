@@ -23,8 +23,8 @@ const validationSchema = yup.object({
     .string()
     .matches(/^\d+$/, "Must be only digits")
     .required("*Enter The Sales Commission"),
-  termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
-  description: yup.string().required("*Enter The Customer Notes"),
+  // termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
+  // description: yup.string().required("*Enter The Customer Notes"),
   invoiceItemList: yup.array().of(
     yup.object().shape({
       productId: yup.string().required("*Product Name is required"),
@@ -873,7 +873,7 @@ function InvoicesEdit() {
               onChange={handleSameAsShippingChange}
               className="form-check-input"
             />
-             
+
           </div>
         </div>
         <div className="container">
@@ -884,12 +884,11 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingStreet &&
-                    formik.errors.shippingStreet
+                  className={`form-control form-size ${formik.touched.shippingStreet &&
+                      formik.errors.shippingStreet
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -913,11 +912,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingStreet && formik.errors.billingStreet
+                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="billingStreet"
                   id="billingStreet"
                   value={
@@ -949,11 +947,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingCity && formik.errors.shippingCity
+                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -977,11 +974,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingCity && formik.errors.billingCity
+                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="billingCity"
                   id="billingCity"
                   value={
@@ -1012,11 +1008,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.shippingCode && formik.errors.shippingCode
+                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -1040,11 +1035,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.billingCode && formik.errors.billingCode
+                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="billingCode"
                   id="billingCode"
                   value={
@@ -1075,11 +1069,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingState && formik.errors.shippingState
+                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -1103,11 +1096,10 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingState && formik.errors.billingState
+                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="billingState"
                   id="billingState"
                   value={
@@ -1139,12 +1131,11 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.shippingCountry &&
-                    formik.errors.shippingCountry
+                  className={`form-control form-size ${formik.touched.shippingCountry &&
+                      formik.errors.shippingCountry
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -1168,12 +1159,11 @@ function InvoicesEdit() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${
-                    formik.touched.billingCountry &&
-                    formik.errors.billingCountry
+                  className={`form-control form-size ${formik.touched.billingCountry &&
+                      formik.errors.billingCountry
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="billingCountry"
                   id="billingCountry"
                   value={
@@ -1232,12 +1222,11 @@ function InvoicesEdit() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className={`form-select ${
-                          formik.touched.invoiceItemList?.[index]?.productId &&
-                          formik.errors.invoiceItemList?.[index]?.productId
+                        className={`form-select ${formik.touched.invoiceItemList?.[index]?.productId &&
+                            formik.errors.invoiceItemList?.[index]?.productId
                             ? "is-invalid"
                             : ""
-                        }`}
+                          }`}
                         name={`invoiceItemList[${index}].productId`}
                         value={row.productId}
                         onChange={(e) => {
@@ -1257,7 +1246,7 @@ function InvoicesEdit() {
                         ))}
                       </select>
                       {formik.touched.invoiceItemList?.[index]?.productName &&
-                      formik.errors.invoiceItemList?.[index]?.productName ? (
+                        formik.errors.invoiceItemList?.[index]?.productName ? (
                         <div className="text-danger fs-6">
                           {formik.errors.invoiceItemList[index].productName}
                         </div>
@@ -1430,7 +1419,7 @@ function InvoicesEdit() {
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Terms & Conditions</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <textarea
                   rows="3"
                   type="text"
@@ -1468,7 +1457,7 @@ function InvoicesEdit() {
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center mb-3 sm-device">
                 <lable>Customer Notes</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"

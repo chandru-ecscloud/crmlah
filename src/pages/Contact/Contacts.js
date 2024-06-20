@@ -640,11 +640,11 @@ const Contacts = () => {
                         handleLeadConvert(table.getSelectedRowModel().rows)
                       }
                     >
-                      Soft Delete
+                      Delete
                     </button>
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -658,10 +658,10 @@ const Contacts = () => {
                       }
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </li>
                   <li>
-                    <button
+                    {/* <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
@@ -673,7 +673,7 @@ const Contacts = () => {
                       }
                     >
                       Mass Delete
-                    </button>
+                    </button> */}
                   </li>
                 </ul>
               </div>
