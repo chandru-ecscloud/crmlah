@@ -784,7 +784,7 @@ const Accounts = () => {
                     </li>
                   </>
                 )} */}
-                  {/* <li>
+                  <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -803,7 +803,7 @@ const Accounts = () => {
                         path={`associateQuotesWithAccount/${rowId}`}
                       />
                     </button>
-                  </li> */}
+                  </li>
                   <li>
                     <button
                       className="btn"

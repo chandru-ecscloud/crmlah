@@ -13,7 +13,7 @@ import Appointment from "../Appointments/AppointmentsCreate";
 import Activity from "./Activity";
 import Delete from "../../components/common/DeleteModel";
 import QuotesModel from "./QuotesModel";
-
+import SendCompanyProfile from "../Email/SendCompanyProfile";
 
 function AccountsShow() {
   const { id } = useParams();
@@ -99,10 +99,12 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1 gap-1" id="buttons-container">
+        <SendCompanyProfile accountData={accountData} />
+          <button className="btn btn-primary">
         <QuotesModel  userData={userData}
                         // onSuccess={refreshData}
                         path={`associateQuotesWithAccount/${id}`}
-                      />
+                      /></button>
           <Activity id={id} />
           <SendQuotes accountData={accountData} />
           <Appointment

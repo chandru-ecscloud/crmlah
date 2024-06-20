@@ -580,7 +580,7 @@ const Deals = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {/* <li>
+                  <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -596,7 +596,7 @@ const Deals = () => {
                         path={`associateInvoiceWithDeals/${rowId}`}
                       />
                     </button>
-                  </li> */}
+                  </li>
                   <li>
                     <button
                       className="btn"

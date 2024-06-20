@@ -114,13 +114,12 @@ const QuotesModel = ({ path,userData }) => {
 
   return (
     <div>
-      <Button variant="primary"
-        // className="btn btn-primary "
-        // style={{ width: "100%", border: "none" }}
+      <span 
+        style={{ width: "100%", border: "none" }}
         onClick={openModal}
       >
         Assign Quote
-      </Button>
+      </span>
       <Modal
         size="lg"
         show={isOpen}
