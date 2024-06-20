@@ -66,7 +66,6 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Formik value is ", data);
       const payload = {
         accountActivity: {
           accountId: accountId,
@@ -83,7 +82,6 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
           clientPhone: item.clientPhone,
         })),
       };
-      console.log("Payload:", payload);
       try {
         const response = await axios.put(
           `${API_URL}updateAccountActivityWithClientData/${id}`,
@@ -107,7 +105,7 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
 
   const handleClose = () => {
     setShow(false);
-    formik.resetForm();
+    // formik.resetForm();
   };
   const handleShow = () => {
     setShow(true);

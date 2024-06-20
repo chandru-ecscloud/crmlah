@@ -150,7 +150,7 @@ function Activity({ id }) {
                           <br />
                           <span className="text-muted small">
                             {expanded !== index.toString() &&
-                              truncateText(activity.note, 10)}
+                              truncateText(activity.note, 7)}
                           </span>
                         </div>
                         <div className="text-end ms-auto">
