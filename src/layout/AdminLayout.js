@@ -62,10 +62,7 @@ import CalenderShow from "../pages/Calendar/CalenderShow";
 
 import AllClient from "../pages/AllClient";
 import TrialNotification from "../components/common/TrialNotification ";
-import Proposal from "../pages/Proposal/Proposal";
-import ProposalCreate from "../pages/Proposal/ProposalCreate";
-import ProposalEdit from "../pages/Proposal/ProposalEdit";
-import ProposalShow from "../pages/Proposal/ProposalShow";
+import CompanyAdd from "../pages/User/CompanyAdd";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -139,12 +136,7 @@ function AdminLayout({ handleLogout }) {
         <Route path="/users/create" element={<UserCreate />} />
         <Route path="/users/edit/:id" element={<UserEdit />} />
         <Route path="/users/show/:id" element={<UserShow />} />
-
-        {/* User */}
-        <Route path="/proposal" element={<Proposal />} />
-        <Route path="/proposal/create" element={<ProposalCreate />} />
-        <Route path="/proposal/edit" element={<ProposalEdit />} />
-        <Route path="/proposal/show" element={<ProposalShow />} />
+        <Route path="/companyadd" element={<CompanyAdd />} />
 
         {/* Appointments  */}
         <Route path="/appointments" element={<Appointments />} />

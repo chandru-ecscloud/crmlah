@@ -7,51 +7,49 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { FaCamera } from "react-icons/fa6";
+// import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("*First Name is required"),
-  // last_name: Yup.string().required("*Last Name is required"),
-  // amount: Yup.number()
-  //   .typeError('Amount must be a number')
-  //   .integer('Amount must be an integer'),
   shipping_code: Yup.number()
-    .typeError('Shipping code must be a number')
-    .integer('Shipping code must be an integer'),
+    .typeError("Shipping code must be a number")
+    .integer("Shipping code must be an integer"),
   billing_code: Yup.number()
-    .typeError('Billing code must be a number')
-    .integer('Billing code must be an integer'),
-  country_code: Yup.string()
-    .required('Country code is required'),
-  // .matches(/^\+65$|^\+91$/, 'Invalid country code'), // Ensure only +65 or +91 are allowed
+    .typeError("Billing code must be a number")
+    .integer("Billing code must be an integer"),
+  country_code: Yup.string().required("Country code is required"),
   phone: Yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
       const { country_code } = this.parent;
       if (value && /\s/.test(value)) {
-        return this.createError({ message: 'Phone number should not contain spaces' });
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
       }
-      if (country_code === '65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      if (country_code === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (country_code === '91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      if (country_code === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
       }
-      return false; // Default validation for other country codes
+      return false; 
     }),
   email: Yup.string().email("Invalid email").required("*Email is required"),
-  company: Yup.string().required('Company Name is required'),
+  company: Yup.string().required("Company Name is required"),
 });
-
-
 
 function AccountsCreate() {
   const navigate = useNavigate();
   const owner = sessionStorage.getItem("user_name");
-  const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
-  const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [accountOption, setAccountOption] = useState([]);
   const [sameAsShipping, setSameAsShipping] = useState(false);
@@ -86,7 +84,7 @@ function AccountsCreate() {
     validationSchema: validationSchema,
     validateOnMount: true,
     onSubmit: async (data) => {
-      data.account_name = `${data.first_name}${data.last_name}`
+      data.account_name = `${data.first_name}${data.last_name}`;
 
       console.log("Account Datas:", data);
       try {
@@ -133,7 +131,7 @@ function AccountsCreate() {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   const handleSameAsShippingChange = () => {
     setSameAsShipping(!sameAsShipping);
     if (!sameAsShipping) {
@@ -214,10 +212,11 @@ function AccountsCreate() {
                 <input
                   {...formik.getFieldProps("account_owner")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.account_owner && formik.errors.account_owner
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.account_owner && formik.errors.account_owner
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="account_owner"
                   name="account_owner"
                   value={owner}
@@ -238,10 +237,11 @@ function AccountsCreate() {
                 <lable>Amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -287,10 +287,11 @@ function AccountsCreate() {
                 <input
                   {...formik.getFieldProps("first_name")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="first_name"
                   name="first_name"
                 />
@@ -299,7 +300,9 @@ function AccountsCreate() {
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.first_name && formik.errors.first_name && (
-                    <div className="text-danger ">{formik.errors.first_name}</div>
+                    <div className="text-danger ">
+                      {formik.errors.first_name}
+                    </div>
                   )}
                 </div>
               </div>
@@ -311,10 +314,11 @@ function AccountsCreate() {
                 <input
                   {...formik.getFieldProps("last_name")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="last_name"
                   name="last_name"
                 />
@@ -323,7 +327,9 @@ function AccountsCreate() {
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
                   {formik.touched.last_name && formik.errors.last_name && (
-                    <div className="text-danger ">{formik.errors.last_name}</div>
+                    <div className="text-danger ">
+                      {formik.errors.last_name}
+                    </div>
                   )}
                 </div>
               </div>
@@ -361,10 +367,12 @@ function AccountsCreate() {
                 <div className="input-group" style={{ width: "60%" }}>
                   <div>
                     <select
-                      className={`form-size form-select  ${formik.touched.country_code && formik.errors.country_code
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-size form-select  ${
+                        formik.touched.country_code &&
+                        formik.errors.country_code
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("country_code")}
                       style={{
                         width: "80px",
@@ -383,10 +391,11 @@ function AccountsCreate() {
                     type="tel"
                     name="phone"
                     id="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Text input with checkbox"
                   />
                 </div>
@@ -395,11 +404,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.country_code && formik.errors.country_code && (
-                    <div className="text-danger ">
-                      {formik.errors.country_code}
-                    </div>
-                  )}
+                  {formik.touched.country_code &&
+                    formik.errors.country_code && (
+                      <div className="text-danger ">
+                        {formik.errors.country_code}
+                      </div>
+                    )}
                   {formik.touched.phone && formik.errors.phone && (
                     <div className="text-danger ">{formik.errors.phone}</div>
                   )}
@@ -412,10 +422,11 @@ function AccountsCreate() {
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("company")}
                   id="company"
                 />
@@ -450,10 +461,11 @@ function AccountsCreate() {
                 <input
                   {...formik.getFieldProps("email")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="email"
                   name="email"
                 />
@@ -653,8 +665,10 @@ function AccountsCreate() {
           </h4>
         </div>
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-
-          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "55rem" }}>
+          <div
+            className="d-flex justify-content-center align-items-center mb-4 gap-2"
+            style={{ marginLeft: "55rem" }}
+          >
             <label htmlFor="sameAsShipping"> Same as Shipping Address</label>
             <input
               type="checkbox"
@@ -664,7 +678,6 @@ function AccountsCreate() {
               className="form-check-input"
             />
           </div>
-
         </div>
         <div className="container">
           <div className="row">
@@ -673,7 +686,7 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Shipping Street</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('shipping_street')}
+                  {...formik.getFieldProps("shipping_street")}
                   type="text"
                   className="form-size form-control"
                   name="shipping_street"
@@ -683,11 +696,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.shipping_street && formik.errors.shipping_street && (
-                    <div className="text-danger">
-                      {formik.errors.shipping_street}
-                    </div>
-                  )}
+                  {formik.touched.shipping_street &&
+                    formik.errors.shipping_street && (
+                      <div className="text-danger">
+                        {formik.errors.shipping_street}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -696,12 +710,16 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Billing Street</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('billing_street')}
+                  {...formik.getFieldProps("billing_street")}
                   type="text"
                   className="form-size form-control"
                   name="billing_street"
                   id="billing_street"
-                  value={sameAsShipping ? formik.values.shipping_street : formik.values.billing_street}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_street
+                      : formik.values.billing_street
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -710,11 +728,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billing_street && formik.errors.billing_street && (
-                    <div className="text-danger">
-                      {formik.errors.billing_street}
-                    </div>
-                  )}
+                  {formik.touched.billing_street &&
+                    formik.errors.billing_street && (
+                      <div className="text-danger">
+                        {formik.errors.billing_street}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -724,7 +743,7 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Shipping City</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('shipping_city')}
+                  {...formik.getFieldProps("shipping_city")}
                   type="text"
                   className="form-size form-control"
                   name="shipping_city"
@@ -734,11 +753,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.shipping_city && formik.errors.shipping_city && (
-                    <div className="text-danger">
-                      {formik.errors.shipping_city}
-                    </div>
-                  )}
+                  {formik.touched.shipping_city &&
+                    formik.errors.shipping_city && (
+                      <div className="text-danger">
+                        {formik.errors.shipping_city}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -747,12 +767,16 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Billing City</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('billing_city')}
+                  {...formik.getFieldProps("billing_city")}
                   type="text"
                   className="form-size form-control"
                   name="billing_city"
                   id="billing_city"
-                  value={sameAsShipping ? formik.values.shipping_city : formik.values.billing_city}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_city
+                      : formik.values.billing_city
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -761,11 +785,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billing_city && formik.errors.billing_city && (
-                    <div className="text-danger">
-                      {formik.errors.billing_city}
-                    </div>
-                  )}
+                  {formik.touched.billing_city &&
+                    formik.errors.billing_city && (
+                      <div className="text-danger">
+                        {formik.errors.billing_city}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -775,7 +800,7 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Shipping State</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('shipping_state')}
+                  {...formik.getFieldProps("shipping_state")}
                   type="text"
                   className="form-size form-control"
                   name="shipping_state"
@@ -785,11 +810,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.shipping_state && formik.errors.shipping_state && (
-                    <div className="text-danger">
-                      {formik.errors.shipping_state}
-                    </div>
-                  )}
+                  {formik.touched.shipping_state &&
+                    formik.errors.shipping_state && (
+                      <div className="text-danger">
+                        {formik.errors.shipping_state}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -798,12 +824,16 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Billing State</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('billing_state')}
+                  {...formik.getFieldProps("billing_state")}
                   type="text"
                   className="form-size form-control"
                   name="billing_state"
                   id="billing_state"
-                  value={sameAsShipping ? formik.values.shipping_state : formik.values.billing_state}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_state
+                      : formik.values.billing_state
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -812,11 +842,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billing_state && formik.errors.billing_state && (
-                    <div className="text-danger">
-                      {formik.errors.billing_state}
-                    </div>
-                  )}
+                  {formik.touched.billing_state &&
+                    formik.errors.billing_state && (
+                      <div className="text-danger">
+                        {formik.errors.billing_state}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -826,9 +857,13 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Shipping Code</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('shipping_code')}
+                  {...formik.getFieldProps("shipping_code")}
                   type="text"
-                  className={`form-size form-control ${formik.touched.shipping_code && formik.errors.shipping_code ? 'is-invalid' : ''}`}
+                  className={`form-size form-control ${
+                    formik.touched.shipping_code && formik.errors.shipping_code
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shipping_code"
                   id="shipping_code"
                 />
@@ -836,11 +871,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.shipping_code && formik.errors.shipping_code && (
-                    <div className="text-danger">
-                      {formik.errors.shipping_code}
-                    </div>
-                  )}
+                  {formik.touched.shipping_code &&
+                    formik.errors.shipping_code && (
+                      <div className="text-danger">
+                        {formik.errors.shipping_code}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -849,12 +885,20 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Billing Code</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('billing_code')}
+                  {...formik.getFieldProps("billing_code")}
                   type="text"
-                  className={`form-size form-control ${formik.touched.billing_code && formik.errors.billing_code ? 'is-invalid' : ''}`}
+                  className={`form-size form-control ${
+                    formik.touched.billing_code && formik.errors.billing_code
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billing_code"
                   id="billing_code"
-                  value={sameAsShipping ? formik.values.shipping_code : formik.values.billing_code}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_code
+                      : formik.values.billing_code
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -863,11 +907,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billing_code && formik.errors.billing_code && (
-                    <div className="text-danger">
-                      {formik.errors.billing_code}
-                    </div>
-                  )}
+                  {formik.touched.billing_code &&
+                    formik.errors.billing_code && (
+                      <div className="text-danger">
+                        {formik.errors.billing_code}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -877,7 +922,7 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Shipping Country</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('shipping_country')}
+                  {...formik.getFieldProps("shipping_country")}
                   type="text"
                   className="form-size form-control"
                   name="shipping_country"
@@ -887,11 +932,12 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.shipping_country && formik.errors.shipping_country && (
-                    <div className="text-danger">
-                      {formik.errors.shipping_country}
-                    </div>
-                  )}
+                  {formik.touched.shipping_country &&
+                    formik.errors.shipping_country && (
+                      <div className="text-danger">
+                        {formik.errors.shipping_country}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -900,12 +946,16 @@ function AccountsCreate() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Billing Country</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps('billing_country')}
+                  {...formik.getFieldProps("billing_country")}
                   type="text"
                   className="form-size form-control"
                   name="billing_country"
                   id="billing_country"
-                  value={sameAsShipping ? formik.values.shipping_country : formik.values.billing_country}
+                  value={
+                    sameAsShipping
+                      ? formik.values.shipping_country
+                      : formik.values.billing_country
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsShipping}
@@ -914,17 +964,15 @@ function AccountsCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.billing_country && formik.errors.billing_country && (
-                    <div className="text-danger">
-                      {formik.errors.billing_country}
-                    </div>
-                  )}
+                  {formik.touched.billing_country &&
+                    formik.errors.billing_country && (
+                      <div className="text-danger">
+                        {formik.errors.billing_country}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
-
-
-
           </div>
         </div>
         <div className="container-fluid my-5">
@@ -955,4 +1003,3 @@ function AccountsCreate() {
 }
 
 export default AccountsCreate;
-

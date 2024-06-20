@@ -42,11 +42,9 @@ const validationSchema = Yup.object({
   note: Yup.string().required("*Notes are required"),
 });
 
-const ActivityEdit = ({ id, fetchData, accountId}) => {
-
+const ActivityEdit = ({ id, fetchData, accountId }) => {
   // console.log("Account ID :",accountId);
   // console.log("Activity ID :",id);
-  const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [rows, setRows] = useState([{}]);
 
@@ -56,6 +54,7 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
     initialValues: {
       status: "",
       note: "",
+      date: "",
       clientData: [
         {
           clientName: "",
@@ -67,15 +66,16 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      console.log("Formik value is ", data);
       const payload = {
         accountActivity: {
-          accountId : accountId,
+          accountId: accountId,
           activityOwner: userName,
           status: data.status,
           note: data.note,
-          date:data.date
+          date: data.date,
         },
-        clientDataModels: rows.map((item) => ({
+        clientDataModels: data.clientData.map((item) => ({
           id: item.id,
           clientName: item.clientName,
           clientEmail: item.clientEmail,
@@ -85,7 +85,8 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
       };
       console.log("Payload:", payload);
       try {
-        const response = await axios.put(`${API_URL}updateAccountActivityWithClientData/${id}`,
+        const response = await axios.put(
+          `${API_URL}updateAccountActivityWithClientData/${id}`,
           payload,
           {
             headers: {
@@ -118,7 +119,6 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
     formik.setFieldValue("clientData", [
       ...formik.values.clientData,
       {
-        id: newRow.id,
         clientName: "",
         clientPhone: "",
         clientEmail: "",
@@ -140,15 +140,8 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
       const response = await axios.get(
         `${API_URL}getAllAccountActivityById/${id}`
       );
-
       formik.setValues(response.data);
-      const getActivity = {
-        clientDataModels : response.data.clientData
-      }
-      const clientDataModelsData =  getActivity.clientDataModels
-      setRows(clientDataModelsData);
-      console.log("Response Data:", response.data);
-      console.log("Response Row Client Data Model:",clientDataModelsData);
+      setRows(response.data.clientData);
     } catch (error) {
       console.log(`Error fetching data: ${error.message}`);
     }
@@ -156,6 +149,7 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
@@ -344,6 +338,23 @@ const ActivityEdit = ({ id, fetchData, accountId}) => {
                 </select>
                 {formik.touched.status && formik.errors.status ? (
                   <div className="invalid-feedback">{formik.errors.status}</div>
+                ) : null}
+              </div>
+              <div className="form-group mt-2">
+                <label htmlFor="status">Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  id="date"
+                  {...formik.getFieldProps("date")}
+                  className={`form-control ${
+                    formik.touched.date && formik.errors.date
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                ></input>
+                {formik.touched.date && formik.errors.date ? (
+                  <div className="invalid-feedback">{formik.errors.date}</div>
                 ) : null}
               </div>
               <div className="form-group mt-2">

@@ -12,6 +12,8 @@ import { API_URL } from "../../Config/URL";
 import axios from "axios";
 import CalenderAdd from "./CalenderAdd";
 import CalenderShow from "./CalenderShow";
+import appoinmentRescheduleTemplete from "../Email/AppoinmentRescheduleTemplete";
+import appoinmentCancelTemplete from "../Email/AppoinmentCancelTemplete";
 
 function Calendar() {
   const [data, setData] = useState([]);
@@ -114,6 +116,7 @@ function Calendar() {
         end: endDateTime,
         allDay: false,
         role: item.appointmentRoleType,
+        email: item.email,
         resourceId: item.userId, // Assume that the data includes an employeeId field
       };
     });
@@ -146,6 +149,16 @@ function Calendar() {
     console.log(
       `Deleted event: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
     );
+    const email = event.extendedProps.email || "";
+    const data = {
+      // appointmentStartDate: startDate,
+      // appointmentEndDate: endDate,
+      // appointmentStartTime: `${startTime12} - ${endTime12}`,
+      appointmentstatus: "CANCELD",
+      email: email,
+      appointmentFor: event.title.split(" - ")[1]
+    }
+    appoinmentCancelTemplete(data);
   };
 
   const handleEventClick = (eventClickInfo) => {
@@ -198,6 +211,7 @@ function Calendar() {
       event.setEnd(new Date(event.start.getTime() + 60 * 60 * 1000)); // Default 1 hour duration
     }
     console.log("event>=", event);
+
     const convertTo12Hour = (timeString) => {
       const [hour, minute] = timeString.split(":");
       let hour12 = hour % 12 || 12; // Convert hour from 24-hour to 12-hour format
@@ -220,12 +234,14 @@ function Calendar() {
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-  
+
     const newStart = new Date(event.start);
     newStart.setHours(0, 0, 0, 0);
-  
+
+    const email = event.extendedProps.email || "";
+
     if (newStart < currentDate) {
-      toast.warning('Cannot drop the event in the past.');
+      toast.warning("Cannot drop the event in the past.");
       eventDropInfo.revert();
       return;
     }
@@ -236,18 +252,18 @@ function Calendar() {
         appointmentEndDate: endDate,
         appointmentStartTime: `${startTime12} - ${endTime12}`,
         appointmentstatus: "RESCHEDULED",
+        email: email,
       };
 
       if (newResource) {
         const updaterole = newResource._resource.extendedProps.role || null;
         const updateroleId = newResource.id;
-        // if (updaterole !== "GENERAL") {
         payload.appointmentRoleType = updaterole;
         payload.userId = updateroleId;
-        // }
       }
-      
+
       console.log("Payload is", payload);
+
       try {
         const updateResponse = await axios.put(
           `${API_URL}updateAppointment/${event.id}`,
@@ -262,9 +278,20 @@ function Calendar() {
         if (updateResponse.status === 200) {
           toast.success(updateResponse.data.message);
           fetchData();
+
+          const id = event.id;
+          const data = {
+            appointmentStartDate: startDate,
+            appointmentEndDate: endDate,
+            appointmentStartTime: `${startTime12} - ${endTime12}`,
+            appointmentstatus: "RESCHEDULED",
+            email: email,
+            appointmentFor: event.title.split(" - ")[1]
+          }
+          appoinmentRescheduleTemplete(data , id);
+          
         } else {
           toast.error("Appointment Update Unsuccessful.");
-          // Revert state if update fails (optional)
           setEvents((prevEvents) =>
             prevEvents.map((e) =>
               e.id === event.id
@@ -275,7 +302,6 @@ function Calendar() {
         }
       } catch (error) {
         toast.error("Failed to update appointment: " + error.message);
-        // Revert state if update fails (optional)
         setEvents((prevEvents) =>
           prevEvents.map((e) =>
             e.id === event.id
@@ -312,15 +338,17 @@ function Calendar() {
     const startTime12 = convertTo12Hour(startTime24);
     const endTime12 = convertTo12Hour(endTime24);
 
+    const email = event.extendedProps.email || "";
+ 
     try {
       const payload = {
         appointmentStartDate: startDate,
         appointmentEndDate: endDate,
         appointmentStartTime: `${startTime12} - ${endTime12}`,
         appointmentstatus: "RESCHEDULED",
+        email: email,
       };
-
-      // console.log("Event Resize Payload is", payload);
+      console.log("Event Resize Payload is", payload);
       try {
         const response = await axios.put(
           `${API_URL}updateAppointment/${event.id}`,
@@ -334,8 +362,20 @@ function Calendar() {
         if (response.status === 200) {
           toast.success(response.data.message);
           fetchData();
+
+          const id = event.id;
+          const data = {
+            appointmentStartDate: startDate,
+            appointmentEndDate: endDate,
+            appointmentStartTime: `${startTime12} - ${endTime12}`,
+            appointmentstatus: "RESCHEDULED",
+            email: email,
+            appointmentFor: event.title.split(" - ")[1]
+          }
+          appoinmentRescheduleTemplete(data , id);
+
         } else {
-          toast.error("Appointment Created Unsuccessful.");
+          toast.error("Appointment Rescheduling Unsuccessful.");
         }
       } catch (error) {
         if (error.response?.status === 400) {
@@ -411,9 +451,10 @@ function Calendar() {
       });
       setShowModal(true);
     } else {
-      toast.warning('Cannot select a past date for events.');
+      toast.warning("Cannot select a past date for events.");
     }
   };
+
   return (
     <div className="calendar">
       {!(

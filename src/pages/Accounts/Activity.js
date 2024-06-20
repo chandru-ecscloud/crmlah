@@ -160,12 +160,25 @@ function Activity({ id }) {
                         </div>
                       </Accordion.Header>
                       <Accordion.Body>
-                        {activity.note}
+                        <div className="row">
+                          <div className="col-10">{activity.note}</div>
+                          <div className="col-2">
+                            <ActivityEdit
+                              fetchData={fetchData}
+                              accountId={id}
+                              id={activity.id}
+                            />
+                            <Delete
+                              onSuccess={fetchData}
+                              path={`deleteAccountActivity/${activity.id}`}
+                            />
+                          </div>
+                        </div>
                         {activity.clientData &&
-                          activity.clientData.map((client, clientIndex) => (
+                          activity.clientData.map((client) => (
                             <div className="mt-3" key={client.id}>
                               <div className="row">
-                                <div className="col-10">
+                                <div className="col-12">
                                   <span>
                                     <b>Name:</b> {client.clientName}
                                   </span>
@@ -181,18 +194,6 @@ function Activity({ id }) {
                                       : ""}{" "}
                                     {client.clientPhone}
                                   </span>
-                                </div>
-                                <div className="col-2">
-                                  <ActivityEdit
-                                    fetchData={fetchData}
-                                    accountId={id}
-                                    id={activity.id}
-                                  />
-
-                                  <Delete
-                                    onSuccess={fetchData}
-                                    path={`deleteAccountActivity/${activity.id}`}
-                                  />
                                 </div>
                               </div>
                             </div>

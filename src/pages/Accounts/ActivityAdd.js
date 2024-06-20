@@ -45,6 +45,8 @@ const validationSchema = Yup.object({
 const ActivityAdd = ({ id, fetchData }) => {
   const [show, setShow] = useState(false);
   const role = sessionStorage.getItem("role");
+  const currentData = new Date().toISOString().split("T")[0];
+
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -146,7 +148,6 @@ const ActivityAdd = ({ id, fetchData }) => {
       formik.setFieldValue("clientData", formik.values.clientData.slice(0, -1));
     }
   };
-  const currentData = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     formik.setFieldValue("date", currentData);
@@ -155,7 +156,12 @@ const ActivityAdd = ({ id, fetchData }) => {
 
   return (
     <>
-      <Button variant="danger" disabled={role === "CMP_USER"} className="me-2" onClick={handleShow}>
+      <Button
+        variant="danger"
+        disabled={role === "CMP_USER"}
+        className="me-2"
+        onClick={handleShow}
+      >
         New Activity
       </Button>
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
