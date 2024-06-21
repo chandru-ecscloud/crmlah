@@ -15,43 +15,46 @@ function ProposalShow() {
   const [invoiceData, setInvoiceData] = useState({});
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-
-  // Dummy fetchData function to simulate API call
-  // const fetchData = async () => {
-  //   try {
-  //     // Simulated data, replace with your actual API call
-  //     const response = await axios.get(`${API_URL}/proposal/${id}`);
-  //     setProposalData({
-  //       ...response.data,
-  //       attachment: "https://www.example.com/sample.pdf", // Replace with actual dummy attachment URL
-  //     });
-  //     setInvoiceData(response.data.invoiceData);
-  //   } catch (error) {
-  //     toast.error("Error fetching data:", error);
-  //   }
+ console.log("data",proposalData)
+  
+  const getData=async()=>{
+    try {
+      const response = await axios.get(`${API_URL}getAllCompanyProposalById/${id}`, {
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+      });
+  
+      if (response.status === 200) {
+        setProposalData(response.data)
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  }
+  useEffect(()=>{
+  getData();
+  },[]);
+  // const handelEdit = () => {
+  //   navigate(`/proposal/edit`);
   // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [id]);
-
-  const handelEdit = () => {
-    navigate(`/proposal/edit`);
-  };
 
   const renderAttachment = (attachment) => {
     if (!attachment) {
       return <span>No attachment available</span>;
     }
-
-    const extension = attachment.split('.').pop().toLowerCase();
+// console.log("object",attachment.multipleAttachments)
+    const extension = attachment.multipleAttachments.split('.').pop().toLowerCase();
 
     if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif') {
-      return <img src={attachment} alt="Attachment" style={{ width: "100%", maxHeight: "300px" }} />;
+      return <img src={attachment.multipleAttachments} alt="Attachment" style={{ width: "100%", maxHeight: "300px" }} className="img-fluid mb-1" />;
     } else if (extension === 'pdf') {
-      return <iframe src={attachment} title="Attachment" style={{ width: "100%", height: "500px" }} />;
+      return <iframe src={attachment.multipleAttachments} title="Attachment" style={{ width: "100%", height: "500px" }} />;
     } else {
-      return <a href={attachment} download>Download Attachment</a>;
+      return <a href={attachment.multipleAttachments} download>Download Attachment</a>;
     }
   };
 
@@ -94,13 +97,15 @@ function ProposalShow() {
               </span>
             </OverlayTrigger>
           )}
+          <Link to={`/proposal/edit/${id}`}>
           <button
             className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER"}
-            onClick={handelEdit}
+            // onClick={handelEdit}
           >
             Edit
           </button>
+          </Link>
         </div>
       </section>
 
@@ -133,8 +138,11 @@ function ProposalShow() {
               </div>
               <div>
                 <label className="text-dark Label">Attachment</label>
+              
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{renderAttachment(proposalData.attachment)}
+                 &nbsp; : &nbsp; {proposalData&& proposalData.companyProposalAttachments?.map((attachment)=>(
+                 <div>{renderAttachment(attachment)}</div> 
+                )) }
                 </span>
               </div>
               <div>

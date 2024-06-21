@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -12,6 +12,9 @@ import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
 // Dummy data to be displayed in the table
 const dummyData = [
@@ -37,10 +40,12 @@ const dummyData = [
 ];
 
 const Proposal = () => {
-  const [loading, setLoading] = useState(false); // Set to false as we're using dummy data
+  const [loading, setLoading] = useState(false);
+  const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
-  const role = "CMP_OWNER"; 
-
+  const role = "CMP_OWNER";
+  const [datas, setDatas] = useState([]);
+  console.log("data", datas);
   const columns = useMemo(
     () => [
       {
@@ -48,7 +53,7 @@ const Proposal = () => {
         enableHiding: false,
         header: "Proposal Name",
         Cell: ({ row }) => (
-          <Link to={"/proposal/show"} className="rowName">
+          <Link to={`/proposal/show/${row.original.id}`} className="rowName">
             {row.original.proposalName}
           </Link>
         ),
@@ -68,25 +73,26 @@ const Proposal = () => {
         enableHiding: false,
         header: "Description",
       },
-      {
-        accessorKey: "created_at",
-        header: "Created At",
-        Cell: ({ row }) => row.original.createdAt.substring(0, 10),
-      },
-      {
-        accessorKey: "updated_at",
-        header: "Updated At",
-        Cell: ({ row }) => {
-          if (row.original.updatedAt) {
-            return row.original.updatedAt.substring(0, 10);
-          } else {
-            return "";
-          }
-        },
-      },
+      // {
+      //   accessorKey: "created_at",
+      //   header: "Created At",
+      //   Cell: ({ row }) => row.original?.createdAt?.substring(0, 10),
+      // },
+      // {
+      //   accessorKey: "updated_at",
+      //   header: "Updated At",
+      //   Cell: ({ row }) => {
+      //     if (row.original.updatedAt) {
+      //       return row.original.updatedAt.substring(0, 10);
+      //     } else {
+      //       return "";
+      //     }
+      //   },
+      // },
     ],
     []
   );
+
 
   const handelNavigateClick = () => {
     navigate("/proposal/create");
@@ -94,7 +100,7 @@ const Proposal = () => {
 
   const table = useMaterialReactTable({
     columns,
-    data: dummyData,
+    data: datas,
     initialState: {
       columnVisibility: {},
     },
@@ -144,7 +150,7 @@ const Proposal = () => {
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        navigate(`/proposal/show`);
+        navigate(`/proposal/show/${row.original.id}`);
       },
       style: { cursor: "pointer" },
     }),
@@ -198,6 +204,51 @@ const Proposal = () => {
       },
     },
   });
+  const handledelete = async (rows) => {
+    const id = rows.map((row) => row.original.id);
+
+    try{
+      const response = await axios.delete(
+        `${API_URL}deleteCompanyProposal/${id}`,
+        // {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // }
+      );
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+        table.setRowSelection(false);
+      } 
+    }catch(error){
+      toast.error("Error deleting Data");
+    }
+  }
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllCompanyProposalByCompanyId/${companyId}`,
+        {
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        }
+      );
+
+      if (response.status === 200) {
+        setDatas(response.data);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <section>
@@ -209,7 +260,7 @@ const Proposal = () => {
               <span className="fs-4 fw-bold px-2">Proposal</span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
-            <div style={{ paddingRight: "10px" }}>
+              <div style={{ paddingRight: "10px" }}>
                 <button
                   className={`btn btn-primary ${
                     role === "CMP_USER" && "disabled"
@@ -235,6 +286,15 @@ const Proposal = () => {
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handledelete(table.getSelectedRowModel().rows)
+                      }
                     >
                       Delete
                     </button>

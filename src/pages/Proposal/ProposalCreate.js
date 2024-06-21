@@ -15,7 +15,7 @@ const validationSchema = yup.object().shape({
   subject: yup.string().required("*Subject is required"),
   description: yup.string().required("*Description is required"),
   mailBody: yup.string().required("*Mail Body is required"),
-  files: yup.string().required("*Attachment is required"),
+  // files: yup.string().required("*Attachment is required"),
 });
 
 function ProposalCreate() {
@@ -42,14 +42,26 @@ function ProposalCreate() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Deals Datas:", data);
+      const formData =new FormData()
+      formData.append("companyId", companyId)
+      formData.append("proposalName ", data.proposal_name)
+      formData.append("description ", data.description)
+      formData.append("proposalType ", data.proposalType)
+      formData.append("subject ", data.subject)
+      formData.append("mailBody  ", data.mailBody )
+      // formData.append("files ", data.files)
+      data.files.forEach((file) => {
+        formData.append("files", file);
+      });
       try {
-        const response = await axios.post(`${API_URL}newProposal`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const response = await axios.post(`${API_URL}createCompanyProposalWithAttachments`, formData, {
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+          formik.resetForm();
           navigate("/proposal");
         } else {
           toast.error(response.data.message);
@@ -173,7 +185,7 @@ function ProposalCreate() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group ">
                   <input
-                    className={`form-control custom-file-input ${
+                    className={`form-size form-control custom-file-input ${
                       formik.touched.files && formik.errors.files
                         ? "is-invalid"
                         : ""
@@ -199,17 +211,18 @@ function ProposalCreate() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-12 mb-3 mt-2">
-              <div className="d-flex align-items-start justify-content-center sm-device">
+            <div className="col-12 mb-3 mt-2">
+              <div className="d-flex align-items-start justify-content-end">
                 <label>Mail Body</label>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
                   className="form-size form-control"
-                  {...formik.getFieldProps("description")}
-                  name="description"
-                  id="description"
+                  {...formik.getFieldProps("mailBody")}
+                  name="mailBody"
+                  id="mailBody"
+                  style={{ minWidth: "81%" }}
                 />
               </div>
             </div>

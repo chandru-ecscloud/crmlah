@@ -18,9 +18,8 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { Button, Modal } from "react-bootstrap";
+import mailContent from "../Email/MailContent";
+import SendCompanyProfile from "../Email/SendCompanyProfile";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -38,65 +37,10 @@ const Lead = () => {
   const [datas, setDatas] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
   // console.log(role);
+  const [emails, setEmails] = useState([]);
   const navigate = useNavigate();
   const companyId = sessionStorage.getItem("companyId");
   const [count, setCount] = useState(0);
-  const [show, setShow] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const handleShow = () => setShow(true);
-  const [showRadios, setShowRadios] = useState(false);
-
-  const handleProposalTypeChange = (event) => {
-    formik.handleChange(event);
-    setShowRadios(!!event.target.value);
-  };
-
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-    setSelectedFile(null);
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    formik.setFieldValue("files", file);
-  };
-
-  const validationSchema = yup.object().shape({
-    proposalType: yup.string().required("*proposal Type is required"),
-    proposal: yup.array()
-      .of(yup.string().required("*Working Days is required!"))
-      .min(1, "*Working Days is required!"),
-  });
-  console.log("object", datas)
-  const formik = useFormik({
-    initialValues: {
-      proposalType: "",
-      file: "",
-      generateLink: "",
-
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (data) => {
-      console.log(data);
-      // try {
-      //   const response = await api.post(`/createNewsUpdatedSaveImages`, formData);
-      //   if (response.status === 201) {
-      //     setShow(false);
-      //     formik.resetForm();
-      //     toast.success(response.data.message);
-      //     refreshData()
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
-    },
-  });
 
   const columns = useMemo(
     () => [
@@ -563,7 +507,11 @@ const Lead = () => {
       style: { cursor: "pointer" },
     }),
   });
-
+ 
+  const getEmail = (rows) => {
+    const emails = rows.map((row) => row.original.email);
+    setEmails(emails);
+  };
   return (
     <section>
       {loading && <LinearProgress />}
@@ -776,13 +724,13 @@ const Lead = () => {
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
-                      onClick={handleShow}
+                      onClick={() => getEmail(table.getSelectedRowModel().rows)}
                       disabled={
                         !table.getIsSomeRowsSelected() &&
                         !table.getIsAllRowsSelected()
                       }
                     >
-                      Company Proposal
+                      <SendCompanyProfile emails={emails} />
                     </button>
                   </li>
                 </ul>
@@ -790,155 +738,6 @@ const Lead = () => {
             </div>
           </div>
 
-          <Modal
-            show={show}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            onHide={handleClose}
-          >
-            <form onSubmit={formik.handleSubmit}>
-              <Modal.Header closeButton
-                closeVariant="white" className="Calenderview"
-              >
-                <Modal.Title>
-                  Send Proposal
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="row">
-                  <div className="mb-2">
-                    <label className="form-label">Proposal Type</label>
-                    <select
-                      {...formik.getFieldProps("proposalType")}
-                      className={`form-select ${formik.touched.proposalType && formik.errors.proposalType ? "is-invalid" : ""}`}
-                      aria-label="Default select example"
-                      onChange={handleProposalTypeChange}
-                    >
-                      <option selected value=""></option>
-                      <option value="Company_Profile">Company Profile</option>
-                      <option value="Other's">Other's</option>
-                    </select>
-                    {formik.touched.proposalType && formik.errors.proposalType && (
-                      <div className="invalid-feedback">
-                        {formik.errors.proposalType}
-                      </div>
-                    )}
-                  </div>
-
-                  {showRadios && (
-                    <div className="mb-2">
-                      <div className="">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="radio"
-                          id="1"
-                        >
-                        </input>&nbsp;&nbsp;
-                        <label className="form-check-label" htmlFor="1">
-                          Company Profile
-                        </label>
-                      </div>
-                      <div className="">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="radio"
-                          id="2">
-                        </input>&nbsp;&nbsp;
-                        <label className="form-check-label" htmlFor="2">
-                          Infrastructure
-                        </label>
-                      </div>
-                      <div className="">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="radio"
-                          id="3">
-                        </input>&nbsp;&nbsp;
-                        <label className="form-check-label" htmlFor="3">
-                          AWS
-                        </label>
-                      </div>
-                      {formik.touched.proposal && formik.errors.proposal && (
-                        <div className="invalid-feedback">
-                          {formik.errors.proposal}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <div className="mb-2">
-                    <label className="form-label">
-                      Attachments
-                    </label>
-                    <div className="input-group mb-3">
-                      <input
-                        type="file"
-                        className={`form-control ${formik.touched.file && formik.errors.file ? "is-invalid" : ""}`}
-                        onChange={handleFileChange}
-                      />
-                      {formik.touched.file && formik.errors.file && (
-                        <div className="invalid-feedback">
-                          {formik.errors.file}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {/* {selectedFile && (
-                    <div className="mb-2">
-                      {selectedFile.type.startsWith("image") && (
-                        <img
-                          src={URL.createObjectURL(selectedFile)}
-                          alt="Selected File"
-                          style={{ maxHeight: "100px" }}
-                        />
-                      )}
-                    </div>
-                  )} */}
-
-                  <div className="mb-2">
-                    <label className="form-label">
-                      Generate Appointment Link
-                    </label>
-                    <div className="form-check form-switch">
-                      <input
-                        type="checkbox"
-                        role="switch"
-                        id="yes"
-                        className={`form-check-input ${formik.touched.generateLink && formik.errors.generateLink ? "is-invalid" : ""}`}
-                        {...formik.getFieldProps("generateLink")}
-                        checked
-                      />
-                    </div>
-                    {formik.touched.generateLink && formik.errors.generateLink && (
-                      <div className="invalid-feedback">{formik.errors.generateLink}</div>
-                    )}
-                  </div>
-                </div>
-              </Modal.Body>
-
-              <Modal.Footer className="mt-5">
-                <Button className="btn btn-danger" onClick={handleClose}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Save
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal>
           <ThemeProvider theme={theme}>
             <MaterialReactTable table={table} />
           </ThemeProvider>

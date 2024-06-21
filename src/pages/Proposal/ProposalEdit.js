@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { FaCamera } from "react-icons/fa6";
@@ -10,48 +10,60 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email("*Enter valid email")
-    .required("*Email is required"),
-  proposal_name: yup.string().required("*Proposal name is required"),
+  // email: yup
+  //   .string()
+  //   .email("*Enter valid email")
+  //   .required("*Email is required"),
+  proposalName: yup.string().required("*Proposal name is required"),
   proposalType: yup.string().required("*Proposal Type is required"),
   subject: yup.string().required("*Subject is required"),
   description: yup.string().required("*Description is required"),
-  files: yup.string().required("*Attachment is required"),
+  // files: yup.string().required("*Attachment is required"),
 });
 
 function ProposalEdit() {
+  const { id } = useParams();
   const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
-  const [accountOption, setAccountOption] = useState([]);
-  const [dealOption, setDealOption] = useState([]);
-  const [contactOption, setContactOption] = useState([]);
-  const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
   const [sameAsShipping, setSameAsShipping] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      proposal_name: "Proposal A",
-      proposalType: "Type A",
-      subject: "Subject A",
-      description: "Test",
-      mailBody: "Mail",
+      proposalName: "",
+      proposalType: "",
+      subject: "",
+      description: "",
+      mailBody: "",
       files: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Deals Datas:", data);
+      const formData = new FormData();
+      formData.append("companyId", companyId);
+      formData.append("proposalName ", data.proposalName);
+      formData.append("description ", data.description);
+      formData.append("proposalType ", data.proposalType);
+      formData.append("subject ", data.subject);
+      formData.append("mailBody  ", data.mailBody);
+      // formData.append("files ", data.files)
+      data.files?.forEach((file) => {
+        formData.append("files", file);
+      });
       try {
-        const response = await axios.post(`${API_URL}newProposal`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
+        const response = await axios.put(
+          `${API_URL}updateCompanyProposalWithAttachments/${id}`,
+          formData,
+          {
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+          }
+        );
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/proposal");
         } else {
@@ -63,6 +75,30 @@ function ProposalEdit() {
     },
   });
 
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllCompanyProposalById/${id}`,
+        {
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        }
+      );
+
+      if (response.status === 200) {
+        formik.setValues(response.data);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
@@ -78,11 +114,9 @@ function ProposalEdit() {
                 <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
-              <span>
-                <button className="btn btn-primary" type="submit">
-                  Save
-                </button>
-              </span>
+              <button className="btn btn-primary" type="submit">
+                Save
+              </button>
             </div>
           </div>
         </div>
@@ -100,21 +134,21 @@ function ProposalEdit() {
                 <input
                   type="text"
                   className={`form-size form-control ${
-                    formik.touched.proposal_name && formik.errors.proposal_name
+                    formik.touched.proposalName && formik.errors.proposalName
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("proposal_name")}
-                  id="proposal_name"
+                  {...formik.getFieldProps("proposalName")}
+                  id="proposalName"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.proposal_name &&
-                    formik.errors.proposal_name && (
+                  {formik.touched.proposalName &&
+                    formik.errors.proposalName && (
                       <p className="text-danger">
-                        {formik.errors.proposal_name}
+                        {formik.errors.proposalName}
                       </p>
                     )}
                 </div>
@@ -130,7 +164,9 @@ function ProposalEdit() {
                   {...formik.getFieldProps("proposalType")}
                   id="proposalType"
                 >
-                  <option value="Company Profile" selected>Company Profile</option>
+                  <option value="Company Profile" selected>
+                    Company Profile
+                  </option>
                   <option value="Others">Others</option>
                 </select>
               </div>
@@ -193,17 +229,18 @@ function ProposalEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-12 mb-3 mt-2">
-              <div className="d-flex align-items-start justify-content-center sm-device">
+            <div className="col-12 mb-3 mt-2">
+              <div className="d-flex align-items-start justify-content-end">
                 <label>Mail Body</label>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
                   className="form-size form-control"
-                  {...formik.getFieldProps("description")}
-                  name="description"
-                  id="description"
+                  {...formik.getFieldProps("mailBody")}
+                  name="mailBody"
+                  id="mailBody"
+                  style={{ minWidth: "81%" }}
                 />
               </div>
             </div>
