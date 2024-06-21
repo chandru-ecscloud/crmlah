@@ -3,7 +3,22 @@ import React from 'react'
 import { toast } from 'react-toastify';
 import { API_URL } from '../../Config/URL';
 
+const fetchCompanyData = async (api) => {
+  try {
+    const response = await axios.get(api);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching company data: ", error);
+    return [];
+  }
+};
+
 const appoinmentCancelTemplete = async(data) => {
+
+  const companyData = await fetchCompanyData(
+    `${API_URL}getUserRegistrationDetailsByCompanyId/2`
+  ); // Adjust the endpoint as needed
+
   const currentData = new Date().toISOString().split("T")[0];
      const mailContent = `
           <!DOCTYPE html>
@@ -51,8 +66,7 @@ const appoinmentCancelTemplete = async(data) => {
                         </td>
                         <td class="third">
                           <b>Date:</b> ${currentData}<br />
-                          The Alexcier, 237 Alexandra Road,<br />
-                          #04-10, Singapore-159929.
+                          ${companyData.address}
                         </td>
                       </tr>
                     </table>
@@ -62,12 +76,12 @@ const appoinmentCancelTemplete = async(data) => {
               <div class="invoice">
                 <h1 style="color: black;">Hi, ${data.appointmentFor}</h1>
                 <p style="margin: 2rem 0 0; font-size: 1rem;">
-                  We regret to inform you that your scheduled appointment has been cancelled at your request. If you have any questions or need further assistance, please do not hesitate to contact us.<br />
+                  We regret to inform you that your scheduled appointment has been cancelled at your request. If you have any questions or need further assistance, please do not hesitate to contact<br />
                 </p>
                 <hr />
                 <p style=" margin: 2rem 0 0;">See You Soon,</p>
                 <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
-                <p style=" margin: 0 ; ">ECS Cloud</p>
+                <p style=" margin: 0 ; ">${companyData.companyName}</p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>

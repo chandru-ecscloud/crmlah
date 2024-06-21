@@ -1,19 +1,32 @@
-import axios from 'axios';
-import React from 'react'
-import { API_URL } from '../../Config/URL';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import React from "react";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
-const appoinmentRescheduleTemplete = async(data,id) => {
-    
-        const zoomLink = data.link
-          ? `
+const fetchCompanyData = async (api) => {
+  try {
+    const response = await axios.get(api);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching company data: ", error);
+    return [];
+  }
+};
+
+const appoinmentRescheduleTemplete = async (data, id) => {
+  const companyData = await fetchCompanyData(
+    `${API_URL}getUserRegistrationDetailsByCompanyId/2`
+  ); // Adjust the endpoint as needed
+
+  const zoomLink = data.link
+    ? `
           <h3 style="margin-bottom: 0;">you can join:</h3>
           <h4 style="margin:0 ;">${data.link}</h4>      
           <p style="margin: 1.5rem 0px 2rem 0px;">You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${id}&name=${data.name}&email=${data.email}&link=${data.link}">Reschedule or Cancel</a> Your Appointment</p>
           `
-          : "";
-    
-        const mailContent = `
+    : "";
+
+  const mailContent = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -106,8 +119,7 @@ const appoinmentRescheduleTemplete = async(data,id) => {
                       </td>
                       <td class="third">
                         <b>Date:</b> 24-01-2024<br />
-                        The Alexcier, 237 Alexandra Road,<br />
-                        #04-10, Singapore-159929.
+                         ${companyData.address}
                       </td>
                     </tr>
                   </table>
@@ -121,30 +133,28 @@ const appoinmentRescheduleTemplete = async(data,id) => {
                 <hr />
                 ${zoomLink}
                 <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                <p style=" margin: 0 ; ">ECS Cloud</p>
+                <p style=" margin: 0 ; ">${companyData.companyName}</p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>
               </div>
             </body>
              </html>`;
-        try {
-          const response = await axios.post(`${API_URL}sendMail`, {
-            toMail: data.email,
-            fromMail: data.email,
-            subject: "Your Appointment Has Been Successfully Rescheduled",
-            htmlContent: mailContent,
-          });
-          if (response.status === 200) {
-            toast.success(response.data.message);
-          } else {
-            toast.error(response.data.message);
-          }
-        } catch (error) {
-          console.error("Failed to send email:", error);
-        }
-     
-    
-}
+  try {
+    const response = await axios.post(`${API_URL}sendMail`, {
+      toMail: data.email,
+      fromMail: data.email,
+      subject: "Your Appointment Has Been Successfully Rescheduled",
+      htmlContent: mailContent,
+    });
+    if (response.status === 200) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
+    }
+  } catch (error) {
+    console.error("Failed to send email:", error);
+  }
+};
 
-export default appoinmentRescheduleTemplete
+export default appoinmentRescheduleTemplete;
