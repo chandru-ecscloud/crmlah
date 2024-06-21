@@ -414,7 +414,7 @@ const UserActivation = () => {
                       }`}
                     disabled={role === "CMP_USER"}
                   >
-                    Company Add
+                    Company
                   </button>
                 </Link>
               </div>
