@@ -26,6 +26,7 @@ function App() {
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("appointmentRole");
+    sessionStorage.removeItem("companyId");
     setIsAdmin(false);
   };
 
