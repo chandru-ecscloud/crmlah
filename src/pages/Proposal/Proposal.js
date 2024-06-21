@@ -10,6 +10,8 @@ import { FaRegFilePdf, FaSortDown } from "react-icons/fa";
 import { RiFileExcel2Fill, RiFileExcel2Line } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
 
 // Dummy data to be displayed in the table
 const dummyData = [
@@ -17,8 +19,8 @@ const dummyData = [
     id: 1,
     proposalName: "Proposal A",
     subject: "Subject A",
-    type: "Type A",
-    discribtion: "Description A",
+    proposalType: "Type A",
+    description: "Description A",
     createdAt: "2024-06-19",
     updatedAt: "2024-06-20",
   },
@@ -26,8 +28,8 @@ const dummyData = [
     id: 2,
     proposalName: "Proposal B",
     subject: "Subject B",
-    type: "Type B",
-    discribtion: "Description B",
+    proposalType: "Type B",
+    description: "Description B",
     createdAt: "2024-06-18",
     updatedAt: "2024-06-19",
   },
@@ -46,7 +48,7 @@ const Proposal = () => {
         enableHiding: false,
         header: "Proposal Name",
         Cell: ({ row }) => (
-          <Link to={`/proposal/show`} className="rowName">
+          <Link to={"/proposal/show"} className="rowName">
             {row.original.proposalName}
           </Link>
         ),
@@ -57,7 +59,7 @@ const Proposal = () => {
         header: "Subject",
       },
       {
-        accessorKey: "type",
+        accessorKey: "proposalType",
         enableHiding: false,
         header: "Type",
       },
@@ -121,7 +123,13 @@ const Proposal = () => {
           </button>
         </OverlayTrigger>
 
-        <button className="btn text-secondary">
+        <button
+          className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          onClick={() =>
+            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          }
+        >
           <MdPictureAsPdf size={23} />
         </button>
         <OverlayTrigger
@@ -136,11 +144,47 @@ const Proposal = () => {
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        navigate(`/deals/show/${row.original.id}`);
+        navigate(`/proposal/show`);
       },
       style: { cursor: "pointer" },
     }),
   });
+
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Deals", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Proposal Name",
+      "Subject",
+      "Subject Type",
+      "Description",
+    ];
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.proposalName,
+        row.original.subject,
+        row.original.proposalType,
+        row.original.description,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+    doc.save("ECS.pdf");
+  };
 
   const theme = createTheme({
     components: {

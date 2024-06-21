@@ -17,23 +17,23 @@ function ProposalShow() {
   const navigate = useNavigate();
 
   // Dummy fetchData function to simulate API call
-  const fetchData = async () => {
-    try {
-      // Simulated data, replace with your actual API call
-      const response = await axios.get(`${API_URL}/proposal/${id}`);
-      setProposalData({
-        ...response.data,
-        attachment: "https://www.example.com/sample.pdf", // Replace with actual dummy attachment URL
-      });
-      setInvoiceData(response.data.invoiceData);
-    } catch (error) {
-      toast.error("Error fetching data:", error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     // Simulated data, replace with your actual API call
+  //     const response = await axios.get(`${API_URL}/proposal/${id}`);
+  //     setProposalData({
+  //       ...response.data,
+  //       attachment: "https://www.example.com/sample.pdf", // Replace with actual dummy attachment URL
+  //     });
+  //     setInvoiceData(response.data.invoiceData);
+  //   } catch (error) {
+  //     toast.error("Error fetching data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, [id]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [id]);
 
   const handelEdit = () => {
     navigate(`/proposal/edit`);
@@ -119,23 +119,16 @@ function ProposalShow() {
                   &nbsp; : &nbsp;{proposalData.proposalName || "Proposal A"}
                 </span>
               </div>
-
+              <div>
+                <label className="text-dark Label">Proposal Type</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.type || "Company Profile"}
+                </span>
+              </div>
               <div>
                 <label className="text-dark Label">Subject</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{proposalData.subject || "Subject A"}
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Type</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{proposalData.type || "Type A"}
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Email</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{proposalData.email || "email@example.com"}
                 </span>
               </div>
               <div>
@@ -144,6 +137,12 @@ function ProposalShow() {
                   &nbsp; : &nbsp;{renderAttachment(proposalData.attachment)}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">Mail Body</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.mailBody || ""}
+                </span>
+              </div> 
             </div>
           </div>
 

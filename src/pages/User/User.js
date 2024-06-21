@@ -396,6 +396,17 @@ const UserActivation = () => {
               >
                 Time Slot
               </button> */}
+               <div style={{ paddingRight: "10px" }}>
+                <Link to={"/proposal"}>
+                  <button
+                    className={`btn btn-primary ${role === "CMP_USER" && "disabled"
+                      }`}
+                    disabled={role === "CMP_USER"}
+                  >
+                    Proposal
+                  </button>
+                </Link>
+              </div>
               <div style={{ paddingRight: "10px" }}>
                 <Link to={"/companyadd"}>
                   <button

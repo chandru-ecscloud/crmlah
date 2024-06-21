@@ -10,20 +10,15 @@ import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  // amount: yup.string()
-  // .matches(/^\d+$/, "Must be only digits")
-  // .required("*Amount is required"),
   email: yup
     .string()
     .email("*Enter valid email")
     .required("*Email is required"),
   proposal_name: yup.string().required("*Proposal name is required"),
-  // contact_name: yup.string().required("*Contact name is required"),
-  // account_name: yup.string().required("*Account name is required"),
-  type: yup.string().required("*Type is required"),
-  subject: yup.string().required("Subject is required"),
+  proposalType: yup.string().required("*Proposal Type is required"),
+  subject: yup.string().required("*Subject is required"),
   description: yup.string().required("*Description is required"),
-  attactment: yup.string().required("*Attactment is required"),
+  files: yup.string().required("*Attachment is required"),
 });
 
 function ProposalEdit() {
@@ -41,11 +36,11 @@ function ProposalEdit() {
   const formik = useFormik({
     initialValues: {
       proposal_name: "Proposal A",
-      email: "proposal@gmail.com",
-      type: "Type A",
+      proposalType: "Type A",
       subject: "Subject A",
-      description: "Description",
-      attactment: "",
+      description: "Test",
+      mailBody: "Mail",
+      files: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -54,7 +49,6 @@ function ProposalEdit() {
         const response = await axios.post(`${API_URL}newProposal`, data, {
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -77,28 +71,6 @@ function ProposalEdit() {
             <div className="col-lg-6 col-md-6 col-12">
               <h4>
                 <b>Edit Proposal</b>
-                <br></br>
-                {/* <img
-                  src={userImage}
-                  className="img-fluid mt-3"
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    cursor: "pointer",
-                    borderRadius: "50%",
-                  }}
-                  alt="user"
-                  onClick={() => document.getElementById("imageInput").click()}
-                /> */}
-                {/* {/ Input for image upload /} */}
-                {/* <input
-                  type="file"
-                  id="imageInput"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
-                />
-                <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
@@ -123,11 +95,11 @@ function ProposalEdit() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12  mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Proposal Name</lable>
+                <label>Proposal Name</label>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
+                  className={`form-size form-control ${
                     formik.touched.proposal_name && formik.errors.proposal_name
                       ? "is-invalid"
                       : ""
@@ -136,15 +108,41 @@ function ProposalEdit() {
                   id="proposal_name"
                 />
               </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.proposal_name &&
+                    formik.errors.proposal_name && (
+                      <p className="text-danger">
+                        {formik.errors.proposal_name}
+                      </p>
+                    )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Proposal Type</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <select
+                  type="text"
+                  className={`form-size form-select `}
+                  {...formik.getFieldProps("proposalType")}
+                  id="proposalType"
+                >
+                  <option value="Company Profile" selected>Company Profile</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Subject</lable>
+                <label>Subject</label>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
+                  className={`form-size form-control ${
                     formik.touched.subject && formik.errors.subject
                       ? "is-invalid"
                       : ""
@@ -163,100 +161,27 @@ function ProposalEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12  mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Type</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.type && formik.errors.type
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("type")}
-                  name="type"
-                  id="type"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.type && formik.errors.type && (
-                    <p className="text-danger">{formik.errors.type}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Phone Number</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("phone")}
-                  name="phone"
-                  id="phone"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.phone && formik.errors.phone && (
-                    <p className="text-danger">{formik.errors.phone}</p>
-                  )}
-                </div>
-              </div>
-            </div> */}
-
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Email</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("email")}
-                  id="email"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.email && formik.errors.email && (
-                    <p className="text-danger">{formik.errors.email}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>Attactment</label>
+                <label>Attachment</label>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group">
                   <input
-                    className="form-control"
+                    className={`form-control custom-file-input ${
+                      formik.touched.files && formik.errors.files
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     type="file"
                     multiple
-                    accept="image/*, video/*"
+                    accept="image/*, video/*, application/pdf"
                     onChange={(event) =>
                       formik.setFieldValue(
                         "files",
                         Array.from(event.target.files)
                       )
                     }
-                  ></input>
+                  />
                 </div>
               </div>
               <div className="row sm-device">
@@ -266,6 +191,20 @@ function ProposalEdit() {
                     <div className="text-danger">{formik.errors.files}</div>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-12 mb-3 mt-2">
+              <div className="d-flex align-items-start justify-content-center sm-device">
+                <label>Mail Body</label>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
+                <textarea
+                  rows="5"
+                  type="text"
+                  className="form-size form-control"
+                  {...formik.getFieldProps("description")}
+                  name="description"
+                  id="description"
+                />
               </div>
             </div>
           </div>
@@ -279,14 +218,14 @@ function ProposalEdit() {
           <div className="row">
             <div className="col-12 mb-3 ">
               <div className="d-flex align-items-start justify-content-center sm-device">
-                <lable>Description</lable> &nbsp;&nbsp;
+                <label>Description</label> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
                   className="form-size form-control"
-                  {...formik.getFieldProps("description_info")}
-                  name="description_info"
-                  id="description_info"
+                  {...formik.getFieldProps("description")}
+                  name="description"
+                  id="description"
                 />
               </div>
             </div>
