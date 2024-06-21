@@ -78,7 +78,7 @@ function Header() {
                   Contact Us
                 </NavLink>
               </Nav>
-              <Nav className="d-flex" style={{padding:"20px 0"}}>
+              <Nav className="d-flex" style={{ padding: "20px 0" }}>
                 <Link to="/login">
                   <button className="btn donateBtn">Sign In</button>
                 </Link>
