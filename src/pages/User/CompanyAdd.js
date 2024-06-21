@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import User from "../../assets/user.png";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
@@ -42,6 +42,7 @@ function CompanyAdd() {
     const [accountOption, setAccountOption] = useState([]);
     const [sameAsShipping, setSameAsShipping] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const { id } = useParams();
     console.log(accountOption);
 
     const formik = useFormik({
@@ -60,27 +61,28 @@ function CompanyAdd() {
             companyCountry: "",
         },
         validationSchema: validationSchema,
-        validateOnMount: true,
         onSubmit: async (data) => {
-            data.account_name = `${data.first_name}${data.last_name}`
-
-            console.log("Account Datas:", data);
-            // try {
-            //     const response = await axios.post(`${API_URL}n`, data, {
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             //Authorization: `Bearer ${token}`,
-            //         },
-            //     });
-            //     if (response.status === 201) {
-            //         toast.success(response.data.message);
-            //         navigate("/accounts");
-            //     } else {
-            //         toast.error(response.data.message);
-            //     }
-            // } catch (error) {
-            //     toast.error("Failed: " + error.message);
-            // }
+            console.log("company Datas:", data);
+            try {
+                const response = await axios.put(
+                    `${API_URL}updateCompanyRegister/${companyId}`,
+                    data,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                console.log(response);
+                if (response.status === 200) {
+                    toast.success(response.data.message);
+                    navigate("/users");
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error("Failed: " + error?.response?.data?.message);
+            }
         },
     });
 
@@ -102,23 +104,26 @@ function CompanyAdd() {
         }
     };
 
-    const AccountList = async () => {
-        try {
-            const response = await axios(`${API_URL}accountNamesList`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    //Authorization: `Bearer ${token}`,
-                },
-            });
-            setAccountOption(response.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
     useEffect(() => {
-        AccountList();
-        formik.setFieldValue("country_code", 65);
+        const userData = async () => {
+            try {
+                const response = await axios.get(
+                    `${API_URL}getUserRegistrationDetailsByCompanyId/${companyId}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            //Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                formik.setValues(response.data);
+                console.log("userData", userData);
+            } catch (error) {
+                toast.error("Error fetching data:", error);
+            }
+        };
+
+        userData();
     }, []);
 
     return (
@@ -178,40 +183,10 @@ function CompanyAdd() {
                             </div>
                         </div>
 
-                        {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
-                            <div className="d-flex align-items-center justify-content-end sm-device">
-                                <lable>Company Logo</lable>
-                                <span className="text-danger">*</span> &nbsp;&nbsp;
-                                <input
-                                    {...formik.getFieldProps("file")}
-                                    type="file"
-                                    className={`form-size form-control  ${formik.touched.file && formik.errors.file
-                                        ? "is-invalid"
-                                        : ""
-                                        
-                                        }`}
-                                        onChange={handleFileChange}
-                                    id="file"
-                                    name="file"
-                                />
-                            </div>
-                            {selectedFile && (
-                                <div className="mb-2">
-                                    {selectedFile.type.startsWith("image") && (
-                                        <img
-                                            src={URL.createObjectURL(selectedFile)}
-                                            alt="Selected File"
-                                            style={{ maxHeight: "100px" }}
-                                        />
-                                    )}
-                                </div>
-                            )}
-                        </div> */}
-
                         <div className="col-lg-6 col-md-6 col-12 mb-3">
                             <div className="d-flex align-items-center justify-content-end sm-device">
                                 <label>Company Logo</label>
-                                <span className="text-danger">*</span> &nbsp;&nbsp;
+                                &nbsp;&nbsp;
                                 <input
                                     type="file"
                                     className={`form-size form-control ${formik.touched.companyLogo && formik.errors.companyLogo ? "is-invalid" : ""}`}
