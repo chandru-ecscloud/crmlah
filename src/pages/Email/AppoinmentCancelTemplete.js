@@ -1,7 +1,7 @@
-import axios from 'axios';
-import React from 'react'
-import { toast } from 'react-toastify';
-import { API_URL } from '../../Config/URL';
+import axios from "axios";
+import React from "react";
+import { toast } from "react-toastify";
+import { API_URL } from "../../Config/URL";
 
 const fetchCompanyData = async (api) => {
   try {
@@ -13,14 +13,13 @@ const fetchCompanyData = async (api) => {
   }
 };
 
-const appoinmentCancelTemplete = async(data) => {
-
+const appoinmentCancelTemplete = async (data) => {
   const companyData = await fetchCompanyData(
-    `${API_URL}getUserRegistrationDetailsByCompanyId/2`
+    `${API_URL}getAllCompanyRegisterById/137`
   ); // Adjust the endpoint as needed
 
   const currentData = new Date().toISOString().split("T")[0];
-     const mailContent = `
+  const mailContent = `
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -61,12 +60,14 @@ const appoinmentCancelTemplete = async(data) => {
                     <table>
                       <tr>
                         <td class="title">
-                          <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                          <img src="${companyData.companyLogo || ""}"
                             style="width: 75%; max-width: 180px" alt="Logo" />
                         </td>
                         <td class="third">
                           <b>Date:</b> ${currentData}<br />
-                          ${companyData.address}
+                          ${companyData.companyStreet || ""},<br />
+                          ${companyData.companyCity || ""},&nbsp;${companyData.companyState || ""},<br />
+                          ${companyData.companyCountry || ""}-${companyData.companyZipCode || ""}.
                         </td>
                       </tr>
                     </table>
@@ -80,8 +81,11 @@ const appoinmentCancelTemplete = async(data) => {
                 </p>
                 <hr />
                 <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                <h4 style=" margin: 0; ">${data.appointmentOwner}</h4>
-                <p style=" margin: 0 ; ">${companyData.companyName}</p>
+                 <h4 style="margin: 0;">${companyData.companyOwnerName || ""}</h4>
+                 <p style="margin: 0;">${companyData.companyName || ""}</p>
+                 <p style="margin: 0;">${companyData.companyEmail || ""}</p>
+                 <p style="margin: 0;">${companyData.companyMobile || ""}</p>
+                 <p style="margin: 0;"><a>${companyData.companyWebsite || ""}</a></p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>
@@ -89,22 +93,22 @@ const appoinmentCancelTemplete = async(data) => {
           </body>
           </html>`;
 
-        try {
-         const response = await axios.post(`${API_URL}sendMail`, {
-            toMail: data.email,
-            fromMail: data.email,
-            subject: "Your Appointment Has Been Cancelled",
-            htmlContent: mailContent,
-          });
+  try {
+    const response = await axios.post(`${API_URL}sendMail`, {
+      toMail: data.email,
+      fromMail: data.email,
+      subject: "Your Appointment Has Been Cancelled",
+      htmlContent: mailContent,
+    });
 
-          if (response.status === 200) {
-            // toast.success("Mail sent successfully.");
-          } else {
-            toast.error("Error sending mail: " + response.data.message);
-          } 
-        } catch (error) {
-          toast.error("Failed to send email: " + error.message);
-        }
-}
+    if (response.status === 200) {
+      // toast.success("Mail sent successfully.");
+    } else {
+      toast.error("Error sending mail: " + response.data.message);
+    }
+  } catch (error) {
+    toast.error("Failed to send email: " + error.message);
+  }
+};
 
-export default appoinmentCancelTemplete
+export default appoinmentCancelTemplete;
