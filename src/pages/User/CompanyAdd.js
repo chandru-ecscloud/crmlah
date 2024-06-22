@@ -39,11 +39,10 @@ function CompanyAdd() {
     const [userImage, setUserImage] = useState(User);
     const role = sessionStorage.getItem("role");
     const companyId = sessionStorage.getItem("companyId");
-    const [accountOption, setAccountOption] = useState([]);
     const [sameAsShipping, setSameAsShipping] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [loadIndicator, setLoadIndicator] = useState(false);
     const { id } = useParams();
-    console.log(accountOption);
 
     const formik = useFormik({
         initialValues: {
@@ -63,9 +62,20 @@ function CompanyAdd() {
         validationSchema: validationSchema,
         onSubmit: async (data) => {
             console.log("company Datas:", data);
+            const formData = new FormData();
+            formData.append("file", data.companyLogo);
+            formData.append("companyName ", data.companyName);
+            formData.append("companyEmail ", data.companyEmail);
+            formData.append("companyMobile ", data.companyMobile);
+            formData.append("companyStreet ", data.companyStreet);
+            formData.append("companyCity", data.companyCity);
+            formData.append("companyState", data.companyState);
+            formData.append("companyZipCode", data.companyZipCode);
+            formData.append("companyCountry", data.companyCountry);
+            setLoadIndicator(true);
             try {
                 const response = await axios.put(
-                    `${API_URL}updateCompanyRegister/${companyId}`,
+                    `${API_URL}updateCompanyRegisterWithLogo/${companyId}`,
                     data,
                     {
                         headers: {
@@ -89,7 +99,7 @@ function CompanyAdd() {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
-        formik.setFieldValue("companyLogo", file);
+        formik.setFieldValue("file", file);
     };
 
     const handleImageUpload = (event) => {
@@ -108,7 +118,7 @@ function CompanyAdd() {
         const userData = async () => {
             try {
                 const response = await axios.get(
-                    `${API_URL}getUserRegistrationDetailsByCompanyId/${companyId}`,
+                    `${API_URL}getAllCompanyRegisterById/${companyId}`,
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -424,23 +434,19 @@ function CompanyAdd() {
                             <div className="d-flex align-items-center justify-content-end sm-device">
                                 <label>Country</label> &nbsp;&nbsp;
                                 <input
-                                    {...formik.getFieldProps('country')}
+                                    {...formik.getFieldProps('companyCountry')}
                                     type="text"
                                     className="form-size form-control"
-                                    name="country"
-                                    id="country"
-                                    value={sameAsShipping ? formik.values.state : formik.values.country}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    disabled={sameAsShipping}
+                                    name="companyCountry"
+                                    id="companyCountry"
                                 />
                             </div>
                             <div className="row sm-device">
                                 <div className="col-5"></div>
                                 <div className="col-6 sm-device">
-                                    {formik.touched.country && formik.errors.country && (
+                                    {formik.touched.companyCountry && formik.errors.companyCountry && (
                                         <div className="text-danger">
-                                            {formik.errors.country}
+                                            {formik.errors.companyCountry}
                                         </div>
                                     )}
                                 </div>
