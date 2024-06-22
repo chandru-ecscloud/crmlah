@@ -345,7 +345,8 @@ const Appointments = () => {
   });
 
   const handleBulkDelete = async (rows) => {
-    const rowId = rows.map((row) => row.original.id);
+    const data = rows.map((row) => row.original);
+    const rowId = data[0].id;
     try {
       const response = await axios.delete(
         `${API_URL}cancelAppointment/${rowId}`,
@@ -360,8 +361,7 @@ const Appointments = () => {
         toast.success(response.data.message);
         navigate("/appointments");
         table.setRowSelection(false);
-        appoinmentCancelTemplete(data)
-       
+        appoinmentCancelTemplete(data[0]);
       } else {
         toast.error(response.data.message);
       }
