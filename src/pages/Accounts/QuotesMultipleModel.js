@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
 
-const QuotesModel = ({ path, userData }) => {
+const QuotesMultipleModel = ({ path, userData, accountIds }) => {
   const [loading, setLoading] = useState(true);
 
   // const token = sessionStorage.getItem("token");
@@ -49,18 +49,14 @@ const QuotesModel = ({ path, userData }) => {
     fetchQuatesData();
   }, []);
 
-  //   const handleCheckboxChange = (id, rowData) => {
-  //     const isChecked = selectedRows.some((row) => row.id === id);
-  //     if (isChecked) {
-  //       setSelectedRows(selectedRows.filter((row) => row.id !== id));
-  //     } else {
-  //       setSelectedRows([...selectedRows, rowData]);
-  //     }
-  //   };
 
   const handleSendAccountToQuote = async () => {
+    const payload = {
+      "accountIds": accountIds,
+      "quoteIds": selectedRows
+    }
     try {
-      const response = await axios.post(`${API_URL}${path}`, selectedRows, {
+      const response = await axios.post(`${API_URL}${path}`, payload, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,
@@ -201,4 +197,4 @@ const QuotesModel = ({ path, userData }) => {
   );
 };
 
-export default QuotesModel;
+export default QuotesMultipleModel;

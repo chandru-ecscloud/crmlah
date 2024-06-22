@@ -5,8 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
 
-const InvoiceModel = ({ path , getData}) => {
-  console.log(path);
+const InvoiceModel = ({ path,dealIds,getData }) => {
   // const token = sessionStorage.getItem("token");
   const [dealsdata, setDealsData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -47,8 +46,12 @@ const InvoiceModel = ({ path , getData}) => {
   }, []);
 
   const handleDealsAssignToInvoice = async () => {
+    const payload = {
+      "dealIds": dealIds,
+      "invoiceIds": selectedRows
+    }
     try {
-      const response = await axios.post(`${API_URL}${path}`, selectedRows, {
+      const response = await axios.post(`${API_URL}${path}`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -80,7 +83,7 @@ const InvoiceModel = ({ path , getData}) => {
 
   return (
     <div>
-      <span 
+      <span
         // className="btn"
         style={{ width: "100%", border: "none" }}
         onClick={openModal}

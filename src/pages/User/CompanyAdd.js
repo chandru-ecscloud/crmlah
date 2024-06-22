@@ -16,18 +16,19 @@ const validationSchema = Yup.object().shape({
     companyMobile: Yup.string()
         .required('Phone number is required')
         .test('phone-length', function (value) {
-            const { country_code } = this.parent;
+            const { countryCode } = this.parent;
             if (value && /\s/.test(value)) {
                 return this.createError({ message: 'Phone number should not contain spaces' });
             }
-            if (country_code === '65') {
+            if (countryCode === '65') {
                 return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
             }
-            if (country_code === '91') {
+            if (countryCode === '91') {
                 return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
             }
             return false; // Default validation for other country codes
         }),
+    website: Yup.string().required("*Website is required"),
 });
 
 
@@ -48,11 +49,12 @@ function CompanyAdd() {
         initialValues: {
             company_id: companyId,
             companyOwnerName: owner,
-            companyLogo: "",
+            file: "",
             companyName: "",
             companyEmail: "",
             companyMobile: "",
-            country_code: "65",
+            countryCode: "",
+            website: "",
             companyStreet: "",
             companyCity: "",
             companyState: "",
@@ -63,10 +65,12 @@ function CompanyAdd() {
         onSubmit: async (data) => {
             console.log("company Datas:", data);
             const formData = new FormData();
-            formData.append("file", data.companyLogo);
+            formData.append("file", data.file);
             formData.append("companyName ", data.companyName);
             formData.append("companyEmail ", data.companyEmail);
+            formData.append("website ", data.website);
             formData.append("companyMobile ", data.companyMobile);
+            formData.append("countryCode ", data.countryCode);
             formData.append("companyStreet ", data.companyStreet);
             formData.append("companyCity", data.companyCity);
             formData.append("companyState", data.companyState);
@@ -76,11 +80,11 @@ function CompanyAdd() {
             try {
                 const response = await axios.put(
                     `${API_URL}updateCompanyRegisterWithLogo/${companyId}`,
-                    data,
+                    formData,
                     {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
+                        // headers: {
+                        //     "Content-Type": "application/json",
+                        // },
                     }
                 );
                 console.log(response);
@@ -126,15 +130,35 @@ function CompanyAdd() {
                         },
                     }
                 );
-                formik.setValues(response.data);
-                console.log("userData", userData);
+                const getData = response.data;
+
+                const payload = {
+                    company_id: companyId,
+                    companyOwnerName: getData.companyOwnerName,
+                    companyLogo: getData.companyLogo,
+                    companyName: getData.companyName,
+                    companyEmail: getData.companyEmail,
+                    companyMobile: getData.companyMobile,
+                    website: getData.website,
+                    countryCode: getData.countryCode,
+                    companyStreet: getData.companyStreet,
+                    companyCity: getData.companyCity,
+                    companyState: getData.companyState,
+                    companyZipCode: getData.companyZipCode,
+                    companyCountry: getData.companyCountry || "",
+                };
+                formik.setValues(payload);
+                console.log("getData", getData);
             } catch (error) {
-                toast.error("Error fetching data:", error);
+                toast.error(`Error fetching data: ${error.message}`);
             }
         };
 
-        userData();
-    }, []);
+        if (companyId) {
+            userData();
+        }
+    }, [companyId]);
+
 
     return (
         <section className="createLead">
@@ -199,13 +223,13 @@ function CompanyAdd() {
                                 &nbsp;&nbsp;
                                 <input
                                     type="file"
-                                    className={`form-size form-control ${formik.touched.companyLogo && formik.errors.companyLogo ? "is-invalid" : ""}`}
+                                    className={`form-size form-control ${formik.touched.file && formik.errors.file ? "is-invalid" : ""}`}
                                     onChange={handleFileChange}
-                                    id="companyLogo"
-                                    name="companyLogo"
+                                    onBlur={formik.handleBlur}
+                                    id="file"
                                 />
-                                {formik.touched.companyLogo && formik.errors.companyLogo ? (
-                                    <div className="invalid-feedback">{formik.errors.companyLogo}</div>
+                                {formik.touched.file && formik.errors.file ? (
+                                    <div className="invalid-feedback">{formik.errors.file}</div>
                                 ) : null}
                             </div>
                             {selectedFile && (
@@ -277,18 +301,18 @@ function CompanyAdd() {
                                 <div className="input-group" style={{ width: "60%" }}>
                                     <div>
                                         <select
-                                            className={`form-size form-select  ${formik.touched.country_code && formik.errors.country_code
+                                            className={`form-size form-select  ${formik.touched.countryCode && formik.errors.countryCode
                                                 ? "is-invalid"
                                                 : ""
                                                 }`}
-                                            {...formik.getFieldProps("country_code")}
+                                            {...formik.getFieldProps("countryCode")}
                                             style={{
                                                 width: "80px",
                                                 borderTopRightRadius: "0px",
                                                 borderBottomRightRadius: "0px",
                                             }}
-                                            name="country_code"
-                                            id="country_code"
+                                            name="countryCode"
+                                            id="countryCode"
                                         >
                                             <option value="65">+65</option>
                                             <option value="91">+91</option>
@@ -310,9 +334,9 @@ function CompanyAdd() {
                             <div className="row sm-device">
                                 <div className="col-5"></div>
                                 <div className="col-6 sm-device">
-                                    {formik.touched.country_code && formik.errors.country_code && (
+                                    {formik.touched.countryCode && formik.errors.countryCode && (
                                         <div className="text-danger ">
-                                            {formik.errors.country_code}
+                                            {formik.errors.countryCode}
                                         </div>
                                     )}
                                     {formik.touched.phone && formik.errors.phone && (
@@ -321,6 +345,32 @@ function CompanyAdd() {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="col-lg-6 col-md-6 col-12 mb-3">
+                            <div className="d-flex align-items-center justify-content-end sm-device">
+                                <lable>Website</lable>
+                                <span className="text-danger">*</span> &nbsp;&nbsp;
+                                <input
+                                    {...formik.getFieldProps("website")}
+                                    type="text"
+                                    className={`form-size form-control  ${formik.touched.website && formik.errors.website
+                                        ? "is-invalid"
+                                        : ""
+                                        }`}
+                                    id="website"
+                                    name="website"
+                                />
+                            </div>
+                            <div className="row sm-device">
+                                <div className="col-5"></div>
+                                <div className="col-6 sm-device">
+                                    {formik.touched.website && formik.errors.website && (
+                                        <div className="text-danger ">{formik.errors.website}</div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div className="container-fluid my-5">
@@ -364,10 +414,8 @@ function CompanyAdd() {
                                     className="form-size form-control"
                                     name="companyCity"
                                     id="companyCity"
-                                    value={sameAsShipping ? formik.values.street : formik.values.companyCity}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    disabled={sameAsShipping}
                                 />
                             </div>
                             <div className="row sm-device">
