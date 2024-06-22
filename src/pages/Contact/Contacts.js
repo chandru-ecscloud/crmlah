@@ -365,7 +365,7 @@ const Contacts = () => {
   const handleLeadConvert = async (rows) => {
     const id = rows.map((row) => row.original.id);
 
-    try{
+    try {
       const response = await axios.post(
         `${API_URL}contactToLeadConvert/${id}?ownerName=${owner}`,
         {
@@ -382,87 +382,47 @@ const Contacts = () => {
       } else {
         toast.error(response.data.message);
       }
-    }catch(error){
+    } catch (error) {
       toast.error("Error Submiting Data");
     }
-  }
+  };
   const handleAccountConvert = async (rows) => {
     const id = rows.map((row) => row.original.id);
 
-      try{
-        const response = await axios.post(
-          `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.status === 200) {
-          toast.success(response.data.message);
-          navigate("/contacts");
-          fetchData();
-          table.setRowSelection(false);
-        } else {
-          toast.error(response.data.message);
-        }
-      }catch(error){
-        toast.error("Error Submiting Data");
-      }
-    
-    };
-
-
-  const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const keyMapping = {
-      firstName: "first_name",
-      lastName: "last_name",
-      contactOwner: "contact_owner",
-      leadSource: "lead_source",
-      accountName: "account_name",
-      vendorName: "vendor_name",
-      email: "email",
-      countryCode: "country_code",
-      phone: "phone",
-      landLine: "landLine",
-      skypeId: "skype_id",
-      twitter: "twitter",
-      mailingStreet: "mailing_street",
-      mailingCity: "mailing_city",
-      mailingState: "mailing_state",
-      mailingZip: "mailing_zip",
-      mailingCountry: "mailing_country",
-      otherStreet: "other_street",
-      otherCity: "other_city",
-      otherState: "other_state",
-      otherZip: "other_zip",
-      otherCountry: "other_country",
-      descriptionInfo: "description_info",
-      createdAt: "created_at",
-      createdBy: "created_by",
-      updatedAt: "updated_at",
-      updatedBy: "updated_by",
-    };
-
-    const transformedData = rowData.map((data) => {
-      return Object.keys(data).reduce((acc, key) => {
-        const newKey = keyMapping[key] || key;
-        acc[newKey] = data[key];
-        return acc;
-      }, {});
-    });
-
     try {
       const response = await axios.post(
-        `${API_URL}deleteMultipleContactData`,
-        transformedData,
+        `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
         {
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
           },
         }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/contacts");
+        fetchData();
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Submiting Data");
+    }
+  };
+
+  const handleBulkDelete = async (rows) => {
+    const rowData = rows.map((row) => row.original.id);
+    const formattedRowData = rowData.join(",");
+
+    const formData = new FormData();
+    formData.append("contactIds", formattedRowData);
+    formData.append("ownerName", owner);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}contactToLeadConvertMultiple`,
+        formData
       );
       if (response.status === 200) {
         toast.success(response.data.message);
@@ -609,7 +569,7 @@ const Contacts = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                <li>
+                  <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -626,7 +586,7 @@ const Contacts = () => {
                       Convert Account
                     </button>
                   </li>
-                <li>
+                  <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -644,36 +604,21 @@ const Contacts = () => {
                     </button>
                   </li>
                   <li>
-                    {/* <button
+                    <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
-                    >
-                      Delete
-                    </button> */}
-                  </li>
-                  <li>
-                    {/* <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !table.getIsSomeRowsSelected() &&
-                        !table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length === 1
                       }
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
                       }
                     >
                       Mass Delete
-                    </button> */}
+                    </button>
                   </li>
                 </ul>
               </div>

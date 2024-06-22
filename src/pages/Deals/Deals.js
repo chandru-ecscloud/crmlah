@@ -19,6 +19,7 @@ import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import InvoiceModel from "./InvoiceModel";
+import InvoiceMultipleModel from "./InvoiceMultipleModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -27,14 +28,13 @@ const csvConfig = mkConfig({
 });
 
 const Deals = () => {
-  const [rowId, setRowId] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const owner = sessionStorage.getItem("user_name");
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
-
+  const [rowMultipleId, setRowMultipleId] = useState([]);
   const columns = useMemo(
     () => [
       {
@@ -361,51 +361,17 @@ const Deals = () => {
   });
 
   const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const keyMapping = {
-      dealName: "deal_name",
-      accessories: "accessories",
-      accountName: "account_name",
-      leadSource: "lead_source",
-      contactName: "contact_name",
-      amount: "amount",
-      closingDate: "closing_date",
-      stage: "stage",
-      probability: "probability",
-      campaignSource: "campaign_source",
-      descriptionInfo: "description_info",
-      dealOwner: "deal_owner",
+    const rowData = rows.map((row) => row.original.id);
+    const formattedRowData = rowData.join(",");
 
-      billingStreet: "billing_street",
-      billingCity: "billing_city",
-      billingState: "billing_state",
-      billingCode: "billing_code",
-      billingCountry: "billing_country",
-      shippingStreet: "shipping_street",
-      shippingCity: "shipping_city",
-      shippingState: "shipping_state",
-      shippingCode: "shipping_code",
-      shippingCountry: "shipping_country",
-    };
-
-    const transformedData = rowData.map((data) => {
-      return Object.keys(data).reduce((acc, key) => {
-        const newKey = keyMapping[key] || key;
-        acc[newKey] = data[key];
-        return acc;
-      }, {});
-    });
+    const formData = new FormData();
+    formData.append("dealIds", formattedRowData);
+    formData.append("ownerName", owner);
 
     try {
       const response = await axios.post(
-        `${API_URL}deleteMultipleDealData`,
-        transformedData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        }
+        `${API_URL}dealToAccountConvertMultiple`,
+        formData
       );
       if (response.status === 200) {
         toast.success(response.data.message);
@@ -423,7 +389,7 @@ const Deals = () => {
   const handleDealConvert = async (rows) => {
     const id = rows.map((row) => row.original.id);
 
-    try{
+    try {
       const response = await axios.post(
         `${API_URL}dealToAccountConvert/${id}?ownerName=${owner}`,
         {
@@ -440,10 +406,10 @@ const Deals = () => {
       } else {
         toast.error(response.data.message);
       }
-    }catch(error){
+    } catch (error) {
       toast.error("Error Submiting Data");
     }
-  }
+  };
 
   const table = useMaterialReactTable({
     columns,
@@ -543,9 +509,8 @@ const Deals = () => {
 
   const handleAssignInvoice = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    setRowId(rowData);
-    // sessionStorage.setItem("invoice_id", rowData);
-    // navigate("/deals");
+    setRowMultipleId(rowData);
+    table.setRowSelection(false);
   };
 
   return (
@@ -592,8 +557,10 @@ const Deals = () => {
                         handleAssignInvoice(table.getSelectedRowModel().rows)
                       }
                     >
-                      <InvoiceModel
-                        path={`associateInvoiceWithDeals/${rowId}`}
+                      <InvoiceMultipleModel
+                        dealIds={rowMultipleId}
+                        getData={fetchData}
+                        path={`associateInvoiceWithMultipleDeals`}
                       />
                     </button>
                   </li>
@@ -632,19 +599,21 @@ const Deals = () => {
                     </button> */}
                   </li>
                   <li>
-                    {/* <button
+                    <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
-                        !table.getIsSomeRowsSelected() &&
-                        !table.getIsAllRowsSelected()
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length === 1
                       }
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
                       }
                     >
                       Mass Delete
-                    </button> */}
+                    </button>
                   </li>
                 </ul>
               </div>

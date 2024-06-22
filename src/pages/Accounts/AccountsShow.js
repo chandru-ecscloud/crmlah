@@ -99,12 +99,13 @@ function AccountsShow() {
         </div>
 
         <div className="col-9 mt-1 gap-1" id="buttons-container">
-        <SendCompanyProfile accountData={accountData} />
           <button className="btn btn-primary">
-        <QuotesModel  userData={userData}
-                        // onSuccess={refreshData}
-                        path={`associateQuotesWithAccount/${id}`}
-                      /></button>
+            <QuotesModel
+              userData={userData}
+              // onSuccess={refreshData}
+              path={`associateQuotesWithAccount/${id}`}
+            />
+          </button>
           <Activity id={id} />
           <SendQuotes accountData={accountData} />
           <Appointment
@@ -438,8 +439,8 @@ function AccountsShow() {
               </div>
             </div>
 
-             {/* Appointment Modal  */}
-             <div className="container-fluid row" id="Details">
+            {/* Appointment Modal  */}
+            <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row d-flex justify-content-between align-items-center">
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Appointment
@@ -452,56 +453,87 @@ function AccountsShow() {
                 <table className="table">
                   <thead class="table-light">
                     <tr>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>S No</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment name</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Date</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Time</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment Owner</th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        S No
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment name
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Date
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Time
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment Owner
+                      </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {accountData.appointmentModels?.length > 0 ? (
-                      accountData.appointmentModels.map((appointment, index) => (
-                        <tr key={index}>
-                          <th scope="row">{index + 1}</th>
-                          <td>{appointment.appointmentName}</td>
-                          <td>{appointment.appointmentStartDate}</td>
-                          <td>{appointment.appointmentStartTime}</td>
-                          <td>{appointment.appointmentOwner}</td>
-                          <td>
-                            {appointment.appointmentMode === "ONLINE" ? (
-                              <span className="badge text-bg-success">Online</span>
-                            ) : (
-                              <span className="badge text-bg-danger">Offline</span>
-                            )}
-                          </td>
-                          <td>
-                          {appointment.appointmentstatus === "CONFIRMED" ? (
-                              <span className="badge text-bg-warning">CONFIRMED</span>
-                            ) : appointment.appointmentstatus === "COMPLETED" ?  (
-                              <span className="badge text-bg-successr">COMPLETED</span>
-                            ) : appointment.appointmentstatus === "CANCELLED" ? (
-                              <span className="badge text-bg-danger">CANCELLED</span>
-                            ) : appointment.appointmentstatus === "RESCHEDULED" ? (
-                              <span className="badge text-bg-info">RESCHEDULED</span>
-                            ) : (
-                              <span className="badge text-bg-primary">PENDING</span>
-                            )}
-                          </td>
-                        </tr>
-                      ))
+                      accountData.appointmentModels.map(
+                        (appointment, index) => (
+                          <tr key={index}>
+                            <th scope="row">{index + 1}</th>
+                            <td>{appointment.appointmentName}</td>
+                            <td>{appointment.appointmentStartDate}</td>
+                            <td>{appointment.appointmentStartTime}</td>
+                            <td>{appointment.appointmentOwner}</td>
+                            <td>
+                              {appointment.appointmentMode === "ONLINE" ? (
+                                <span className="badge text-bg-success">
+                                  Online
+                                </span>
+                              ) : (
+                                <span className="badge text-bg-danger">
+                                  Offline
+                                </span>
+                              )}
+                            </td>
+                            <td>
+                              {appointment.appointmentstatus === "CONFIRMED" ? (
+                                <span className="badge text-bg-warning">
+                                  CONFIRMED
+                                </span>
+                              ) : appointment.appointmentstatus ===
+                                "COMPLETED" ? (
+                                <span className="badge text-bg-successr">
+                                  COMPLETED
+                                </span>
+                              ) : appointment.appointmentstatus ===
+                                "CANCELLED" ? (
+                                <span className="badge text-bg-danger">
+                                  CANCELLED
+                                </span>
+                              ) : appointment.appointmentstatus ===
+                                "RESCHEDULED" ? (
+                                <span className="badge text-bg-info">
+                                  RESCHEDULED
+                                </span>
+                              ) : (
+                                <span className="badge text-bg-primary">
+                                  PENDING
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      )
                     ) : (
                       <tr>
-                        <td colSpan="7" className="text-center"> No Appointment</td>
+                        <td colSpan="7" className="text-center">
+                          {" "}
+                          No Appointment
+                        </td>
                       </tr>
                     )}
                   </tbody>
                 </table>
               </div>
             </div>
-
 
             {/* Description Information */}
             <div className="container-fluid row" id="Details">
@@ -520,8 +552,6 @@ function AccountsShow() {
             </div>
           </div>
 
-          
-
           {/* Quotes Information Table*/}
           <div className="container-fluid row" id="Details">
             <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
@@ -535,7 +565,7 @@ function AccountsShow() {
                 <div>
                   {accountData.quotes.map((quote) => (
                     <div key={quote.id} className="row mt-4">
-                       <div className="col-12 d-flex justify-content-end">
+                      <div className="col-12 d-flex justify-content-end">
                         <Delete
                           onSuccess={userData}
                           path={`unassignQuoteFromAccount/${id}?quotesId=${quote.id}`}
