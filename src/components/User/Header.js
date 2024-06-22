@@ -10,17 +10,14 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Logo from "../../assets/WebsiteLogo.png";
 import "../../styles/user.css";
 
-
 function Header() {
-  const expand = "lg";
-  // useLocation();
   return (
     <>
       {["lg"].map((expand) => (
         <Navbar key={expand} expand={expand} className="navBar-CRM">
           <Container fluid>
             <Navbar>
-              <Navbar.Brand as={Link} to="/home">
+              <Navbar.Brand as={Link} to="/">
                 <img
                   src={Logo}
                   alt="WWG"
@@ -37,7 +34,7 @@ function Header() {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  CRMLAH 
+                  CRMLAH
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
@@ -46,7 +43,6 @@ function Header() {
                     to="/about"
                     activeClassName="active"
                     className="headers"
-                   
                   >
                     About
                   </NavLink>
@@ -59,11 +55,10 @@ function Header() {
                      color: "rgba(0, 0, 0, 0.85)",
                      textDecoration: "none",
                    }}>Home</NavLink> */}
-                   <NavLink
+                  <NavLink
                     to="/feature"
                     activeClassName="active"
                     className="headers"
-                    
                   >
                     Features
                   </NavLink>
@@ -71,11 +66,10 @@ function Header() {
                     to="/contact"
                     activeClassName="active"
                     className="headers"
-                   
                   >
                     Contact
                   </NavLink>
-                  
+
                   {/* <NavDropdown
                     title="Dropdown"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
