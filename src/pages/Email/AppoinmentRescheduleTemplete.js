@@ -15,7 +15,7 @@ const fetchCompanyData = async (api) => {
 
 const appoinmentRescheduleTemplete = async (data, id) => {
   const companyData = await fetchCompanyData(
-    `${API_URL}getUserRegistrationDetailsByCompanyId/2`
+    `${API_URL}getAllCompanyRegisterById/137`
   ); // Adjust the endpoint as needed
 
   const zoomLink = data.link
@@ -25,7 +25,7 @@ const appoinmentRescheduleTemplete = async (data, id) => {
           <p style="margin: 1.5rem 0px 2rem 0px;">You Can Still <span><a href="https://crmlah.com/reschedule/index.html?id=${id}&name=${data.name}&email=${data.email}&link=${data.link}">Reschedule or Cancel</a> Your Appointment</p>
           `
     : "";
-
+  const currentData = new Date().toISOString().split("T")[0];
   const mailContent = `
         <!DOCTYPE html>
         <html lang="en">
@@ -112,14 +112,16 @@ const appoinmentRescheduleTemplete = async (data, id) => {
                     <tr>
                       <td class="title">
                         <img
-                          src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                          src="${companyData.companyLogo || ""}"
                           style="width: 75%; max-width: 180px"
                           alt="Logo"
                         />
                       </td>
                       <td class="third">
-                        <b>Date:</b> 24-01-2024<br />
-                         ${companyData.address}
+                        <b>Date:</b> ${currentData}<br />
+                          ${companyData.companyStreet || ""},<br />
+                          ${companyData.companyCity || ""},&nbsp;${companyData.companyState || ""},<br />
+                          ${companyData.companyCountry || ""}-${companyData.companyZipCode || ""}.
                       </td>
                     </tr>
                   </table>
@@ -133,7 +135,11 @@ const appoinmentRescheduleTemplete = async (data, id) => {
                 <hr />
                 ${zoomLink}
                 <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                <p style=" margin: 0 ; ">${companyData.companyName}</p>
+                 <h4 style="margin: 0;">${companyData.companyOwnerName || ""}</h4>
+                 <p style="margin: 0;">${companyData.companyName || ""}</p>
+                 <p style="margin: 0;">${companyData.companyEmail || ""}</p>
+                 <p style="margin: 0;">${companyData.companyMobile || ""}</p>
+                 <p style="margin: 0;"><a>${companyData.companyWebsite || ""}</a></p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>

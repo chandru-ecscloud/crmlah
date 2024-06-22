@@ -15,6 +15,7 @@ import jsPDF from "jspdf";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
+import { download, generateCsv, mkConfig } from "export-to-csv";
 
 // Dummy data to be displayed in the table
 const dummyData = [
@@ -39,13 +40,21 @@ const dummyData = [
   // Add more dummy data as needed
 ];
 
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
+
 const Proposal = () => {
   const [loading, setLoading] = useState(false);
   const companyId = sessionStorage.getItem("companyId");
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
   const role = "CMP_OWNER";
   const [datas, setDatas] = useState([]);
   console.log("data", datas);
+
   const columns = useMemo(
     () => [
       {
@@ -73,28 +82,30 @@ const Proposal = () => {
         enableHiding: false,
         header: "Description",
       },
-      // {
-      //   accessorKey: "created_at",
-      //   header: "Created At",
-      //   Cell: ({ row }) => row.original?.createdAt?.substring(0, 10),
-      // },
-      // {
-      //   accessorKey: "updated_at",
-      //   header: "Updated At",
-      //   Cell: ({ row }) => {
-      //     if (row.original.updatedAt) {
-      //       return row.original.updatedAt.substring(0, 10);
-      //     } else {
-      //       return "";
-      //     }
-      //   },
-      // },
     ],
     []
   );
 
+  const handleExportRows = (rows) => {
+    if (!rows || rows.length === 0) {
+      toast.error("No rows selected for export.");
+      return;
+    }
+    const rowData = rows.map((row) => row.original);
+    const csv = generateCsv(csvConfig)(rowData);
+    download(csvConfig)(csv);
+  };
 
-  const handelNavigateClick = () => {
+  const handleExportData = () => {
+    if (!data || data.length === 0) {
+      toast.error("No data available for export.");
+      return;
+    }
+    const csv = generateCsv(csvConfig)(data);
+    download(csvConfig)(csv);
+  };
+
+  const handleNavigateClick = () => {
     navigate("/proposal/create");
   };
 
@@ -109,26 +120,25 @@ const Proposal = () => {
     positionToolbarAlertBanner: "bottom",
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
-        sx={{
-          display: "flex",
-          gap: "16px",
-          padding: "8px",
-          flexWrap: "wrap",
-        }}
+        sx={{ display: "flex", gap: "16px", padding: "8px", flexWrap: "wrap" }}
       >
-        <button className="btn text-secondary">
+        <button className="btn text-secondary" onClick={handleExportData}>
           <RiFileExcel2Fill size={23} />
         </button>
-
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
-          <button className="btn text-secondary border-0">
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
             <RiFileExcel2Line size={23} />
           </button>
         </OverlayTrigger>
-
         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
@@ -160,7 +170,6 @@ const Proposal = () => {
     const doc = new jsPDF();
     doc.setFontSize(20);
     doc.text("Deals", 15, 15);
-
     const tableHeaders1 = [
       "S.no",
       "Proposal Name",
@@ -168,16 +177,13 @@ const Proposal = () => {
       "Subject Type",
       "Description",
     ];
-    const tableData1 = rows.map((row, i) => {
-      return [
-        i + 1,
-        row.original.proposalName,
-        row.original.subject,
-        row.original.proposalType,
-        row.original.description,
-      ];
-    });
-
+    const tableData1 = rows.map((row, i) => [
+      i + 1,
+      row.original.proposalName,
+      row.original.subject,
+      row.original.proposalType,
+      row.original.description,
+    ]);
     autoTable(doc, {
       head: [tableHeaders1],
       body: tableData1,
@@ -204,48 +210,40 @@ const Proposal = () => {
       },
     },
   });
-  const handledelete = async (rows) => {
-    const id = rows.map((row) => row.original.id);
 
-    try{
+  const handleDelete = async (rows) => {
+    const ids = rows.map((row) => row.original.id);
+    try {
       const response = await axios.delete(
-        `${API_URL}deleteCompanyProposal/${id}`,
-        // {
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // }
+        `${API_URL}deleteCompanyProposal/${ids}`
       );
       if (response.status === 201) {
-        toast.success(response.data.message);
+        toast.success("Deleted successfully.");
         getData();
         table.setRowSelection(false);
-      } 
-    }catch(error){
-      toast.error("Error deleting Data");
+      }
+    } catch (error) {
+      toast.error("Error deleting data: " + error.message);
     }
-  }
+  };
+
   const getData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}getAllCompanyProposalByCompanyId/${companyId}`,
-        {
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-        }
+        `${API_URL}getAllCompanyProposalByCompanyId/${companyId}`
       );
-
       if (response.status === 200) {
         setDatas(response.data);
-        toast.success(response.data.message);
+        setData(response.data);
+        toast.success("Data fetched successfully.");
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed: " + error.message);
+      toast.error("Failed to fetch data: " + error.message);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -266,7 +264,7 @@ const Proposal = () => {
                     role === "CMP_USER" && "disabled"
                   }`}
                   disabled={role === "CMP_USER"}
-                  onClick={handelNavigateClick}
+                  onClick={handleNavigateClick}
                 >
                   Create Proposal
                 </button>
@@ -287,13 +285,11 @@ const Proposal = () => {
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
-                        !(
-                          table.getIsSomeRowsSelected() ||
-                          table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
                       }
                       onClick={() =>
-                        handledelete(table.getSelectedRowModel().rows)
+                        handleDelete(table.getSelectedRowModel().rows)
                       }
                     >
                       Delete
@@ -303,7 +299,6 @@ const Proposal = () => {
               </div>
             </div>
           </div>
-
           <ThemeProvider theme={theme}>
             <MaterialReactTable table={table} />
           </ThemeProvider>
