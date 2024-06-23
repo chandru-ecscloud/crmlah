@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import { Tooltip, Zoom, responsiveFontSizes } from "@mui/material";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-// import { FaEdit } from "react-icons/fa";
 import axios from "axios";
-// import UserEdit from "../User/UserEdit";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -37,6 +34,7 @@ function UserShow() {
     };
 
     userData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handelEdit = () => {

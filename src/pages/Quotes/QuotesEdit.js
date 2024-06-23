@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import User from "../../assets/user.png";
+// import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -37,21 +37,21 @@ function QuotesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
   console.log("Row Value is ", rows);
-  const [adjustment, setAdjustment] = React.useState(0);
-  const [grandTotal, setGrandTotal] = React.useState(0);
+  // const [adjustment, setAdjustment] = React.useState(0);
+  // const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
-  const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
+  // const token = sessionStorage.getItem("token");
+  // const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const [productOptions, setProductOptions] = useState([]);
-  console.log("productOptions:", productOptions);
+  // console.log("productOptions:", productOptions);
   const [accountOption, setAccountOption] = useState([]);
   // console.log(accountOption);
   const [dealOption, setDealOption] = useState([]);
   // console.log(dealOption);/
   const [contactOption, setContactOption] = useState([]);
   // console.log(contactOption);
-  const [userImage, setUserImage] = useState(User);
+  // const [userImage, setUserImage] = useState(User);
   const navigate = useNavigate();
   const [sameAsShipping, setSameAsShipping] = useState(false);
 
@@ -279,7 +279,7 @@ function QuotesEdit() {
         },
       });
       const productName = response.data.productName;
-      console.log("Product Name is ", productName)
+      console.log("Product Name is ", productName);
 
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
@@ -387,6 +387,7 @@ function QuotesEdit() {
 
   useEffect(() => {
     calculateTotals();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows]);
 
   const handleSameAsShippingChange = () => {
@@ -433,6 +434,7 @@ function QuotesEdit() {
     };
 
     userData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -440,6 +442,7 @@ function QuotesEdit() {
     AccountList();
     DealList();
     ContactList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -520,10 +523,11 @@ function QuotesEdit() {
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-control form-size ${formik.touched.dealName && formik.errors.dealName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.dealName && formik.errors.dealName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
               </div>
               <div className="row sm-device">
@@ -544,10 +548,11 @@ function QuotesEdit() {
                   type="text"
                   name="subject"
                   {...formik.getFieldProps("subject")}
-                  className={`form-control form-size ${formik.touched.subject && formik.errors.subject
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.subject && formik.errors.subject
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="subject"
                 />
               </div>
@@ -569,10 +574,11 @@ function QuotesEdit() {
                   name="quoteStage"
                   {...formik.getFieldProps("quoteStage")}
                   type="text"
-                  className={`form-select form-size ${formik.touched.quoteStage && formik.errors.quoteStage
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-select form-size ${
+                    formik.touched.quoteStage && formik.errors.quoteStage
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="quoteStage"
                 >
                   <option value=""></option>
@@ -602,10 +608,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("validUntil")}
                   type="date"
-                  className={`form-control form-size ${formik.touched.validUntil && formik.errors.validUntil
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.validUntil && formik.errors.validUntil
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="validUntil"
                   id="validUntil"
                 />
@@ -722,7 +729,6 @@ function QuotesEdit() {
               onChange={handleSameAsShippingChange}
               className="form-check-input"
             />
-
           </div>
         </div>
         <div className="container">
@@ -733,11 +739,12 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingStreet &&
+                  className={`form-control form-size ${
+                    formik.touched.shippingStreet &&
                     formik.errors.shippingStreet
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -761,10 +768,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.billingStreet && formik.errors.billingStreet
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingStreet"
                   id="billingStreet"
                   value={
@@ -796,10 +804,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.shippingCity && formik.errors.shippingCity
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -823,10 +832,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.billingCity && formik.errors.billingCity
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingCity"
                   id="billingCity"
                   value={
@@ -857,10 +867,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.shippingCode && formik.errors.shippingCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -884,10 +895,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.billingCode && formik.errors.billingCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingCode"
                   id="billingCode"
                   value={
@@ -918,10 +930,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.shippingState && formik.errors.shippingState
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -945,10 +958,11 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-size ${
+                    formik.touched.billingState && formik.errors.billingState
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingState"
                   id="billingState"
                   value={
@@ -980,11 +994,12 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCountry &&
+                  className={`form-control form-size ${
+                    formik.touched.shippingCountry &&
                     formik.errors.shippingCountry
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -1008,11 +1023,12 @@ function QuotesEdit() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCountry &&
+                  className={`form-control form-size ${
+                    formik.touched.billingCountry &&
                     formik.errors.billingCountry
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   name="billingCountry"
                   id="billingCountry"
                   value={
@@ -1071,11 +1087,12 @@ function QuotesEdit() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className={`form-select ${formik.touched.quotesItemList?.[index]?.productId &&
+                        className={`form-select ${
+                          formik.touched.quotesItemList?.[index]?.productId &&
                           formik.errors.quotesItemList?.[index]?.productId
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name={`quotesItemList[${index}].productId`}
                         value={row.productId}
                         onChange={(e) => {
@@ -1095,11 +1112,13 @@ function QuotesEdit() {
                         ))}
                       </select>
                       {formik.touched.quotesItemList?.[index]?.productName &&
-                        formik.errors.quotesItemList?.[index]?.productName ? (
+                      formik.errors.quotesItemList?.[index]?.productName ? (
                         <div className="text-danger fs-6">
                           {formik.errors.quotesItemList[index].productName}
                         </div>
-                      ) : ""}
+                      ) : (
+                        ""
+                      )}
                     </td>
                     <td>
                       <input

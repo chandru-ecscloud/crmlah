@@ -97,6 +97,7 @@ const TimeSlotsEdit = ({ id, refreshData}) => {
 
   useEffect(() => {
     getTimeSlotDataId();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

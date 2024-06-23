@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import User from "../../assets/user.png";
+import React from "react";
+// import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,10 +15,12 @@ const validationSchema = yup.object().shape({
   members: yup.string().required("*Members is required"),
   availableDays: yup.string().required("*Available days is required"),
   availableTime: yup.string().required("*Available time is required"),
-  price: yup.string()
+  price: yup
+    .string()
     .matches(/^\d+$/, "Must be only digits")
     .required("*Price is required"),
-  tax: yup.string()
+  tax: yup
+    .string()
     .matches(/^\d+$/, "Must be only digits")
     .required("*Tax is required"),
 });
@@ -40,8 +42,7 @@ function ServicesCreate() {
       availableTime: "",
       price: "",
       tax: "",
-      description: ""
-
+      description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -61,7 +62,7 @@ function ServicesCreate() {
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
-    }
+    },
   });
 
   // const handleChange = (e) => {
@@ -70,7 +71,6 @@ function ServicesCreate() {
   //     [e.target.name]: e.target.value,
   //   });
   // };
-
 
   // const handleSubmit = async () => {
   //   try {
@@ -110,17 +110,12 @@ function ServicesCreate() {
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
               <span>
                 <Link to={"/services"}>
-                  <button className="btn btn-danger">
-                    Cancel
-                  </button>
+                  <button className="btn btn-danger">Cancel</button>
                 </Link>
               </span>
               &nbsp;
               <span>
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                >
+                <button className="btn btn-primary" type="submit">
                   Save
                 </button>
               </span>
@@ -154,9 +149,12 @@ function ServicesCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.serviceOwner && formik.errors.serviceOwner && (
-                    <p className="text-danger">{formik.errors.serviceOwner}</p>
-                  )}
+                  {formik.touched.serviceOwner &&
+                    formik.errors.serviceOwner && (
+                      <p className="text-danger">
+                        {formik.errors.serviceOwner}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -230,7 +228,9 @@ function ServicesCreate() {
                   <option value=""></option>
                   <option value="Business Address">Business Address</option>
                   <option value="Client Address">Client Address</option>
-                  <option value="Business Address and Client Address">Business Address and Client Address</option>
+                  <option value="Business Address and Client Address">
+                    Business Address and Client Address
+                  </option>
                 </select>
               </div>
               <div className="row sm-device">
@@ -244,7 +244,7 @@ function ServicesCreate() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Member(s)</lable> 
+                <lable>Member(s)</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="tel"
@@ -291,8 +291,12 @@ function ServicesCreate() {
                   name="availableDays"
                 >
                   <option value=""></option>
-                  <option value="Every Business Days">Every Business Days</option>
-                  <option value="Specific Date Range">Specific Date Range</option>
+                  <option value="Every Business Days">
+                    Every Business Days
+                  </option>
+                  <option value="Specific Date Range">
+                    Specific Date Range
+                  </option>
                   <option value="Specific Date(s)">Specific Date(s)</option>
                   <option value="Specific Day(s)">Specific Day(s)</option>
                 </select>
@@ -300,9 +304,12 @@ function ServicesCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.availableDays && formik.errors.availableDays && (
-                    <p className="text-danger">{formik.errors.availableDays}</p>
-                  )}
+                  {formik.touched.availableDays &&
+                    formik.errors.availableDays && (
+                      <p className="text-danger">
+                        {formik.errors.availableDays}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -321,7 +328,9 @@ function ServicesCreate() {
                   name="availableTime"
                 >
                   <option value=""></option>
-                  <option value="Same as Business Time">Same as Business Time</option>
+                  <option value="Same as Business Time">
+                    Same as Business Time
+                  </option>
                   <option value="10.00AM to 12.00PM">10.00AM to 12.00PM</option>
                   <option value="12.00PM to 2.00PM">12.00PM to 2.00PM</option>
                   <option value="2.00PM to 4.00PM">2.00PM to 4.00PM</option>
@@ -330,9 +339,12 @@ function ServicesCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.availableTime && formik.errors.availableTime && (
-                    <p className="text-danger">{formik.errors.availableTime}</p>
-                  )}
+                  {formik.touched.availableTime &&
+                    formik.errors.availableTime && (
+                      <p className="text-danger">
+                        {formik.errors.availableTime}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -347,7 +359,7 @@ function ServicesCreate() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
-                <lable>Price</lable> 
+                <lable>Price</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
@@ -375,8 +387,9 @@ function ServicesCreate() {
                 <lable>Tax</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.tax && formik.errors.tax ? "is-invalid" : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.tax && formik.errors.tax ? "is-invalid" : ""
+                  }`}
                   {...formik.getFieldProps("tax")}
                   name="tax"
                   id="tax"

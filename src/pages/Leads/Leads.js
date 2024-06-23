@@ -18,7 +18,6 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
-import mailContent from "../Email/MailContent";
 import SendCompanyProfile from "../Email/SendCompanyProfile";
 
 const csvConfig = mkConfig({

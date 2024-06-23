@@ -18,7 +18,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -92,23 +92,26 @@ const Services = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(`${API_URL}getAllServicesByCompanyId/${companyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}getAllServicesByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setData(response.data);
     } catch (error) {
       toast.error("Error fetching data:", error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleExportRows = (rows) => {
@@ -138,7 +141,6 @@ const Services = () => {
       "Price",
       "Location",
       "Service Owner",
-
     ];
     const tableData1 = rows.map((row, i) => {
       return [
@@ -148,7 +150,6 @@ const Services = () => {
         row.original.price,
         row.original.location,
         row.original.serviceOwner,
-
       ];
     });
 
@@ -191,7 +192,6 @@ const Services = () => {
       },
     });
 
-
     // console.log("tableData",tableData1)
     // console.log("tableHeaders",tableHeaders1 )
     doc.save("ECS.pdf");
@@ -212,7 +212,7 @@ const Services = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
-    console.log("rowData", rowData[0])
+    console.log("rowData", rowData[0]);
     // console.log("rowData",rowData.id)
     try {
       const response = await axios.delete(
@@ -265,7 +265,8 @@ const Services = () => {
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -279,7 +280,8 @@ const Services = () => {
           </button>
         </OverlayTrigger>
 
-        <button className="btn text-secondary"
+        <button
+          className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             handleExportRowsPDF(table.getPrePaginationRowModel().rows)
@@ -287,7 +289,8 @@ const Services = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger placement="top"
+        <OverlayTrigger
+          placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
           <button
@@ -295,7 +298,9 @@ const Services = () => {
             disabled={
               !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
             }
-            onClick={() => handleExportRowsPDF(table.getSelectedRowModel().rows)}
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
@@ -312,7 +317,9 @@ const Services = () => {
           <div className="d-flex align-items-center justify-content-end py-4 px-3">
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
                 disabled={role === "CMP_USER"}
                 onClick={handelNavigateClick}
               >
@@ -394,7 +401,8 @@ const Services = () => {
             <MaterialReactTable table={table} />
           </ThemeProvider>
         </>
-      )};
+      )}
+      ;
     </section>
   );
 };

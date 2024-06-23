@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import User from "../../assets/user.png";
+// import User from "../../assets/user.png";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
@@ -11,8 +11,7 @@ import "../../styles/dummy.css";
 
 const validationSchema = Yup.object().shape({
     companyName: Yup.string().required("*Company Name is required"),
-    companyEmail: Yup.string().email("Invalid email").
-        required("*Email is required"),
+    companyEmail: Yup.string().email("Invalid email").required("*Email is required"),
     companyMobile: Yup.string()
         .required('Phone number is required')
         .test('phone-length', function (value) {
@@ -36,14 +35,14 @@ const validationSchema = Yup.object().shape({
 function CompanyAdd() {
     const navigate = useNavigate();
     const owner = sessionStorage.getItem("user_name");
-    const token = sessionStorage.getItem("token");
-    const [userImage, setUserImage] = useState(User);
-    const role = sessionStorage.getItem("role");
+    // const token = sessionStorage.getItem("token");
+    // const [userImage, setUserImage] = useState(User);
+    // const role = sessionStorage.getItem("role");
     const companyId = sessionStorage.getItem("companyId");
-    const [sameAsShipping, setSameAsShipping] = useState(false);
+    // const [sameAsShipping, setSameAsShipping] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loadIndicator, setLoadIndicator] = useState(false);
-    const { id } = useParams();
+    // const { id } = useParams();
 
     const formik = useFormik({
         initialValues: {
@@ -106,17 +105,17 @@ function CompanyAdd() {
         formik.setFieldValue("file", file);
     };
 
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
+    // const handleImageUpload = (event) => {
+    //     const file = event.target.files[0];
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setUserImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setUserImage(reader.result);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
 
     useEffect(() => {
         const userData = async () => {

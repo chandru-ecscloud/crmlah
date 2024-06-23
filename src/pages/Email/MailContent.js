@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 
@@ -14,9 +13,11 @@ const fetchCompanyData = async (api) => {
   }
 };
 
-const mailContent = async (data, generateLink) => {
+const mailContent = async (data, generateLink, mailBody) => {
   const companyId = sessionStorage.getItem("companyId");
-  console.log("companyId", companyId);
+  console.log("companyId", generateLink);
+
+  console.log("Selected Mail Body ", mailBody);
 
   const companyData = await fetchCompanyData(
     `${API_URL}getAllCompanyRegisterById/${companyId}`
@@ -27,7 +28,6 @@ const mailContent = async (data, generateLink) => {
     return "";
   }
   console.log("companyData", companyData);
-  const currentDate = new Date().toISOString().split("T")[0];
 
   let Link = generateLink
     ? `<h3 style="margin-bottom: 0;">You can join:</h3>
@@ -69,75 +69,26 @@ const mailContent = async (data, generateLink) => {
 </head>
 <body>
     <div class="invoice-box">
-        <table>
-            <tr class="top">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <img src="${
-                                  companyData.companyLogo || ""
-                                }" style="width: 75%; max-width: 180px" alt="Logo" />
-                            </td>
-                            <td class="third">
-                                <b>Date:</b> ${currentDate}<br />
-                                ${companyData.companyStreet || ""},<br />
-                                ${companyData.companyCity || ""},&nbsp;${
-    companyData.companyState || ""
-  },<br />
-                                ${companyData.companyCountry || ""}-${
-    companyData.companyZipCode || ""
-  }.
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
         <div class="invoice">
-            <h1 style="color: black;">Dear ${data},</h1>
-            <div id="email-content" class="preserve-whitespace" style="margin: 2rem 0 0; font-size: 0.9rem;">
- My name is ${
-              companyData.companyOwnerName || ""
-            }, and I am the Developer at ${companyData.companyName || ""}.
-I am writing to introduce our company and propose a potential collaboration that I believe could be mutually beneficial for both our organizations.
-
-At ${
-    companyData.companyName || ""
-  }, we specialize in [briefly describe your company's services/products]. We have been following your impressive work in the industry and are particularly interested in exploring ways in which we could combine our expertise to achieve greater success together.
-
-I would love to schedule a meeting at your earliest convenience to discuss this proposal in more detail and explore how our collaboration can help achieve our respective goals. Please let me know your availability, and I will be happy to coordinate accordingly.
-
-Thank you for considering this opportunity. I look forward to the possibility of working together.</div>
+            <h1 style="color: black;margin: 0px;">Dear ${data},</h1>
+            <div id="email-content" class="preserve-whitespace" style="margin: 1rem 0 0; font-size: 0.9rem;">
+${mailBody}
+            </div>
             ${Link}
             <hr />
             <p style="margin: 2rem 0 0;">Best regards,</p>
             <h4 style="margin: 0;">${companyData.companyOwnerName || ""}</h4>
             <p style="margin: 0;">${companyData.companyName || ""}</p>
             <p style="margin: 0;">${companyData.companyEmail || ""}</p>
-            <p style="margin: 0;">${companyData.companyMobile || ""}</p>
+            <p style="margin: 0;">+${companyData.countryCode || ""} ${
+    companyData.companyMobile || ""
+  }</p>
             <p style="margin: 0 0 2rem 0;"><a>${
               companyData.companyWebsite || ""
             }</a></p>
             <hr />
         </div>
     </div>
-    <script>
-        const emailContent = \`My name is ${
-          companyData.companyOwnerName || ""
-        }, and I am the Developer at ${companyData.companyName || ""}.
-I am writing to introduce our company and propose a potential collaboration that I believe could be mutually beneficial for both our organizations.
-
-At ${
-    companyData.companyName || ""
-  }, we specialize in [briefly describe your company's services/products]. We have been following your impressive work in the industry and are particularly interested in exploring ways in which we could combine our expertise to achieve greater success together.
-
-I would love to schedule a meeting at your earliest convenience to discuss this proposal in more detail and explore how our collaboration can help achieve our respective goals. Please let me know your availability, and I will be happy to coordinate accordingly.
-
-Thank you for considering this opportunity. I look forward to the possibility of working together.\`;
-
-        document.getElementById('email-content').textContent = emailContent;
-    </script>
 </body>
 </html>`;
 

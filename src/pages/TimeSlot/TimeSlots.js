@@ -4,14 +4,14 @@ import { API_URL } from "../../Config/URL";
 import Modal from "react-bootstrap/Modal";
 import TimeSlotsAdd from "../TimeSlot/TimeSlotsAdd";
 import TimeSlotsEdit from "./TimeSlotsEdit";
-import { Delete } from "@mui/icons-material";
+// import { Delete } from "@mui/icons-material";
 import DeleteTimeSlot from "./DeleteTimeSlot";
 
 const TimeSlots = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const role = sessionStorage.getItem("role");
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const companyId = sessionStorage.getItem("companyId");
 
   const openMainModal = () => {
@@ -22,10 +22,10 @@ const TimeSlots = () => {
     setIsMainModalOpen(false);
   };
 
-  const openAddModal = () => {
-    setIsAddModalOpen(true);
-    closeMainModal(); // Close the main modal when opening the add modal
-  };
+  // const openAddModal = () => {
+  //   setIsAddModalOpen(true);
+  //   closeMainModal(); // Close the main modal when opening the add modal
+  // };
 
   const handleTimeSlotAdded = () => {
     getTimeSlotData();
@@ -43,7 +43,7 @@ const TimeSlots = () => {
         }
       );
       setTimeSlot(response.data);
-      console.log("Time Slot Data:",response.data);
+      console.log("Time Slot Data:", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       console.log("Time Slot Data Not Available");
@@ -52,6 +52,7 @@ const TimeSlots = () => {
 
   useEffect(() => {
     getTimeSlotData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -80,40 +81,41 @@ const TimeSlots = () => {
                 style={{ maxHeight: "23rem", overflowY: "auto" }}
               >
                 {timeSlot.length > 0 ? (
-                <table className="table">
-                  <thead>
-                    <tr
-                      style={{ position: "sticky", top: 0, zIndex: 1 }}
-                      className="text-center table-warning"
-                    >
-                      <th scope="col">S.NO</th>
-                      <th scope="col">Slot Time</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                    
-                      <tbody>
-                        {timeSlot.map((item, index) => (
-                          <tr key={item.id} className="text-center">
-                            <td>{index + 1}</td>
-                            <td>{item.slotTime}</td>
-                            <td className="d-flex justify-content-center">
-                              <TimeSlotsEdit
-                                id={item.id}
-                                refreshData={handleTimeSlotAdded}
-                              />
-                              <DeleteTimeSlot
-                                refreshData={handleTimeSlotAdded}
-                                path={`deleteTimeSlot/${item.id}`}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-    
-                </table>
-               ) : (
-                  <p className="text-center my-2">Time slot is not Available!</p>
+                  <table className="table">
+                    <thead>
+                      <tr
+                        style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        className="text-center table-warning"
+                      >
+                        <th scope="col">S.NO</th>
+                        <th scope="col">Slot Time</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {timeSlot.map((item, index) => (
+                        <tr key={item.id} className="text-center">
+                          <td>{index + 1}</td>
+                          <td>{item.slotTime}</td>
+                          <td className="d-flex justify-content-center">
+                            <TimeSlotsEdit
+                              id={item.id}
+                              refreshData={handleTimeSlotAdded}
+                            />
+                            <DeleteTimeSlot
+                              refreshData={handleTimeSlotAdded}
+                              path={`deleteTimeSlot/${item.id}`}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p className="text-center my-2">
+                    Time slot is not Available!
+                  </p>
                 )}
               </div>
               <div className="col-12 d-flex justify-content-end">

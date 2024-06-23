@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
+import { useNavigate } from "react-router-dom";
+// import { BsThreeDots } from "react-icons/bs";
+// import USER from "../../assets/user.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { IoArrowBack } from "react-icons/io5";
 function ServicesShow() {
   const { id } = useParams();
@@ -39,7 +39,6 @@ function ServicesShow() {
   const handelEdit = () => {
     navigate(`/services/edit/${id}`);
   };
-
 
   // const renderQuotedItems = () => {
   //   return quotedItems.map((item, index) => (
@@ -98,7 +97,6 @@ function ServicesShow() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER" || role === "CMP_ADMIN"}

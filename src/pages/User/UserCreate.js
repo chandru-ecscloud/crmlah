@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

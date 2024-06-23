@@ -25,47 +25,47 @@ function QuotesShow() {
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
-  const quotedItems = [
-    {
-      productName: "Product Name",
-      itemDescription: "Item Description",
-      quantity: "2",
-      price: "1000",
-      discount: "5%",
-      tax: "5%",
-      totalAmount: "850",
-    },
-  ];
+  // const quotedItems = [
+  //   {
+  //     productName: "Product Name",
+  //     itemDescription: "Item Description",
+  //     quantity: "2",
+  //     price: "1000",
+  //     discount: "5%",
+  //     tax: "5%",
+  //     totalAmount: "850",
+  //   },
+  // ];
 
-  const renderQuotedItems = () => {
-    return quotedItems.map((item, index) => (
-      <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
-        <td className="px-5 py-2">
-          <span>{index + 1}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span className="text-primary">
-            {item.productName || "--"} <br />
-          </span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.quantity || "--"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.price || "--"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.discount || "0"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.tax || "--"}</span>
-        </td>
-        <td className="px-5 py-2">
-          <span>{item.totalAmount || "--"}</span>
-        </td>
-      </tr>
-    ));
-  };
+  // const renderQuotedItems = () => {
+  //   return quotedItems.map((item, index) => (
+  //     <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
+  //       <td className="px-5 py-2">
+  //         <span>{index + 1}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span className="text-primary">
+  //           {item.productName || "--"} <br />
+  //         </span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.quantity || "--"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.price || "--"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.discount || "0"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.tax || "--"}</span>
+  //       </td>
+  //       <td className="px-5 py-2">
+  //         <span>{item.totalAmount || "--"}</span>
+  //       </td>
+  //     </tr>
+  //   ));
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,6 +178,7 @@ function QuotesShow() {
         textColor: [0, 0, 0],
         fontStyle: "normal",
       },
+      // eslint-disable-next-line no-dupe-keys
       body: tableData,
       foot: [
         [

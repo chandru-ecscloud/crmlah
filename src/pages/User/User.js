@@ -302,10 +302,6 @@ const UserActivation = () => {
     navigate("/users/create");
   };
 
-  const handelProposalNavigate = () => {
-    navigate("/proposal");
-  };
-
   const table = useMaterialReactTable({
     columns,
     data,
@@ -396,11 +392,12 @@ const UserActivation = () => {
               >
                 Time Slot
               </button> */}
-               <div style={{ paddingRight: "10px" }}>
+              <div style={{ paddingRight: "10px" }}>
                 <Link to={"/user/proposal"}>
                   <button
-                    className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                      }`}
+                    className={`btn btn-primary ${
+                      role === "CMP_USER" && "disabled"
+                    }`}
                     disabled={role === "CMP_USER"}
                   >
                     Proposal
@@ -410,8 +407,9 @@ const UserActivation = () => {
               <div style={{ paddingRight: "10px" }}>
                 <Link to={"/companyadd"}>
                   <button
-                    className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                      }`}
+                    className={`btn btn-primary ${
+                      role === "CMP_USER" && "disabled"
+                    }`}
                     disabled={role === "CMP_USER"}
                   >
                     Company

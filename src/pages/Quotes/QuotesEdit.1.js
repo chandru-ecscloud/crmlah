@@ -1,41 +1,18 @@
 import React, { useEffect, useState } from "react";
-import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
-import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
-// import { FaCamera } from "react-icons/fa6";
-import "../../styles/dummy.css";
+import { validationSchema } from "./QuotesEdit";
 
-const validationSchema = yup.object().shape({
-  quoteOwner: yup.string().required("*Quote owner is required"),
-  dealName: yup.string().required("*Quote Name is required"),
-  subject: yup.string().required("*Enter the Subject"),
-  quoteStage: yup.string().required("*Enter the Quotes Stage"),
-  validUntil: yup.string().required("*Select Valid Until"),
-  shippingCode: yup
-    .number()
-    .typeError("Shipping code must be a number")
-    .integer("Shipping code must be an integer"),
-  billingCode: yup
-    .number()
-    .typeError("Billing code must be a number")
-    .integer("Billing code must be an integer"),
-  // termsAndConditions: yup.string().required("*Enter The termsAndConditions"),
-  // description: yup.string().required("*Enter The Customer Notes"),
-  quotesItemList: yup.array().of(
-    yup.object().shape({
-      productName: yup.string().required("*Product Name is required"),
-    })
-  ),
-});
-
-function QuotesCreate() {
+export function QuotesEdit() {
+  const { id } = useParams();
   const [rows, setRows] = useState([{}]);
-  console.log(rows);
+  console.log("Row Value is ", rows);
+  // const [adjustment, setAdjustment] = React.useState(0);
+  // const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
   // const token = sessionStorage.getItem("token");
   // const role = sessionStorage.getItem("role");
@@ -49,14 +26,12 @@ function QuotesCreate() {
   const [contactOption, setContactOption] = useState([]);
   // console.log(contactOption);
   // const [userImage, setUserImage] = useState(User);
-  const [sameAsShipping, setSameAsShipping] = useState(false);
-
   const navigate = useNavigate();
+  const [sameAsShipping, setSameAsShipping] = useState(false);
 
   const addRow = () => {
     const updatedRows = [...rows, {}];
     setRows(updatedRows);
-
     const updatedQuotesItemList = [
       ...formik.values.quotesItemList,
       {
@@ -88,14 +63,14 @@ function QuotesCreate() {
   const formik = useFormik({
     initialValues: {
       companyId: companyId,
-      quoteOwner: owner,
+      quoteOwner: "",
       itemDescription: "",
       description: "",
       termsAndConditions: "",
       subTotal: "",
       txnDiscount: "",
       txnTax: "",
-      adjustment: "",
+      adjustment: 0,
       grandTotal: "",
       subject: "",
       quoteStage: "",
@@ -125,65 +100,69 @@ function QuotesCreate() {
           total: "",
         },
       ],
+      deletedQuotesItemIds: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Quotes Create:", values);
+      // console.log("Quotes Edit:",values);
+      const payload = {
+        transactionQuotes: {
+          companyId: companyId,
+          itemDescription: values.itemDescription,
+          description: values.description,
+          termsAndConditions: values.termsAndConditions,
+          subTotal: values.subTotal,
+          txnDiscount: values.txnDiscount,
+          txnTax: values.txnTax,
+          adjustment: values.adjustment,
+          grandTotal: values.grandTotal,
+          quoteOwner: values.quoteOwner,
+          subject: values.subject,
+          quoteStage: values.quoteStage,
+          dealName: values.dealName,
+          validUntil: values.validUntil,
+          contactName: values.contactName,
+          accountName: values.accountName,
+          billingStreet: values.billingStreet,
+          billingCity: values.billingCity,
+          billingState: values.billingState,
+          billingCode: values.billingCode || "",
+          billingCountry: values.billingCountry,
+          shippingStreet: values.shippingStreet,
+          shippingCity: values.shippingCity,
+          shippingState: values.shippingState,
+          shippingCode: values.shippingCode || "",
+          shippingCountry: values.shippingCountry,
+        },
+        quotesItemList: rows.map((item) => ({
+          id: item.id,
+          productName: item.productName,
+          productId: item.selectedOption ? item.selectedOption : undefined,
+          quantity: item.quantity,
+          listPrice: item.listPrice,
+          amount: item.amount,
+          discount: parseInt(item.discount),
+          tax: parseInt(item.tax),
+          total: parseInt(item.total),
+        })),
+        deletedQuotesItemIds: [],
+      };
+      console.log("Payload is ", payload);
+
       try {
-        const payload = {
-          transactionQuotes: {
-            companyId: companyId,
-            itemDescription: values.itemDescription,
-            description: values.description,
-            termsAndConditions: values.termsAndConditions,
-            subTotal: values.subTotal,
-            txnDiscount: values.txnDiscount,
-            txnTax: values.txnTax,
-            adjustment: values.adjustment,
-            grandTotal: values.grandTotal,
-            quoteOwner: values.quoteOwner,
-            subject: values.subject,
-            quoteStage: values.quoteStage,
-            dealName: values.dealName,
-            validUntil: values.validUntil,
-            contactName: values.contactName,
-            accountName: values.accountName,
-            billingStreet: values.billingStreet,
-            billingCity: values.billingCity,
-            billingState: values.billingState,
-            billingCode: values.billingCode,
-            billingCountry: values.billingCountry,
-            shippingStreet: values.shippingStreet,
-            shippingCity: values.shippingCity,
-            shippingState: values.shippingState,
-            shippingCode: values.shippingCode,
-            shippingCountry: values.shippingCountry,
-          },
-          quotesItemList: rows.map((item) => ({
-            productName: item.ProductName,
-            productId: item.selectedOption,
-            quantity: item.quantity,
-            listPrice: item.listPrice,
-            amount: item.amount,
-            discount: parseInt(item.discount),
-            tax: parseInt(item.tax),
-            total: parseInt(item.total),
-          })),
-        };
-        console.log("Payload:", payload);
-        const response = await axios.post(
-          `${API_URL}createTransactionQuotesAndQuoteItems`,
+        const response = await axios.put(
+          `${API_URL}updateTransactionQuotesAndQuoteItems/${id}`,
           payload,
           {
             headers: {
               "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
             },
           }
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/quotes");
-          console.log("Create Quotes Data:", response.data);
         } else {
           toast.error(response.data.message);
         }
@@ -203,7 +182,6 @@ function QuotesCreate() {
   //     reader.readAsDataURL(file);
   //   }
   // };
-
   const AccountList = async () => {
     try {
       const response = await axios(`${API_URL}accountNamesList`, {
@@ -274,9 +252,11 @@ function QuotesCreate() {
         },
       });
       const productName = response.data.productName;
+      console.log("Product Name is ", productName);
+
       const listPrice = response.data.unitPrice;
       const tax = response.data.tax;
-      updatedRows[index].ProductName = productName;
+      updatedRows[index].productName = productName;
       updatedRows[index].productId = response.data.id;
       updatedRows[index].listPrice = listPrice;
       updatedRows[index].quantity = 1;
@@ -355,20 +335,6 @@ function QuotesCreate() {
     calculateTotals();
   };
 
-  const handleSameAsShippingChange = () => {
-    setSameAsShipping(!sameAsShipping);
-    if (!sameAsShipping) {
-      formik.setValues({
-        ...formik.values,
-        billingStreet: formik.values.shippingStreet,
-        billingCity: formik.values.shippingCity,
-        billingState: formik.values.shippingState,
-        billingCode: formik.values.shippingCode,
-        billingCountry: formik.values.shippingCountry,
-      });
-    }
-  };
-
   const calculateTotals = () => {
     let subtotal = 0;
     let totalDiscount = 0;
@@ -394,13 +360,62 @@ function QuotesCreate() {
 
   useEffect(() => {
     calculateTotals();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows]);
+
+  const handleSameAsShippingChange = () => {
+    setSameAsShipping(!sameAsShipping);
+    if (!sameAsShipping) {
+      formik.setValues({
+        ...formik.values,
+        billingStreet: formik.values.shippingStreet,
+        billingCity: formik.values.shippingCity,
+        billingState: formik.values.shippingState,
+        billingCode: formik.values.shippingCode,
+        billingCountry: formik.values.shippingCountry,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios(`${API_URL}allQuotes/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        const getData = response.data;
+        console.log("Quotes Data:", getData);
+        const formattedResponseData = {
+          ...getData,
+          validUntil: getData.validUntil.substring(0, 10),
+          deletedQuotesItemIds: [],
+        };
+        formik.setValues(formattedResponseData);
+        setRows(
+          response.data.quotesItemList.map((item, index) => ({
+            ...item,
+            selectedOption: parseInt(item.productId),
+          }))
+        );
+        console.log("Set Row DATA", response.data.quotesItemList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    userData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     ProductList();
     AccountList();
     DealList();
     ContactList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -410,41 +425,39 @@ function QuotesCreate() {
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12">
               <h4>
-                <b>Create Quote</b>
+                <b>Update Quote</b>
                 <br></br>
                 {/* <img
-                  src={userImage}
-                  className="img-fluid mt-3"
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    cursor: "pointer",
-                    borderRadius: "50%",
-                  }}
-                  alt="user"
-                  onClick={() => document.getElementById("imageInput").click()}
-                /> */}
+              src={userImage}
+              className="img-fluid mt-3"
+              style={{
+                width: "70px",
+                height: "70px",
+                cursor: "pointer",
+                borderRadius: "50%",
+              }}
+              alt="user"
+              onClick={() => document.getElementById("imageInput").click()}
+            /> */}
                 {/* Input for image upload */}
                 {/* <input
-                  type="file"
-                  id="imageInput"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
-                />
-                <FaCamera className="cameraIcon" /> */}
+              type="file"
+              id="imageInput"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleImageUpload}
+            />
+            <FaCamera className="cameraIcon" /> */}
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
               <Link to={"/quotes"}>
-                <button type="button" className="btn btn-danger">
-                  Cancel
-                </button>
+                <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Save
+                  Update
                 </button>
               </span>
             </div>
@@ -483,10 +496,11 @@ function QuotesCreate() {
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-control form-size ${formik.touched.dealName && formik.errors.dealName
+                  className={`form-control form-size ${
+                    formik.touched.dealName && formik.errors.dealName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                 />
               </div>
               <div className="row sm-device">
@@ -507,10 +521,11 @@ function QuotesCreate() {
                   type="text"
                   name="subject"
                   {...formik.getFieldProps("subject")}
-                  className={`form-control form-size ${formik.touched.subject && formik.errors.subject
+                  className={`form-control form-size ${
+                    formik.touched.subject && formik.errors.subject
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="subject"
                 />
               </div>
@@ -532,10 +547,11 @@ function QuotesCreate() {
                   name="quoteStage"
                   {...formik.getFieldProps("quoteStage")}
                   type="text"
-                  className={`form-select form-size ${formik.touched.quoteStage && formik.errors.quoteStage
+                  className={`form-select form-size ${
+                    formik.touched.quoteStage && formik.errors.quoteStage
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="quoteStage"
                 >
                   <option value=""></option>
@@ -565,10 +581,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("validUntil")}
                   type="date"
-                  className={`form-control form-size ${formik.touched.validUntil && formik.errors.validUntil
+                  className={`form-control form-size ${
+                    formik.touched.validUntil && formik.errors.validUntil
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="validUntil"
                   id="validUntil"
                 />
@@ -606,8 +623,8 @@ function QuotesCreate() {
                   style={{ width: "60%" }}
                   {...formik.getFieldProps("accountName")}
                   className={`form-select form-size ${formik.touched.accountName && formik.errors.accountName
-                    ? "is-invalid"
-                    : ""
+                      ? "is-invalid"
+                      : ""
                     }`}
                 >
                   <option value="" selected disabled></option>
@@ -639,8 +656,8 @@ function QuotesCreate() {
                   style={{ width: "60%" }}
                   {...formik.getFieldProps("contactName")}
                   className={`form-select form-size ${formik.touched.contactName && formik.errors.contactName
-                    ? "is-invalid"
-                    : ""
+                      ? "is-invalid"
+                      : ""
                     }`}
                 >
                   <option value="" selected disabled></option>
@@ -695,11 +712,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingStreet &&
-                      formik.errors.shippingStreet
+                  className={`form-control form-size ${
+                    formik.touched.shippingStreet &&
+                    formik.errors.shippingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -723,10 +741,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
+                  className={`form-control form-size ${
+                    formik.touched.billingStreet && formik.errors.billingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingStreet"
                   id="billingStreet"
                   value={
@@ -758,10 +777,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
+                  className={`form-control form-size ${
+                    formik.touched.shippingCity && formik.errors.shippingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -785,10 +805,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
+                  className={`form-control form-size ${
+                    formik.touched.billingCity && formik.errors.billingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCity"
                   id="billingCity"
                   value={
@@ -819,10 +840,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
+                  className={`form-size form-control  ${
+                    formik.touched.shippingCode && formik.errors.shippingCode
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -846,10 +868,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
+                  className={`form-size form-control  ${
+                    formik.touched.billingCode && formik.errors.billingCode
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCode"
                   id="billingCode"
                   value={
@@ -880,10 +903,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
+                  className={`form-control form-size ${
+                    formik.touched.shippingState && formik.errors.shippingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -907,10 +931,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
+                  className={`form-control form-size ${
+                    formik.touched.billingState && formik.errors.billingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingState"
                   id="billingState"
                   value={
@@ -942,11 +967,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCountry &&
-                      formik.errors.shippingCountry
+                  className={`form-control form-size ${
+                    formik.touched.shippingCountry &&
+                    formik.errors.shippingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -970,11 +996,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCountry &&
-                      formik.errors.billingCountry
+                  className={`form-control form-size ${
+                    formik.touched.billingCountry &&
+                    formik.errors.billingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCountry"
                   id="billingCountry"
                   value={
@@ -1033,16 +1060,17 @@ function QuotesCreate() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className={`form-select ${formik.touched.quotesItemList?.[index]?.productName &&
-                            formik.errors.quotesItemList?.[index]?.productName
+                        className={`form-select ${
+                          formik.touched.quotesItemList?.[index]?.productId &&
+                          formik.errors.quotesItemList?.[index]?.productId
                             ? "is-invalid"
                             : ""
-                          }`}
-                        name={`quotesItemList[${index}].productName`}
-                        value={row.productName}
+                        }`}
+                        name={`quotesItemList[${index}].productId`}
+                        value={row.productId}
                         onChange={(e) => {
                           formik.setFieldValue(
-                            `quotesItemList[${index}].productName`,
+                            `quotesItemList[${index}].productId`,
                             e.target.value
                           );
                           handleSelectChange(index, e.target.value);
@@ -1057,11 +1085,13 @@ function QuotesCreate() {
                         ))}
                       </select>
                       {formik.touched.quotesItemList?.[index]?.productName &&
-                        formik.errors.quotesItemList?.[index]?.productName ? (
+                      formik.errors.quotesItemList?.[index]?.productName ? (
                         <div className="text-danger fs-6">
                           {formik.errors.quotesItemList[index].productName}
                         </div>
-                      ) : null}
+                      ) : (
+                        ""
+                      )}
                     </td>
                     <td>
                       <input
@@ -1194,6 +1224,15 @@ function QuotesCreate() {
                   readOnly
                 />
               </div>
+              {/* <div className="container-fluid py-2">
+              <label className="text-dark">Adjustment(Rs.)</label>
+              <input
+                className="form-control p-1"
+                type="text"
+                {...formik.getFieldProps("adjustment")}
+                value={adjustment}
+              />
+            </div> */}
               <div className="container-fluid py-2">
                 <label className="text-dark">Grand Total(SGT)</label>
                 <input
@@ -1280,5 +1319,3 @@ function QuotesCreate() {
     </section>
   );
 }
-
-export default QuotesCreate;
