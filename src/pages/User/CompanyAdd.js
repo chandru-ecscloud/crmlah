@@ -157,7 +157,7 @@ function CompanyAdd() {
         if (companyId) {
             userData();
         }
-    }, [companyId]);
+    }, [companyId, formik]);
 
 
     return (

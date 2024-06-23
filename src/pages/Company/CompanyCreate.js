@@ -8,8 +8,7 @@ import { API_URL } from "../../Config/URL";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
-import { password } from "@mui/icons-material";
-import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string().required("*User Name is required"),
@@ -41,10 +40,10 @@ const validationSchema = Yup.object().shape({
 
 function CompanyCreate() {
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
-  const role = sessionStorage.getItem("role");
-  const companyId = sessionStorage.getItem("companyId");
+  // const token = sessionStorage.getItem("token");
+  // const [userImage, setUserImage] = useState(User);
+  // const role = sessionStorage.getItem("role");
+  // const companyId = sessionStorage.getItem("companyId");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userNameAvailable, setUserNameAvailable] = useState(false);
@@ -207,10 +206,11 @@ function CompanyCreate() {
                     <input
                       {...formik.getFieldProps("name")}
                       type="text"
-                      className={`form-size form-control ${formik.touched.name && formik.errors.name
+                      className={`form-size form-control ${
+                        formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       id="name"
                       name="name"
                     />
@@ -230,10 +230,11 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
+                      className={`form-size form-control  ${
+                        formik.touched.userName && formik.errors.userName
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("userName")}
                       name="userName"
                       id="userName"
@@ -267,10 +268,11 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
+                      className={`form-size form-control  ${
+                        formik.touched.companyName && formik.errors.companyName
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("companyName")}
                       name="companyName"
                       id="companyName"
