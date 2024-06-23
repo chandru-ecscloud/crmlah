@@ -1,8 +1,7 @@
 import axios from "axios";
-import React from "react";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
-
+const companyId = sessionStorage.getItem("companyId");
 const fetchCompanyData = async (api) => {
   try {
     const response = await axios.get(api);
@@ -15,7 +14,7 @@ const fetchCompanyData = async (api) => {
 
 const appoinmentCancelTemplete = async (data) => {
   const companyData = await fetchCompanyData(
-    `${API_URL}getAllCompanyRegisterById/137`
+    `${API_URL}getAllCompanyRegisterById/${companyId}`
   ); // Adjust the endpoint as needed
 
   const currentData = new Date().toISOString().split("T")[0];
@@ -66,8 +65,12 @@ const appoinmentCancelTemplete = async (data) => {
                         <td class="third">
                           <b>Date:</b> ${currentData}<br />
                           ${companyData.companyStreet || ""},<br />
-                          ${companyData.companyCity || ""},&nbsp;${companyData.companyState || ""},<br />
-                          ${companyData.companyCountry || ""}-${companyData.companyZipCode || ""}.
+                          ${companyData.companyCity || ""},&nbsp;${
+    companyData.companyState || ""
+  },<br />
+                          ${companyData.companyCountry || ""}-${
+    companyData.companyZipCode || ""
+  }.
                         </td>
                       </tr>
                     </table>
@@ -81,11 +84,17 @@ const appoinmentCancelTemplete = async (data) => {
                 </p>
                 <hr />
                 <p style=" margin: 2rem 0 0;">See You Soon,</p>
-                 <h4 style="margin: 0;">${companyData.companyOwnerName || ""}</h4>
+                 <h4 style="margin: 0;">${
+                   companyData.companyOwnerName || ""
+                 }</h4>
                  <p style="margin: 0;">${companyData.companyName || ""}</p>
                  <p style="margin: 0;">${companyData.companyEmail || ""}</p>
-                 <p style="margin: 0;">${companyData.companyMobile || ""}</p>
-                 <p style="margin: 0;"><a>${companyData.companyWebsite || ""}</a></p>
+                 <p style="margin: 0;">+${companyData.countryCode || ""} ${
+    companyData.companyMobile || ""
+  }</p>
+                 <p style="margin: 0;"><a>${
+                   companyData.companyWebsite || ""
+                 }</a></p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>
