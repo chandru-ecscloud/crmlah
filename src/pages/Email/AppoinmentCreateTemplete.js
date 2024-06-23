@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 
-// Function to fetch company data
+const companyId = sessionStorage.getItem("companyId");
 const fetchCompanyData = async (api) => {
   try {
     const response = await axios.get(api);
@@ -14,10 +14,9 @@ const fetchCompanyData = async (api) => {
 };
 
 const appoinmentCreateTemplete = async (data, appointmentId, linkResponse) => {
-  // Fetch company data
   const companyData = await fetchCompanyData(
-    `${API_URL}getAllCompanyRegisterById/137`
-  ); // Adjust the endpoint as needed
+    `${API_URL}getAllCompanyRegisterById/${companyId}`
+  ); 
 
   const currentDate = new Date().toISOString().split("T")[0];
 

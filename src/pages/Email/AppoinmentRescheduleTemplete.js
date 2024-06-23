@@ -3,6 +3,7 @@ import React from "react";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 
+const companyId = sessionStorage.getItem("companyId");
 const fetchCompanyData = async (api) => {
   try {
     const response = await axios.get(api);
@@ -15,7 +16,7 @@ const fetchCompanyData = async (api) => {
 
 const appoinmentRescheduleTemplete = async (data, id) => {
   const companyData = await fetchCompanyData(
-    `${API_URL}getAllCompanyRegisterById/137`
+    `${API_URL}getAllCompanyRegisterById/${companyId}`
   ); // Adjust the endpoint as needed
 
   const zoomLink = data.link

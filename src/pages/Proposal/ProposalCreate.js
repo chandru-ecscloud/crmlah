@@ -13,7 +13,7 @@ const validationSchema = yup.object().shape({
   proposal_name: yup.string().required("*Proposal name is required"),
   proposalType: yup.string().required("*Proposal Type is required"),
   subject: yup.string().required("*Subject is required"),
-  description: yup.string().required("*Description is required"),
+  // description: yup.string().required("*Description is required"),
   mailBody: yup.string().required("*Mail Body is required"),
   // files: yup.string().required("*Attachment is required"),
 });
@@ -180,7 +180,7 @@ function ProposalCreate() {
             </div>
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end">
+              <div className="d-flex align-items-center justify-content-end attactUi">
                 <label>Attachment</label>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <div className="input-group ">
@@ -237,7 +237,7 @@ function ProposalCreate() {
           <div className="row">
             <div className="col-12 mb-3 ">
               <div className="d-flex align-items-start justify-content-center sm-device">
-                <label>Description</label><span className="text-danger">*</span> &nbsp;&nbsp;
+                <label>Description</label> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"

@@ -117,7 +117,7 @@ function AppointmentsCreate({ name, id, getData }) {
 
         // Send email only if date or time has changed
       } else {
-        toast.error("Appointment Created Unsuccessful.");
+        toast.error("Appointment Updated Unsuccessful.");
       }
     } catch (error) {
       if (error.response?.status === 400) {

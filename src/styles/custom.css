@@ -888,13 +888,27 @@ nav .nav-link Link {
 }
 
 /* dummy.css */
-/* .custom-file-input { */
-  /* width: 20px !important; */
-  /* max-width: 350px !important; */
+.custom-file-input {
+  width: 20px !important;
+  max-width: 350px !important;
+  /* margin-left: 100px; */
   /* height: 30px; 
   padding: 5px; 
   font-size: 14px;  */
-/* } */
+}
+
+
+
+/* @media (max-width: 500px) {
+  .attactUi{
+    margin-left: 110px;
+  }
+} */
+
+.attactUi{
+  margin-left: 110px;
+}
+
 
 
 

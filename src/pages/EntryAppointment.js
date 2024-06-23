@@ -22,6 +22,8 @@ const getCurrentLocalTime = () => {
   return localISOTime;
 };
 
+
+
 const validationSchema = Yup.object().shape({
   // appointmentFor: Yup.string().required("*Appointment for is required"),
   first_name: Yup.string().required("*First Name is required"),
@@ -37,8 +39,23 @@ const validationSchema = Yup.object().shape({
 const EntryAppointment = () => {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [appointmentTime, setAppointmentTime] = useState([]);
+  const [companyData, setCompanyData] =useState([]);
 
   const currentData = new Date().toISOString().split("T")[0];
+
+  const fetchCompanyData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}getAllCompanyRegisterById/2`);
+      setCompanyData(response.data);
+    } catch (error) {
+      console.error("Error fetching company data: ", error);
+      return [];
+    }
+  };
+  
+  useEffect(() => {
+    fetchCompanyData();
+  }, [])
 
   console.log(appointmentTime);
 
@@ -198,8 +215,9 @@ const EntryAppointment = () => {
                           </td>
                           <td class="third">
                             <b>Date:</b> ${currentData}<br />
-                            The Alexcier, 237 Alexandra Road,<br />
-                            #04-10, Singapore-159929.
+                    ${companyData.companyStreet || ""},<br />
+                    ${companyData.companyCity || ""},&nbsp;${companyData.companyState || ""},<br />
+                    ${companyData.companyCountry || ""}-${companyData.companyZipCode || ""}.
                           </td>
                         </tr>
                       </table>
@@ -229,7 +247,11 @@ const EntryAppointment = () => {
                 <hr />
           
                 <p style=" margin: 4rem 0 0;">See You Soon,</p>
-                <p style=" margin: 0 ; color: #016ce4;">ECS Cloud</p>
+                <h4 style="margin: 0;">${companyData.companyOwnerName || ""}</h4>
+                <p style="margin: 0;">${companyData.companyName || ""}</p>
+                <p style="margin: 0;">${companyData.companyEmail || ""}</p>
+                <p style="margin: 0;">${companyData.companyMobile || ""}</p>
+                <p style="margin: 0;"><a>${companyData.companyWebsite || ""}</a></p>
                 <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
                 <hr />
               </div>
