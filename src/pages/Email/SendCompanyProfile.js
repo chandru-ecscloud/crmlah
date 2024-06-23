@@ -43,7 +43,7 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
         (proposal) => proposal.multipleAttachments
       );
 
-      // console.log("Files ", files);
+      console.log("Files ", files);
 
       const base64Files = await Promise.all(
         files.map(async (filePath) => {

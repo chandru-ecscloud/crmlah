@@ -84,7 +84,7 @@ ${mailBody}
     companyData.companyMobile || ""
   }</p>
             <p style="margin: 0 0 2rem 0;"><a>${
-              companyData.companyWebsite || ""
+              companyData.website || ""
             }</a></p>
             <hr />
         </div>
