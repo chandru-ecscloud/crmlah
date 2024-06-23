@@ -509,9 +509,12 @@ const Lead = () => {
   });
  
   const getEmail = (rows) => {
-    const emails = rows.map((row) => row.original.email);
+    const emails = rows.map((row) => row.original);
     setEmails(emails);
   };
+  const tableReset =()=>{
+    table.setRowSelection(false);
+  }
   return (
     <section>
       {loading && <LinearProgress />}
@@ -730,7 +733,7 @@ const Lead = () => {
                         !table.getIsAllRowsSelected()
                       }
                     >
-                      <SendCompanyProfile emails={emails} />
+                      <SendCompanyProfile emails={emails} tablereset={tableReset}/>
                     </button>
                   </li>
                 </ul>
