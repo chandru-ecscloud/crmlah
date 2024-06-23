@@ -62,7 +62,7 @@ const Proposal = () => {
         enableHiding: false,
         header: "Proposal Name",
         Cell: ({ row }) => (
-          <Link to={`/proposal/show/${row.original.id}`} className="rowName">
+          <Link to={`/user/proposal/show/${row.original.id}`} className="rowName">
             {row.original.proposalName}
           </Link>
         ),
@@ -106,7 +106,7 @@ const Proposal = () => {
   };
 
   const handleNavigateClick = () => {
-    navigate("/proposal/create");
+    navigate("/user/proposal/create");
   };
 
   const table = useMaterialReactTable({
@@ -160,7 +160,7 @@ const Proposal = () => {
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        navigate(`/proposal/show/${row.original.id}`);
+        navigate(`/user/proposal/show/${row.original.id}`);
       },
       style: { cursor: "pointer" },
     }),
@@ -169,7 +169,7 @@ const Proposal = () => {
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
-    doc.text("Deals", 15, 15);
+    doc.text("Proposal", 15, 15);
     const tableHeaders1 = [
       "S.no",
       "Proposal Name",
@@ -218,7 +218,7 @@ const Proposal = () => {
         `${API_URL}deleteCompanyProposal/${ids}`
       );
       if (response.status === 201) {
-        toast.success("Deleted successfully.");
+        toast.success(response.data.message);
         getData();
         table.setRowSelection(false);
       }
@@ -235,7 +235,7 @@ const Proposal = () => {
       if (response.status === 200) {
         setDatas(response.data);
         setData(response.data);
-        toast.success("Data fetched successfully.");
+        // toast.success("Data fetched successfully.");
       } else {
         toast.error(response.data.message);
       }

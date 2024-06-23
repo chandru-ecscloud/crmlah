@@ -72,7 +72,7 @@ function ProposalShow() {
                 >
                   <button
                     className="btn fs-4 border-white"
-                    onClick={() => navigate("/deals")}
+                    onClick={() => navigate("/user/proposal")}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>
@@ -97,7 +97,7 @@ function ProposalShow() {
               </span>
             </OverlayTrigger>
           )}
-          <Link to={`/proposal/edit/${id}`}>
+          <Link to={`/user/proposal/edit/${id}`}>
           <button
             className={`btn btn-warning ms-2 ${role === "CMP_USER" && "disabled"}`}
             disabled={role === "CMP_USER"}

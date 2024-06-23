@@ -143,10 +143,10 @@ function AdminLayout({ handleLogout }) {
         <Route path="/companyadd" element={<CompanyAdd />} />
 
         {/* Proposal */}
-        <Route path="/proposal" element={<Proposal />} />
-        <Route path="/proposal/create" element={<ProposalCreate />} />
-        <Route path="/proposal/edit/:id" element={<ProposalEdit />} />
-        <Route path="/proposal/show/:id" element={<ProposalShow />} />
+        <Route path="/user/proposal" element={<Proposal />} />
+        <Route path="/user/proposal/create" element={<ProposalCreate />} />
+        <Route path="/user/proposal/edit/:id" element={<ProposalEdit />} />
+        <Route path="/user/proposal/show/:id" element={<ProposalShow />} />
 
         {/* Appointments  */}
         <Route path="/appointments" element={<Appointments />} />

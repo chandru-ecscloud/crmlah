@@ -65,7 +65,7 @@ function ProposalEdit() {
         );
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/proposal");
+          navigate("/user/proposal");
         } else {
           toast.error(response.data.message);
         }
@@ -110,7 +110,7 @@ function ProposalEdit() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={"/proposal"}>
+              <Link to={"/user/proposal"}>
                 <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
@@ -255,7 +255,7 @@ function ProposalEdit() {
           <div className="row">
             <div className="col-12 mb-3 ">
               <div className="d-flex align-items-start justify-content-center sm-device">
-                <label>Description</label> &nbsp;&nbsp;
+                <label>Description</label><span className="text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
