@@ -61,9 +61,8 @@ function AppointmentsCreate({ name, schedule, getData }) {
       additionalInformation: "",
       appointmentMode: "",
     },
-    // validationSchema: validationSchema,
-
-    onSubmit: async (data, { resetForm, setSubmitting }) => {
+    validationSchema: validationSchema,
+    onSubmit: async (data, { resetForm }) => {
       console.log("Add appointment", data);
       console.log("User Data", leadData);
       if (name === "Create Appointment") {
@@ -121,29 +120,28 @@ function AppointmentsCreate({ name, schedule, getData }) {
           // console.log("Appoinment Created");
 
           // if (data.appointmentMode === "ONLINE") {
-            try {
-              // console.log("Link Generated function")
-              const linkResponse = await axios.post(
-                `${API_URL}GenerateSingaporeZoomMeetingLink`,
-                {
-                  meetingTitle: data.typeOfAppointment,
-                  startDate: data.appointmentStartDate,
-                  startTime: data.appointmentStartTime.split(" ")[0],
-                  duration: 30,
-                }
-              );
-              if (linkResponse.status === 200) {
-                appoinmentCreateTemplete(
-                  data,
-                  appointmentId,
-                  linkResponse,
-                  currentData
-                );
-                
+          try {
+            // console.log("Link Generated function")
+            const linkResponse = await axios.post(
+              `${API_URL}GenerateSingaporeZoomMeetingLink`,
+              {
+                meetingTitle: data.typeOfAppointment,
+                startDate: data.appointmentStartDate,
+                startTime: data.appointmentStartTime.split(" ")[0],
+                duration: 30,
               }
-            } catch (e) {
-              toast.error("Error Generating Zoom Link ", e);
+            );
+            if (linkResponse.status === 200) {
+              appoinmentCreateTemplete(
+                data,
+                appointmentId,
+                linkResponse,
+                currentData
+              );
             }
+          } catch (e) {
+            toast.error("Error Generating Zoom Link ", e);
+          }
         } else {
           toast.error("Appointment Created Unsuccessful.");
         }
@@ -239,11 +237,9 @@ function AppointmentsCreate({ name, schedule, getData }) {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
         },
       });
       setserviceData(response.data);
-      // console.log("idAndName", idAndName);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -438,40 +434,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Service Name</lable> &nbsp;&nbsp;
-                      <select
-                        type="text"
-                        name="serviceId"
-                        id="serviceId"
-                        {...formik.getFieldProps("serviceId")}
-                        className={`form-size form-select ${
-                          formik.touched.serviceId && formik.errors.serviceId
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        {serviceData.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.serviceName}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="row sm-device">
-                      <div className="col-5"></div>
-                      <div className="col-6 sm-device">
-                        {formik.touched.serviceId &&
-                          formik.errors.serviceId && (
-                            <p className="text-danger">
-                              {formik.errors.serviceId}
-                            </p>
-                          )}
-                      </div>
-                    </div>
-                  </div> */}
+
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
                       <lable>Appointment Name</lable>
@@ -557,25 +520,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         ))}
                       </select>
                     </div>
-                  </div>
-
-                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <lable>Start Time</lable> &nbsp;&nbsp;
-                      <input
-                        type="text"
-                        //className="form-size form-control"
-                        name="timeSlotId"
-                        id="timeSlotId"
-                        {...formik.getFieldProps("timeSlotId")}
-                        className={`form-size form-control   ${
-                          formik.touched.timeSlotId &&
-                          formik.errors.timeSlotId
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      />
-                    </div>
                     <div className="row sm-device">
                       <div className="col-5"></div>
                       <div className="col-6 sm-device">
@@ -587,39 +531,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                           )}
                       </div>
                     </div>
-                  </div> */}
-
-                  {/* <div className="col-lg-6 col-md-6 col-12  mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="duration">Duration</label>&nbsp;&nbsp;
-                      <select
-                        id="duration"
-                        //className="form-size form-select"
-                        name="duration"
-                        {...formik.getFieldProps("duration")}
-                        className={`form-size form-select   ${
-                          formik.touched.duration && formik.errors.duration
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="1 Hour">1 Hour</option>
-                        <option value="3 Hour">3 Hour</option>
-                        <option value="5 Hour">5 Hour</option>
-                      </select>
-                    </div>
-                    <div className="row sm-device">
-                      <div className="col-5"></div>
-                      <div className="col-6 sm-device">
-                        {formik.touched.duration && formik.errors.duration && (
-                          <p className="text-danger">
-                            {formik.errors.duration}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
+                  </div>
 
                   <div className="col-lg-6 col-md-6 col-12 mb-3">
                     <div className="d-flex align-items-center justify-content-end sm-device">
@@ -721,135 +633,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
                   </div>
                 </div>
               </div>
-              {/* <div className="container-fluid my-5">
-                <h4>
-                  <b>Reminder</b>
-                </h4>
-              </div>
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="minutes">Minutes</label>&nbsp;&nbsp;
-                      <select
-                        id="minutes"
-                        //className="form-size form-select"
-                        name="minutes"
-                        {...formik.getFieldProps("minutes")}
-                        className={`form-size form-select   ${
-                          formik.touched.minutes && formik.errors.minutes
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="15 minutes before">
-                          15 minutes before
-                        </option>
-                        <option value="30 minutes before">
-                          30 minutes before
-                        </option>
-                        <option value="45 minutes before">
-                          45 minutes before
-                        </option>
-                        <option value="50 minutes before">
-                          50 minutes before
-                        </option>
-                      </select>
-                    </div>
-                    {formik.touched.minutes && formik.errors.minutes && (
-                      <p className="text-danger">
-                        {formik.errors.minutes}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="days">Days</label>&nbsp;&nbsp;
-                      <select
-                        id="time"
-                        //className="form-size form-select"
-                        name="time"
-                        {...formik.getFieldProps("time")}
-                        className={`form-size form-select   ${
-                          formik.touched.time && formik.errors.time
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="At time of appointment">
-                          At time of appointment
-                        </option>
-                        <option value="option 1">1 day before</option>
-                        <option value="option 2">2 day before</option>
-                        <option value="option 3">3 day before</option>
-                      </select>
-                    </div>
-                    {formik.touched.time && formik.errors.time && (
-                      <p className="text-danger">
-                        {formik.errors.time}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="hours">Hours</label>&nbsp;&nbsp;
-                      <select
-                        id="hour"
-                        //className="form-size form-select"
-                        name="hour"
-                        {...formik.getFieldProps("hour")}
-                        className={`form-size form-select   ${
-                          formik.touched.hour && formik.errors.hour
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value=""></option>
-                        <option value="1 hour before">1 hour before</option>
-                        <option value="2 hour before">2 hour before</option>
-                        <option value="3 hour before">3 hour before</option>
-                        <option value="4 hour before">4 hour before</option>
-                      </select>
-                    </div>
-                    {formik.touched.hour && formik.errors.hour && (
-                      <p className="text-danger">
-                        {formik.errors.hour}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-lg-6 col-md-6 col-12 mb-3">
-                    <div className="d-flex align-items-center justify-content-end sm-device">
-                      <label htmlFor="none">Not Neccessary</label>&nbsp;&nbsp;
-                      <select
-                        id="none"
-                        // className="form-size form-select"
-                        name="none"
-                        {...formik.getFieldProps("none")}
-                        className={`form-size form-select   ${
-                          formik.touched.none && formik.errors.none
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option></option>
-                        <option value="Option 1">Option 1</option>
-                        <option value="Option 2">Option 2</option>
-                        <option value="Option 3">Option 3</option>
-                      </select>
-                    </div>
-                    {formik.touched.none && formik.errors.none && (
-                      <p className="text-danger">
-                        {formik.errors.none}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div> */}
 
               <div className="container-fluid my-5">
                 <h4>

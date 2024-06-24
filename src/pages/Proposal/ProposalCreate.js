@@ -28,6 +28,7 @@ function ProposalCreate() {
   const token = sessionStorage.getItem("token");
   const [userImage, setUserImage] = useState(User);
   const [sameAsShipping, setSameAsShipping] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -42,23 +43,28 @@ function ProposalCreate() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Deals Datas:", data);
-      const formData =new FormData()
-      formData.append("companyId", companyId)
-      formData.append("proposalName ", data.proposal_name)
-      formData.append("description ", data.description)
-      formData.append("proposalType ", data.proposalType)
-      formData.append("subject ", data.subject)
-      formData.append("mailBody  ", data.mailBody )
+      const formData = new FormData();
+      formData.append("companyId", companyId);
+      formData.append("proposalName ", data.proposal_name);
+      formData.append("description ", data.description);
+      formData.append("proposalType ", data.proposalType);
+      formData.append("subject ", data.subject);
+      formData.append("mailBody  ", data.mailBody);
       // formData.append("files ", data.files)
       data.files.forEach((file) => {
         formData.append("files", file);
       });
+      setLoadIndicator(true);
       try {
-        const response = await axios.post(`${API_URL}createCompanyProposalWithAttachments`, formData, {
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-        });
+        const response = await axios.post(
+          `${API_URL}createCompanyProposalWithAttachments`,
+          formData,
+          {
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+          }
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
           formik.resetForm();
@@ -68,6 +74,8 @@ function ProposalCreate() {
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -89,6 +97,12 @@ function ProposalCreate() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   Save
                 </button>
               </span>
@@ -147,9 +161,12 @@ function ProposalCreate() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.proposalType && formik.errors.proposalType && (
-                    <p className="text-danger">{formik.errors.proposalType}</p>
-                  )}
+                  {formik.touched.proposalType &&
+                    formik.errors.proposalType && (
+                      <p className="text-danger">
+                        {formik.errors.proposalType}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>

@@ -28,6 +28,7 @@ function ProposalEdit() {
   const companyId = sessionStorage.getItem("companyId");
   const [userImage, setUserImage] = useState(User);
   const [sameAsShipping, setSameAsShipping] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -53,6 +54,7 @@ function ProposalEdit() {
       data.files?.forEach((file) => {
         formData.append("files", file);
       });
+      setLoadIndicator(true);
       try {
         const response = await axios.put(
           `${API_URL}updateCompanyProposalWithAttachments/${id}`,
@@ -71,6 +73,8 @@ function ProposalEdit() {
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -115,6 +119,12 @@ function ProposalEdit() {
               </Link>
               &nbsp;
               <button className="btn btn-primary" type="submit">
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Save
               </button>
             </div>
