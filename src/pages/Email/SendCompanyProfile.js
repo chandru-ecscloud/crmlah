@@ -147,7 +147,7 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
             }
           );
 
-          if (response.status !== 201 && response.status !== 200) {
+          if (response.status !== 200) {
             toast.error(response.data.message);
           }
         } catch (error) {
@@ -159,7 +159,7 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
       }
 
       setGenerateLink(null);
-      toast.success("Mails sent successfully");
+      // toast.success("Mails sent successfully");
       formik.resetForm();
       setBase64PDFs([]);
       tablereset();
