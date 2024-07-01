@@ -1,35 +1,51 @@
-import React, { useEffect, useState } from "react";
-import User from "../../assets/user.png";
+import React, { useState } from "react";
+// import User from "../../assets/user.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
-import { FaCamera } from "react-icons/fa6";
+// import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
-const validationSchema = yup.object().shape({
-  proposal_name: yup.string().required("*Proposal name is required"),
-  proposalType: yup.string().required("*Proposal Type is required"),
-  subject: yup.string().required("*Subject is required"),
-  // description: yup.string().required("*Description is required"),
-  mailBody: yup.string().required("*Mail Body is required"),
-  // files: yup.string().required("*Attachment is required"),
-});
-
 function ProposalCreate() {
-  const owner = sessionStorage.getItem("user_name");
-  const role = sessionStorage.getItem("role");
+  // const owner = sessionStorage.getItem("user_name");
+  // const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
-  const [accountOption, setAccountOption] = useState([]);
-  const [dealOption, setDealOption] = useState([]);
-  const [contactOption, setContactOption] = useState([]);
-  const token = sessionStorage.getItem("token");
-  const [userImage, setUserImage] = useState(User);
-  const [sameAsShipping, setSameAsShipping] = useState(false);
+  // const [accountOption, setAccountOption] = useState([]);
+  // const [dealOption, setDealOption] = useState([]);
+  // const [contactOption, setContactOption] = useState([]);
+  // const token = sessionStorage.getItem("token");
+  // const [userImage, setUserImage] = useState(User);
+  // const [sameAsShipping, setSameAsShipping] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [fileSize, setFileSize] = useState(0);
+  const [fileError, setFileError] = useState("");
+  const [isSaveDisabled, setIsSaveDisabled] = useState(false);
   const navigate = useNavigate();
+
+  const MAX_FILE_SIZE = 20 * 1024 * 1024;
+
+  const validationSchema = yup.object().shape({
+    proposal_name: yup.string().required("*Proposal name is required"),
+    proposalType: yup.string().required("*Proposal Type is required"),
+    subject: yup.string().required("*Subject is required"),
+    // description: yup.string().required("*Description is required"),
+    mailBody: yup.string().required("*Mail Body is required"),
+    files: yup
+      .mixed()
+      .test("fileSize", "*File size is too large, maximum 20 MB", (files) => {
+        if (!files) return true; 
+        let isValid = true;
+        files.forEach((file) => {
+          if (file.size > MAX_FILE_SIZE) {
+            isValid = false;
+          }
+        });
+        return isValid;
+      }),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -38,11 +54,12 @@ function ProposalCreate() {
       subject: "",
       description: "",
       mailBody: "",
-      files: "",
+      files: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Deals Datas:", data);
+      // console.log("Deals Datas:", data);
+
       const formData = new FormData();
       formData.append("companyId", companyId);
       formData.append("proposalName ", data.proposal_name);
@@ -80,6 +97,27 @@ function ProposalCreate() {
     },
   });
 
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+
+    setFileSize(totalSize);
+
+    const fileSizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+
+    if (totalSize > MAX_FILE_SIZE) {
+      // setFileError("File size is 25 MB; the maximum file size that can be uploaded is 20 MB.");
+      setFileError(`File is ${fileSizeInMB} MB; max allowed is 20 MB.`);
+      setIsSaveDisabled(true);
+      formik.setFieldValue("files", []);
+    } else {
+      setFileSize(totalSize);
+      setFileError("");
+      setIsSaveDisabled(false);
+      formik.setFieldValue("files", files);
+    }
+  };
+
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
@@ -96,7 +134,7 @@ function ProposalCreate() {
               </Link>
               &nbsp;
               <span>
-                <button className="btn btn-primary" type="submit">
+                <button className="btn btn-primary" type="submit" disabled={isSaveDisabled}>
                   {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
@@ -198,8 +236,7 @@ function ProposalCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end attactUi">
-                <label>Attachment</label>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <label>Attachment</label>&nbsp;&nbsp;
                 <div className="input-group ">
                   <input
                     className={`form-size form-control custom-file-input ${
@@ -210,21 +247,17 @@ function ProposalCreate() {
                     type="file"
                     multiple
                     accept="image/*, video/*, application/pdf"
-                    onChange={(event) =>
-                      formik.setFieldValue(
-                        "files",
-                        Array.from(event.target.files)
-                      )
-                    }
+                    onChange={handleFileChange}
                   />
                 </div>
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.files && formik.errors.files && (
-                    <div className="text-danger">{formik.errors.files}</div>
-                  )}
+                  {fileError && <div className="text-danger">{fileError}</div>}
+                  {/* <div className="text-secondary">
+                    Total size: {(fileSize / (1024 * 1024)).toFixed(2)} MB
+                  </div> */}
                 </div>
               </div>
             </div>
