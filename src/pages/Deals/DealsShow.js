@@ -726,13 +726,13 @@ function DealsShow() {
                               <div className="col-md-5 col-12 border rounded">
                                 <div className="container-fluid py-2">
                                   <div className="row">
-                                    <div className="col-md-8 col-12">
+                                    <div className="col-md-7 col-12">
                                       {" "}
                                       <label className="text-dark ">
                                         Sub Total(SGT)
                                       </label>
                                     </div>
-                                    <div className="col-md-4 col-12">
+                                    <div className="col-md-5 col-12">
                                       {" "}
                                       <span>
                                         : {invoice.subTotal || "0"}.00
@@ -742,13 +742,13 @@ function DealsShow() {
                                 </div>
                                 <div className="container-fluid py-2">
                                   <div className="row">
-                                    <div className="col-md-8 col-12">
+                                    <div className="col-md-7 col-12">
                                       {" "}
                                       <label className="text-dark ">
                                         Discount(%)
                                       </label>
                                     </div>
-                                    <div className="col-md-4 col-12">
+                                    <div className="col-md-5 col-12">
                                       {" "}
                                       <span>
                                         : {invoice.txnDiscount || "0"}.00
@@ -758,13 +758,13 @@ function DealsShow() {
                                 </div>
                                 <div className="container-fluid py-2">
                                   <div className="row">
-                                    <div className="col-md-8 col-12">
+                                    <div className="col-md-7 col-12">
                                       {" "}
                                       <label className="text-dark ">
                                         Tax(%)
                                       </label>
                                     </div>
-                                    <div className="col-md-4 col-12">
+                                    <div className="col-md-5 col-12">
                                       {" "}
                                       <span>: {invoice.txnTax || "0"}.00</span>
                                     </div>
@@ -772,12 +772,12 @@ function DealsShow() {
                                 </div>
                                 <div className="container-fluid py-2">
                                   <div className="row">
-                                    <div className="col-md-8 col-12">
+                                    <div className="col-md-7 col-12">
                                       <label className="text-dark ">
                                         Grand Total(SGT)
                                       </label>
                                     </div>
-                                    <div className="col-md-4 col-12">
+                                    <div className="col-md-5 col-12">
                                       <span>
                                         : {invoice.grandTotal || "0"}.00
                                       </span>

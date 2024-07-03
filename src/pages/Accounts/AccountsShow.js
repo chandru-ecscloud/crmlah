@@ -626,13 +626,13 @@ function AccountsShow() {
                           <div className="col-md-5 col-12 border rounded">
                             <div className="container-fluid py-2">
                               <div className="row">
-                                <div className="col-md-8 col-12">
+                                <div className="col-md-7 col-12">
                                   {" "}
                                   <label className="text-dark ">
                                     Sub Total(SGT)
                                   </label>
                                 </div>
-                                <div className="col-md-4 col-12">
+                                <div className="col-md-5 col-12">
                                   {" "}
                                   <span>: {quote.subTotal || "0"}.00</span>
                                 </div>
@@ -640,13 +640,13 @@ function AccountsShow() {
                             </div>
                             <div className="container-fluid py-2">
                               <div className="row">
-                                <div className="col-md-8 col-12">
+                                <div className="col-md-7 col-12">
                                   {" "}
                                   <label className="text-dark ">
                                     Discount(%)
                                   </label>
                                 </div>
-                                <div className="col-md-4 col-12">
+                                <div className="col-md-5 col-12">
                                   {" "}
                                   <span>: {quote.txnDiscount || "0"}.00</span>
                                 </div>
@@ -654,11 +654,11 @@ function AccountsShow() {
                             </div>
                             <div className="container-fluid py-2">
                               <div className="row">
-                                <div className="col-md-8 col-12">
+                                <div className="col-md-7 col-12">
                                   {" "}
                                   <label className="text-dark ">Tax(%)</label>
                                 </div>
-                                <div className="col-md-4 col-12">
+                                <div className="col-md-5 col-12">
                                   {" "}
                                   <span>: {quote.txnTax || "0"}.00</span>
                                 </div>
@@ -666,12 +666,12 @@ function AccountsShow() {
                             </div>
                             <div className="container-fluid py-2">
                               <div className="row">
-                                <div className="col-md-8 col-12">
+                                <div className="col-md-7 col-12">
                                   <label className="text-dark ">
                                     Grand Total(SGT)
                                   </label>
                                 </div>
-                                <div className="col-md-4 col-12">
+                                <div className="col-md-5 col-12">
                                   <span>: {quote.grandTotal || "0"}.00</span>
                                 </div>
                               </div>
