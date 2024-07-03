@@ -8,9 +8,15 @@ import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SendInvoice from "../Email/SendInvoice";
-import AttactmentPdf from "../../assets/Attactment pdf.jpg"; // Make sure the path is correct
-import AttactmentExcel from "../../assets/Attactment Excel.jpg"; // Make sure the path is correct
-import AttactmentOther from "../../assets/Attactment others.jpg"; // Make sure the path is correct
+import AttactmentPdf from "../../assets/Attactment pdf.jpg";
+import AttactmentExcel from "../../assets/Attactment Excel.jpg";
+import AttactmentOther from "../../assets/Attactment others.jpg";
+import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
+import AttactmentWord from "../../assets/Attactment Word.jpg";
+import AttactmentPpt from "../../assets/Attachment Ppt.png";
+import { MdDeleteOutline } from "react-icons/md";
+import { IoMdDownload } from "react-icons/io";
+import DeleteAttach from "../../components/common/DeleteModelAttach";
 
 function ProposalShow() {
   const { id } = useParams();
@@ -18,7 +24,6 @@ function ProposalShow() {
   const [invoiceData, setInvoiceData] = useState({});
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-  console.log("data", proposalData);
 
   const getData = async () => {
     try {
@@ -28,7 +33,6 @@ function ProposalShow() {
 
       if (response.status === 200) {
         setProposalData(response.data);
-        toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
@@ -46,96 +50,91 @@ function ProposalShow() {
       return <span>No attachment available</span>;
     }
 
+    const attachmentId = attachment.id;
     const url = attachment.multipleAttachments;
     const extension = url.split(".").pop().toLowerCase();
+    const fileName = url.split("/").pop();
 
-    if (["jpg", "jpeg", "png", "gif"].includes(extension)) {
-      return (
-        <div>
-          <img
-            src={url}
-            alt="Attachment"
-            style={{ width: "100%", maxHeight: "350px" }}
-            className="img-fluid mb-3"
-          />
-          {/* <a href={url} download>
-            Download Attachment
-          </a> */}
+    const downloadFile = () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    const renderCard = (src, label, attachmentId, isVideo = false) => (
+      <div className="position-relative d-flex justify-content-center mb-3">
+        <div className="delete-icon-container">
+          <DeleteAttach id={attachmentId} onSuccess={getData} />
         </div>
-      );
-    } else if (extension === "pdf") {
-      return (
-        // <div className="text-center">
-        //   <img
-        //     src={AttactmentPdf}
-        //     alt="PDF Thumbnail"
-        //     style={{ width: "80%", height: "120px" }}
-        //     className="img-fluid mb-3"
-        //   />
-        //   <p >
-        //     <a href={url} target="_blank" rel="noopener noreferrer">
-        //       Download PDF
-        //     </a>
-        //   </p>
-        // </div>
-        <div className="card" style={{ width: "18rem;" }}>
-          <img
-            src={AttactmentPdf}
-            alt="PDF Thumbnail"
-            style={{ width: "100%", height: "150px" }}
-            className="img-fluid"
-          />
+        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
+          {isVideo ? (
+            <video
+              width="100%"
+              height="auto"
+              controls
+              style={{ maxHeight: "150px" }}
+            >
+              <source src={src} type="video/mp4" />
+              <source src={src} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={src}
+              alt={label}
+              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+            />
+          )}
           <div className="card-body">
-          <p className="text-center">
-            <a href={url} download>
-              Download Pdf
-            </a>
-          </p>
+            <div className="row">
+              <div className="col-md-8 col-12 text-end">
+                <p>{label}</p>
+              </div>
+              <div className="col-md-4 col-12 text-end">
+                <p>
+                  <IoMdDownload
+                    onClick={downloadFile}
+                    style={{ cursor: "pointer" }}
+                  />
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      );
-    } else if (extension === "excel") {
-      return (
-        <div className="card" style={{ width: "18rem;" }}>
-          <img
-            src={AttactmentExcel}
-            alt="PDF Thumbnail"
-            style={{ width: "100%", height: "150px" }}
-            className="img-fluid"
-          />
-          <div className="card-body">
-          <p className="text-center">
-            <a href={url} download>
-              Download Excel
-            </a>
-          </p>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="card" style={{ width: "18rem;" }}>
-          <img
-            src={AttactmentOther}
-            alt="PDF Thumbnail"
-            style={{ width: "100%", height: "150px" }}
-            className="img-fluid"
-          />
-          <div className="card-body">
-          <p className="text-center">
-            <a href={url} download>
-              Download
-            </a>
-          </p>
-          </div>
-        </div>
-      );
+      </div>
+    );
+
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return renderCard(url, "Image", attachmentId);
+      case "pdf":
+        return renderCard(AttactmentPdf, "PDF", attachmentId);
+      case "xls":
+      case "xlsx":
+      case "csv":
+        return renderCard(AttactmentExcel, "Excel", attachmentId);
+      case "mp4":
+      case "ogg":
+        return renderCard(url, "Video", attachmentId, true);
+      case "doc":
+      case "docx":
+        return renderCard(AttactmentWord, "Word", attachmentId);
+      case "ppt":
+      case "pptx":
+        return renderCard(AttactmentPpt, "PPT", attachmentId);
+      default:
+        return renderCard(AttactmentOther, "Other", attachmentId);
     }
   };
 
   return (
     <>
-      {/* Header Section */}
       <section className="container-fluid row section1 m-0 p-0">
         <div className="col-3 py-1">
           <div className="container">
@@ -156,7 +155,6 @@ function ProposalShow() {
             </div>
           </div>
         </div>
-
         <div className="col-9 mt-1" id="buttons-container">
           {proposalData.email && (
             <OverlayTrigger
@@ -185,7 +183,6 @@ function ProposalShow() {
         </div>
       </section>
 
-      {/* Deals Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
         <div
           className="container-fluid col-md-9 m-0"
@@ -195,7 +192,6 @@ function ProposalShow() {
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3">Details</span>
             </div>
-
             <div className="container-fluid col-md-12">
               <div>
                 <label className="text-dark Label">Proposal Name</label>
@@ -238,15 +234,12 @@ function ProposalShow() {
               </div>
             </div>
           </div>
-
-          {/* Description Information */}
           <div className="container-fluid row" id="Details">
             <div className="my-3 container-fluid row">
               <span className="my-3 fs-6 fw-bold my-3">
                 Description Information
               </span>
             </div>
-
             <div>
               <label className="text-dark Label">Description</label>
               <span className="text-dark">

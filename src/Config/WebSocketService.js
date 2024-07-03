@@ -4,7 +4,7 @@ import { Stomp } from "@stomp/stompjs";
 class WebSocketService {
   constructor() {
     // this.socket = new SockJS("http://13.213.208.92:8080/ecscrm/ws");
-    this.socket = new SockJS("https://crmlah.com/ecscrm/ws");
+    this.socket = new SockJS("https://uat.crmlah.com/ecscrm-uat/ws");
     this.stompClient = Stomp.over(this.socket);
     // this.stompClient.debug = false; // Disable debug logging
     this.connected = false;

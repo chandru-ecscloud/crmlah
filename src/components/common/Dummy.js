@@ -1,285 +1,256 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap";
-import CalenderEdit from "./CalenderEdit";
-import { MdDelete } from "react-icons/md";
+import { IoArrowBack } from "react-icons/io5";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import SendInvoice from "../Email/SendInvoice";
+import AttactmentPdf from "../../assets/Attactment pdf.jpg";
+import AttactmentExcel from "../../assets/Attactment Excel.jpg";
+import AttactmentOther from "../../assets/Attactment others.jpg";
+import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
+import AttactmentWord from "../../assets/Attactment Word.jpg";
+import AttactmentPpt from "../../assets/Attachment Ppt.png";
+import { MdDeleteOutline } from "react-icons/md";
+import { IoMdDownload } from "react-icons/io";
+import DeleteAttach from "../../components/common/DeleteModelAttach";
 
-function CalenderShow({
-  id,
-  showViewModal,
-  setShowViewModal,
-  setShowDeleteModal,
-  showEditModal,
-  setShowEditModal,
-  getData,
-}) {
-  const [clientData, setClientData] = useState({});
-  const currentData = new Date().toISOString().split("T")[0];
-  // Fetch user data based on appointment ID
-  const fetchUserData = async () => {
+function ProposalShow() {
+  const { id } = useParams();
+  const [proposalData, setProposalData] = useState({});
+  const [invoiceData, setInvoiceData] = useState({});
+  const role = sessionStorage.getItem("role");
+  const navigate = useNavigate();
+
+  const getData = async () => {
     try {
-      const response = await axios.get(`${API_URL}allAppointments/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setClientData(response.data);
-    } catch (error) {
-      toast.error("Error fetching data: " + error.message);
-    }
-  };
-
-  // Handle delete click event
-  const handleDeleteClick = async () => {
-    setShowDeleteModal(true);
-    setShowViewModal(false);
-
-    const mailContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <title>Invoice</title>
-        <style>
-          body { background-color: #ddd; }
-          .invoice-box {
-            font-size: 12px;
-            max-width: 600px;
-            background-color: #fff;
-            margin: auto;
-            padding: 30px;
-            border-bottom: 3px solid #0059ff;
-            line-height: 24px;
-            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-            color: #555;
-            min-height: 85vh;
-          }
-          .invoice-box table { width: 100%; line-height: inherit; text-align: left; }
-          .invoice-box table td { padding: 5px; vertical-align: top; }
-          .invoice-box table td.third { text-align: right; }
-          .invoice-box table tr.heading td { background: #eee; border-bottom: 1px solid #ddd; font-weight: bold; }
-          .invoice-box table tr.item td { border-bottom: 1px solid #eee; }
-          .invoice-box table tr.item.last td { border-bottom: none; }
-          .invoice-box table tr.total td:nth-child(2) { border-top: 2px solid #eee; font-weight: bold; }
-          .invoice { padding: 1rem; }
-          #scan { float: right; }
-          #scan img { max-width: 100%; height: auto; }
-          @media print { .invoice-box { border: 0; } }
-        </style>
-      </head>
-      <body>
-        <div class="invoice-box">
-          <table>
-            <tr class="top">
-              <td colspan="2">
-                <table>
-                  <tr>
-                    <td class="title">
-                      <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                        style="width: 75%; max-width: 180px" alt="Logo" />
-                    </td>
-                    <td class="third">
-                      <b>Date:</b> ${currentData}<br />
-                      The Alexcier, 237 Alexandra Road,<br />
-                      #04-10, Singapore-159929.
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-          <div class="invoice">
-            <h1 style="color: black;">Hi, ${clientData.appointmentName}</h1>
-            <p style="margin: 2rem 0 0; font-size: 1rem;">
-              We regret to inform you that your scheduled appointment has been cancelled at your request. If you have any questions or need further assistance, please do not hesitate to contact us.<br />
-            </p>
-            <hr />
-            <p style=" margin: 2rem 0 0;">See You Soon,</p>
-            <h4 style=" margin: 0; ">${clientData.appointmentName}</h4>
-            <p style=" margin: 0 ; ">ECS Cloud</p>
-            <p style=" margin: 0 0 2rem 0;">Powered by ECS</p>
-            <hr />
-          </div>
-        </div>
-      </body>
-      </html>`;
-
-    try {
-      const response = await axios.post(`${API_URL}sendMail`, {
-        toMail: clientData.email,
-        fromMail: clientData.email,
-        subject: "Your Appointment Has Been Cancelled",
-        htmlContent: mailContent,
-      });
+      const response = await axios.get(
+        `${API_URL}getAllCompanyProposalById/${id}`
+      );
 
       if (response.status === 200) {
-        toast.success("Mail sent successfully.");
+        setProposalData(response.data);
       } else {
-        toast.error("Error sending mail: " + response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed to send email: " + error.message);
+      toast.error("Failed: " + error.message);
     }
   };
 
   useEffect(() => {
-    if (id) {
-      console.log("id", id);
-      fetchUserData();
-    }
-  }, [id, showViewModal]);
+    getData();
+  }, []);
 
-  return (
-    <Modal
-      show={showViewModal}
-      size="xl"
-      onHide={() => setShowViewModal(false)}
-      centered
-      scrollable
-    >
-      <Modal.Header className="Calenderview">
-        <div>
-          <b>
-            <h5 className="modal-title">View Event Details</h5>
-          </b>
+  const renderAttachment = (attachment) => {
+    if (!attachment) {
+      return <span>No attachment available</span>;
+    }
+
+    const attachmentId = attachment.id;
+    const url = attachment.multipleAttachments;
+    const extension = url.split(".").pop().toLowerCase();
+    const fileName = url.split("/").pop();
+
+    const downloadFile = () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    const renderCard = (src, label, attachmentId, isVideo = false) => (
+      <div className="position-relative d-flex justify-content-center mb-3">
+        <div className="delete-icon-container">
+          <DeleteAttach id={attachmentId} onSuccess={getData} />
         </div>
-        <span className="calenderEdit-icon">
-          <CalenderEdit
-            id={id}
-            setShowEditModal={setShowEditModal}
-            setShowViewModal={setShowViewModal}
-            showEditModal={showEditModal}
-            getData={getData}
-          />
-          <button className="btn text-light">
-            <MdDelete size={20} onClick={handleDeleteClick} />
-          </button>
-        </span>
-        <button className="btn close" onClick={() => setShowViewModal(false)}>
-          <span className="text-light fs-4">X</span>
-        </button>
-      </Modal.Header>
-      <Modal.Body className="custom-modal-body">
-        <section className="container-fluid">
-          <div className="row">
-            {clientData.appointmentFor && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Appointment For</b></div>
-                  <div className="col-6">: {clientData.appointmentFor}</div>
-                </div>
+        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
+          {isVideo ? (
+            <video
+              width="100%"
+              height="auto"
+              controls
+              style={{ maxHeight: "150px" }}
+            >
+              <source src={src} type="video/mp4" />
+              <source src={src} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={src}
+              alt={label}
+              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+            />
+          )}
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-8 col-12 text-end">
+                <p>{label}</p>
               </div>
-            )}
-            {clientData.appointmentMode && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Appointment Mode</b></div>
-                  <div className="col-6">: {clientData.appointmentMode}</div>
-                </div>
-              </div>
-            )}
-            {clientData.appointmentName && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Name</b></div>
-                  <div className="col-6">: {clientData.appointmentName}</div>
-                </div>
-              </div>
-            )}
-            {clientData.appointmentStartDate && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Start Date</b></div>
-                  <div className="col-6">: {clientData.appointmentStartDate}</div>
-                </div>
-              </div>
-            )}
-            {clientData.appointmentStartTime && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Start Time</b></div>
-                  <div className="col-6">: {clientData.appointmentStartTime}</div>
-                </div>
-              </div>
-            )}
-            {clientData.location && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Location</b></div>
-                  <div className="col-6">: {clientData.location}</div>
-                </div>
-              </div>
-            )}
-            {clientData.member && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Member</b></div>
-                  <div className="col-6">: {clientData.member}</div>
-                </div>
-              </div>
-            )}
-            {clientData.street && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Street</b></div>
-                  <div className="col-6">: {clientData.street}</div>
-                </div>
-              </div>
-            )}
-            {clientData.city && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>City</b></div>
-                  <div className="col-6">: {clientData.city}</div>
-                </div>
-              </div>
-            )}
-            {clientData.state && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>State</b></div>
-                  <div className="col-6">: {clientData.state}</div>
-                </div>
-              </div>
-            )}
-            {clientData.zipCode && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Zip Code</b></div>
-                  <div className="col-6">: {clientData.zipCode}</div>
-                </div>
-              </div>
-            )}
-            {clientData.country && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Country</b></div>
-                  <div className="col-6">: {clientData.country}</div>
-                </div>
-              </div>
-            )}
-            {clientData.additionalInformation && (
-              <div className="col-md-6 col-12 my-2">
-                <div className="row">
-                  <div className="col-6"><b>Description</b></div>
-                  <div className="col-6">: {clientData.additionalInformation}</div>
-                </div>
-              </div>
-            )}
-            <div className="col-md-6 col-12 my-2">
-              <div className="row">
-                <div className="col-6"><b>Role</b></div>
-                <div className="col-6">: {clientData.appointmentRoleType || "--"}</div>
+              <div className="col-md-4 col-12 text-end">
+                <p>
+                  <IoMdDownload
+                    onClick={downloadFile}
+                    style={{ cursor: "pointer" }}
+                  />
+                </p>
               </div>
             </div>
           </div>
-        </section>
-      </Modal.Body>
-    </Modal>
+        </div>
+      </div>
+    );
+
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return renderCard(url, "Image", attachmentId);
+      case "pdf":
+        return renderCard(AttactmentPdf, "PDF", attachmentId);
+      case "xls":
+      case "xlsx":
+      case "csv":
+        return renderCard(AttactmentExcel, "Excel", attachmentId);
+      case "mp4":
+      case "ogg":
+        return renderCard(url, "Video", attachmentId, true);
+      case "doc":
+      case "docx":
+        return renderCard(AttactmentWord, "Word", attachmentId);
+      case "ppt":
+      case "pptx":
+        return renderCard(AttactmentPpt, "PPT", attachmentId);
+      default:
+        return renderCard(AttactmentOther, "Other", attachmentId);
+    }
+  };
+
+  return (
+    <>
+      <section className="container-fluid row section1 m-0 p-0">
+        <div className="col-3 py-1">
+          <div className="container">
+            <div className="container-fluid row image-container">
+              <div className="image-container">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
+                  <button
+                    className="btn fs-4 border-white"
+                    onClick={() => navigate("/user/proposal")}
+                  >
+                    <IoArrowBack className="back_arrow" />
+                  </button>
+                </OverlayTrigger>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-9 mt-1" id="buttons-container">
+          {proposalData.email && (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="button-tooltip-2" className="mailtip">
+                  Send Email
+                </Tooltip>
+              }
+            >
+              <span>
+                <SendInvoice invoiceData={invoiceData} id={id} />
+              </span>
+            </OverlayTrigger>
+          )}
+          <Link to={`/user/proposal/edit/${id}`}>
+            <button
+              className={`btn btn-warning ms-2 ${
+                role === "CMP_USER" && "disabled"
+              }`}
+              disabled={role === "CMP_USER"}
+            >
+              Edit
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
+        <div
+          className="container-fluid col-md-9 m-0"
+          id="userDetails-container"
+        >
+          <div className="container-fluid row" id="Details">
+            <div className="border-bottom py-3">
+              <span className="fs-6 fw-bold my-3">Details</span>
+            </div>
+            <div className="container-fluid col-md-12">
+              <div>
+                <label className="text-dark Label">Proposal Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.proposalName || "Proposal A"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Proposal Type</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.type || "Company Profile"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Subject</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.subject || ""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Attachment</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;
+                  <div className="row">
+                    {proposalData.companyProposalAttachments?.map(
+                      (attachment, index) => (
+                        <div key={index} className="col-md-4 col-12 mb-2">
+                          {renderAttachment(attachment)}
+                        </div>
+                      )
+                    )}
+                  </div>
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Mail Body</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.mailBody || ""}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="container-fluid row" id="Details">
+            <div className="my-3 container-fluid row">
+              <span className="my-3 fs-6 fw-bold my-3">
+                Description Information
+              </span>
+            </div>
+            <div>
+              <label className="text-dark Label">Description</label>
+              <span className="text-dark">
+                &nbsp; : &nbsp;{proposalData.description || ""}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
-export default CalenderShow;
+export default ProposalShow;
