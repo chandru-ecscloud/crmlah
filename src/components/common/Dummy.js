@@ -1,256 +1,256 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import "../../styles/Ragul.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import * as yup from "yup";
-import "../../styles/dummy.css";
-import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { IoArrowBack } from "react-icons/io5";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import SendInvoice from "../Email/SendInvoice";
+import AttactmentPdf from "../../assets/Attactment pdf.jpg";
+import AttactmentExcel from "../../assets/Attactment Excel.jpg";
+import AttactmentOther from "../../assets/Attactment others.jpg";
+import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
+import AttactmentWord from "../../assets/Attactment Word.jpg";
+import AttactmentPpt from "../../assets/Attachment Ppt.png";
+import { MdDeleteOutline } from "react-icons/md";
+import { IoMdDownload } from "react-icons/io";
+import DeleteAttach from "../../components/common/DeleteModelAttach";
 
-function ProposalCreate() {
-  const companyId = sessionStorage.getItem("companyId");
-  const [loadIndicator, setLoadIndicator] = useState(false);
-  const [fileSize, setFileSize] = useState(0);
-  const [fileError, setFileError] = useState("");
+function ProposalShow() {
+  const { id } = useParams();
+  const [proposalData, setProposalData] = useState({});
+  const [invoiceData, setInvoiceData] = useState({});
+  const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
-  const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}getAllCompanyProposalById/${id}`
+      );
 
-  const validationSchema = yup.object().shape({
-    proposal_name: yup.string().required("*Proposal name is required"),
-    proposalType: yup.string().required("*Proposal Type is required"),
-    subject: yup.string().required("*Subject is required"),
-    mailBody: yup.string().required("*Mail Body is required"),
-    files: yup.mixed().test("fileSize", "*File size is too large, maximum 20 MB", (files) => {
-      if (!files) return true;
-      let isValid = true;
-      files.forEach((file) => {
-        if (file.size > MAX_FILE_SIZE) {
-          isValid = false;
-        }
-      });
-      return isValid;
-    }),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      proposal_name: "",
-      proposalType: "",
-      subject: "",
-      description: "",
-      mailBody: "",
-      files: [],
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (data) => {
-      const formData = new FormData();
-      formData.append("companyId", companyId);
-      formData.append("proposalName", data.proposal_name);
-      formData.append("description", data.description);
-      formData.append("proposalType", data.proposalType);
-      formData.append("subject", data.subject);
-      formData.append("mailBody", data.mailBody);
-      data.files.forEach((file) => {
-        formData.append("files", file);
-      });
-      setLoadIndicator(true);
-      try {
-        const response = await axios.post(
-          `${API_URL}createCompanyProposalWithAttachments`,
-          formData
-        );
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          formik.resetForm();
-          navigate("/user/proposal");
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Failed: " + error.message);
-      } finally {
-        setLoadIndicator(false);
+      if (response.status === 200) {
+        setProposalData(response.data);
+      } else {
+        toast.error(response.data.message);
       }
-    },
-  });
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
+  };
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+  useEffect(() => {
+    getData();
+  }, []);
 
-    setFileSize(totalSize);
+  const renderAttachment = (attachment) => {
+    if (!attachment) {
+      return <span>No attachment available</span>;
+    }
 
-    const fileSizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+    const attachmentId = attachment.id;
+    const url = attachment.multipleAttachments;
+    const extension = url.split(".").pop().toLowerCase();
+    const fileName = url.split("/").pop();
 
-    if (totalSize > MAX_FILE_SIZE) {
-      setFileError(`File is ${fileSizeInMB} MB; max allowed is 20 MB.`);
-      formik.setFieldValue("files", []);
-    } else {
-      setFileSize(totalSize);
-      setFileError("");
-      formik.setFieldValue("files", files);
+    const downloadFile = () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    const renderCard = (src, label, attachmentId, isVideo = false) => (
+      <div className="position-relative d-flex justify-content-center mb-3">
+        <div className="delete-icon-container">
+          <DeleteAttach id={attachmentId} onSuccess={getData} />
+        </div>
+        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
+          {isVideo ? (
+            <video
+              width="100%"
+              height="auto"
+              controls
+              style={{ maxHeight: "150px" }}
+            >
+              <source src={src} type="video/mp4" />
+              <source src={src} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={src}
+              alt={label}
+              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+            />
+          )}
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-8 col-12 text-end">
+                <p>{label}</p>
+              </div>
+              <div className="col-md-4 col-12 text-end">
+                <p>
+                  <IoMdDownload
+                    onClick={downloadFile}
+                    style={{ cursor: "pointer" }}
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return renderCard(url, "Image", attachmentId);
+      case "pdf":
+        return renderCard(AttactmentPdf, "PDF", attachmentId);
+      case "xls":
+      case "xlsx":
+      case "csv":
+        return renderCard(AttactmentExcel, "Excel", attachmentId);
+      case "mp4":
+      case "ogg":
+        return renderCard(url, "Video", attachmentId, true);
+      case "doc":
+      case "docx":
+        return renderCard(AttactmentWord, "Word", attachmentId);
+      case "ppt":
+      case "pptx":
+        return renderCard(AttactmentPpt, "PPT", attachmentId);
+      default:
+        return renderCard(AttactmentOther, "Other", attachmentId);
     }
   };
 
   return (
-    <section className="createLead">
-      <form onSubmit={formik.handleSubmit}>
-        <div className="container-fluid">
-          <div className="row mt-3">
-            <div className="col-lg-6 col-md-6 col-12">
-              <h4><b>Create Proposal</b></h4>
+    <>
+      <section className="container-fluid row section1 m-0 p-0">
+        <div className="col-3 py-1">
+          <div className="container">
+            <div className="container-fluid row image-container">
+              <div className="image-container">
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Back</Tooltip>}
+                >
+                  <button
+                    className="btn fs-4 border-white"
+                    onClick={() => navigate("/user/proposal")}
+                  >
+                    <IoArrowBack className="back_arrow" />
+                  </button>
+                </OverlayTrigger>
+              </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={"/user/proposal"}>
-                <button className="btn btn-danger">Cancel</button>
-              </Link>
-              &nbsp;
+          </div>
+        </div>
+        <div className="col-9 mt-1" id="buttons-container">
+          {proposalData.email && (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="button-tooltip-2" className="mailtip">
+                  Send Email
+                </Tooltip>
+              }
+            >
               <span>
-                <button className="btn btn-primary" type="submit">
-                  {loadIndicator && (
-                    <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-                  )}
-                  Save
-                </button>
+                <SendInvoice invoiceData={invoiceData} id={id} />
+              </span>
+            </OverlayTrigger>
+          )}
+          <Link to={`/user/proposal/edit/${id}`}>
+            <button
+              className={`btn btn-warning ms-2 ${
+                role === "CMP_USER" && "disabled"
+              }`}
+              disabled={role === "CMP_USER"}
+            >
+              Edit
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
+        <div
+          className="container-fluid col-md-9 m-0"
+          id="userDetails-container"
+        >
+          <div className="container-fluid row" id="Details">
+            <div className="border-bottom py-3">
+              <span className="fs-6 fw-bold my-3">Details</span>
+            </div>
+            <div className="container-fluid col-md-12">
+              <div>
+                <label className="text-dark Label">Proposal Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.proposalName || "Proposal A"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Proposal Type</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.type || "Company Profile"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Subject</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.subject || ""}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Attachment</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;
+                  <div className="row">
+                    {proposalData.companyProposalAttachments?.map(
+                      (attachment, index) => (
+                        <div key={index} className="col-md-4 col-12 mb-2">
+                          {renderAttachment(attachment)}
+                        </div>
+                      )
+                    )}
+                  </div>
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Mail Body</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{proposalData.mailBody || ""}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="container-fluid row" id="Details">
+            <div className="my-3 container-fluid row">
+              <span className="my-3 fs-6 fw-bold my-3">
+                Description Information
+              </span>
+            </div>
+            <div>
+              <label className="text-dark Label">Description</label>
+              <span className="text-dark">
+                &nbsp; : &nbsp;{proposalData.description || ""}
               </span>
             </div>
           </div>
         </div>
-        <div className="container-fluid my-5">
-          <h4><b>Proposal Information</b></h4>
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <label>Proposal Name</label>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control ${formik.touched.proposal_name && formik.errors.proposal_name ? "is-invalid" : ""}`}
-                  {...formik.getFieldProps("proposal_name")}
-                  id="proposal_name"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.proposal_name && formik.errors.proposal_name && (
-                    <p className="text-danger">{formik.errors.proposal_name}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>Proposal Type</label>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
-                <select
-                  type="text"
-                  className={`form-size form-select`}
-                  {...formik.getFieldProps("proposalType")}
-                  id="proposalType"
-                >
-                  <option value=""></option>
-                  <option value="Company Profile">Company Profile</option>
-                  <option value="Others">Others</option>
-                </select>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.proposalType && formik.errors.proposalType && (
-                    <p className="text-danger">{formik.errors.proposalType}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>Subject</label>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control ${formik.touched.subject && formik.errors.subject ? "is-invalid" : ""}`}
-                  {...formik.getFieldProps("subject")}
-                  id="subject"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.subject && formik.errors.subject && (
-                    <p className="text-danger">{formik.errors.subject}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end attactUi">
-                <label>Attachment</label>&nbsp;&nbsp;
-                <div className="input-group">
-                  <input
-                    className={`form-size form-control custom-file-input ${formik.touched.files && formik.errors.files ? "is-invalid" : ""}`}
-                    type="file"
-                    multiple
-                    accept="image/*, video/*, application/pdf"
-                    onChange={handleFileChange}
-                  />
-                </div>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {fileError && <div className="text-danger">{fileError}</div>}
-                  {/* <div className="text-secondary">
-                    Total size: {(fileSize / (1024 * 1024)).toFixed(2)} MB
-                  </div> */}
-                </div>
-              </div>
-            </div>
-            <div className="col-12 mb-3 mt-2">
-              <div className="d-flex align-items-start justify-content-end">
-                <label>Mail Body</label>
-                <span className="text-danger">*</span> &nbsp;&nbsp;
-                <textarea
-                  rows="5"
-                  type="text"
-                  className="form-size form-control"
-                  {...formik.getFieldProps("mailBody")}
-                  name="mailBody"
-                  id="mailBody"
-                  style={{ minWidth: "81%" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="container-fluid my-5">
-          <h4><b>Description Information</b></h4>
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-12 mb-3">
-              <div className="d-flex align-items-start justify-content-center sm-device">
-                <label>Description</label> &nbsp;&nbsp;
-                <textarea
-                  rows="5"
-                  type="text"
-                  className="form-size form-control"
-                  {...formik.getFieldProps("description")}
-                  name="description"
-                  id="description"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </section>
+      </section>
+    </>
   );
 }
 
-export default ProposalCreate;
+export default ProposalShow;
