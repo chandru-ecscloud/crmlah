@@ -9,6 +9,37 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
 
+// const validationSchema = Yup.object().shape({
+//   companyName: Yup.string().required("*Company Name is required"),
+//   companyEmail: Yup.string()
+//     .email("Invalid email")
+//     .required("*Email is required"),
+//   companyMobile: Yup.string()
+//     .required("Phone number is required")
+//     .test("phone-length", function (value) {
+//       const { countryCode } = this.parent;
+//       if (value && /\s/.test(value)) {
+//         return this.createError({
+//           message: "Phone number should not contain spaces",
+//         });
+//       }
+//       if (countryCode === "65") {
+//         return value && value.length === 8
+//           ? true
+//           : this.createError({ message: "Phone number must be 8 digits only" });
+//       }
+//       if (countryCode === "91") {
+//         return value && value.length === 10
+//           ? true
+//           : this.createError({
+//               message: "Phone number must be 10 digits only",
+//             });
+//       }
+//       return false; // Default validation for other country codes
+//     }),
+//   website: Yup.string().required("*Website is required"),
+// });
+
 const validationSchema = Yup.object().shape({
   companyName: Yup.string().required("*Company Name is required"),
   companyEmail: Yup.string()
@@ -68,7 +99,7 @@ function CompanyAdd() {
       countryCode: "",
       companyCountry: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("company Datas:", data);
       const formData = new FormData();
@@ -107,11 +138,11 @@ function CompanyAdd() {
     },
   });
 
-//   const handleFileChange = (event) => {
-//     const file = event.target.files[0];
-//     setSelectedFile(file);
-//     formik.setFieldValue("file", file);
-//   };
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      formik.setFieldValue("file", file);
+    };
 
   useEffect(() => {
     const userData = async () => {
@@ -218,18 +249,13 @@ function CompanyAdd() {
                 <input
                   type="file"
                   name="file"
-                  className="form-control"
-                  //   className={`form-size form-control ${
-                  //     formik.touched.file && formik.errors.file
-                  //       ? "is-invalid"
-                  //       : ""
-                  //   }`}
-                  //   onChange={handleFileChange}
-                  //   onBlur={formik.handleBlur}
-                  onChange={(event) => {
-                    formik.setFieldValue("file", event.target.files[0]);
-                  }}
-                  onBlur={formik.handleBlur}
+                  className={`form-size form-control ${
+                    formik.touched.file && formik.errors.file
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                    onChange={handleFileChange}
+                    onBlur={formik.handleBlur}
                 />
                 {formik.touched.file && formik.errors.file ? (
                   <div className="invalid-feedback">{formik.errors.file}</div>
@@ -302,7 +328,7 @@ function CompanyAdd() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
+            {/* <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Company Mobile</label>
                 <span className="text-danger">*</span> &nbsp;&nbsp;
@@ -345,16 +371,67 @@ function CompanyAdd() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.countryCode && formik.errors.countryCode && (
-                    <div className="text-danger ">
-                      {formik.errors.countryCode}
-                    </div>
-                  )}
                   {formik.touched.companyMobile &&
                     formik.errors.companyMobile && (
                       <div className="text-danger ">
                         {formik.errors.companyMobile}
                       </div>
+                    )}
+                </div>
+              </div>
+            </div> */}
+
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end  sm-device">
+                <lable>Company Mobile</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <div className="input-group" style={{ width: "60%" }}>
+                  <div>
+                    <select
+                      {...formik.getFieldProps("countryCode")}
+                      id="countryCode"
+                      name="countryCode"
+                      className={`form-size form-control  ${
+                        formik.touched.countryCode && formik.errors.countryCode
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      style={{
+                        width: "80px",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                    >
+                      <option value="65" selected>
+                        +65
+                      </option>
+                      <option value="91">+91</option>
+                    </select>
+                  </div>
+                  <input
+                    type="tel"
+                    name="companyMobile"
+                    className={`form-size form-control  ${
+                      formik.touched.companyMobile &&
+                      formik.errors.companyMobile
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("companyMobile")}
+                    id="companyMobile"
+                    aria-label="Text input with checkbox"
+                  />
+                </div>
+              </div>
+
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.companyMobile &&
+                    formik.errors.companyMobile && (
+                      <p className="text-danger">
+                        {formik.errors.companyMobile}
+                      </p>
                     )}
                 </div>
               </div>
@@ -387,12 +464,12 @@ function CompanyAdd() {
             </div>
           </div>
         </div>
+
         <div className="container-fluid my-5">
           <h4>
             <b>Address Information</b>
           </h4>
         </div>
-
         <div className="container">
           <div className="row">
             {/* Street */}
@@ -444,11 +521,11 @@ function CompanyAdd() {
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <label>Code</label> &nbsp;&nbsp;
                 <input
-                  {...formik.getFieldProps("countryCode")}
+                  {...formik.getFieldProps("companyZipCode")}
                   type="text"
                   className="form-size form-control"
-                  name="countryCode"
-                  id="countryCode"
+                  name="companyZipCode"
+                  id="companyZipCode"
                 />
               </div>
             </div>
