@@ -91,12 +91,12 @@ function CompanyAdd() {
       companyName: "",
       companyEmail: "",
       companyMobile: "",
-      countryCode: "",
+      countryCode: "65",
       website: "",
       companyStreet: "",
       companyCity: "",
       companyState: "",
-      countryCode: "",
+      companyZipCode: "",
       companyCountry: "",
     },
     validationSchema: validationSchema,
@@ -112,20 +112,15 @@ function CompanyAdd() {
       formData.append("companyStreet", data.companyStreet);
       formData.append("companyCity", data.companyCity);
       formData.append("companyState", data.companyState);
-      formData.append("countryCode", data.countryCode);
+      formData.append("companyZipCode", data.companyZipCode);
       formData.append("companyCountry", data.companyCountry);
       setLoadIndicator(true);
       try {
         const response = await axios.put(
           `${API_URL}updateCompanyRegisterWithLogo/${companyId}`,
-          formData,
-          {
-            // headers: {
-            //     "Content-Type": "application/json",
-            // },
-          }
+          formData
         );
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/users");
@@ -138,11 +133,11 @@ function CompanyAdd() {
     },
   });
 
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      formik.setFieldValue("file", file);
-    };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    formik.setFieldValue("file", file);
+  };
 
   useEffect(() => {
     const userData = async () => {
@@ -166,11 +161,11 @@ function CompanyAdd() {
           companyEmail: getData.companyEmail,
           companyMobile: getData.companyMobile,
           website: getData.website,
-          countryCode: getData.countryCode,
+          countryCode: getData.countryCode || "65",
           companyStreet: getData.companyStreet,
           companyCity: getData.companyCity,
           companyState: getData.companyState,
-          countryCode: getData.countryCode,
+          companyZipCode: getData.companyZipCode,
           companyCountry: getData.companyCountry,
         };
         formik.setValues(payload);
@@ -180,6 +175,7 @@ function CompanyAdd() {
       }
     };
     userData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -254,8 +250,8 @@ function CompanyAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                    onChange={handleFileChange}
-                    onBlur={formik.handleBlur}
+                  onChange={handleFileChange}
+                  onBlur={formik.handleBlur}
                 />
                 {formik.touched.file && formik.errors.file ? (
                   <div className="invalid-feedback">{formik.errors.file}</div>

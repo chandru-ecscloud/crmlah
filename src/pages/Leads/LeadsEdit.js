@@ -212,7 +212,8 @@ function LeadsEdit() {
                   className="form-size form-control"
                   {...formik.getFieldProps("lead_owner")}
                   id="lead_owner"
-                  readOnly />
+                  readOnly
+                />
                 {/* <option selected value={owner}>
                     {owner}
                   </option>
@@ -236,10 +237,11 @@ function LeadsEdit() {
                 <lable>Amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -261,10 +263,11 @@ function LeadsEdit() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("first_name")}
                   name="first_name"
                   id="first_name"
@@ -286,10 +289,11 @@ function LeadsEdit() {
                 <input
                   type="text"
                   name="last_name"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("last_name")}
                   id="last_name"
                 />
@@ -310,10 +314,11 @@ function LeadsEdit() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("company")}
                   name="company"
                   id="company"
@@ -339,27 +344,32 @@ function LeadsEdit() {
                       {...formik.getFieldProps("country_code")}
                       id="country_code"
                       name="country_code"
-                      className={`form-size form-control  ${formik.touched.country_code && formik.errors.country_code
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-size form-control  ${
+                        formik.touched.country_code &&
+                        formik.errors.country_code
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="65" selected>+65</option>
+                      <option value="65" selected>
+                        +65
+                      </option>
                       <option value="91">+91</option>
                     </select>
                   </div>
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -383,10 +393,11 @@ function LeadsEdit() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -426,10 +437,11 @@ function LeadsEdit() {
                 <lable>Land Line</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.landLine && formik.errors.landLine
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.landLine && formik.errors.landLine
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("landLine")}
                   name="landLine"
                   id="landLine"
@@ -469,6 +481,8 @@ function LeadsEdit() {
                   <option value="FaceBook">FaceBook</option>
                   <option value="Twitter">Twitter</option>
                   <option value="Instagram">Instagram</option>
+                  <option value="Website">Website</option>
+                  <option value="Others">Others</option>
                 </select>
               </div>
             </div>
@@ -481,9 +495,7 @@ function LeadsEdit() {
                   {...formik.getFieldProps("lead_status")}
                   id="lead_status"
                 >
-                  <option value="Processed">
-                    Pending
-                  </option>
+                  <option value="Processed">Pending</option>
                   <option value="Contacted">Contacted</option>
                   <option value="Qualified">Qualified</option>
                   <option value="Junk">Junk</option>
@@ -643,10 +655,11 @@ function LeadsEdit() {
                 <lable>Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.zipCode && formik.errors.zipCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.zipCode && formik.errors.zipCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("zipCode")}
                   name="zipCode"
                   id="zipCode"
@@ -685,14 +698,17 @@ function LeadsEdit() {
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-start justify-content-center  sm-device">
-                <lable>Description</lable><span className="text-danger">*</span> &nbsp;&nbsp;
+                <lable>Description</lable>
+                <span className="text-danger">*</span> &nbsp;&nbsp;
                 <textarea
                   rows="5"
                   type="text"
-                  className={`form-size form-control  ${formik.touched.description_info && formik.errors.description_info
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.description_info &&
+                    formik.errors.description_info
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("description_info")}
                   name="description_info"
                   id="description_info"
@@ -700,13 +716,16 @@ function LeadsEdit() {
               </div>
             </div>
             <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.description_info && formik.errors.description_info && (
-                    <p className="text-danger">{formik.errors.description_info}</p>
+              <div className="col-5"></div>
+              <div className="col-6 sm-device">
+                {formik.touched.description_info &&
+                  formik.errors.description_info && (
+                    <p className="text-danger">
+                      {formik.errors.description_info}
+                    </p>
                   )}
-                </div>
               </div>
+            </div>
           </div>
         </div>
       </form>

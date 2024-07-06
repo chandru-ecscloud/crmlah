@@ -47,6 +47,7 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
   // console.log("Activity ID :",id);
   const [show, setShow] = useState(false);
   const [rows, setRows] = useState([{}]);
+  const currentData = new Date().toISOString().split("T")[0];
 
   const userName = sessionStorage.getItem("user_name");
 
@@ -344,6 +345,7 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
                   type="date"
                   name="date"
                   id="date"
+                  max={currentData}
                   {...formik.getFieldProps("date")}
                   className={`form-control ${
                     formik.touched.date && formik.errors.date

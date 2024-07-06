@@ -13,6 +13,7 @@ const QuotesModel = ({ path, userData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const companyId = sessionStorage.getItem("companyId");
 
   // console.log(path);
 
@@ -29,7 +30,7 @@ const QuotesModel = ({ path, userData }) => {
   const fetchQuatesData = async () => {
     try {
       //   setLoading(true);
-      const response = await axios(`${API_URL}allQuotes`, {
+      const response = await axios(`${API_URL}allQuotesByCompanyId/${companyId}`, {
         headers: {
           "Content-Type": "application/json",
           //Authorization: `Bearer ${token}`,

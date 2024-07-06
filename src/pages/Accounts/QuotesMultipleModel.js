@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 
 const QuotesMultipleModel = ({ path, userData, accountIds }) => {
   const [loading, setLoading] = useState(true);
+  const companyId = sessionStorage.getItem("companyId");
 
   // const token = sessionStorage.getItem("token");
   const [quotesdata, setQuotesData] = useState([]);
@@ -29,12 +30,15 @@ const QuotesMultipleModel = ({ path, userData, accountIds }) => {
   const fetchQuatesData = async () => {
     try {
       //   setLoading(true);
-      const response = await axios(`${API_URL}allQuotes`, {
-        headers: {
-          "Content-Type": "application/json",
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${API_URL}allQuotesByCompanyId/${companyId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.status === 200) {
         setQuotesData(response.data);
       }

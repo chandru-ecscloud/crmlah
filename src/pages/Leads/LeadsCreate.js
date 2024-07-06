@@ -456,6 +456,8 @@ function LeadsCreate() {
                   <option value="FaceBook">FaceBook</option>
                   <option value="Twitter">Twitter</option>
                   <option value="Instagram">Instagram</option>
+                  <option value="Website">Website</option>
+                  <option value="Others">Others</option>
                 </select>
               </div>
             </div>

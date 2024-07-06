@@ -28,7 +28,7 @@ function SendQuotes({ accountData }) {
   // const [htmlContent, setHtmlContent] = useState("");
   // const [isSendingEmail, setIsSendingEmail] = useState(false);
 
-  console.log("Account Data:", accountData);
+  // console.log("Account Data:", accountData);
 
   const formik = useFormik({
     initialValues: {
@@ -95,6 +95,7 @@ function SendQuotes({ accountData }) {
       formik.setFieldValue("htmlContent", htmlContent);
       formik.setFieldValue("isSendingEmail", true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subject, accountData.quotes]);
 
   const generateInvoice = (quotes) => {

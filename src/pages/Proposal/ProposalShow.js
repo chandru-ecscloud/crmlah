@@ -11,10 +11,10 @@ import SendInvoice from "../Email/SendInvoice";
 import AttactmentPdf from "../../assets/Attactment pdf.jpg";
 import AttactmentExcel from "../../assets/Attactment Excel.jpg";
 import AttactmentOther from "../../assets/Attactment others.jpg";
-import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
+// import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
 import AttactmentWord from "../../assets/Attactment Word.jpg";
 import AttactmentPpt from "../../assets/Attachment Ppt.png";
-import { MdDeleteOutline } from "react-icons/md";
+// import { MdDeleteOutline } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import DeleteAttach from "../../components/common/DeleteModelAttach";
 
@@ -226,24 +226,27 @@ function ProposalShow() {
                   </div>
                 </span>
               </div>
-              <div>
-                <label className="text-dark Label">Mail Body</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{proposalData.mailBody || ""}
-                </span>
-              </div>
             </div>
           </div>
           <div className="container-fluid row" id="Details">
             <div className="my-3 container-fluid row">
-              <span className="my-3 fs-6 fw-bold my-3">
+              <span className="mt-3 mb-2 fs-6 fw-bold my-3">Mail Body</span>
+            </div>
+            <div className="mb-4">
+              <span className="text-dark preserve-whitespace">
+                {proposalData.mailBody || ""}
+              </span>
+            </div>
+          </div>
+          <div className="container-fluid row" id="Details">
+            <div className="my-3 container-fluid row">
+              <span className="mt-3 mb-2 fs-6 fw-bold my-3">
                 Description Information
               </span>
             </div>
-            <div>
-              <label className="text-dark Label">Description</label>
+            <div className="mb-4">
               <span className="text-dark">
-                &nbsp; : &nbsp;{proposalData.description || ""}
+                {proposalData.description || ""}
               </span>
             </div>
           </div>

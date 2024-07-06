@@ -170,7 +170,7 @@ function QuotesCreate() {
             total: parseInt(item.total),
           })),
         };
-        console.log("Payload:", payload);
+        // console.log("Payload:", payload);
         const response = await axios.post(
           `${API_URL}createTransactionQuotesAndQuoteItems`,
           payload,
@@ -192,6 +192,7 @@ function QuotesCreate() {
       }
     },
   });
+
 
   // const handleImageUpload = (event) => {
   //   const file = event.target.files[0];
@@ -483,10 +484,11 @@ function QuotesCreate() {
                   style={{ width: "60%" }}
                   name="dealName"
                   {...formik.getFieldProps("dealName")}
-                  className={`form-control form-size ${formik.touched.dealName && formik.errors.dealName
+                  className={`form-control form-size ${
+                    formik.touched.dealName && formik.errors.dealName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                 />
               </div>
               <div className="row sm-device">
@@ -507,10 +509,11 @@ function QuotesCreate() {
                   type="text"
                   name="subject"
                   {...formik.getFieldProps("subject")}
-                  className={`form-control form-size ${formik.touched.subject && formik.errors.subject
+                  className={`form-control form-size ${
+                    formik.touched.subject && formik.errors.subject
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="subject"
                 />
               </div>
@@ -532,10 +535,11 @@ function QuotesCreate() {
                   name="quoteStage"
                   {...formik.getFieldProps("quoteStage")}
                   type="text"
-                  className={`form-select form-size ${formik.touched.quoteStage && formik.errors.quoteStage
+                  className={`form-select form-size ${
+                    formik.touched.quoteStage && formik.errors.quoteStage
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   id="quoteStage"
                 >
                   <option value=""></option>
@@ -565,10 +569,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("validUntil")}
                   type="date"
-                  className={`form-control form-size ${formik.touched.validUntil && formik.errors.validUntil
+                  className={`form-control form-size ${
+                    formik.touched.validUntil && formik.errors.validUntil
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="validUntil"
                   id="validUntil"
                 />
@@ -695,11 +700,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingStreet &&
-                      formik.errors.shippingStreet
+                  className={`form-control form-size ${
+                    formik.touched.shippingStreet &&
+                    formik.errors.shippingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingStreet"
                   id="shippingStreet"
                 />
@@ -723,10 +729,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingStreet")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingStreet && formik.errors.billingStreet
+                  className={`form-control form-size ${
+                    formik.touched.billingStreet && formik.errors.billingStreet
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingStreet"
                   id="billingStreet"
                   value={
@@ -758,10 +765,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCity && formik.errors.shippingCity
+                  className={`form-control form-size ${
+                    formik.touched.shippingCity && formik.errors.shippingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCity"
                   id="shippingCity"
                 />
@@ -785,10 +793,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCity")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCity && formik.errors.billingCity
+                  className={`form-control form-size ${
+                    formik.touched.billingCity && formik.errors.billingCity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCity"
                   id="billingCity"
                   value={
@@ -819,10 +828,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.shippingCode && formik.errors.shippingCode
+                  className={`form-size form-control  ${
+                    formik.touched.shippingCode && formik.errors.shippingCode
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCode"
                   id="shippingCode"
                 />
@@ -846,10 +856,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCode")}
                   type="text"
-                  className={`form-size form-control  ${formik.touched.billingCode && formik.errors.billingCode
+                  className={`form-size form-control  ${
+                    formik.touched.billingCode && formik.errors.billingCode
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCode"
                   id="billingCode"
                   value={
@@ -880,10 +891,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingState && formik.errors.shippingState
+                  className={`form-control form-size ${
+                    formik.touched.shippingState && formik.errors.shippingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingState"
                   id="shippingState"
                 />
@@ -907,10 +919,11 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingState")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingState && formik.errors.billingState
+                  className={`form-control form-size ${
+                    formik.touched.billingState && formik.errors.billingState
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingState"
                   id="billingState"
                   value={
@@ -942,11 +955,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("shippingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.shippingCountry &&
-                      formik.errors.shippingCountry
+                  className={`form-control form-size ${
+                    formik.touched.shippingCountry &&
+                    formik.errors.shippingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="shippingCountry"
                   id="shippingCountry"
                 />
@@ -970,11 +984,12 @@ function QuotesCreate() {
                 <input
                   {...formik.getFieldProps("billingCountry")}
                   type="text"
-                  className={`form-control form-size ${formik.touched.billingCountry &&
-                      formik.errors.billingCountry
+                  className={`form-control form-size ${
+                    formik.touched.billingCountry &&
+                    formik.errors.billingCountry
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="billingCountry"
                   id="billingCountry"
                   value={
@@ -1033,11 +1048,12 @@ function QuotesCreate() {
                     <th scope="row">{index + 1}</th>
                     <td>
                       <select
-                        className={`form-select ${formik.touched.quotesItemList?.[index]?.productName &&
-                            formik.errors.quotesItemList?.[index]?.productName
+                        className={`form-select ${
+                          formik.touched.quotesItemList?.[index]?.productName &&
+                          formik.errors.quotesItemList?.[index]?.productName
                             ? "is-invalid"
                             : ""
-                          }`}
+                        }`}
                         name={`quotesItemList[${index}].productName`}
                         value={row.productName}
                         onChange={(e) => {
@@ -1057,7 +1073,7 @@ function QuotesCreate() {
                         ))}
                       </select>
                       {formik.touched.quotesItemList?.[index]?.productName &&
-                        formik.errors.quotesItemList?.[index]?.productName ? (
+                      formik.errors.quotesItemList?.[index]?.productName ? (
                         <div className="text-danger fs-6">
                           {formik.errors.quotesItemList[index].productName}
                         </div>

@@ -36,7 +36,7 @@ const validationSchema = yup.object().shape({
 function QuotesEdit() {
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
-  console.log("Row Value is ", rows);
+  // console.log("Row Value is ", rows);
   // const [adjustment, setAdjustment] = React.useState(0);
   // const [grandTotal, setGrandTotal] = React.useState(0);
   const owner = sessionStorage.getItem("user_name");
@@ -173,7 +173,7 @@ function QuotesEdit() {
         })),
         deletedQuotesItemIds: [],
       };
-      console.log("Payload is ", payload);
+      // console.log("Payload is ", payload);
 
       try {
         const response = await axios.put(
@@ -418,6 +418,8 @@ function QuotesEdit() {
         const formattedResponseData = {
           ...getData,
           validUntil: getData.validUntil.substring(0, 10),
+          shippingCode: getData.shippingCode || "",
+          billingCode: getData.billingCode || "",
           deletedQuotesItemIds: [],
         };
         formik.setValues(formattedResponseData);

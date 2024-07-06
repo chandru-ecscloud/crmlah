@@ -209,6 +209,7 @@ const Lead = () => {
 
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
   const handleExportRows = (rows) => {
@@ -527,8 +528,9 @@ const Lead = () => {
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
                 <button
-                  className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                    }`}
+                  className={`btn btn-primary ${
+                    role === "CMP_USER" && "disabled"
+                  }`}
                   disabled={role === "CMP_USER"}
                   onClick={handelNavigateClick}
                 >
@@ -536,8 +538,9 @@ const Lead = () => {
                 </button>
               </div>
               <div
-                className={`dropdown-center ${role === "CMP_USER" && "disabled"
-                  }`}
+                className={`dropdown-center ${
+                  role === "CMP_USER" && "disabled"
+                }`}
               >
                 <button
                   className="btn btn-danger dropdown-toggle"
@@ -549,7 +552,6 @@ const Lead = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul className="dropdown-menu">
-
                   {/* {role === "CRM_USER" ? (
                     <>
                       <li>
@@ -679,10 +681,7 @@ const Lead = () => {
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !table.getIsSomeRowsSelected() &&
-                        !table.getIsAllRowsSelected()
-                      }
+                      disabled={table.getSelectedRowModel().rows.length < 2}
                       onClick={() =>
                         handleBulkConvert(table.getSelectedRowModel().rows)
                       }
@@ -711,10 +710,7 @@ const Lead = () => {
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !table.getIsSomeRowsSelected() &&
-                        !table.getIsAllRowsSelected()
-                      }
+                      disabled={table.getSelectedRowModel().rows.length < 2}
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
                       }
@@ -732,7 +728,10 @@ const Lead = () => {
                         !table.getIsAllRowsSelected()
                       }
                     >
-                      <SendCompanyProfile emails={emails} tablereset={tableReset}/>
+                      <SendCompanyProfile
+                        emails={emails}
+                        tablereset={tableReset}
+                      />
                     </button>
                   </li>
                 </ul>

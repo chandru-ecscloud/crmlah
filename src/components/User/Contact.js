@@ -37,7 +37,7 @@ function Contact() {
       // console.log(data);
       data.company_id = 2;
       data.company = "ECSCloudInfotech";
-      data.lead_status = "Processed";
+      data.lead_status = "PENDING";
       setLoadIndicator(true)
       try {
         const response = await axios.post(`${API_URL}newClient`, data, {

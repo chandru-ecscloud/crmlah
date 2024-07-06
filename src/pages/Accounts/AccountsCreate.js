@@ -106,17 +106,17 @@ function AccountsCreate() {
     },
   });
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setUserImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const AccountList = async () => {
     try {
@@ -149,6 +149,7 @@ function AccountsCreate() {
   useEffect(() => {
     AccountList();
     formik.setFieldValue("country_code", 65);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

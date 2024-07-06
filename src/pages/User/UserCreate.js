@@ -69,6 +69,7 @@ function UserCreate() {
   // const token = sessionStorage.getItem("token");
   // const [userImage, setUserImage] = useState(User);
   const [userNameAvailable, setUserNameAvailable] = useState(false);
+  const currentData = new Date().toISOString().split("T")[0];
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -110,7 +111,204 @@ function UserCreate() {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+          let mailContent;
+          mailContent = `<!DOCTYPE html>
+                          <html lang="en">
 
+                          <head>
+                              <meta charset="UTF-8" />
+                              <title>Invoice</title>
+                              <style>
+                                  body {
+                                      background-color: #ddd;
+                                  }
+
+                                  .invoice-box {
+                                      font-size: 12px;
+                                      max-width: 600px;
+                                      background-color: #fff;
+                                      margin: auto;
+                                      padding: 30px;
+                                      border-bottom: 3px solid #0059ff;
+                                      line-height: 24px;
+                                      font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+                                      color: #555;
+                                      min-height: 85vh;
+                                  }
+
+                                  .invoice-box table {
+                                      width: 100%;
+                                      line-height: inherit;
+                                      text-align: left;
+                                  }
+
+                                  .invoice-box table td {
+                                      padding: 5px;
+                                      vertical-align: top;
+                                  }
+
+                                  .invoice-box table td.third {
+                                      text-align: right;
+                                  }
+
+                                  .invoice-box table tr.heading td {
+                                      background: #eee;
+                                      border-bottom: 1px solid #ddd;
+                                      font-weight: bold;
+                                  }
+
+                                  .invoice-box table tr.item td {
+                                      border-bottom: 1px solid #eee;
+                                  }
+
+                                  .invoice-box table tr.item.last td {
+                                      border-bottom: none;
+                                  }
+
+                                  .invoice-box table tr.total td:nth-child(2) {
+                                      border-top: 2px solid #eee;
+                                      font-weight: bold;
+                                  }
+
+                                  .invoice {
+                                      padding: 1rem;
+                                  }
+
+                                  #scan {
+                                      float: right;
+                                  }
+
+                                  #scan img {
+                                      max-width: 100%;
+                                      height: auto;
+                                  }
+
+                                  @media print {
+                                      .invoice-box {
+                                          border: 0;
+                                      }
+                                  }
+
+                                  .styled-button {
+                                      background-color: #4CAF50;
+                                      /* Green background */
+                                      border: none;
+                                      /* Remove border */
+                                      color: white;
+                                      /* White text */
+                                      padding: 5px 10px;
+                                      /* Some padding */
+                                      text-align: center;
+                                      /* Center text */
+                                      text-decoration: none;
+                                      /* Remove underline */
+                                      display: inline-block;
+                                      /* Make the link a block element */
+                                      font-size: 12px;
+                                      /* Increase font size */
+                                      margin: 4px 2px;
+                                      /* Some margin */
+                                      cursor: pointer;
+                                      /* Pointer/hand icon */
+                                      border-radius: 4px;
+                                      /* Rounded corners */
+                                      transition-duration: 0.4s;
+                                      /* Transition effect */
+                                  }
+
+                                  .styled-button:hover {
+                                      background-color: #006803;
+                                      /* White background on hover */
+
+                                  }
+                              </style>
+                          </head>
+
+                          <body>
+                              <div class="invoice-box">
+                                  <table>
+                                      <tr class="top">
+                                          <td colspan="2">
+                                              <table>
+                                                  <tr>
+                                                      <td class="title">
+                                                          <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                                                              style="width: 75%; max-width: 180px" alt="Logo" />
+                                                      </td>
+                                                      <td class="third">
+                                                          <b>Date:</b> ${currentData}<br />
+                                                          The Alexcier, 237 Alexandra Road,<br />
+                                                          #04-10, Singapore-159929.
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </td>
+                                      </tr>
+                                  </table>
+
+
+                                  <div class="invoice">
+                                      <h1 style="color: black;">Hi, ${data.name}!</h1>
+                                      <p style="margin: 2rem 0 0;">Welcome to ECS Cloud! We are thrilled to have you on board.</p>
+                                      <p style="margin: 1.5rem 0;">To complete your registration and activate your account, please click the
+                                          button below:</p>
+                                      <a href="https://crmlah.com?userId=${response.data.userId}"><button class="styled-button">Confirm It's You</button></a>
+
+                                      <p style="margin: 1.5rem 0px 2rem 0px;">Thank you for registering with us! We appreciate your business.</p>
+
+                                      <p style="margin: 1.5rem 0px 0px;">Here are your CRM credentials:</p>
+                                      <p style="margin: 1rem 0px 0px;"><b>Username:</b> ${data.userName}</p>
+                                      <p style="margin: 1rem 0px 2rem 0px;"><b>Password:</b> ${data.password}</p>
+
+                                      <hr />
+
+                                      <p style="margin: 1.5rem 0;">You are currently on a 30-day trial      version. After the trial period ends, your
+                                          account will be deactivated. To prevent this, please upgrade your plan within the trial period to avoid
+                                          deactivation. For further details regarding your CRMLAH registration or to upgrade your license, please
+                                          do not hesitate to contact our team:</p>
+                                      <p style="margin: 1rem 0;"><b>Email:</b> info@ecscloudinfotech.com</p>
+                                      <p style="margin: 1rem 0;"><b>Phone:</b> (+65) 88941306</p>
+
+                                      <hr />
+
+                                      <p style="margin: 2rem 0 0;">If you need any assistance, feel free to reach out to our support team:</p>
+                                      <p style="margin: 1rem 0;"><b>Email:</b> info@ecscloudinfotech.com</p>
+                                      <p style="margin: 1rem 0;"><b>Phone:</b> (+65) 88941306</p>
+
+                                      <hr />
+
+                                      <p style="margin: 2rem 0 0;">See You Soon,</p>
+                                      <p style="margin: 0;">ECS Cloud</p>
+                                      <p style="margin: 0 0 2rem 0;">Powered by ECS</p>
+
+                                      <hr />
+
+                                      <p style="margin: 2rem 0 0; font-size: smaller; color: gray;">This email was sent to you as part of your CRM
+                                          registration process. If you did not register for this account, please contact our support team
+                                          immediately.</p>
+                                  </div>
+                              </div>
+                          </body>
+
+                          </html>`;
+          try {
+            const response = await axios.post(`${API_URL}sendMail`, {
+              toMail: data.email,
+              fromMail: data.email,
+              subject: "Please Verify Your Email to Complete Your Registration",
+              htmlContent: mailContent,
+            });
+
+            if (response.status === 200) {
+              // toast.success(response.data.message);
+              toast.success("Mail Send Successfully");
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error("Mail Not Send");
+            // console.error("Failed to send email:", error);
+          }
           navigate("/users");
         } else {
           toast.error(response.data.message);
@@ -177,7 +375,6 @@ function UserCreate() {
         const response = await axios.get(
           `${API_URL}getUserRegistrationDetailsByCompanyId/${companyId}`
         );
-
         formik.setFieldValue("companyName", response.data.companyName);
         formik.setFieldValue("address", response.data.address);
         formik.setFieldValue("city", response.data.city);

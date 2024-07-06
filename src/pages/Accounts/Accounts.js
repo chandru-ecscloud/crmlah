@@ -10,7 +10,7 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-import QuotesModel from "./QuotesModel";
+// import QuotesModel from "./QuotesModel";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
@@ -27,7 +27,7 @@ const csvConfig = mkConfig({
 
 const Accounts = () => {
   const [data, setData] = useState([]);
-  const [rowId, setRowId] = useState("");
+  // const [rowId, setRowId] = useState("");
   const [rowMultipleId, setRowMultipleId] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -294,10 +294,10 @@ const Accounts = () => {
         cellHeight: "auto",
       },
     });
-    const tableHeaders4 = ["Created At", "Updated At"];
-    const tableData4 = rows.map((row) => {
-      return [row.original.createdAt, row.original.updatedAt];
-    });
+    // const tableHeaders4 = ["Created At", "Updated At"];
+    // const tableData4 = rows.map((row) => {
+    //   return [row.original.createdAt, row.original.updatedAt];
+    // });
     autoTable(doc, {
       head: [tableHeaders3],
       body: tableData3,

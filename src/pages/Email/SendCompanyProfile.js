@@ -20,6 +20,7 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
   const [generateLink, setGenerateLink] = useState(null);
   const companyId = sessionStorage.getItem("companyId");
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [base64PDFs, setBase64PDFs] = useState([]);
 
   useEffect(() => {
@@ -112,6 +113,13 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setShow(false); 
+      const sendingToastId = toast("Sending...", { autoClose: false }); // Show sending toast and keep it open
+
+      let successCount = 0;
+      let errorCount = 0;
+
       for (const email of emails || []) {
         try {
           const formData = new FormData();
@@ -149,21 +157,34 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
 
           if (response.status !== 200) {
             toast.error(response.data.message);
+            errorCount++;
+          } else {
+            successCount++;
           }
         } catch (error) {
           console.error("Error sending email:", error);
           toast.error("Failed to send email");
+          errorCount++;
         } finally {
           setLoadIndicator(false);
         }
       }
 
       setGenerateLink(null);
-      // toast.success("Mails sent successfully");
+      toast.dismiss(sendingToastId); // Dismiss the sending toast
+
+      if (errorCount === 0) {
+        toast.success("All mails sent successfully");
+      } else if (successCount === 0) {
+        toast.error("Failed to send all mails");
+      } else {
+        toast.info(`Mails sent: ${successCount}, Failed: ${errorCount}`);
+      }
+
       formik.resetForm();
       setBase64PDFs([]);
       tablereset();
-      handleHide();
+      setIsSubmitting(false);
     },
   });
 
@@ -304,9 +325,9 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
             <Button
               type="submit"
               className="btn btn-primary"
-              disabled={loadIndicator}
+              disabled={isSubmitting || loadIndicator}
             >
-              {loadIndicator && (
+              {isSubmitting && (
                 <span
                   className="spinner-border spinner-border-sm me-2"
                   aria-hidden="true"
@@ -317,6 +338,7 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
           </Modal.Footer>
         </form>
       </Modal>
+     
     </div>
   );
 }

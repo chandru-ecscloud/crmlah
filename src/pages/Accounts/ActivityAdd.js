@@ -382,6 +382,7 @@ const ActivityAdd = ({ id, fetchData }) => {
                   type="date"
                   name="date"
                   id="date"
+                  max={currentData}
                   {...formik.getFieldProps("date")}
                   className={`form-control ${
                     formik.touched.date && formik.errors.date
