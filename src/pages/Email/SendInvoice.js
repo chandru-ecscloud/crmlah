@@ -59,7 +59,7 @@ function SendInvoice({ invoiceData, id }) {
           }
         );
 
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success("Mail sent successfully");
           handleHide();
         } else {
@@ -412,10 +412,10 @@ function SendInvoice({ invoiceData, id }) {
     doc.text("Bill To", 13, 65);
     doc.setFontSize(10);
     doc.setFont("helvetica", "small");
-    doc.text(`${invoiceData.billingStreet}`, 13, 70);
-    doc.text(`${invoiceData.billingCity}`, 13, 75);
-    doc.text(`${invoiceData.billingCode}`, 13, 80);
-    doc.text(`${invoiceData.billingCountry}`, 13, 85);
+    doc.text(`${invoiceData.billingStreet || ""}`, 13, 70);
+    doc.text(`${invoiceData.billingCity || ""}`, 13, 75);
+    doc.text(`${invoiceData.billingCode || ""}`, 13, 80);
+    doc.text(`${invoiceData.billingCountry || ""}`, 13, 85);
 
     let startY = 95; // Starting Y position for the quotes tables
 
@@ -425,8 +425,8 @@ function SendInvoice({ invoiceData, id }) {
       doc.text(`Invoice ${index + 1}`, 13, startY);
       doc.setFontSize(10);
       doc.setFont("helvetica", "small");
-      doc.text(`Subject: ${invoice.subject}`, 13, startY + 5);
-      doc.text(`Deal Name: ${invoice.dealName}`, 13, startY + 10);
+      doc.text(`Subject: ${invoice.subject || ""}`, 13, startY + 5);
+      doc.text(`Deal Name: ${invoice.dealName || ""}`, 13, startY + 10);
 
       // Add the table
       const tableData = invoice.invoiceItemList?.map((row, rowIndex) => [
@@ -510,7 +510,7 @@ function SendInvoice({ invoiceData, id }) {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const notesText = doc.splitTextToSize(`${invoice.description}`, 180); // 180 is the width
+      const notesText = doc.splitTextToSize(`${invoice.description || ""}`, 180); // 180 is the width
       doc.text(notesText, 13, finalY + 6);
 
       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
@@ -523,7 +523,7 @@ function SendInvoice({ invoiceData, id }) {
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       const termsText = doc.splitTextToSize(
-        `${invoice.termsAndConditions}`,
+        `${invoice.termsAndConditions || ""}`,
         180
       ); // 180 is the width
       doc.text(termsText, 13, nextY + 6);
@@ -694,6 +694,8 @@ function SendInvoice({ invoiceData, id }) {
                 <p className="text-danger">{formik.errors.subject}</p>
               )}
             </div>
+
+            {/* Invoice Address */}
             <p className="my-2 fs-5 fw-bold" style={{ color: "#424242" }}>
               Address
             </p>

@@ -7,65 +7,18 @@ import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import CompanyLogo from "../../assets/CMPLogoNew.png";
-// import pdfMake from "pdfmake/build/pdfmake";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 function QuotesShow() {
   const { id } = useParams();
   const [quoteData, setQuoteData] = useState({});
-  // const [quotesItemList, setQuotesItemsList] = useState({});
   console.log("Quote Item list", quoteData);
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
-
-  // const quotedItems = [
-  //   {
-  //     productName: "Product Name",
-  //     itemDescription: "Item Description",
-  //     quantity: "2",
-  //     price: "1000",
-  //     discount: "5%",
-  //     tax: "5%",
-  //     totalAmount: "850",
-  //   },
-  // ];
-
-  // const renderQuotedItems = () => {
-  //   return quotedItems.map((item, index) => (
-  //     <tr key={index} style={{ borderTop: "1px solid #9494947c" }}>
-  //       <td className="px-5 py-2">
-  //         <span>{index + 1}</span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span className="text-primary">
-  //           {item.productName || "--"} <br />
-  //         </span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span>{item.quantity || "--"}</span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span>{item.price || "--"}</span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span>{item.discount || "0"}</span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span>{item.tax || "--"}</span>
-  //       </td>
-  //       <td className="px-5 py-2">
-  //         <span>{item.totalAmount || "--"}</span>
-  //       </td>
-  //     </tr>
-  //   ));
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -295,12 +248,6 @@ function QuotesShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </OverlayTrigger>
-                {/* <img
-                  className="img-fluid"
-                  style={{ width: "5rem" }}
-                  src={USER}
-                  alt="profile"
-                /> */}
               </div>
             </div>
           </div>
@@ -350,56 +297,7 @@ function QuotesShow() {
 
       {/* Quotes Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content */}
-        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
-          <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-2">
-              <Link className="py-3">Notes</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">
-                <span>Products </span>
-                <span class="badge text-bg-danger">{total}</span>
-              </Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Attachments</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Open Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Closed Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Invited Meeting</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Emails</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Campaigns</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Social</Link>
-            </li>
-
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">
-                Add Related List
-              </Link>
-            </li>
-          </ul>
-          <h3 className="text-start ms-4 mt-4 fw-bold">Links</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">Add Links</Link>
-            </li>
-          </ul>
-        </div> */}
-
-        {/* Right Side Content */}
+        {/*center Content */}
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
@@ -411,47 +309,24 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Quote Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Quote Number</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteNumber || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Quote Stage</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.quoteStage || ""}
                 </span>
               </div>
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Valid Until</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Team</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.team || "--"}
-                </span>
-              </div>
-
-              <div>
-                <label className="text-dark Label">Carrier</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.carrier || "--"}
-                </span>
-              </div> */}
             </div>
 
             <div className="container-fluid col-md-6"></div>
@@ -468,47 +343,38 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Quotes Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Subject</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.subject || ""}
                 </span>
               </div>
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Quotes Stage</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.quoteStage || ""}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Carrier</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.carrier || "--"}
-                </span>
-              </div> */}
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.createdBy || ""}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;
                   {quoteData.createdAt ? quoteData.createdAt.split("T")[0] : ""}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;
@@ -518,40 +384,12 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              {/* <div>
-                <label className="text-dark Label">Deal Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.dealName || ""}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Valied Until</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Lead Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.leadName || "--"}
-                </span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Account Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.accountName || ""}
-                </span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Modified By</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.updatedBy || "--"}
-                </span>
-              </div> */}
             </div>
 
             {/* Address Information */}
@@ -560,39 +398,36 @@ function QuotesShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information
                 </span>
-                {/* <button className="btn bg-info col-2 text-white">
-                  Locate Map
-                </button> */}
               </div>
 
               <div className="my-3"></div>
 
               <div className="container col-md-6">
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Shipping Street</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingStreet || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Shipping State</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingState || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Shipping City</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingCity || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Shipping Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingCode || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Shipping Country</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.shippingCountry || "--"}
@@ -601,31 +436,31 @@ function QuotesShow() {
               </div>
 
               <div className="container col-md-6">
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Billing Street</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingStreet || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Billing State</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingState || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Billing City</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingCity || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Billing Zip Code</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingCode || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Billing Country</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{quoteData.billingCountry || "--"}
@@ -798,7 +633,7 @@ function QuotesShow() {
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Customer Notes</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.description || " "}
@@ -807,53 +642,7 @@ function QuotesShow() {
             </div>
           </div>
 
-          {/* Notes */}
-          {/* <div className="container-fluid row" id="Details">
-            <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
-              <div>
-                <span className="my-3 fs-6 fw-bold my-3">Notes</span>
-              </div>
-              <div className="dropdown">
-                <Link
-                  className="btn border border-primary text-primary dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Recent Last
-                </Link>
-                <ul className="dropdown-menu">
-                  <li className="mt-2"></li>
-                </ul>
-              </div>
-            </div>
-            <hr />
-            <div className="container  col-12">
-              <textarea
-                className="form-control py-2 m-3 textarea"
-                placeholder="'Add note...'"
-              ></textarea>
-            </div>
-          </div> */}
-
-          {/* Sales Order */}
-          {/* <div className="container-fluid row" id="Details">
-            <div className="container my-3 col-12 d-flex justify-content-left align-items-center">
-              <div>
-                <span className="my-3 fs-6 fw-bold my-3">Sales Order</span>
-              </div>
-            </div>
-            <hr />
-            <div className="container col-12 p-2 d-flex justify-content-left align-items-center">
-              <p className="mx-1 my-0">No records Found</p>
-              <button className="btn border-primary text-primary p-1 mx-1">
-                Assing
-              </button>
-              <button className="btn border-primary text-primary p-1 mx-1">
-                New
-              </button>
-            </div>
-          </div> */}
+          {/* Notes --*/}
         </div>
       </section>
     </>

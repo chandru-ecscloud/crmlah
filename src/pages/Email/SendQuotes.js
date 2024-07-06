@@ -43,7 +43,7 @@ function SendQuotes({ accountData }) {
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
         // formData.append("body", values.subject);
-        formData.append("htmlContent", generateInvoice(accountData.quotes));
+        formData.append("htmlContent", generateQuotes(accountData.quotes));
         values.files.forEach((file) => {
           formData.append("files", file);
         });
@@ -55,7 +55,7 @@ function SendQuotes({ accountData }) {
             // toMail: accountData.email,
             // fromMail: userEmail,
             // subject: values.subject,
-            // htmlContent: generateInvoice(accountData.quotes),
+            // htmlContent: generateQuotes(accountData.quotes),
             // file:values.files,
             headers: {
               "Content-Type": "multipart/form-data",
@@ -91,14 +91,14 @@ function SendQuotes({ accountData }) {
 
   useEffect(() => {
     if (formik.values.subject && accountData.quotes) {
-      const htmlContent = generateInvoice(accountData.quotes);
+      const htmlContent = generateQuotes(accountData.quotes);
       formik.setFieldValue("htmlContent", htmlContent);
       formik.setFieldValue("isSendingEmail", true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subject, accountData.quotes]);
 
-  const generateInvoice = (quotes) => {
+  const generateQuotes = (quotes) => {
     if (!quotes || quotes.length === 0) {
       return "No quotes available";
     }
@@ -326,6 +326,30 @@ function SendQuotes({ accountData }) {
                 </td>
               </tr>
             </table>
+
+            <br />
+            <div style="display: flex;">
+              <label>Billing Street</label>
+              <span>:&nbsp;&nbsp;${accountData.billingStreet || " "}</span>
+       
+              <label>Billing City</label>
+              <span>:&nbsp;&nbsp;${accountData.billingCity || " "}</span>
+            </div>
+       
+            <div style="display: flex">
+              <label>Billing State</label>
+              <span>:&nbsp;&nbsp;${accountData.billingState || " "}</span>
+       
+              <label>Billing Code</label>
+              <span>:&nbsp;&nbsp;${accountData.billingCode || " "}</span>
+            </div>
+             
+            <div style="display: flex">
+              <label>Billing Country</label>
+              <span>:&nbsp;&nbsp;${accountData.billingCountry || "--"}</span>
+            </div>
+          </div>
+          <br/>
     
             ${tableRows.join("")}
           </div>
@@ -367,10 +391,10 @@ function SendQuotes({ accountData }) {
     doc.text("Bill To", 13, 65);
     doc.setFontSize(10);
     doc.setFont("helvetica", "small");
-    doc.text(`${accountData.billingStreet}`, 13, 70);
-    doc.text(`${accountData.billingCity}`, 13, 75);
-    doc.text(`${accountData.billingCode}`, 13, 80);
-    doc.text(`${accountData.billingCountry}`, 13, 85);
+    doc.text(`${accountData.billingStreet || ""}`, 13, 70);
+    doc.text(`${accountData.billingCity || ""}`, 13, 75);
+    doc.text(`${accountData.billingCode || ""}`, 13, 80);
+    doc.text(`${accountData.billingCountry || ""}`, 13, 85);
 
     let startY = 95; // Starting Y position for the quotes tables
 
@@ -465,7 +489,7 @@ function SendQuotes({ accountData }) {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const notesText = doc.splitTextToSize(`${quote.description}`, 180); // 180 is the width
+      const notesText = doc.splitTextToSize(`${quote.description || ""}`, 180); // 180 is the width
       doc.text(notesText, 13, finalY + 6);
 
       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
@@ -477,7 +501,7 @@ function SendQuotes({ accountData }) {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const termsText = doc.splitTextToSize(`${quote.termsAndConditions}`, 180); // 180 is the width
+      const termsText = doc.splitTextToSize(`${quote.termsAndConditions || ""}`, 180); // 180 is the width
       doc.text(termsText, 13, nextY + 6);
 
       startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next quote
@@ -715,13 +739,13 @@ function SendQuotes({ accountData }) {
                             <div className="col-md-5 col-12 border rounded">
                               <div className="container-fluid py-2">
                                 <div className="row">
-                                  <div className="col-md-8 col-12">
+                                  <div className="col-md-7 col-12">
                                     {" "}
                                     <label className="text-dark ">
                                       Sub Total(SGT)
                                     </label>
                                   </div>
-                                  <div className="col-md-4 col-12">
+                                  <div className="col-md-5 col-12">
                                     {" "}
                                     <span>: {quote.subTotal || "0"}.00</span>
                                   </div>
@@ -729,13 +753,13 @@ function SendQuotes({ accountData }) {
                               </div>
                               <div className="container-fluid py-2">
                                 <div className="row">
-                                  <div className="col-md-8 col-12">
+                                  <div className="col-md-7 col-12">
                                     {" "}
                                     <label className="text-dark ">
                                       Discount(%)
                                     </label>
                                   </div>
-                                  <div className="col-md-4 col-12">
+                                  <div className="col-md-5 col-12">
                                     {" "}
                                     <span>: {quote.txnDiscount || "0"}.00</span>
                                   </div>
@@ -743,11 +767,11 @@ function SendQuotes({ accountData }) {
                               </div>
                               <div className="container-fluid py-2">
                                 <div className="row">
-                                  <div className="col-md-8 col-12">
+                                  <div className="col-md-7 col-12">
                                     {" "}
                                     <label className="text-dark ">Tax(%)</label>
                                   </div>
-                                  <div className="col-md-4 col-12">
+                                  <div className="col-md-5 col-12">
                                     {" "}
                                     <span>: {quote.txnTax || "0"}.00</span>
                                   </div>
@@ -755,12 +779,12 @@ function SendQuotes({ accountData }) {
                               </div>
                               <div className="container-fluid py-2">
                                 <div className="row">
-                                  <div className="col-md-8 col-12">
+                                  <div className="col-md-7 col-12">
                                     <label className="text-dark ">
                                       Grand Total(SGT)
                                     </label>
                                   </div>
-                                  <div className="col-md-4 col-12">
+                                  <div className="col-md-5 col-12">
                                     <span>: {quote.grandTotal || "0"}.00</span>
                                   </div>
                                 </div>

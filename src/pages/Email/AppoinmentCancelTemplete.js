@@ -67,11 +67,11 @@ const appoinmentCancelTemplete = async (data) => {
                           <b>Date:</b> ${currentData}<br />
                           ${companyData.companyStreet || ""},<br />
                           ${companyData.companyCity || ""},&nbsp;${
-    companyData.companyState || ""
-  },<br />
+                            companyData.companyState || ""
+                          },<br />
                           ${companyData.companyCountry || ""}-${
-    companyData.companyZipCode || ""
-  }.
+                              companyData.companyZipCode || ""
+                            }.
                         </td>
                       </tr>
                     </table>

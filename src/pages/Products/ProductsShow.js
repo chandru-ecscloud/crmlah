@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Ragul.css";
-import { Link, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
-import USER from "../../assets/user.png";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import { IoArrowBack } from "react-icons/io5";
-import SendEmail from "../Email/SendEmail";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function ProductsShow() {
   const { id } = useParams();
   const [productData, setProductData] = useState({});
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
@@ -23,9 +20,7 @@ function ProductsShow() {
       try {
         const response = await axios(`${API_URL}allProducts/${id}`, {
           headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
+            "Content-Type": "application/json",          },
         });
         const transformedData = Object.keys(response.data).reduce(
           (acc, key) => {
@@ -86,12 +81,6 @@ function ProductsShow() {
                     <IoArrowBack className="back_arrow" />
                   </button>
                 </OverlayTrigger>
-                {/* <img
-                  className="img-fluid"
-                  style={{ width: "5rem" }}
-                  src={USER}
-                  alt="profile"
-                /> */}
               </div>
             </div>
           </div>
@@ -107,62 +96,12 @@ function ProductsShow() {
           >
             Edit
           </button>
-
-          {/* <button className="btn bg-light bg-gradient mx-2  text-dark shadow-none">
-            <BsThreeDots />
-          </button> */}
         </div>
       </section>
 
       {/* {/ Products Information Section /} */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* {/ left Side Content /} */}
-        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
-          <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-2">
-              <Link className="py-3">Notes</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Products</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Attachments</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Open Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Closed Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Invited Meeting</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Emails</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Campaigns</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Social</Link>
-            </li>
-
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">
-                Add Related List
-              </Link>
-            </li>
-          </ul>
-          <h3 className="text-start ms-4 mt-4 fw-bold">Links</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">Add Links</Link>
-            </li>
-          </ul>
-        </div> */}
-
-        {/* {/ Right Side Content /} */}
+        {/* {/ center Content /} */}
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
@@ -174,46 +113,31 @@ function ProductsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productOwner || "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Category</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productCategory || "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Code</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productCode || "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Unit Price</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.unitPrice || "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Vendor Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.vendorName || "--"}
-                </span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Qty Ordered</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.qtyOrdered || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Quantity in Stock</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.quantityInStock || "--"}
@@ -235,14 +159,14 @@ function ProductsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productOwner || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Active</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;
@@ -250,84 +174,47 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Category</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productCategory || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Sales End Date</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.salesEndDate || "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.createdAt ?productData.createdAt.split("T")[0]: "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.updatedAt ?productData.updatedAt.split("T")[0]: "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Support End Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.supportEndDate || "--"}
-                </span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Modified By</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.updatedBy || "--"}
-                </span>
-              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Product Name</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productName || "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Vendor Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.vendorName || "--"}
-                </span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Manufacturer</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.manufacturer || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Sales Start Date</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.salesStartDate || "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Support Start Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.supportStartDate || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.createdBy || "--"}
@@ -344,19 +231,19 @@ function ProductsShow() {
               </div>
 
               <div className="container col-md-6">
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Unit Price</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.unitPrice || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Taxable</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.taxable ? "Yes" : "No"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Tax</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.tax || "--"}
@@ -365,7 +252,7 @@ function ProductsShow() {
               </div>
 
               <div className="container col-md-6">
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Commission Rate</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.commissionRate || "--"}
@@ -383,45 +270,24 @@ function ProductsShow() {
               </div>
 
               <div className="container col-md-6">
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Usage Unit</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.usageUnit || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Quantity in Stock</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.quantityInStock || "--"}
                   </span>
                 </div>
-                <div>
+                <div className="address-item">
                   <label className="text-dark Label">Handler</label>
                   <span className="text-dark">
                     &nbsp; : &nbsp;{productData.handler || "--"}
                   </span>
                 </div>
-              </div>
-
-              <div className="container col-md-6">
-                {/* <div>
-                  <label className="text-dark Label">Qty Ordered</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{productData.handler || "--"}
-                  </span>
-                </div> */}
-                {/* <div>
-                  <label className="text-dark Label">Reorder Level</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{productData.reorderLevel || "--"}
-                  </span>
-                </div> */}
-                {/* <div>
-                  <label className="text-dark Label">Qty Demand</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{productData.qtyDemand || "--"}
-                  </span>
-                </div> */}
               </div>
             </div>
 
@@ -433,7 +299,7 @@ function ProductsShow() {
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Description</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.descriptionInfo || "--"}
@@ -442,34 +308,7 @@ function ProductsShow() {
             </div>
           </div>
 
-          {/* {/ Notes /} */}
-          {/* <div className="container-fluid row" id="Details">
-            <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
-              <div>
-                <span className="my-3 fs-6 fw-bold my-3">Notes</span>
-              </div>
-              <div className="dropdown">
-                <Link
-                  className="btn border border-primary text-primary dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Recent Last
-                </Link>
-                <ul className="dropdown-menu">
-                  <li className="mt-2"></li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="container  col-12">
-              <textarea
-                className="form-control py-2 m-3 textarea"
-                placeholder="'Add note...'"
-              ></textarea>
-            </div>
-          </div> */}
+          {/* Notes -- */}
         </div>
       </section>
     </>

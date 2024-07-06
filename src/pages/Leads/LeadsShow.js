@@ -168,54 +168,8 @@ function LeadsShow() {
 
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        {/* left Side Content
-         */}
-        {/* <div className="container-fluid col-md-2 m-0" id="ulList-container">
-          <h3 className="text-start ms-4 mt-3 fw-bold fw-bold">Related List</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-2">
-              <Link className="py-3">Notes</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Products</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Attachments</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Open Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Closed Activites</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Invited Meeting</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Emails</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Campaigns</Link>
-            </li>
-            <li className="mt-4">
-              <Link className="py-3">Social</Link>
-            </li>
-
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">
-                Add Related List
-              </Link>
-            </li>
-          </ul>
-          <h3 className="text-start ms-4 mt-4 fw-bold">Links</h3>
-          <ul className="m-0 py-1">
-            <li className="mt-4">
-              <Link className="ms-2 text-primary fw-bold">Add Links</Link>
-            </li>
-          </ul>
-        </div> */}
-
-        {/* Right Side Content  */}
+        
+        {/* center Content  */}
         <div
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
@@ -227,57 +181,50 @@ function LeadsShow() {
             </div>
 
             <div className="container-fluid col-md-12">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Lead Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.lead_owner}
                 </span>
               </div>
 
-              {/* <div>
-                <label className="text-dark Label">Title</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.title || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.countryCode || ""}&nbsp;
+                  &nbsp; : &nbsp; + {clientData.countryCode || ""}&nbsp;
                   {clientData.phone || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Lead Source</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.lead_source || ""}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Land Line</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.land_line || ""}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.company || ""}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Amount</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.amount || ""}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Country</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.country || ""}
@@ -299,27 +246,20 @@ function LeadsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Leads Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.lead_owner || "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Title</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.title || "--"}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Phone</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.phone || "--"}
+                  &nbsp; : &nbsp; + {clientData.countryCode || ""}&nbsp;
+                  {clientData.phone || "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;
@@ -328,7 +268,7 @@ function LeadsShow() {
                     : "--"}
                 </span>
               </div>
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Updated At</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;
@@ -337,104 +277,57 @@ function LeadsShow() {
                     : "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Industry</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.industry || "--"}
-                </span>
-              </div>
-
-              <div>
-                <label className="text-dark Label">Modified By</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.updated_by || "--"}
-                </span>
-              </div> */}
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Company</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.company || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Lead Name</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{leadName || "--"}{" "}
-                  {/* {clientData.last_name} */}
+                  &nbsp; : &nbsp;{leadName || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Email</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.email || "--"}
                 </span>
               </div>
 
-              {/* <div>
-                <label className="text-dark Label">Website</label>
-                <span className="text-dark">--</span>
-              </div> */}
-
-              {/* <div>
-                <label className="text-dark Label">Lead Status</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.lead_status === 'Processed' ? 'Pending' : (clientData.lead_status || 'Pending')}
-                </span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Lead Status</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.lead_status || "--"}
                 </span>
               </div>
 
-              {/* <div>
-                <label className="text-dark Label">Annual Revenue</label>
-                <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
-
-              <div>
-                <label className="text-dark Label">No of Employees</label>
-                <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div>
-
-              <div>
-                <label className="text-dark Label">Rating</label>
-                <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div> */}
-
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.created_by || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Skype Id</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.skype_id || "--"}
                 </span>
               </div>
 
-              <div>
+              <div className="address-item">
                 <label className="text-dark Label">Twitter</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{clientData.twitter || "--"}
                 </span>
               </div>
-
-              {/* <div>
-                <label className="text-dark Label">Secondary Email</label>
-                <span className="text-dark">&nbsp; : &nbsp; --</span>
-              </div> */}
             </div>
 
             {/* {/ Address Information /} */}
@@ -443,46 +336,44 @@ function LeadsShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Address Information
                 </span>
-                {/* <button className="btn bg-info col-2 text-white">
-                  Locate Map
-                </button> */}
               </div>
 
-              <div className="my-3"></div>
-
               <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">Street</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.street || "--"}
-                  </span>
+                <div className="address-item">
+                  <label className="text-dark Label">
+                    Street &nbsp; &nbsp;: &nbsp;
+                  </label>
+                  <span className="text-dark">{clientData.street || "--"}</span>
                 </div>
-                <div>
-                  <label className="text-dark Label">State</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.state || "--"}
-                  </span>
+                <div className="address-item">
+                  <label className="text-dark Label">
+                    State &nbsp; &nbsp;: &nbsp;
+                  </label>
+                  <span className="text-dark">{clientData.state || "--"}</span>
                 </div>
-                <div>
-                  <label className="text-dark Label">Country</label>
+                <div className="address-item">
+                  <label className="text-dark Label">
+                    Country &nbsp; &nbsp;: &nbsp;
+                  </label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.country || "--"}
+                    {clientData.country || "--"}
                   </span>
                 </div>
               </div>
 
               <div className="container col-md-6">
-                <div>
-                  <label className="text-dark Label">City</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.city || "--"}
-                  </span>
+                <div className="address-item">
+                  <label className="text-dark Label">
+                    City &nbsp; &nbsp;: &nbsp;
+                  </label>
+                  <span className="text-dark">{clientData.city || "--"}</span>
                 </div>
-
-                <div>
-                  <label className="text-dark Label">Zip Code</label>
+                <div className="address-item">
+                  <label className="text-dark Label">
+                    Zip Code &nbsp; &nbsp;: &nbsp;
+                  </label>
                   <span className="text-dark">
-                    &nbsp; : &nbsp;{clientData.zipCode || "--"}
+                    {clientData.zipCode || "--"}
                   </span>
                 </div>
               </div>
@@ -494,11 +385,8 @@ function LeadsShow() {
                 <span className="my-3 fs-6 fw-bold col-10 my-3">
                   Appointment
                 </span>
-                {/* <button className="btn bg-info col-2 text-white">
-                  Locate Map
-                </button> */}
               </div>
-              <div className="container">
+              <div className="container overflow-x-scroll">
                 <table className="table">
                   <thead class="table-light">
                     <tr>
@@ -599,202 +487,8 @@ function LeadsShow() {
             </div>
           </div>
 
-          {/* {/ Notes /} */}
-          {/* <div className="container-fluid row" id="Details">
-            <div className="container my-3 col-12 d-flex justify-content-between align-items-center">
-              <div>
-                <span className="my-3 fs-6 fw-bold my-3">Notes</span>
-              </div>
-              <div className="dropdown">
-                <Link
-                  className="btn border border-primary text-primary dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Recent Last
-                </Link>
-                <ul className="dropdown-menu">
-                  <li className="mt-2"></li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="container  col-12">
-              <textarea
-                className="form-control py-2 m-3 textarea"
-                placeholder="'Add note...'"
-              ></textarea>
-            </div>
-          </div> */}
+          {/* Notes --*/}
         </div>
-        {/* <Offcanvas
-          show={show}
-          onHide={handleClose}
-          className="emailHeader"
-          placement="end"
-        >
-          <Offcanvas.Header>
-            New Message &nbsp;&nbsp;&nbsp;&nbsp;{" "}
-            <button
-              onClick={handleHide}
-              className="btn"
-              style={{ color: "#fff", fontSize: "20px" }}
-            >
-              x
-            </button>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <div
-              className="d-flex align-items-center pb-3"
-              style={{ gap: "10px", borderBottom: "1px solid #d4d4d3" }}
-            >
-              <img className="img-fluid" src={user} width={40} alt="user" />
-              <p style={{ marginBottom: "0px" }}>
-                {owner || "--"} ( {clientData.email || "--"} )
-              </p>
-            </div>
-            <div
-              className="d-flex align-items-center py-3"
-              style={{ gap: "10px", borderBottom: "1px solid #d4d4d3" }}
-            >
-              <p style={{ marginBottom: "0px" }}>
-                <b style={{ color: "#424242" }}>To :</b>
-              </p>
-              <p style={{ marginBottom: "0px" }}>
-                {clientData.first_name || "--"} {clientData.last_name || "--"} ({" "}
-                {clientData.email || "--"} )
-              </p>
-            </div>
-            <div
-              className="d-flex align-items-center py-3"
-              style={{ gap: "10px", borderBottom: "1px solid #d4d4d3" }}
-            >
-              <input
-                type="text"
-                className="form-control"
-                name="subject"
-                id="subject"
-                placeholder="Subject"
-                style={{ border: "none" }}
-              />
-            </div>
-            <div
-              className="d-flex align-items-center py-3"
-              style={{ gap: "10px", borderBottom: "1px solid #d4d4d3" }}
-            >
-              <textarea
-                class="form-control"
-                placeholder="Mail Body"
-                style={{ height: "250px", border: "none" }}
-              ></textarea>
-            </div>
-            <div className="d-flex align-items-center justify-content-between">
-              <span
-                style={{ minHeight: "80px", gap: "10px" }}
-                className="d-flex align-items-center"
-              >
-                <span>
-                  <label
-                    htmlFor="file-input-1"
-                    className="btn btn-outline-primary"
-                  >
-                    <GrAttachment />
-                  </label>
-                  <input
-                    id="file-input-1"
-                    type="file"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                    accept=".pdf, .doc, .docx, .txt"
-                    multiple
-                  />
-                </span>
-                <span>
-                  <label
-                    htmlFor="file-input-2"
-                    className="btn btn-outline-primary"
-                  >
-                    <MdOutlineAddPhotoAlternate />
-                  </label>
-                  <input
-                    id="file-input-2"
-                    type="file"
-                    onChange={handleFile2Change}
-                    style={{ display: "none" }}
-                    accept=".jpg, .jpeg, .png, .gif"
-                    multiple
-                  />
-                </span>
-              </span>
-              <span className="d-flex" style={{ gap: "10px" }}>
-                <div class="dropup-center">
-                  <button
-                    type="button"
-                    class="btn"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ border: "none" }}
-                  >
-                    <IoMdTime /> Schedule
-                  </button>
-                  <ul class="dropdown-menu" style={{ width: "max-content" }}>
-                    <li className="px-3">
-                      <span>
-                        <h6 className="mb-3">
-                          <b>Schedule at</b>
-                        </h6>
-                      </span>
-                      <div class="form-check mb-2">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                        />
-                        <label class="form-check-label" for="flexRadioDefault1">
-                          One hour from now
-                        </label>
-                      </div>
-                      <div class="form-check mb-2">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                        />
-                        <label class="form-check-label" for="flexRadioDefault1">
-                          Tomorrow Evening 8pm
-                        </label>
-                      </div>
-                      <div class="form-check mb-2">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault"
-                          id="flexRadioDefault1"
-                        />
-                        Date <input type="date" /> &nbsp;&nbsp; Time{" "}
-                        <input type="time" />
-                      </div>
-                      <div className="mt-3">
-                        <button className="btn btn-primary">Schedule</button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <button className="btn btn-primary">
-                  Send <IoMdSend />
-                </button>
-              </span>
-            </div>
-            {selectedFiles.length > 0 && (
-              <p className="mt-2" style={{ marginBottom: "0px" }}>
-                {selectedFiles.length} file(s) selected
-              </p>
-            )}
-          </Offcanvas.Body>
-        </Offcanvas> */}
       </section>
     </div>
   );
