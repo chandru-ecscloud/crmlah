@@ -386,30 +386,31 @@ const Contacts = () => {
       toast.error("Error Submiting Data");
     }
   };
-  const handleAccountConvert = async (rows) => {
-    const id = rows.map((row) => row.original.id);
+  
+  // const handleAccountConvert = async (rows) => {
+  //   const id = rows.map((row) => row.original.id);
 
-    try {
-      const response = await axios.post(
-        `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        navigate("/contacts");
-        fetchData();
-        table.setRowSelection(false);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Error Submiting Data");
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       navigate("/contacts");
+  //       fetchData();
+  //       table.setRowSelection(false);
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error Submiting Data");
+  //   }
+  // };
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
@@ -569,7 +570,7 @@ const Contacts = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -585,7 +586,7 @@ const Contacts = () => {
                     >
                       Convert Account
                     </button>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       className="btn"

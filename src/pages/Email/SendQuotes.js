@@ -104,258 +104,267 @@ function SendQuotes({ accountData }) {
     }
     const tableRows = quotes.map(
       (row, index) => `
-        <div id="LABEL1" id="LABEL2" style="width: 150% !important">
-          <br />
-          <div style="display: flex">
-            <label><b>Quote Name</b></label>
-            <span>:&nbsp;&nbsp;${row.dealName || "--"}</span>
-
-            <label><b>Subject</b></label>
-            <span>:&nbsp;&nbsp;${row.subject || "--"}</span>
+          <div class="billing-info" style="margin-top: 25px; margin-bottom: 15px;">
+            <div class="billing-item">
+              <label><b>Quote Name</b></label>
+              <span>:&nbsp;&nbsp;${row.dealName || " "}</span>
+            </div>
+            <div class="billing-item">
+              <label><b>Subject</b></label>
+              <span>:&nbsp;&nbsp;${row.subject ||  " "}</span>
+            </div>
           </div>
-        </div>
-      
-       <div style="max-width: 590px; overflow: auto; justify-content: space-around;">
+
+        <div style="max-width: 590px; overflow: auto; justify-content: space-around">
             <table>
-              <tr class="heading">
-                <td style="white-space: nowrap;">S No</td>
-                <td style="white-space: nowrap;">Product Name</td>
-                <td style="white-space: nowrap;">Quantity</td>
-                <td style="white-space: nowrap;">List Price</td>
-                <td style="white-space: nowrap;">Amount</td>
-                <td style="white-space: nowrap;">Discount</td>
-                <td style="white-space: nowrap;">Tax</td>
-                <td style="white-space: nowrap;">Total</td>
-              </tr>
-              
-              ${row.quotesItemList &&
-        row.quotesItemList
-          .map(
-            (product, productIndex) => `
-                  <tr class="item">
-                    <td>${productIndex + 1}</td>
-                    <td>${product.productName || "--"}</td>
-                    <td>${product.quantity || "--"}</td>
-                    <td>${product.listPrice || "--"}</td>
-                    <td>${product.amount || "--"}</td>
-                    <td>${product.discount || 0}</td>
-                    <td>${product.tax || "--"}</td>
-                    <td>${product.total || "--"}</td>
-                  </tr>
-                `
-          )
-          .join("")
-        }
+            <tr class="heading">
+                <td style="white-space: nowrap">S No</td>
+                <td style="white-space: nowrap">Product Name</td>
+                <td style="white-space: nowrap">Quantity</td>
+                <td style="white-space: nowrap">List Price</td>
+                <td style="white-space: nowrap">Amount</td>
+                <td style="white-space: nowrap">Discount</td>
+                <td style="white-space: nowrap">Tax</td>
+                <td style="white-space: nowrap">Total</td>
+            </tr>
+
+            ${row.quotesItemList && row.quotesItemList .map( (product,
+            productIndex) => `
+            <tr class="item">
+                <td>${productIndex + 1}</td>
+                <td>${product.productName || "--"}</td>
+                <td>${product.quantity || "--"}</td>
+                <td>${product.listPrice || "--"}</td>
+                <td>${product.amount || "--"}</td>
+                <td>${product.discount || 0}</td>
+                <td>${product.tax || "--"}</td>
+                <td>${product.total || "--"}</td>
+            </tr>
+            ` ) .join("") }
             </table>
-          </div>
+        </div>
 
-
-      <div class="totals-div">
-        <div class="totals-container">
-          <div style="text-align: end">
-            <label style="width: 40%; margin-right: 5px">Sub Total(SGT)</label>
-            <span style="width: 23%; text-align: start"
-              >&nbsp;:&nbsp; ${row.subTotal}</span
-            >
-          </div>
-          <div style="text-align: end">
-            <label style="width: 40%; margin-right: 5px">Discount(%)</label>
-            <span style="width: 23%; text-align: start"
-              >&nbsp;:&nbsp; ${row.txnDiscount}</span
-            >
-          </div>
-          <div style="text-align: end">
-            <label style="width: 40%; margin-right: 5px">Tax(%)</label>
-            <span style="width: 23%; text-align: start"
-              >&nbsp;:&nbsp; ${row.txnTax}</span
-            >
-          </div>
-          <div style="text-align: end">
-            <label style="width: 40%; margin-right: 5px">Grand Total(SGT)</label>
-            <span style="width: 23%; text-align: start"
-              >&nbsp;:&nbsp; ${row.grandTotal}</span
-            >
+        <div class="total-div-info">
+          <div class="billing-info"></div>
+          <div class="billing-info">
+            <div class="billing-item">
+              <label><b>Sub Total(SGT)</b></label>
+              <span>:&nbsp;&nbsp;${row.subTotal || "0"}</span>
+            </div>
+            <div class="billing-item">
+              <label><b>Discount(%)</b></label>
+              <span>:&nbsp;&nbsp;${row.txnDiscount || "0"}</span>
+            </div>
+            <div class="billing-item">
+              <label><b>Tax(%)</b></label>
+              <span>:&nbsp;&nbsp;${row.txnTax || "0"}</span>
+            </div>
+            <div class="billing-item">
+              <label><b>Grand Total(SGT)</b></label>
+              <span>:&nbsp;&nbsp;${row.grandTotal || "0"}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-        <div id="LABEL1" id="LABEL2" style="width: 150% !important">
-          <br />
-          <div>
-            <label><b>Customer Note :</b></label>
-            <div>&nbsp;&nbsp;${row.description || "--"}</div>
-          </div>
-          <br />
-          <div>
-            <label><b>Terms And Conditions :</b></label>
-            <div>&nbsp;&nbsp;${row.termsAndConditions || "--"}</div>
-          </div>
+        <br />
+        <div class="note-container">
+          <label style="width: 100%;"><b>Customer Note :</b></label>
+          <div>&nbsp;&nbsp;${row.description || " "}</div>
         </div>
-      
+        <br />
+        <div class="note-container">
+          <label style="width: 100%;"><b>Terms And Conditions :</b></label>
+          <div>&nbsp;&nbsp;${row.termsAndConditions || " "}</div>
+        </div>
     `
     );
 
-    return `
-      <!DOCTYPE html>
+
+    return`<!DOCTYPE html>
       <html lang="en">
         <head>
-          <meta charset="UTF-8">
+          <meta charset="UTF-8" />
           <title>Invoice</title>
           <style>
-          .invoice-box {
-            font-size: 12px;
-            max-width: 600px;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #eee;
-            line-height: 24px;
-            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-            color: #555;
-            min-height: 100vh;
-          }
-    
-          .invoice-box table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-          }
-    
-          .invoice-box table td {
-            padding: 5px;
-            vertical-align: top;
-          }
-    
-          .invoice-box table td.third {
-            text-align: right;
-          }
-    
-          .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-          }
-    
-          .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
-          }
-    
-          .invoice-box table tr.item.last td {
-            border-bottom: none;
-          }
-    
-          .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
-            font-weight: bold;
-          }
-    
-          #scan {
-            float: right;
-          }
-    
-          #scan img {
-            max-width: 100%;
-            height: auto;
-          }
-    
-          @media print {
             .invoice-box {
-              border: 0;
+              font-size: 12px;
+              max-width: 600px;
+              margin: auto;
+              padding: 30px;
+              border: 1px solid #eee;
+              line-height: 24px;
+              font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+              color: #555;
+              min-height: 100vh;
             }
-          }
-          #LABEL1 label {
-            display: inline-block;
-            width: 15%;
-            padding: 5px;
-          }
-          #LABEL1 span {
-            display: inline-block;
-            width: 20%;
-            padding: 5px;
-          }
-    
-          #LABEL2 label {
-            display: inline-block;
-            width: 15%;
-            padding: 5px;
-          }
-          #LABEL2 span {
-            display: inline-block;
-            width: 20%;
-            padding: 5px;
-          }
 
-          .totals-div{
-            text-align: end;
-            margin-left: 60%;
-            padding: 10px 0px;
-           }
+            .invoice-box table {
+              width: 100%;
+              line-height: inherit;
+              text-align: left;
+            }
 
-          .totals-container {
-            max-width: 590px;
-            overflow: auto;
-            justify-content: end;
-          }
-      
-          .totals-container div {
-            display: flex;
-            justify-content: end;
-            align-items: center;
-          }
+            .invoice-box table td {
+              padding: 5px;
+              vertical-align: top;
+            }
+
+            .invoice-box table td.third {
+              text-align: right;
+            }
+
+            .invoice-box table tr.heading td {
+              background: #eee;
+              border-bottom: 1px solid #ddd;
+              font-weight: bold;
+            }
+
+            .invoice-box table tr.item td {
+              border-bottom: 1px solid #eee;
+            }
+
+            .invoice-box table tr.item.last td {
+              border-bottom: none;
+            }
+
+            .invoice-box table tr.total td:nth-child(2) {
+              border-top: 2px solid #eee;
+              font-weight: bold;
+            }
+
+            #scan {
+              float: right;
+            }
+
+            #scan img {
+              max-width: 100%;
+              height: auto;
+            }
+
+            @media print {
+              .invoice-box {
+                border: 0;
+              }
+            }
+            #LABEL1 label {
+              display: inline-block;
+              width: 15%;
+              padding: 5px;
+            }
+            #LABEL1 span {
+              display: inline-block;
+              width: 20%;
+              padding: 5px;
+            }
+
+            #LABEL2 label b {
+              display: inline-block;
+              width: 15%;
+              padding: 5px;
+            }
+            #LABEL2 span {
+              display: inline-block;
+              width: 20%;
+              padding: 5px;
+            }
+
+            .grid-container {
+              display: grid;
+              grid-template-columns: auto 1fr;
+              gap: 10px;
+              width: auto;
+            }
+
+            .note-container {
+              width: 100%;
+              word-wrap: break-word;
+            }
+
+            .total-div-info {
+              display: flex;
+              justify-content : end !important;
+              align-items: center !important;
+              margin-top: 10px;
+              margin-left: 30%;
+            }
+            
+            .billing-info {
+              width: 100%;
+              max-width: 600px; /* Adjust as needed */
+              margin: 0 auto;
+            }
+
+            .billing-item {
+              display: flex;
+              justify-content: flex-start;
+              margin-bottom: 2px; /* Adjust spacing as needed */
+            }
+
+            .billing-item label {
+              width: 120px; /* Set a consistent width for all labels */
+              text-align: left;
+            }
+
+            .billing-item span {
+              flex-grow: 1;
+              text-align: left;
+            }
           </style>
         </head>
         <body>
           <div class="invoice-box">
-            <table>
-              <tr class="top">
-                <td colspan="2">
-                  <table>
-                    <tr>
-                      <td class="title">
-                        <img src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
-                          style="width: 75%; max-width: 180px;" alt="Logo">
-                      </td>
-                      <td class="third">
-                        <b>Date:</b> ${currentData}<br>
-                        The Alexcier,
-                        237 Alexandra Road,<br>
-                        #04-10,
-                        Singapore-159929.
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+              <table>
+                  <tr class="top">
+                  <td colspan="2">
+                      <table>
+                      <tr>
+                          <td class="title">
+                          <img
+                              src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                              style="width: 75%; max-width: 180px"
+                              alt="Logo"
+                          />
+                          </td>
+                          <td class="third">
+                          <b>Date:</b> ${currentData}<br />
+                          The Alexcier, 237 Alexandra Road,<br />
+                          #04-10, Singapore-159929.
+                          </td>
+                      </tr>
+                      </table>
+                  </td>
+                  </tr>
+              </table>
+              <br />
+              <div class="billing-info">
+                <h3>Billing To:</h3>
+                <div class="billing-item">
+                  <label><b>Street</b></label>
+                  <span>:&nbsp;&nbsp;${accountData.billingStreet || " "}</span>
+                </div>
+                <div class="billing-item">
+                  <label><b>City</b></label>
+                  <span>:&nbsp;&nbsp;${accountData.billingCity || " "}</span>
+                </div>
+                <div class="billing-item">
+                  <label><b>State</b></label>
+                  <span>:&nbsp;&nbsp;${accountData.billingState || " "}</span>
+                </div>
+                <div class="billing-item">
+                  <label><b>Code</b></label>
+                  <span>:&nbsp;&nbsp;${accountData.billingCode || " "}</span>
+                </div>
+                <div class="billing-item">
+                  <label><b>Country</b></label>
+                  <span>:&nbsp;&nbsp;${accountData.billingCountry || " "}</span>
+                </div>
+              </div>
 
-            <br />
-            <div style="display: flex;">
-              <label>Billing Street</label>
-              <span>:&nbsp;&nbsp;${accountData.billingStreet || " "}</span>
-       
-              <label>Billing City</label>
-              <span>:&nbsp;&nbsp;${accountData.billingCity || " "}</span>
+              ${tableRows.join("")}
             </div>
-       
-            <div style="display: flex">
-              <label>Billing State</label>
-              <span>:&nbsp;&nbsp;${accountData.billingState || " "}</span>
-       
-              <label>Billing Code</label>
-              <span>:&nbsp;&nbsp;${accountData.billingCode || " "}</span>
-            </div>
-             
-            <div style="display: flex">
-              <label>Billing Country</label>
-              <span>:&nbsp;&nbsp;${accountData.billingCountry || "--"}</span>
-            </div>
-          </div>
-          <br/>
-    
-            ${tableRows.join("")}
           </div>
         </body>
-      </html>
-    `;
+      </html>`
   };
 
   console.log("Account Maped Qoutes List:", accountData.quotes);

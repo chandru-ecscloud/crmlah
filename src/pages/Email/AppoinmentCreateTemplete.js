@@ -18,7 +18,7 @@ const appoinmentCreateTemplete = async (data, appointmentId, linkResponse) => {
     `${API_URL}getAllCompanyRegisterById/${companyId}`
   ); 
 
-  console.log("Company Data is ", companyData)
+  console.log("Company Data:", companyData)
 
   const currentDate = new Date().toISOString().split("T")[0];
 

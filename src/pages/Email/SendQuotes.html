@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice</title>
+    <style>
+      .invoice-box {
+        font-size: 12px;
+        max-width: 600px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        line-height: 24px;
+        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        color: #555;
+        min-height: 100vh;
+      }
+
+      .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+      }
+
+      .invoice-box table td {
+        padding: 5px;
+        vertical-align: top;
+      }
+
+      .invoice-box table td.third {
+        text-align: right;
+      }
+
+      .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+      }
+
+      .invoice-box table tr.item td {
+        border-bottom: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item.last td {
+        border-bottom: none;
+      }
+
+      .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+      }
+
+      #scan {
+        float: right;
+      }
+
+      #scan img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      @media print {
+        .invoice-box {
+          border: 0;
+        }
+      }
+      #LABEL1 label {
+        display: inline-block;
+        width: 15%;
+        padding: 5px;
+      }
+      #LABEL1 span {
+        display: inline-block;
+        width: 20%;
+        padding: 5px;
+      }
+
+      #LABEL2 label {
+        display: inline-block;
+        width: 15%;
+        padding: 5px;
+      }
+      #LABEL2 span {
+        display: inline-block;
+        width: 20%;
+        padding: 5px;
+      }
+
+      .totals-div {
+        display: flex;
+        justify-content : space-between;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        width: auto;
+      }
+
+      .totals-container {
+        max-width: 590px;
+        overflow: auto;
+        justify-content: start;
+      }
+
+      .totals-container div {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+      }
+
+      .note-container {
+        width: 100%;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-box">
+        <table>
+            <tr class="top">
+            <td colspan="2">
+                <table>
+                <tr>
+                    <td class="title">
+                    <img
+                        src="https://crmlah.com/static/media/WebsiteLogo.142f7f2ca4ef67373e74.png"
+                        style="width: 75%; max-width: 180px"
+                        alt="Logo"
+                    />
+                    </td>
+                    <td class="third">
+                    <b>Date:</b> ${currentData}<br />
+                    The Alexcier, 237 Alexandra Road,<br />
+                    #04-10, Singapore-159929.
+                    </td>
+                </tr>
+                </table>
+            </td>
+            </tr>
+        </table>
+        <br />
+        <div
+            style="
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            width: 100%;
+            "
+        >
+            <h3 style="grid-column: span 2">Billing To:</h3>
+            <label>
+              <b>Street</b>
+              <span>:&nbsp;&nbsp;{accountData.billingStreet || " "}</span>
+            </label>
+           
+            <b>City</b>
+            <span>:&nbsp;&nbsp;{accountData.billingCity || " "}</span>
+            <b>State</b>
+            <span>:&nbsp;&nbsp;{accountData.billingState || " "}</span>
+            <b>Code</b>
+            <span>:&nbsp;&nbsp;{accountData.billingCode || " "}</span>
+            <b>Country</b>
+            <span>:&nbsp;&nbsp;{accountData.billingCountry || " "}</span>
+        </div>
+
+        <div style="margin-top: 25px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between;">
+            <label><b>Quote Name</b></label>
+            <span>:&nbsp;&nbsp;${row.dealName || "--"}</span>
+
+            <label><b>Subject</b></label>
+            <span>:&nbsp;&nbsp;${row.subject || "--"}</span>
+            </div>
+        </div>
+
+        <div
+            style="max-width: 590px; overflow: auto; justify-content: space-around"
+        >
+            <table>
+            <tr class="heading">
+                <td style="white-space: nowrap">S No</td>
+                <td style="white-space: nowrap">Product Name</td>
+                <td style="white-space: nowrap">Quantity</td>
+                <td style="white-space: nowrap">List Price</td>
+                <td style="white-space: nowrap">Amount</td>
+                <td style="white-space: nowrap">Discount</td>
+                <td style="white-space: nowrap">Tax</td>
+                <td style="white-space: nowrap">Total</td>
+            </tr>
+
+            ${row.quotesItemList && row.quotesItemList .map( (product,
+            productIndex) => `
+            <tr class="item">
+                <td>${productIndex + 1}</td>
+                <td>${product.productName || "--"}</td>
+                <td>${product.quantity || "--"}</td>
+                <td>${product.listPrice || "--"}</td>
+                <td>${product.amount || "--"}</td>
+                <td>${product.discount || 0}</td>
+                <td>${product.tax || "--"}</td>
+                <td>${product.total || "--"}</td>
+            </tr>
+            ` ) .join("") }
+            </table>
+        </div>
+
+        <div class="totals-div">
+            <div class="grid-container">
+            <b>Sub Total(SGT)</b>
+            <span>&nbsp;&nbsp;:&nbsp;&nbsp;${row.subTotal}dsfedfefesfewfsdf</span>
+            <b>Discount(%)</b>
+            <span>&nbsp;&nbsp;:&nbsp;&nbsp;${row.txnDiscount}sdfdsfdsf</span>
+            <b>Tax(%)</b>
+            <span>&nbsp;&nbsp;:&nbsp;&nbsp;${row.txnTax}</span>
+            <b>Grand Total(SGT)</b>
+            <span>&nbsp;&nbsp;:&nbsp;&nbsp;${row.grandTotal}</span>
+            </div>
+        </div>
+    
+        <br />
+        <div class="note-container">
+          <label style="width: 100%;"><b>Customer Note :</b></label>
+          <div>&nbsp;&nbsp;${row.description || "--"}
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, non assumenda. Voluptates eos recusandae autem voluptas earum pariatur, impedit nostrum adipisci veniam voluptatibus laboriosam aspernatur labore amet fugiat quaerat corrupti?
+          </div>
+        </div>
+        <br />
+        <div class="note-container">
+          <label style="width: 100%;"><b>Terms And Conditions :</b></label>
+          <div>&nbsp;&nbsp;${row.termsAndConditions || "--"}</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

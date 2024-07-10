@@ -232,6 +232,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       formik.setValues(scheduleData);
     }
   };
+  
   const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {

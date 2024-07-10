@@ -226,6 +226,7 @@ const Schedule = () => {
       resetForm();
     },
   });
+
   const filterAvailableSlots = (slots, selectedDate) => {
     const currentTime = new Date();
 
@@ -449,25 +450,9 @@ const Schedule = () => {
   };
 
   useEffect(() => {
-    formik.setFieldValue(
-      "appointmentStartDate",
-      new Date().toISOString().split("T")[0]
-    );
-  }, []);
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios(`${API_URL}allAppointments/${id}`);
-  //     formik.setValues(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  useEffect(() => {
     fetchAppointmentTime();
     // getData();
-    formik.setFieldValue("appointmentStartDate", currentData);
+    // formik.setFieldValue("appointmentStartDate", currentData);
   }, [formik.values.appointmentStartDate]);
 
   return (
