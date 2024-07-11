@@ -37,16 +37,28 @@ function SendQuotes({ accountData }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      const quotesData = accountData?.quotes;
+
+      if (!quotesData || quotesData.length === 0) {
+        toast.warning("No quotes available");
+        return;
+      }
       try {
+        // const quotesData = [];
+        const pdfBlob = generatePDF(accountData.quotes);
+
         const formData = new FormData();
         formData.append("to", accountData.email);
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
         // formData.append("body", values.subject);
         formData.append("htmlContent", generateQuotes(accountData.quotes));
+
+        formData.append("files", pdfBlob, "quotes.pdf");
         values.files.forEach((file) => {
           formData.append("files", file);
         });
+
         setLoadIndicator(true);
         const response = await axios.post(
           `${API_URL}sendMailWithHtmlContentAndAttachment`,
@@ -95,7 +107,7 @@ function SendQuotes({ accountData }) {
       formik.setFieldValue("htmlContent", htmlContent);
       formik.setFieldValue("isSendingEmail", true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subject, accountData.quotes]);
 
   const generateQuotes = (quotes) => {
@@ -111,7 +123,7 @@ function SendQuotes({ accountData }) {
             </div>
             <div class="billing-item">
               <label><b>Subject</b></label>
-              <span>:&nbsp;&nbsp;${row.subject ||  " "}</span>
+              <span>:&nbsp;&nbsp;${row.subject || " "}</span>
             </div>
           </div>
 
@@ -128,8 +140,11 @@ function SendQuotes({ accountData }) {
                 <td style="white-space: nowrap">Total</td>
             </tr>
 
-            ${row.quotesItemList && row.quotesItemList .map( (product,
-            productIndex) => `
+            ${
+              row.quotesItemList &&
+              row.quotesItemList
+                .map(
+                  (product, productIndex) => `
             <tr class="item">
                 <td>${productIndex + 1}</td>
                 <td>${product.productName || "--"}</td>
@@ -140,7 +155,10 @@ function SendQuotes({ accountData }) {
                 <td>${product.tax || "--"}</td>
                 <td>${product.total || "--"}</td>
             </tr>
-            ` ) .join("") }
+            `
+                )
+                .join("")
+            }
             </table>
         </div>
 
@@ -179,8 +197,7 @@ function SendQuotes({ accountData }) {
     `
     );
 
-
-    return`<!DOCTYPE html>
+    return `<!DOCTYPE html>
       <html lang="en">
         <head>
           <meta charset="UTF-8" />
@@ -364,7 +381,7 @@ function SendQuotes({ accountData }) {
             </div>
           </div>
         </body>
-      </html>`
+      </html>`;
   };
 
   console.log("Account Maped Qoutes List:", accountData.quotes);
@@ -373,9 +390,10 @@ function SendQuotes({ accountData }) {
     const quotesData = accountData?.quotes;
     console.log("quotesData -> Quotes List:", quotesData);
 
-    if (!quotesData || quotesData.length === 0) {
-      return "No quotes available";
-    }
+    // if (!quotesData || quotesData.length === 0) {
+    //   toast.warning("No quotes available");
+    //   return;
+    // }
 
     const doc = new jsPDF();
     doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
@@ -510,11 +528,15 @@ function SendQuotes({ accountData }) {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const termsText = doc.splitTextToSize(`${quote.termsAndConditions || ""}`, 180); // 180 is the width
+      const termsText = doc.splitTextToSize(
+        `${quote.termsAndConditions || ""}`,
+        180
+      ); // 180 is the width
       doc.text(termsText, 13, nextY + 6);
 
       startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next quote
     });
+    const pdfBlob = doc.output("blob");
 
     // Save the PDF
     // doc.save("ESTIMATE.pdf");
@@ -526,7 +548,22 @@ function SendQuotes({ accountData }) {
     } else if (action === "open") {
       window.open(doc.output("bloburl"), "_blank");
     }
+
+    return pdfBlob;
+    // const pdfBlob = doc.output("blob");
+    // const pdfFile = new File([pdfBlob], "quotes.pdf", { type: "application/pdf" });
+    // formik.setFieldValue("files", [...formik.values.files, pdfFile]);
+    // return pdfFile;
   };
+  // const handleGenerateAndSend = async () => {
+  //   try {
+  //     const pdfFile = await generatePDF("blob");
+  //     formik.setFieldValue("files", [...formik.values.files, pdfFile]);
+  //     formik.handleSubmit();
+  //   } catch (error) {
+  //     console.error('Error generating PDF and sending:', error.message);
+  //   }
+  // };
 
   return (
     <div>
@@ -636,6 +673,7 @@ function SendQuotes({ accountData }) {
                     type="submit"
                     className="btn btn-primary "
                     onClick={formik.handleSubmit}
+                    // onClick={handleGenerateAndSend}
                   >
                     {loadIndicator && (
                       <span
@@ -663,10 +701,11 @@ function SendQuotes({ accountData }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control form-size  ${formik.touched.subject && formik.errors.subject
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control form-size  ${
+                  formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>
