@@ -158,7 +158,7 @@ function Calendar() {
       email: email,
       appointmentFor: event.title.split(" - ")[1]
     }
-    appoinmentCancelTemplete(data);
+    appoinmentCancelTemplete(data, companyId);
   };
 
   const handleEventClick = (eventClickInfo) => {
@@ -288,7 +288,7 @@ function Calendar() {
             email: email,
             appointmentFor: event.title.split(" - ")[1]
           }
-          appoinmentRescheduleTemplete(data , id);
+          appoinmentRescheduleTemplete(data , id, companyId);
           
         } else {
           toast.error("Appointment Update Unsuccessful.");
@@ -372,7 +372,7 @@ function Calendar() {
             email: email,
             appointmentFor: event.title.split(" - ")[1]
           }
-          appoinmentRescheduleTemplete(data , id);
+          appoinmentRescheduleTemplete(data , id, companyId);
 
         } else {
           toast.error("Appointment Rescheduling Unsuccessful.");

@@ -84,6 +84,7 @@ function SendInvoice({ invoiceData, id }) {
   const handleHide = () => {
     setShow(false);
     setSubject("");
+    formik.resetForm();
   };
 
   const handleFileChange = (event) => {
@@ -97,6 +98,7 @@ function SendInvoice({ invoiceData, id }) {
       formik.setFieldValue("htmlContent", htmlContent);
       formik.setFieldValue("isSendingEmail", true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.subject, invoiceData.invoice]);
 
   const generateInvoice = (invoice) => {

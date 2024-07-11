@@ -37,7 +37,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     appointmentMode: Yup.string().required("*Appointment mode is required"),
     additionalInformation: Yup.string().required("*Description is required"),
   });
-  console.log("object", schedule);
+  // console.log("object", schedule);
   const currentData = new Date().toISOString().split("T")[0];
 
   const formik = useFormik({

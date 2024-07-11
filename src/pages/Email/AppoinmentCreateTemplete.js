@@ -9,7 +9,6 @@ const appoinmentCreateTemplete = async (
   companyId
 ) => {
   // const companyId = sessionStorage.getItem("companyId");
-  console.log("CompanyId:", companyId);
   const fetchCompanyData = async (api) => {
     try {
       const response = await axios.get(api);
@@ -23,8 +22,6 @@ const appoinmentCreateTemplete = async (
   const companyData = await fetchCompanyData(
     `${API_URL}getAllCompanyRegisterById/${companyId}`
   );
-
-  console.log("Company Data:", companyData);
 
   const currentDate = new Date().toISOString().split("T")[0];
 
@@ -124,7 +121,7 @@ const appoinmentCreateTemplete = async (
           </p>
           ${mailType}
           <p style="margin: 1.5rem 0px 2rem 0px;">
-            You can still <a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${
+            You can still <a href="http://localhost:3000/CrmAppoinmentReschedule?id=${appointmentId}&name=${
     data.appointmentFor || ""
   }&email=${data.email || ""}&link=${
     linkResponse.data.message || ""

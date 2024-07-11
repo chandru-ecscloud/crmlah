@@ -94,6 +94,7 @@ function SendQuotes({ accountData }) {
 
   const handleHide = () => {
     setShow(false);
+    formik.resetForm()
   };
 
   const handleFileChange = (event) => {

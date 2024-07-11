@@ -16,14 +16,15 @@ function CalenderShow({
   setShowDeleteModal,
   showEditModal,
   setShowEditModal,
-  getData
+  getData,
 }) {
   //   const { id } = useParams();
   const [clientData, setClientData] = useState({});
 
-  const currentData = new Date().toISOString().split("T")[0];
-  console.log("Ids is", clientData)
+  // const currentData = new Date().toISOString().split("T")[0];
+  // console.log("Ids is", clientData)
   // const [selectedEvent, setSelectedEvent] = useState(null);
+  const companyId = sessionStorage.getItem("companyId");
 
   const userData = async () => {
     try {
@@ -44,7 +45,7 @@ function CalenderShow({
     setShowDeleteModal(true);
     setShowViewModal(false);
 
-    appoinmentCancelTemplete(clientData)
+    appoinmentCancelTemplete(clientData, companyId);
     // const mailContent = `
     //   <!DOCTYPE html>
     //   <html lang="en">
@@ -300,7 +301,9 @@ function CalenderShow({
                 <div className="col-6">
                   <b>Description</b>
                 </div>
-                <div className="col-6">: {clientData.additionalInformation}</div>
+                <div className="col-6">
+                  : {clientData.additionalInformation}
+                </div>
               </div>
             </div>
             <div className="col-md-6  col-12 my-2">

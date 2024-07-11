@@ -209,7 +209,7 @@ const Lead = () => {
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
   const handleExportRows = (rows) => {
@@ -507,14 +507,14 @@ const Lead = () => {
       style: { cursor: "pointer" },
     }),
   });
- 
+
   const getEmail = (rows) => {
     const emails = rows.map((row) => row.original);
     setEmails(emails);
   };
-  const tableReset =()=>{
+  const tableReset = () => {
     table.setRowSelection(false);
-  }
+  };
   return (
     <section>
       {loading && <LinearProgress />}

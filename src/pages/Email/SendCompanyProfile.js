@@ -114,9 +114,9 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setIsSubmitting(true);
-      setShow(false); 
-      const sendingToastId = toast("Sending...", { autoClose: false }); // Show sending toast and keep it open
-
+      setShow(false);
+      const sendingToastId = toast.info("Sending...", { autoClose: false }); // Show sending toast and keep it open
+      tablereset();
       let successCount = 0;
       let errorCount = 0;
 
@@ -338,7 +338,6 @@ function SendCompanyProfile({ accountData, emails, tablereset }) {
           </Modal.Footer>
         </form>
       </Modal>
-     
     </div>
   );
 }
