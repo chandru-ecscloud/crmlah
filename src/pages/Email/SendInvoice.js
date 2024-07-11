@@ -40,11 +40,16 @@ function SendInvoice({ invoiceData, id }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        const dealData = [];
+        const pdfBlob = generatePDF(dealData);
+
         const formData = new FormData();
         formData.append("to", invoiceData.email);
         formData.append("from", userEmail);
         formData.append("subject", values.subject);
         formData.append("htmlContent", generateInvoice(invoiceData.invoice));
+        formData.append("files", pdfBlob, "quotes.pdf");
+
         values.files.forEach((file) => {
           formData.append("files", file);
         });
@@ -113,10 +118,11 @@ function SendInvoice({ invoiceData, id }) {
                 <td style="white-space: nowrap;">Total</td>
               </tr>
               
-              ${row.invoiceItemList &&
-        row.invoiceItemList
-          .map(
-            (product, productIndex) => `
+              ${
+                row.invoiceItemList &&
+                row.invoiceItemList
+                  .map(
+                    (product, productIndex) => `
                   <tr class="item">
                     <td>${productIndex + 1}</td>
                     <td>${product.productName || "--"}</td>
@@ -128,9 +134,9 @@ function SendInvoice({ invoiceData, id }) {
                     <td>${product.total || "--"}</td>
                   </tr>
                 `
-          )
-          .join("")
-        }
+                  )
+                  .join("")
+              }
             </table>
           </div>
 
@@ -362,7 +368,8 @@ function SendInvoice({ invoiceData, id }) {
     console.log("quotesData -> Quotes List:", dealData);
 
     if (!dealData || dealData.length === 0) {
-      return "No Invoice available";
+      toast.warning("No Invoice available");
+      return;
     }
 
     const doc = new jsPDF();
@@ -486,7 +493,10 @@ function SendInvoice({ invoiceData, id }) {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const notesText = doc.splitTextToSize(`${invoice.description || ""}`, 180); // 180 is the width
+      const notesText = doc.splitTextToSize(
+        `${invoice.description || ""}`,
+        180
+      ); // 180 is the width
       doc.text(notesText, 13, finalY + 6);
 
       const nextY = finalY + 6 + notesText.length * 10; // Adjust next Y position
@@ -507,6 +517,7 @@ function SendInvoice({ invoiceData, id }) {
       startY = nextY + 6 + termsText.length * 10; // Update the Y position for the next invoice
     });
 
+    const pdfBlob = doc.output("blob");
     // Save the PDF
     // doc.save("Invoice.pdf");
     if (action === "download") {
@@ -517,6 +528,8 @@ function SendInvoice({ invoiceData, id }) {
     } else if (action === "open") {
       window.open(doc.output("bloburl"), "_blank");
     }
+
+    return pdfBlob;
   };
 
   return (
@@ -631,6 +644,7 @@ function SendInvoice({ invoiceData, id }) {
                     type="submit"
                     className="btn btn-primary "
                     onClick={formik.handleSubmit}
+                    // onClick={handleGenerateAndSend}
                   >
                     {loadIndicator && (
                       <span
@@ -658,10 +672,11 @@ function SendInvoice({ invoiceData, id }) {
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 style={{ border: "none" }}
-                className={`form-control  ${formik.touched.subject && formik.errors.subject
+                className={`form-control  ${
+                  formik.touched.subject && formik.errors.subject
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("subject")}
               />
             </div>
@@ -864,9 +879,7 @@ function SendInvoice({ invoiceData, id }) {
                                   </div>
                                   <div className="col-md-5 col-12">
                                     {" "}
-                                    <span>
-                                      : {invoice.txnDiscount || "0"}
-                                    </span>
+                                    <span>: {invoice.txnDiscount || "0"}</span>
                                   </div>
                                 </div>
                               </div>
@@ -890,9 +903,7 @@ function SendInvoice({ invoiceData, id }) {
                                     </label>
                                   </div>
                                   <div className="col-md-5 col-12">
-                                    <span>
-                                      : {invoice.grandTotal || "0"}
-                                    </span>
+                                    <span>: {invoice.grandTotal || "0"}</span>
                                   </div>
                                 </div>
                               </div>
