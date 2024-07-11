@@ -136,7 +136,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                 data,
                 appointmentId,
                 linkResponse,
-                currentData
+                companyId
               );
             }
           } catch (e) {

@@ -478,10 +478,10 @@ function LeadsShow() {
                 </span>
               </div>
 
-              <div>
-                <label className="text-dark Label">Description</label>
+              <div className="address-item">
+                <label className="text-dark Label">Description  &nbsp; : &nbsp;</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;{clientData.description_info || "--"}
+                 {clientData.description_info || "--"}
                 </span>
               </div>
             </div>

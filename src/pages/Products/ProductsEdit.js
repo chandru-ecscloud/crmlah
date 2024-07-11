@@ -5,16 +5,13 @@ import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
-import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   product_owner: yup.string().required("*Product Owner is required."),
   product_name: yup.string().required("*Product name is required."),
-  product_code: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
-  .required("*Product code is required."),
+  product_code: yup.string().required("*Product code is required."),
   // vendor_name: yup.string().required("*Vendor name is required."),
   product_category: yup.string().required("*Product category is required."),
   sales_start_date: yup.date().required("*Date is required"),
