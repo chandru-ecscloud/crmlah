@@ -121,7 +121,7 @@ const appoinmentCreateTemplete = async (
           </p>
           ${mailType}
           <p style="margin: 1.5rem 0px 2rem 0px;">
-            You can still <a href="http://localhost:3000/CrmAppoinmentReschedule?id=${appointmentId}&name=${
+            You can still <a href="https://crmlah.com/reschedule/index.html?id=${appointmentId}&name=${
     data.appointmentFor || ""
   }&email=${data.email || ""}&link=${
     linkResponse.data.message || ""
