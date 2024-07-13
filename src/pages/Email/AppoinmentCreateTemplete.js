@@ -9,7 +9,6 @@ const appoinmentCreateTemplete = async (
   companyId
 ) => {
   // const companyId = sessionStorage.getItem("companyId");
-  console.log("CompanyId:", companyId);
   const fetchCompanyData = async (api) => {
     try {
       const response = await axios.get(api);
@@ -23,8 +22,6 @@ const appoinmentCreateTemplete = async (
   const companyData = await fetchCompanyData(
     `${API_URL}getAllCompanyRegisterById/${companyId}`
   );
-
-  console.log("Company Data:", companyData);
 
   const currentDate = new Date().toISOString().split("T")[0];
 

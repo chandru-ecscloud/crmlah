@@ -111,7 +111,7 @@ function AppointmentsCreate({ name, id, getData }) {
         // Check if either date or time has changed
         if (dateTimeChange) {
           // sendEmail(data);
-          appoinmentRescheduleTemplete(data,id);
+          appoinmentRescheduleTemplete(data,id, companyId);
           setDateTimeChange(false);
         }
 

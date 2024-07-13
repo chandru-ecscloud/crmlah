@@ -2,18 +2,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 
-const companyId = sessionStorage.getItem("companyId");
-const fetchCompanyData = async (api) => {
-  try {
-    const response = await axios.get(api);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching company data: ", error);
-    return [];
-  }
-};
+const appoinmentCancelTemplete = async (data, companyId) => {
+  const fetchCompanyData = async (api) => {
+    try {
+      const response = await axios.get(api);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching company data: ", error);
+      return [];
+    }
+  };
 
-const appoinmentCancelTemplete = async (data) => {
   const companyData = await fetchCompanyData(
     `${API_URL}getAllCompanyRegisterById/${companyId}`
   ); // Adjust the endpoint as needed
@@ -67,11 +66,11 @@ const appoinmentCancelTemplete = async (data) => {
                           <b>Date:</b> ${currentData}<br />
                           ${companyData.companyStreet || ""},<br />
                           ${companyData.companyCity || ""},&nbsp;${
-                            companyData.companyState || ""
-                          },<br />
+    companyData.companyState || ""
+  },<br />
                           ${companyData.companyCountry || ""}-${
-                              companyData.companyZipCode || ""
-                            }.
+    companyData.companyZipCode || ""
+  }.
                         </td>
                       </tr>
                     </table>

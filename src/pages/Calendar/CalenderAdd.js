@@ -157,7 +157,12 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
                 }
               );
               if (zoomResponse.status === 200) {
-                appoinmentCreateTemplete(data,appointmentId,zoomResponse)
+                appoinmentCreateTemplete(
+                  data,
+                  appointmentId,
+                  zoomResponse,
+                  companyId
+                );
                 
               } else {
                 toast.error(zoomResponse.data.message);

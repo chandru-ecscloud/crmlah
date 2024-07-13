@@ -31,6 +31,7 @@ const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
   const userId = sessionStorage.getItem("userId");
+  const companyId = sessionStorage.getItem("companyId");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
@@ -204,7 +205,6 @@ const Appointments = () => {
     ],
     []
   );
-  const currentData = new Date().toISOString().split("T")[0];
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -361,7 +361,7 @@ const Appointments = () => {
         toast.success(response.data.message);
         navigate("/appointments");
         table.setRowSelection(false);
-        appoinmentCancelTemplete(data[0]);
+        appoinmentCancelTemplete(data[0], companyId);
       } else {
         toast.error(response.data.message);
       }

@@ -166,7 +166,7 @@ function AdminLayout({ handleLogout }) {
 
         <Route path="/allclient" element={<AllClient />} />
 
-        <Route path="*" element={<Page404 />} />
+        <Route path="*" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
