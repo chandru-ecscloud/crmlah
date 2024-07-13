@@ -383,7 +383,7 @@ function UserCreate() {
         formik.setFieldValue("country", response.data.country);
         // console.log("userData", response.data.companyName);
       } catch (error) {
-        toast.error("Error fetching data:", error);
+        toast.error("Error fetching data:", error.message);
       }
     };
 

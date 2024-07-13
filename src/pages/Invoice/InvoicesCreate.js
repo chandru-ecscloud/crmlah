@@ -377,7 +377,7 @@ function InvoicesCreate() {
       "txnDiscount",
       isNaN(totalDiscount) ? 0 : totalDiscount
     );
-    formik.setFieldValue("txnTax", isNaN(totalTax) ? 0 : totalTax);
+    formik.setFieldValue("txnTax", isNaN(totalTax) ? 0 : totalTax.toFixed(2));
     formik.setFieldValue(
       "grandTotal",
       isNaN(grandTotal) ? 0 : grandTotal

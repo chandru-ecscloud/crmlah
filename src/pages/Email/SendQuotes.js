@@ -45,7 +45,7 @@ function SendQuotes({ accountData }) {
       }
       try {
         // const quotesData = [];
-        const pdfBlob = generatePDF(accountData.quotes);
+        const pdfBlob = generatePDF(quotesData);
 
         const formData = new FormData();
         formData.append("to", accountData.email);

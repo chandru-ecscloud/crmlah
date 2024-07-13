@@ -36,7 +36,7 @@ function ProposalCreate() {
     files: yup
       .mixed()
       .test("fileSize", "*File size is too large, maximum 20 MB", (files) => {
-        if (!files) return true; 
+        if (!files) return true;
         let isValid = true;
         files.forEach((file) => {
           if (file.size > MAX_FILE_SIZE) {
@@ -134,7 +134,11 @@ function ProposalCreate() {
               </Link>
               &nbsp;
               <span>
-                <button className="btn btn-primary" type="submit" disabled={isSaveDisabled}>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={isSaveDisabled}
+                >
                   {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
@@ -274,6 +278,14 @@ function ProposalCreate() {
                   id="mailBody"
                   style={{ minWidth: "81%" }}
                 />
+              </div>
+              <div className="row sm-device">
+                <div className="col-3"></div>
+                <div className="col-9 sm-device">
+                  {formik.touched.mailBody && formik.errors.mailBody && (
+                    <p className="text-danger">{formik.errors.mailBody}</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -39,6 +39,12 @@ function SendInvoice({ invoiceData, id }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      const dealData = invoiceData?.invoice;
+
+      if (!dealData || dealData.length === 0) {
+        toast.warning("No deals available");
+        return;
+      }
       try {
         const dealData = [];
         const pdfBlob = generatePDF(dealData);
@@ -367,10 +373,10 @@ function SendInvoice({ invoiceData, id }) {
     const dealData = invoiceData?.invoice;
     console.log("quotesData -> Quotes List:", dealData);
 
-    if (!dealData || dealData.length === 0) {
-      toast.warning("No Invoice available");
-      return;
-    }
+    // if (!dealData || dealData.length === 0) {
+    //   toast.warning("No Invoice available");
+    //   return;
+    // }
 
     const doc = new jsPDF();
     doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height

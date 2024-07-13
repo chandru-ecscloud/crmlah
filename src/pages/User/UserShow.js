@@ -105,21 +105,21 @@ function UserShow() {
             <div className="container-fluid col-md-6 mt-4">
               <div>
                 <label className="text-dark Label">Company Name</label>
-                <span className="text-dark">
+                <span className="text-dark" style={{marginLeft:"30px"}}>
                   &nbsp; : &nbsp;{userData.companyName || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Role</label>
-                <span className="text-dark">
+                <span className="text-dark"style={{marginLeft:"30px"}}>
                   &nbsp; : &nbsp;{userData.role || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Appointment Role</label>
-                <span className="text-dark">
+                <span className="text-dark"style={{marginLeft:"30px"}}>
                   &nbsp; : &nbsp;{userData.appointmentRoleType || "--"}
                 </span>
               </div>

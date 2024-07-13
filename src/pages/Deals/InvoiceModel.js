@@ -123,8 +123,7 @@ const InvoiceModel = ({ path , getData}) => {
                       <tr className="" key={item.id}>
                         <td>
                           <input
-                            type="radio"
-                            className="form-check-input"
+                            type="checkbox"
                             checked={selectedRows[0] === item.id}
                             onChange={() => handleCheckboxChange(item.id)}
                           />
