@@ -128,7 +128,7 @@ function QuotesCreate() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Quotes Create:", values);
+      // console.log("Quotes Create:", values);
       try {
         const payload = {
           transactionQuotes: {
@@ -389,7 +389,7 @@ function QuotesCreate() {
       "txnDiscount",
       isNaN(totalDiscount) ? 0 : totalDiscount
     );
-    formik.setFieldValue("txnTax", isNaN(totalTax) ? 0 : totalTax.toFixed(2));
+    formik.setFieldValue("txnTax", isNaN(totalTax) ? 0 : totalTax);
     formik.setFieldValue("grandTotal", isNaN(grandTotal) ? 0 : grandTotal);
   };
 
