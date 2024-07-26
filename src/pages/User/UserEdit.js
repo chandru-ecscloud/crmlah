@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -17,8 +17,8 @@ const validationSchema = yup.object().shape({
     .email("*Pls Enter valid email")
     .required("*Enter the Email"),
 
-  role: yup.string().required("*Select the Role"),
-  appointmentRoleType: yup.string().required("*Select the Appointment Role"),
+  // role: yup.string().required("*Select the Role"),
+  // appointmentRoleType: yup.string().required("*Select the Appointment Role"),
   countryCode: yup.string().required("*Country Code is required"),
   phone: yup
     .string()
@@ -47,12 +47,13 @@ const validationSchema = yup.object().shape({
     .required("*Enter zipcode")
     .matches(/^\d+$/, "Must be only digits"),
   country: yup.string().required("*Enter contry"),
-  registrationStatus: yup.string().required("*Status is required"),
+  // registrationStatus: yup.string().required("*Status is required"),
 });
 function UserEdit() {
   const companyId = sessionStorage.getItem("companyId");
   // const owner = sessionStorage.getItem("user_name");
-  // const role = sessionStorage.getItem("role");
+  const role = sessionStorage.getItem("role");
+  const [data, setDate] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -110,9 +111,11 @@ function UserEdit() {
             },
           }
         );
-
-        formik.setValues(response.data);
-        console.log("userData", userData);
+        if (response.status === 200) {
+          setDate(response.data);
+          formik.setValues(response.data);
+          console.log("userData", data);
+        }
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -231,69 +234,72 @@ function UserEdit() {
                 </div>
               </div>
             </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Role</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
-                  type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.role && formik.errors.role
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("role")}
-                  id="role"
-                >
-                  <option></option>
-                  <option value="CMP_ADMIN">Admin</option>
-                  <option value="CMP_USER">User</option>
-                </select>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.role && formik.errors.role && (
-                    <p className="text-danger">{formik.errors.role}</p>
-                  )}
+            {data?.role !== "CMP_OWNER" && (
+              <>
+                <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="d-flex align-items-center justify-content-end sm-device">
+                    <lable>Role</lable>
+                    &nbsp;&nbsp;
+                    <select
+                      type="text"
+                      className={`form-size form-select  ${
+                        formik.touched.role && formik.errors.role
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("role")}
+                      id="role"
+                    >
+                      <option></option>
+                      <option value="CMP_ADMIN">Admin</option>
+                      <option value="CMP_USER">User</option>
+                    </select>
+                  </div>
+                  <div className="row sm-device">
+                    <div className="col-5"></div>
+                    <div className="col-6 sm-device">
+                      {formik.touched.role && formik.errors.role && (
+                        <p className="text-danger">{formik.errors.role}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Appointment Role</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
-                  type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.appointmentRoleType &&
-                    formik.errors.appointmentRoleType
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("appointmentRoleType")}
-                  id="appointmentRoleType"
-                >
-                  <option></option>
-                  <option value="SALES_MANAGER">SALES MANAGER</option>
-                  <option value="SALES_EXECUTIVE">SALES EXECUTIVE</option>
-                  <option value="FREELANCERS">FREELANCERS</option>
-                </select>
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.appointmentRoleType &&
-                    formik.errors.appointmentRoleType && (
-                      <p className="text-danger">
-                        {formik.errors.appointmentRoleType}
-                      </p>
-                    )}
+                <div className="col-lg-6 col-md-6 col-12 mb-3">
+                  <div className="d-flex align-items-center justify-content-end sm-device">
+                    <lable>Appointment Role</lable>
+                   &nbsp;&nbsp;
+                    <select
+                      type="text"
+                      className={`form-size form-select  ${
+                        formik.touched.appointmentRoleType &&
+                        formik.errors.appointmentRoleType
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("appointmentRoleType")}
+                      id="appointmentRoleType"
+                    >
+                      <option></option>
+                      <option value="SALES_MANAGER">SALES MANAGER</option>
+                      <option value="SALES_EXECUTIVE">SALES EXECUTIVE</option>
+                      <option value="FREELANCERS">FREELANCERS</option>
+                    </select>
+                  </div>
+                  <div className="row sm-device">
+                    <div className="col-5"></div>
+                    <div className="col-6 sm-device">
+                      {formik.touched.appointmentRoleType &&
+                        formik.errors.appointmentRoleType && (
+                          <p className="text-danger">
+                            {formik.errors.appointmentRoleType}
+                          </p>
+                        )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
@@ -346,34 +352,35 @@ function UserEdit() {
                 </div>
               </div>
             </div>
-
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end  sm-device">
-                <label>Registration Status</label>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <select
-                  id="registrationStatus"
-                  className="form-size form-select"
-                  {...formik.getFieldProps("registrationStatus")}
-                >
-                  {/* <option value=""></option> */}
-                  <option value="PENDING">PENDING</option>
-                  <option value="APPROVED">APPROVED</option>
-                  <option value="REJECTED">REJECTED</option>
-                </select>
-              </div>
-              <div className="row sm-device pb-4">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
-                  {formik.touched.registrationStatus &&
-                    formik.errors.registrationStatus && (
-                      <div className="text-danger ">
-                        {formik.errors.registrationStatus}
-                      </div>
-                    )}
+            {data?.role !== "CMP_OWNER" && (
+              <div className="col-lg-6 col-md-6 col-12 mb-3">
+                <div className="d-flex align-items-center justify-content-end  sm-device">
+                  <label>Registration Status</label>
+                  &nbsp;&nbsp;
+                  <select
+                    id="registrationStatus"
+                    className="form-size form-select"
+                    {...formik.getFieldProps("registrationStatus")}
+                  >
+                    {/* <option value=""></option> */}
+                    <option value="PENDING">PENDING</option>
+                    <option value="APPROVED">APPROVED</option>
+                    <option value="REJECTED">REJECTED</option>
+                  </select>
+                </div>
+                <div className="row sm-device pb-4">
+                  <div className="col-5"></div>
+                  <div className="col-6 sm-device">
+                    {formik.touched.registrationStatus &&
+                      formik.errors.registrationStatus && (
+                        <div className="text-danger ">
+                          {formik.errors.registrationStatus}
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

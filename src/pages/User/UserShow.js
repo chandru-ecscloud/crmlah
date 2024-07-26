@@ -75,16 +75,16 @@ function UserShow() {
             </div>
 
             <div className="container-fluid col-md-6 mt-4">
-              <div>
-                <label className="text-dark Label">User Name</label>
-                <span className="text-dark">
+              <div className="">
+                <label className="text-dark Label ">User Name</label>
+                <span className="text-dark ">
                   &nbsp; : &nbsp;{userData.userName || "--"}
                 </span>
               </div>
 
-              <div>
-                <label className="text-dark Label">Email</label>
-                <span className="text-dark">
+              <div className="">
+                <label className="text-dark Label ">Email</label>
+                <span className="text-dark ">
                   &nbsp; : &nbsp;{userData.email || "--"}
                 </span>
               </div>
@@ -105,21 +105,21 @@ function UserShow() {
             <div className="container-fluid col-md-6 mt-4">
               <div>
                 <label className="text-dark Label">Company Name</label>
-                <span className="text-dark" style={{marginLeft:"30px"}}>
+                <span className="text-dark" style={{ marginLeft: "30px" }}>
                   &nbsp; : &nbsp;{userData.companyName || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Role</label>
-                <span className="text-dark"style={{marginLeft:"30px"}}>
+                <span className="text-dark" style={{ marginLeft: "30px" }}>
                   &nbsp; : &nbsp;{userData.role || "--"}
                 </span>
               </div>
 
               <div>
                 <label className="text-dark Label">Appointment Role</label>
-                <span className="text-dark"style={{marginLeft:"30px"}}>
+                <span className="text-dark" style={{ marginLeft: "30px" }}>
                   &nbsp; : &nbsp;{userData.appointmentRoleType || "--"}
                 </span>
               </div>
@@ -137,47 +137,51 @@ function UserShow() {
 
           {/* Hide Details */}
           <div className="container-fluid row" id="Details">
-            <div className="border-bottom py-3">
+            <div className="border-bottom py-3 mb-4">
               <span className="fs-6 fw-bold my-3">Address Information</span>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div>
-                <label className="text-dark Label">Address</label>
-                <span className="text-dark">
+              <div className="row mb-2">
+                <label className="text-dark Label col-6">Address</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.address || "--"}
                 </span>
               </div>
-
-              <div>
-                <label className="text-dark Label">State</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{userData.state || "--"}
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Country</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{userData.country || "--"}
-                </span>
-              </div>
             </div>
-
             <div className="container-fluid col-md-6">
-              <div>
-                <label className="text-dark Label">City</label>
-                <span className="text-dark">
+              <div className="row">
+                <label className="text-dark Label col-6">City</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.city || "--"}
                 </span>
               </div>
-
-              <div>
-                <label className="text-dark Label">Zip Code</label>
-                <span className="text-dark">
+            </div>
+            <div className="container-fluid col-md-6">
+              <div className="row">
+                <label className="text-dark Label col-6">State</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{userData.state || "--"}
+                </span>
+              </div>
+            </div>
+            <div className="container-fluid col-md-6">
+              <div className="row">
+                <label className="text-dark Label col-6">Zip Code</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.zipCode || "--"}
                 </span>
               </div>
             </div>
+            <div className="container-fluid col-md-6">
+              <div className="row">
+                <label className="text-dark Label col-6">Country</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{userData.country || "--"}
+                </span>
+              </div>
+            </div>
+            <div className="container-fluid col-md-6"></div>
           </div>
         </div>
       </section>
