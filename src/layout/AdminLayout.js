@@ -67,6 +67,10 @@ import Proposal from "../pages/Proposal/Proposal";
 import ProposalCreate from "../pages/Proposal/ProposalCreate";
 import ProposalEdit from "../pages/Proposal/ProposalEdit";
 import ProposalShow from "../pages/Proposal/ProposalShow";
+import Event from "../pages/Event/Event";
+import EventAdd from "../pages/Event/EventAdd";
+import EventEdit from "../pages/Event/EventEdit";
+import EventView from "../pages/Event/EventView";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -159,6 +163,13 @@ function AdminLayout({ handleLogout }) {
         <Route path="/services/create" element={<ServicesCreate />} />
         <Route path="/services/edit/:id" element={<ServicesEdit />} />
         <Route path="/services/show/:id" element={<ServicesShow />} />
+
+                {/* Event */}
+         <Route path="/event" element={<Event />} />
+        <Route path="/event/add" element={<EventAdd />} />
+        <Route path="/event/edit" element={<EventEdit />} />
+        <Route path="/event/view" element={<EventView />} />
+
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/changepass" element={<ChangePassword />} />

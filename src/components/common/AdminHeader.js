@@ -36,6 +36,7 @@ const mainMenu = [
   { to: "/deals", label: "Deals" },
   { to: "/dragable", label: "PipeLine" },
   { to: "/appointments", label: "Appointments" },
+  { to: "/event", label: "Event" },
   // { to: "/company", label: "Company" },
 ];
 
