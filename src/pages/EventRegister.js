@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Countdown from 'react-countdown';// Import your CSS file
 import "../styles/user.css";
 import { useFormik } from 'formik';
 import * as yup from "yup";
