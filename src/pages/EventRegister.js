@@ -5,28 +5,7 @@ import * as yup from "yup";
 
 
 
-const renderer = ({ days, hours, minutes, seconds, completed }) => {
-  if (completed) {
-    return <span>Class has started!</span>;
-  } else {
-    return (
-      <div className="countdown">
-        <div className="countdown-item">
-          <span className="time">{days}</span>
-          <span className="label">Days</span>
-        </div>
-        <div className="countdown-item">
-          <span className="time">{hours}</span>
-          <span className="label">Hours</span>
-        </div>
-        <div className="countdown-item">
-          <span className="time">{minutes}</span>
-          <span className="label">Minutes</span>
-        </div>
-      </div>
-    );
-  }
-};
+
 
 const validationSchema = yup.object().shape({
     company_name: yup.string().required("*Company Name is required"),
@@ -66,7 +45,6 @@ const EventRegister = () => {
       <h1 className="title">
       Registration Link: ISV Community Day Singapore 
       </h1>
-      <Countdown date={new Date('2024-08-11T10:30:00')} renderer={renderer} />
       <span className="date">Date: 11th Aug 2024</span>
       <p className="date">Venue: AWS Singapore,23 Church Street, Level 8 Capital Square, Singapore 049481</p>
       <div className="text-start">
