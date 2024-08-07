@@ -18,6 +18,7 @@ import EntryAppointment from "../pages/EntryAppointment";
 import Page404 from "../components/common/404";
 import { FaWhatsapp } from "react-icons/fa";
 import PrivacyAndPolicy from "../pages/PrivacyAndPolicy";
+import EventRegister from "../pages/EventRegister";
 
 function UserLayout({ handleLogin }) {
   return (
@@ -29,6 +30,7 @@ function UserLayout({ handleLogin }) {
           <Route path="/about" element={<About />} />
           <Route path="/feature" element={<Feature />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/eventregister" element={<EventRegister />} />
           <Route path="/" element={<Home handleLogin={handleLogin} />} />
           <Route path="/register" element={<SignIn />} />
           <Route path="/login" element={<LogIn handleLogin={handleLogin} />} />

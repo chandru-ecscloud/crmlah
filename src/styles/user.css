@@ -130,3 +130,47 @@
   top: 4px;
 
  }
+
+ .container {
+  text-align: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #7a5cff;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.countdown-item {
+  text-align: center;
+}
+
+.time {
+  font-size: 2em;
+}
+
+.label {
+  display: block;
+}
+
+.next-class {
+  margin-top: 20px;
+}
+
+.date {
+  font-weight: bold;
+}
