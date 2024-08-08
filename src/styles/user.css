@@ -145,32 +145,25 @@
   color: #7a5cff;
 }
 
-.countdown {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  background: #000;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
+.agenda{
+  text-decoration: none;
+  list-style: none;
 }
 
-.countdown-item {
-  text-align: center;
+.heading-register {
+  font-family: 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
 }
 
-.time {
-  font-size: 2em;
+.heading-register .register {
+  color: #000;
 }
 
-.label {
-  display: block;
+.heading-register .community {
+  color: #3d63ea;
+  margin-left: 5px;
 }
-
-.next-class {
-  margin-top: 20px;
-}
-
-.date {
-  font-weight: bold;
+.large-number {
+  font-size: 4rem; /* Adjust the size as needed */
 }
