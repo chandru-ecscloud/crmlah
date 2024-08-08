@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   companyName: yup.string().required("*Company Name is Required"),
+  eventName: yup.string().required("*Event Name is Required"),
   firstName: yup.string().required("*First Name is Required"),
   lastName: yup.string().required("*Last Name is Required"),
   email: yup.string().email("Invalid email").required("*Email is required"),
@@ -16,6 +17,8 @@ function EventEdit() {
   const formik = useFormik({
     initialValues: {
       companyName: "ECS Cloud",
+      eventName: "ECS Cloud",
+      eventDate: "07/8/2024",
       firstName: "Sakthivel",
       lastName: "Jayabal",
       email: "sakthiveljayabal23@gmail.com",
@@ -37,7 +40,7 @@ function EventEdit() {
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12">
               <h4>
-                <b>Create Event</b>
+                <b>Edit Event</b>
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex justify-content-lg-end justify-content-md-end">
@@ -47,19 +50,14 @@ function EventEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Save
+                  Update
                 </button>
               </span>
             </div>
           </div>
         </div>
-        <div className="container-fluid my-5">
-          <h4>
-            <b>Event Information</b>
-          </h4>
-        </div>
-        <div className="container">
-          <div className="row">
+        <div className="container pt-5">
+        <div className="row">
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Company Name</lable>
@@ -81,6 +79,31 @@ function EventEdit() {
                 <div className="col-6 sm-device">
                   {formik.touched.companyName && formik.errors.companyName && (
                     <p className="text-danger">{formik.errors.companyName}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Event Name</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="text"
+                  className={`form-size form-control  ${
+                    formik.touched.eventName && formik.errors.eventName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("eventName")}
+                  name="eventName"
+                  id="eventName"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.eventName && formik.errors.eventName && (
+                    <p className="text-danger">{formik.errors.eventName}</p>
                   )}
                 </div>
               </div>
@@ -137,6 +160,31 @@ function EventEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Event Date</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <input
+                  type="date"
+                  className={`form-size form-control  ${
+                    formik.touched.eventDate && formik.errors.eventDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("eventDate")}
+                  name="eventDate"
+                  id="eventDate"
+                />
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.eventDate && formik.errors.eventDate && (
+                    <p className="text-danger">{formik.errors.eventDate}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Bussiness Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
@@ -185,50 +233,50 @@ function EventEdit() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Event Agenda</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.agenda && formik.errors.agenda
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("agenda")}
-                  name="agenda"
-                  id="agenda"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
+          </div>
+          <div className="row">
+            <div className="col-12 mb-3">
+              <div className="row align-items-center">
+                <div className="col-2 text-end">
+                  <lable>
+                    Event Agenda <span className="text-danger">*</span>
+                  </lable>
+                </div>
+                <div className="col-10">
+                  <textarea
+                    type="text"
+                    className={` form-control  ${
+                      formik.touched.agenda && formik.errors.agenda
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("agenda")}
+                    name="agenda"
+                    id="agenda"
+                  />
                   {formik.touched.agenda && formik.errors.agenda && (
                     <p className="text-danger">{formik.errors.agenda}</p>
                   )}
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Enquiry</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <textarea
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.enquiry && formik.errors.enquiry
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("enquiry")}
-                  name="enquiry"
-                  id="enquiry"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
+            <div className=" col-12 mb-3">
+              <div className="row align-items-center">
+                <div className="col-2 text-end">
+                  <lable>Enquiry</lable>
+                </div>
+                <div className="col-10">
+                  <textarea
+                    type="text"
+                    className={` form-control  ${
+                      formik.touched.enquiry && formik.errors.enquiry
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("enquiry")}
+                    name="enquiry"
+                    id="enquiry"
+                  />
                   {formik.touched.enquiry && formik.errors.enquiry && (
                     <p className="text-danger">{formik.errors.enquiry}</p>
                   )}
@@ -236,26 +284,24 @@ function EventEdit() {
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 mb-3">
-              <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Event Description</lable>
-                <span className="text-danger">*</span>&nbsp;&nbsp;
-                <textarea
-                  type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.eventDescription &&
-                    formik.errors.eventDescription
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("eventDescription")}
-                  name="eventDescription"
-                  id="eventDescription"
-                />
-              </div>
-              <div className="row sm-device">
-                <div className="col-5"></div>
-                <div className="col-6 sm-device">
+            <div className="col-12 mb-3">
+              <div className="row align-items-center">
+                <div className="col-2 text-end">
+                  <lable>Event Description</lable>
+                </div>
+                <div className="col-10">
+                  <textarea
+                    type="text"
+                    className={` form-control  ${
+                      formik.touched.eventDescription &&
+                      formik.errors.eventDescription
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("eventDescription")}
+                    name="eventDescription"
+                    id="eventDescription"
+                  />
                   {formik.touched.eventDescription &&
                     formik.errors.eventDescription && (
                       <p className="text-danger">

@@ -71,6 +71,10 @@ import Event from "../pages/Event/Event";
 import EventAdd from "../pages/Event/EventAdd";
 import EventEdit from "../pages/Event/EventEdit";
 import EventView from "../pages/Event/EventView";
+import Members from "../pages/Event/Members/Members";
+import MembersAdd from "../pages/Event/Members/MembersAdd";
+import MembersEdit from "../pages/Event/Members/MembersEdit";
+import MembersView from "../pages/Event/Members/MembersView";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -164,12 +168,17 @@ function AdminLayout({ handleLogout }) {
         <Route path="/services/edit/:id" element={<ServicesEdit />} />
         <Route path="/services/show/:id" element={<ServicesShow />} />
 
-                {/* Event */}
-         <Route path="/event" element={<Event />} />
+        {/* Event */}
+        <Route path="/event" element={<Event />} />
         <Route path="/event/add" element={<EventAdd />} />
         <Route path="/event/edit" element={<EventEdit />} />
         <Route path="/event/view" element={<EventView />} />
 
+        {/* Members*/}
+        <Route path="/members" element={<Members />} />
+        <Route path="/members/add" element={<MembersAdd />} />
+        <Route path="/members/edit" element={<MembersEdit />} />
+        <Route path="/members/view" element={<MembersView />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/changepass" element={<ChangePassword />} />
