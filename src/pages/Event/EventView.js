@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip, Modal, Button } from "react-bootstrap";
 import success from "../../assets/success.mp4";
+import { LuCopy, LuCopyCheck } from "react-icons/lu";
 
 function EventView() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [link, setLink] = useState("https://ecscloudinfotech.com/ecs/");
-  const [copyButtonText, setCopyButtonText] = useState("Copy");
+  const [copyButtonText, setCopyButtonText] = useState(<LuCopy />);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -19,10 +20,10 @@ function EventView() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(link);
-    setCopyButtonText("✓ Copied");
+    setCopyButtonText(<LuCopyCheck className="text-success" />);
 
     setTimeout(() => {
-      setCopyButtonText("Copy");
+      setCopyButtonText(<LuCopy />);
     }, 1000);
   };
   return (
@@ -53,7 +54,7 @@ function EventView() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <button className="btn btn-secondary" onClick={handleShow}>
+          <button className="btn btn-primary" onClick={handleShow}>
             Generate Link
           </button>
           <Link to="/members">
@@ -69,10 +70,10 @@ function EventView() {
         style={{ minHeight: "70vh" }}
       >
         <div
-          className="container-fluid col-md-10 m-0 "
+          className="container-fluid align-items-center col-10 my-3 "
           id="userDetails-container"
         >
-          <div className="container-fluid row" id="Details">
+          <div className="row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Event View</span>
             </div>
@@ -104,32 +105,40 @@ function EventView() {
           </div>
         </div>
         <div
-          className="container-fluid align-items-center col-10 my-3"
+          className="container-fluid align-items-center col-10 my-3 "
           id="Details"
         >
-          <div className="address-item pt-4">
-            <label className="text-dark Label">Enquiry</label>
-            <span className="text-dark">&nbsp; : &nbsp; test</span>
+          {" "}
+          <div className="my-2 container-fluid row">
+            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Enquiry</span>
+          </div>
+          <div className="address-item ">
+            <span className="text-dark"> test</span>
           </div>
         </div>
         <div
           className="container-fluid align-items-center col-10 my-3"
           id="Details"
         >
-          <div className="address-item  pt-4">
-            <label className="text-dark Label">Agenda</label>
-            <span className="text-dark">&nbsp; : &nbsp; test</span>
+          <div className="my-2 container-fluid row">
+            <span className="fs-6 fw-bold my-2 border-bottom">Agenda</span>
+          </div>
+          <div className="address-item">
+            <span className="text-dark"> test</span>
           </div>
         </div>
         <div
           className="container-fluid align-items-center col-10 my-3"
           id="Details"
         >
-          <div className="address-item  pt-4">
-            <label className="text-dark Label">Description</label>
-            <span className="text-dark">&nbsp; : &nbsp; test</span>
+          <div className="my-3 container-fluid row">
+            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Description</span>
+          </div>
+          <div className="address-item ">
+            <span className="text-dark ms-2"> test</span>
           </div>
         </div>
+        
       </section>
 
       {/* Modal */}
@@ -139,21 +148,24 @@ function EventView() {
         className="d-flex align-items-center"
       >
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <div className="d-flex justify-content-center">
-            <video src={success} autoPlay loop muted className="w-50" />
+        <Modal.Body className="text-center">
+          <div className="d-flex justify-content-center mb-3">
+            <video src={success} autoPlay loop muted className="w-50 rounded" />
           </div>
-          <div className="d-flex justify-content-center">
-            <p className="fw-bold ">Thank You!</p>
-          </div>
-          <div className="d-flex justify-content-center">
-            <p className="fw-bold">Your Link Is successfully Generated!</p>
-          </div>
-          <div className="d-flex gap-3 align-items-center justify-content-center">
-            <a href={link} target="_blank" rel="noopener noreferrer">
-              {link}
+          <p className="fw-midium mb-3">Thank You!</p>
+          <p className="fw-midium">
+            Your Link Has Been Successfully Generated!
+          </p>
+          <div className="d-flex gap-3 align-items-center justify-content-center mt-4">
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none"
+            >
+              <span className="link-text">{link}</span>
             </a>
-            <button className="btn btn-secondary" onClick={handleCopy}>
+            <button className="btn " onClick={handleCopy}>
               {copyButtonText}
             </button>
           </div>
