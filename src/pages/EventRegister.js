@@ -82,7 +82,7 @@ const EventRegister = () => {
   return (
     <div className="container-fluid">
       <div style={{ backgroundColor: '#e0f7fa' }} className="p-3">
-     <div className="heading-register">
+     <div className="heading-register text-center">
      <span className="register fw-bold fs-1">Registration Link:</span>
 
             <span className="community">ISV Community Day Singapore</span>
@@ -105,9 +105,9 @@ const EventRegister = () => {
 </div>
 
 
-      <span className="date"><strong>Date:</strong> 11th Aug 2024</span>
+      <span className="time-in"><strong>Date:</strong> 11th Aug 2024</span>
 
-      <p className="date"><strong>Venue:</strong> AWS Singapore,23 Church Street, Level 8 Capital Square, Singapore 049481</p>
+      <p className=" text-center"><strong>Venue:</strong> AWS Singapore,23 Church Street, Level 8 Capital Square, Singapore 049481</p>
       <div className="text-start">
       <h2 className="fw-bold "style={{marginLeft:"23px"}}>Event Agenda</h2>
       <ul className='agenda'>
@@ -299,7 +299,16 @@ const EventRegister = () => {
             </form>
           </div>
             <div className="col-md-6 p-4">
-            <span className="text-center fs-3">Let's Make</span>
+            <div className="quote-container">
+      <div className="quote-icon">“</div>
+      <h1 className="quote-text">
+        Let’s Make <br />
+        it Happen <br />
+        Together!
+      </h1>
+    </div>
+    <p className='my-2'>Join us for an engaging day at the ISV Community Day in Singapore, where independent software vendors (ISVs) come together to explore the latest industry trends, share insights, and collaborate on innovative solutions. This event offers a unique opportunity to network with peers, learn from experts, and discover new ways to drive success in the software development landscape. Whether you're looking to expand your knowledge, connect with potential partners, or simply be inspired, ISV Community Day Singapore is the place to be.</p>
+
             </div>
             </div>
           

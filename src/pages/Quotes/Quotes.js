@@ -410,11 +410,12 @@ const Quotes = () => {
     };
 
     const transformedData = rowData.map((data) => {
-      return Object.keys(data).reduce((acc, key) => {
-        const newKey = keyMapping[key] || key;
-        acc[newKey] = data[key];
-        return acc;
-      }, {});
+      return data.id
+      // Object.keys(data).reduce((acc, key) => {
+      //   const newKey = keyMapping[key] || key;
+      //   acc[newKey] = data[key];
+      //   return acc;
+      // }, {});
     });
 
     try {
