@@ -76,6 +76,14 @@ function AdminHeader({ handleLogout }) {
     (menuItem) => !(role === "CMP_USER" && menuItem.label === "PipeLine")
   );
 
+  // Add a condition for EVENT_ORGANIZER
+  const filteredMainMenuForOrganizer =
+    role === "EVENT_ORGANIZER"
+      ? mainMenu.filter(
+          (menuItem) => menuItem.label === "Home" || menuItem.label === "Event"
+        )
+      : filteredMainMenu;
+
   const renderContentBasedOnRole = (role) => {
     switch (role) {
       case "CRM_SUPERADMIN":
@@ -88,6 +96,8 @@ function AdminHeader({ handleLogout }) {
         return "Admin";
       case "CMP_USER":
         return "User";
+      case "EVENT_ORGANIZER":
+        return "Event Organizer";
       default:
         return role.split("_")[1]; // return the part after the underscore
     }
@@ -105,7 +115,7 @@ function AdminHeader({ handleLogout }) {
           <Navbar.Toggle aria-controls={`navbar-expand-${expand}`} />
           <Navbar.Collapse id={`navbar-expand-${expand}`}>
             <Nav className=" flex-grow-1 pe-3">
-              {filteredMainMenu.map((menuItem) => (
+              {filteredMainMenuForOrganizer.map((menuItem) => (
                 <NavLink
                   key={menuItem.to}
                   to={menuItem.to}
@@ -118,91 +128,97 @@ function AdminHeader({ handleLogout }) {
               ))}
 
               {/* <Tooltip TransitionComponent={Zoom} title="Other Modules"> */}
-              <OverlayTrigger
-                placement="bottom"
-                overlay={<Tooltip id="button-tooltip-2">Other Modules</Tooltip>}
-              >
-                <NavDropdown
-                  title={<AiOutlineEllipsis className="text-white " />}
-                  className="navDropdown"
-                  style={{ marginTop: "7px" }}
+              {role !== "EVENT_ORGANIZER" && (
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
+                  }
                 >
-                  <span>
-                    <input
-                      className="form-control mx-1"
-                      style={{ width: "95%" }}
-                      type="search"
-                      placeholder="Search"
-                      aria-label="Search"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </span>
+                  <NavDropdown
+                    title={<AiOutlineEllipsis className="text-white " />}
+                    className="navDropdown"
+                    style={{ marginTop: "7px" }}
+                  >
+                    <span>
+                      <input
+                        className="form-control mx-1"
+                        style={{ width: "95%" }}
+                        type="search"
+                        placeholder="Search"
+                        aria-label="Search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </span>
 
-                  {filteredMenuItems.map((menuItem) => (
-                    <NavDropdown.Item
-                      as={NavLink}
-                      to={menuItem.to}
-                      key={menuItem.to}
-                    >
-                      {menuItem.label}
+                    {filteredMenuItems.map((menuItem) => (
+                      <NavDropdown.Item
+                        as={NavLink}
+                        to={menuItem.to}
+                        key={menuItem.to}
+                      >
+                        {menuItem.label}
+                      </NavDropdown.Item>
+                    ))}
+                  </NavDropdown>
+                </OverlayTrigger>
+              )}
+              {role !== "EVENT_ORGANIZER" && (
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
+                  }
+                >
+                  <NavDropdown
+                    title={<FiPlus className="text-white fs-5 mt-2" />}
+                    className="navDropdowns"
+                    disabled={role === "CMP_USER"}
+                  >
+                    <NavDropdown.Item as={NavLink} to="/leads/create">
+                      <IoMdAdd /> create Lead
                     </NavDropdown.Item>
-                  ))}
-                </NavDropdown>
-              </OverlayTrigger>
-
-              <OverlayTrigger
-                placement="bottom"
-                overlay={<Tooltip id="button-tooltip-2">Other Modules</Tooltip>}
-              >
-                <NavDropdown
-                  title={<FiPlus className="text-white fs-5 mt-2" />}
-                  className="navDropdowns"
-                  disabled={role === "CMP_USER"}
-                >
-                  <NavDropdown.Item as={NavLink} to="/leads/create">
-                    <IoMdAdd /> create Lead
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/contacts/create">
-                    <IoMdAdd /> create contact
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/accounts/create">
-                    <IoMdAdd /> create account
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/deals/create">
-                    <IoMdAdd /> create deal
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/quotes/create">
-                    <IoMdAdd /> create quote
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/products/create">
-                    <IoMdAdd /> create product
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/invoices/create">
-                    <IoMdAdd /> create invoice
-                  </NavDropdown.Item>
-                  {/* <NavDropdown.Item as={NavLink} to="/company/companycreate">
+                    <NavDropdown.Item as={NavLink} to="/contacts/create">
+                      <IoMdAdd /> create contact
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/accounts/create">
+                      <IoMdAdd /> create account
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/deals/create">
+                      <IoMdAdd /> create deal
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/quotes/create">
+                      <IoMdAdd /> create quote
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/products/create">
+                      <IoMdAdd /> create product
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/invoices/create">
+                      <IoMdAdd /> create invoice
+                    </NavDropdown.Item>
+                    {/* <NavDropdown.Item as={NavLink} to="/company/companycreate">
                     <IoMdAdd /> create company
                   </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/users/create">
                     <IoMdAdd /> create User
                   </NavDropdown.Item> */}
-                </NavDropdown>
-              </OverlayTrigger>
-
+                  </NavDropdown>
+                </OverlayTrigger>
+              )}
               {/* <Tooltip TransitionComponent={Zoom} title="Profile"> */}
-              <OverlayTrigger
-                placement="bottom"
-                overlay={<Tooltip id="button-tooltip-2">Profile</Tooltip>}
-              >
-                <Nav
-                  className="custom-nav-links"
-                  style={{ fontSize: "20px", paddingTop: "8px" }}
-                  onClick={handleShow}
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="button-tooltip-2">Profile</Tooltip>}
                 >
-                  <FaUserCircle style={{ cursor: "pointer" }} />
-                </Nav>
-              </OverlayTrigger>
+                  <Nav
+                    className="custom-nav-links"
+                    style={{ fontSize: "20px", paddingTop: "8px" }}
+                    onClick={handleShow}
+                  >
+                    <FaUserCircle style={{ cursor: "pointer" }} />
+                  </Nav>
+                </OverlayTrigger>
             </Nav>
           </Navbar.Collapse>
         </Container>

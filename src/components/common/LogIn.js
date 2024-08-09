@@ -48,6 +48,7 @@ function LogIn({ handleLogin }) {
         sessionStorage.setItem("email", response.data.email);
         sessionStorage.setItem("companyId", response.data.companyId);
         sessionStorage.setItem("role", response.data.role);
+        // sessionStorage.setItem("role", "EVENT_ORGANIZER");
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.userId);
         sessionStorage.setItem("appointmentRole",response.data.appointmentRole);
