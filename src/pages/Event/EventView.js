@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip, Modal, Button } from "react-bootstrap";
 import success from "../../assets/success.mp4";
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
+import axios from "axios";
+import { API_URL } from "../../Config/URL";
+import { toast } from "react-toastify";
 
 function EventView() {
+
+  const { id } = useParams();
+  const [eventData, setEventData] = useState({});
+  console.log("Deal Data:", eventData);
+  // const token = sessionStorage.getItem("token");
+  const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [link, setLink] = useState("https://ecscloudinfotech.com/ecs/");
@@ -14,8 +23,26 @@ function EventView() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const userData = async () => {
+    try {
+      const response = await axios(`${API_URL}getAllEventManagementById/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      setEventData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    userData();
+  }, [id]);
+
   const handleEdit = () => {
-    navigate(`/event/edit`);
+    navigate(`/event/edit/${id}`);
   };
 
   const handleCopy = () => {
@@ -81,25 +108,25 @@ function EventView() {
             <div className="container-fluid row">
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark ">Company Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;ECS Cloud</span>
+                <span className="text-dark">&nbsp; : &nbsp;{eventData.companyName || ""}</span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">First Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Sakthivel</span>
+                <span className="text-dark">&nbsp; : &nbsp;{eventData.firstName || ""}</span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Last Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Jayabal</span>
+                <span className="text-dark">&nbsp; : &nbsp;{eventData.lastName || ""}</span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label"> Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;Sakthiveljayabal23@gmail.com
+                  &nbsp; : &nbsp;{eventData.businessEmail || ""}
                 </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Phone</label>
-                <span className="text-dark">&nbsp; : &nbsp;6382307159</span>
+                <span className="text-dark">&nbsp; : &nbsp;{eventData.phone || ""}</span>
               </div>
             </div>
           </div>
@@ -113,7 +140,7 @@ function EventView() {
             <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Enquiry</span>
           </div>
           <div className="address-item ">
-            <span className="text-dark"> test</span>
+            <span className="text-dark"> {eventData.enquiry || ""}</span>
           </div>
         </div>
         <div
@@ -124,7 +151,7 @@ function EventView() {
             <span className="fs-6 fw-bold my-2 border-bottom">Agenda</span>
           </div>
           <div className="address-item">
-            <span className="text-dark"> test</span>
+            <span className="text-dark"> {eventData.eventAgenda || ""}</span>
           </div>
         </div>
         <div
@@ -135,10 +162,10 @@ function EventView() {
             <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Description</span>
           </div>
           <div className="address-item ">
-            <span className="text-dark ms-2"> test</span>
+            <span className="text-dark ms-2"> {eventData.eventDescription || ""}</span>
           </div>
         </div>
-        
+
       </section>
 
       {/* Modal */}
