@@ -1,31 +1,81 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { API_URL } from "../../../Config/URL";
 
 const validationSchema = yup.object().shape({
   companyName: yup.string().required("*Company Name is Required"),
   firstName: yup.string().required("*First Name is Required"),
   lastName: yup.string().required("*Last Name is Required"),
-  email: yup.string().email("Invalid email").required("*Email is required"),
+  status: yup.string().required("*Status is Required"),
+  businessEmail: yup
+    .string()
+    .email("Invalid email")
+    .required("*Email is required"),
   phone: yup.string().required("*Phone is Required"),
 });
 
 function MembersEdit() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-      companyName: "ECS",
-      firstName: "sakthi",
-      lastName: "j",
-      email: "sakthi@gmail.com",
-      phone: "6345678978",
-      message: "Cloud Ecs Infotech",
+      companyName: "",
+      firstName: "",
+      lastName: "",
+      businessEmail: "",
+      status: "",
+      phone: "",
+      message: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Event Data:", data);
+      const payload = {
+        companyName: data.companyName,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        businessEmail: data.businessEmail,
+        phone: data.phone,
+        message: data.message,
+        eventMemberStatus:data.status
+        // eventManagementId:1
+      };
+      try {
+        const response = await axios.put(
+          `${API_URL}updateEventMembers/${id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/members");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
     },
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios(`${API_URL}getAllEventMembersById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
+        toast.error("Error fetching data:", error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <section className="createLead">
@@ -130,26 +180,59 @@ function MembersEdit() {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
+                <lable>Status</lable>
+                <span className="text-danger">*</span>&nbsp;&nbsp;
+                <select
+                  type="text"
+                  className={`form-size form-select  ${
+                    formik.touched.status && formik.errors.status
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("status")}
+                  name="status"
+                  id="status"
+                >
+                  <option value=""></option>
+                  <option value="NEW">New</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </div>
+              <div className="row sm-device">
+                <div className="col-5"></div>
+                <div className="col-6 sm-device">
+                  {formik.touched.status && formik.errors.status && (
+                    <p className="text-danger">{formik.errors.status}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-12 mb-3">
+              <div className="d-flex align-items-center justify-content-end sm-device">
                 <lable>Bussiness Email</lable>
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
                   className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
+                    formik.touched.businessEmail && formik.errors.businessEmail
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("email")}
-                  name="email"
-                  id="email"
+                  {...formik.getFieldProps("businessEmail")}
+                  name="businessEmail"
+                  id="businessEmail"
                 />
               </div>
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.email && formik.errors.email && (
-                    <p className="text-danger">{formik.errors.email}</p>
-                  )}
+                  {formik.touched.businessEmail &&
+                    formik.errors.businessEmail && (
+                      <p className="text-danger">
+                        {formik.errors.businessEmail}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
