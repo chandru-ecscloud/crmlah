@@ -171,14 +171,14 @@ function AdminLayout({ handleLogout }) {
         {/* Event */}
         <Route path="/event" element={<Event />} />
         <Route path="/event/add" element={<EventAdd />} />
-        <Route path="/event/edit" element={<EventEdit />} />
-        <Route path="/event/view" element={<EventView />} />
+        <Route path="/event/edit/:id" element={<EventEdit />} />
+        <Route path="/event/view/:id" element={<EventView />} />
 
         {/* Members*/}
         <Route path="/members" element={<Members />} />
         <Route path="/members/add" element={<MembersAdd />} />
-        <Route path="/members/edit" element={<MembersEdit />} />
-        <Route path="/members/view" element={<MembersView />} />
+        <Route path="/members/edit/:id" element={<MembersEdit />} />
+        <Route path="/members/view/:id" element={<MembersView />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/changepass" element={<ChangePassword />} />

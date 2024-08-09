@@ -1,13 +1,28 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import axios from "axios";
+import { API_URL } from "../../../Config/URL";
+import { toast } from "react-toastify";
 
 function MembersView() {
+  const { id } = useParams();
   const navigate = useNavigate();
-
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios(`${API_URL}getAllEventMembersById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        toast.error("Error fetching data:", error.message);
+      }
+    };
+    fetchData();
+  }, []);
   const handelEdit = () => {
-    navigate(`/members/edit`);
+    navigate(`/members/edit/${id}`);
   };
 
   return (
@@ -52,7 +67,7 @@ function MembersView() {
         className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center"
         style={{ minHeight: "75vh" }}
       >
-     <div
+        <div
           className="container-fluid col-md-10 m-0 "
           id="userDetails-container"
         >
@@ -64,25 +79,41 @@ function MembersView() {
             <div className="container-fluid row">
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark ">Company Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;ECS Cloud</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{data.companyName}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">First Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Sakthivel</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{data.firstName}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Last Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;Jayabal</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{data.lastName}
+                </span>
+              </div>
+              <div className="col-md-6 d-flex justify-content-center">
+                <label className="text-dark Label">Status</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{data.eventMemberStatus}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label"> Email</label>
                 <span className="text-dark">
-                  &nbsp; : &nbsp;Sakthiveljayabal23@gmail.com
+                  &nbsp; : &nbsp;{data.businessEmail}
                 </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Phone</label>
-                <span className="text-dark">&nbsp; : &nbsp;6382307159</span>
+                <span className="text-dark">&nbsp; : &nbsp;{data.phone}</span>
+              </div>
+              <div className="col-md-6 d-flex justify-content-center">
+                <label className="text-dark Label">Message</label>
+                <span className="text-dark">&nbsp; : &nbsp;{data.message}</span>
               </div>
             </div>
           </div>
