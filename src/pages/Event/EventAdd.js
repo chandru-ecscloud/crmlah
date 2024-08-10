@@ -46,7 +46,7 @@ function EventAdd() {
         const response = await axios.post(`${API_URL}createEventManagement`, data, {
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {

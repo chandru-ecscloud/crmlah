@@ -17,12 +17,14 @@ const validationSchema = yup.object().shape({
 
 function MembersAdd() {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+
   const formik = useFormik({
     initialValues: {
       companyName: "",
       firstName: "",
       lastName: "",
-      status:"NEW",
+      status: "NEW",
       email: "",
       phone: "",
       message: "",
@@ -33,18 +35,19 @@ function MembersAdd() {
       console.log("Event Data:", data);
       const payload = {
         companyName: data.companyName,
-        firstName:data.firstName,
-        lastName:data.lastName,
-        businessEmail:data.email,
-        phone:data.phone,
-        message:data.message,
-        eventMemberStatus:data.status,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        businessEmail: data.email,
+        phone: data.phone,
+        message: data.message,
+        eventMemberStatus: data.status,
         // eventManagementId:id
       }
       try {
         const response = await axios.post(`${API_URL}createEventMembers`, payload, {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 201) {
@@ -55,7 +58,7 @@ function MembersAdd() {
         }
       } catch (error) {
         toast.error(error.message)
-       
+
       }
     },
   });
@@ -92,11 +95,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.companyName && formik.errors.companyName
+                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -117,11 +119,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.firstName && formik.errors.firstName
+                  className={`form-size form-control  ${formik.touched.firstName && formik.errors.firstName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("firstName")}
                   name="firstName"
                   id="firstName"
@@ -142,11 +143,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.lastName && formik.errors.lastName
+                  className={`form-size form-control  ${formik.touched.lastName && formik.errors.lastName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("lastName")}
                   name="lastName"
                   id="lastName"
@@ -167,15 +167,14 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${
-                    formik.touched.status && formik.errors.status
+                  className={`form-size form-select  ${formik.touched.status && formik.errors.status
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("status")}
                   name="status"
                   id="status"
-                 >
+                >
                   <option value=""></option>
                   <option value="NEW">New</option>
                   <option value="APPROVED">Approved</option>
@@ -197,11 +196,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${
-                    formik.touched.email && formik.errors.email
+                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("email")}
                   name="email"
                   id="email"
@@ -222,11 +220,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.phone && formik.errors.phone
+                  className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("phone")}
                   name="phone"
                   id="phone"
@@ -247,11 +244,10 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   type="text"
-                  className={`form-size form-control  ${
-                    formik.touched.message && formik.errors.message
+                  className={`form-size form-control  ${formik.touched.message && formik.errors.message
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("message")}
                   name="message"
                   id="message"

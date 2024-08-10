@@ -1,23 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
+import { MaterialReactTable, useMaterialReactTable, } from "material-react-table";
 import { LinearProgress, ThemeProvider, createTheme } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
-import { mkConfig, generateCsv, download } from "export-to-csv";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
-
-const csvConfig = mkConfig({
-  fieldSeparator: ",",
-  decimalSeparator: ".",
-  useKeysAsHeaders: true,
-});
 
 const Event = () => {
   const { id } = useParams();
@@ -86,8 +74,15 @@ const Event = () => {
       {
         accessorKey: "eventDate",
         header: "Event Date",
-        Cell: ({ row }) => row.original.eventDate.substring(0, 10),
-      },
+        enableHiding: false,
+        Cell: ({ row }) => {
+          if (row.original.eventDate) {
+             return row.original.eventDate.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
+      },      
       {
         accessorKey: "enquiry",
         header: "Enquiry",
@@ -101,21 +96,22 @@ const Event = () => {
         header: "Event Link",
       },
       {
-        accessorKey: "eventStatus",
-        header: "Event Status",
-      },
-      {
         accessorKey: "created_at",
         header: "Created At",
-        Cell: ({ row }) =>
-          new Date(row.original.created_at).toLocaleDateString(),
+        Cell: ({ row }) => {
+          if (row.original.created_at) {
+             return row.original.created_at.substring(0, 10);
+          } else {
+            return "";
+          }
+        },
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
         Cell: ({ row }) => {
           if (row.original.updatedAt) {
-            return row.original.updatedAt.substring(0, 10);
+             return row.original.updatedAt.substring(0, 10);
           } else {
             return "";
           }
@@ -146,133 +142,38 @@ const Event = () => {
   };
 
   const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
+    if (!rows.length) {
+      toast.error("No rows selected for deletion");
+      return;
+    }
+    const ids = rows.map((row) => row.original.id);
     try {
-      const response = await axios.post(
-        `${API_URL}deleteEventManagement/${id}`,
-        rowData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // //Authorization: `Bearer ${token}`,
-          },
-        }
+      const responses = await Promise.all(
+        ids.map((id) =>
+          axios.delete(`${API_URL}deleteEventManagement/${id}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+        )
       );
-      if (response.status === 200) {
-        toast.success(response.data.message);
+      const allSuccessful = responses.every((response) => response.status === 201);
+      if (allSuccessful) {
+        toast.success("Events deleted successfully");
         navigate("/event");
         table.setRowSelection(false);
       } else {
-        toast.error(response.data.message);
+        toast.error("Some deletions failed");
       }
     } catch (error) {
       toast.error("Failed: " + error.message);
     }
     fetchData();
   };
-
+  
   useEffect(() => {
     fetchData();
-  }, [id]);
-
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
-  };
-
-  const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
-  };
-
-  const handelNavigateClick = () => {
-    navigate("/deals/create");
-  };
-  const handleExportRowsPDF = (rows) => {
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Deals", 15, 15);
-
-    const tableHeaders1 = [
-      "S.no",
-      "Deal Name",
-      "Account Name",
-      "Contact Name",
-      "Deal Owner",
-      "Amount",
-    ];
-    const tableData1 = rows.map((row, i) => {
-      return [
-        i + 1,
-        row.original.dealName,
-        row.original.accountName,
-        row.original.contactName,
-        row.original.dealOwner,
-        row.original.amount,
-      ];
-    });
-
-    autoTable(doc, {
-      head: [tableHeaders1],
-      body: tableData1,
-      startY: 25,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-
-    const tableHeaders2 = [
-      "Closing Date",
-      "Lead Source",
-      "Stage",
-      "Probability",
-      "Campaign Source",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.closingDate,
-        row.original.leadSource,
-        row.original.stage,
-        row.original.probability,
-        row.original.campaignSource,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-
-    const tableHeaders5 = ["Description", "CreatedAt", "UpdatedAt"];
-    const tableData5 = rows.map((row) => {
-      return [
-        row.original.descriptionInfo,
-        row.original.createdAt,
-        row.original.updatedAt,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders5],
-      body: tableData5,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-
-    doc.save("ECS.pdf");
-  };
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -291,18 +192,9 @@ const Event = () => {
     columns,
     data,
     columnVisibility: {
-      eventName: false,
-      firstName: false,
-      lastName: false,
-      phone: false,
-      businessEmail: false,
-      eventDate: false,
-      enquiry: false,
+      eventLink:false,
       eventDescription: false,
       eventStatus: false,
-      skypeId: false,
-      twitter: false,
-      sources: false,
     },
     enableRowSelection: true,
     paginationDisplayMode: "pages",
@@ -321,49 +213,46 @@ const Event = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-            
           <div className="d-flex align-items-center justify-content-end">
-            <div className="d-flex align-items-center  justify-content-end py-4 px-3">
+            <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
                 <Link to="/event/add">
-                  <button className="btn btn-primary">
-                    Create Event
-                  </button>
+                  <button className={`btn btn-primary`}>Create Event</button>
                 </Link>
               </div>
-            </div>
-            <div
-              className={`dropdown-center ${role === "CMP_USER" && "disabled"
-                }`}
-            >
-              <button
-                className="btn btn-danger dropdown-toggle"
-                // disabled={role === "CMP_USER"}
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+              <div
+                className={`dropdown-center ${role === "CMP_USER" && "disabled"
+                  }`}
               >
-                Action <FaSortDown style={{ marginTop: "-6px" }} />
-              </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled={
-                      !(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      ) || table.getSelectedRowModel().rows.length !== 1
-                    }
-                    onClick={() =>
-                      handleBulkDelete(table.getSelectedRowModel().rows)
-                    }
-                  >
-                    Delete
-                  </button>
-                </li>
-              </ul>
+                <button
+                  className="btn btn-danger dropdown-toggle"
+                  disabled={role === "CMP_USER"}
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Action <FaSortDown style={{ marginTop: "-6px" }} />
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <button
+                      className="btn"
+                      style={{ width: "100%", border: "none" }}
+                      disabled={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        ) || table.getSelectedRowModel().rows.length !== 1
+                      }
+                      onClick={() =>
+                        handleBulkDelete(table.getSelectedRowModel().rows)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <ThemeProvider theme={theme}>

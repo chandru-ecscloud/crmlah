@@ -179,14 +179,8 @@
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
 }
 
-.quote-icon {
-  color: #090909; /* Yellow color for the quote icon */
-  font-size: 6rem; /* Large size for the quote icon */
-  margin-bottom: 0px; 
-}
-
 .quote-text {
-  font-size: 2.5rem; /* Increased text size */
+  font-size: 2.3rem; /* Increased text size */
   font-weight: bold;
   line-height: 1.3;
   margin: 0;

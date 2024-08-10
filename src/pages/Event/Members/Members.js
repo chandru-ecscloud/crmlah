@@ -9,29 +9,6 @@ import axios from "axios";
 import { API_URL } from "../../../Config/URL";
 import { toast } from "react-toastify";
 import { FaSortDown } from "react-icons/fa";
-// const dummyData = [
-//   {
-//     id: 1,
-//     CompanyName: "ECS",
-//     FirstName: "Sakthivel",
-//     Email: "Sakthiveljayabal23@gmail.com",
-//     phone: "6345674567",
-//   },
-//   {
-//     id: 2,
-//     CompanyName: "ECS",
-//     FirstName: "Prem",
-//     Email: "Prem@gmail.com",
-//     phone: "6345674567",
-//   },
-//   {
-//     id: 3,
-//     CompanyName: "ECS",
-//     FirstName: "Chandru",
-//     Email: "Chandru@gmail.com",
-//     phone: "6345674567",
-//   },
-// ];
 
 const Members = () => {
   const [loading, setLoading] = useState(false);
@@ -39,20 +16,26 @@ const Members = () => {
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
   console.log("data", data);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios(`${API_URL}getAllEventMembers`);
-        setData(response.data);
-      } catch (error) {
-        toast.error("Error fetching data:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios(
+        `${API_URL}getAllEventMembers`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -115,30 +98,40 @@ const Members = () => {
       style: { cursor: "pointer" },
     }),
   });
+
   const handleBulkDelete = async (rows) => {
-    const rowData = rows.map((row) => row.original);
+    if (!rows.length) {
+      toast.error("No rows selected for deletion");
+      return;
+    }
+    const ids = rows.map((row) => row.original.id);
     try {
-      const response = await axios.delete(
-        `${API_URL}deleteEventMembers/${rows.original.id}`,
-        rowData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // //Authorization: `Bearer ${token}`,
-          },
-        }
+      const responses = await Promise.all(
+        ids.map((id) =>
+          axios.delete(`${API_URL}deleteEventMembers/${id}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+        )
       );
-      if (response.status === 200) {
-        toast.success(response.data.message);
+      const allSuccessful = responses.every((response) => response.status === 201);
+      if (allSuccessful) {
+        toast.success("Members deleted successfully");
         navigate("/members");
         table.setRowSelection(false);
       } else {
-        toast.error(response.data.message);
+        toast.error("Some deletions failed");
       }
     } catch (error) {
       toast.error("Failed: " + error.message);
     }
+    fetchData();
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -166,9 +159,8 @@ const Members = () => {
                 </Link>
               </div>
               <div
-                className={`dropdown-center ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+                className={`dropdown-center ${role === "CMP_USER" && "disabled"
+                  }`}
               >
                 <button
                   className="btn btn-danger dropdown-toggle"
