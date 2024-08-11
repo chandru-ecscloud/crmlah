@@ -191,10 +191,12 @@ const Event = () => {
   const table = useMaterialReactTable({
     columns,
     data,
-    columnVisibility: {
-      eventLink:false,
-      eventDescription: false,
-      eventStatus: false,
+    initialState: {
+      columnVisibility: {
+        eventLink: false,
+        eventDescription: false,
+        enquiry: false
+      },
     },
     enableRowSelection: true,
     paginationDisplayMode: "pages",

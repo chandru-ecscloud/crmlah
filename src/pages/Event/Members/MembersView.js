@@ -63,10 +63,10 @@ function MembersView() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <Link to="/members">
+          {/* <Link to="/members">
             {" "}
             <button className={`btn btn-primary`}>Members</button>
-          </Link>
+          </Link> */}
           <button className={`btn btn-warning ms-3`} onClick={handelEdit}>
             Edit
           </button>
@@ -74,7 +74,7 @@ function MembersView() {
       </section>
       <section
         className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center"
-        style={{ minHeight: "75vh" }}
+        style={{ minHeight: "85vh" }}
       >
         <div
           className="container-fluid col-md-10 m-0 "

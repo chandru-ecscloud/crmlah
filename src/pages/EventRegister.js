@@ -60,7 +60,7 @@ const EventRegister = () => {
           payload,
         );
         if (response.status === 201) {
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
           setShow(true);
           formik.resetForm();
         } else {
