@@ -18,7 +18,7 @@ const validationSchema = yup.object().shape({
   phone: yup
     .string()
     .required("*Phone is required")
-    .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
+    .matches(/^[0-9]{8}$|^[0-9]{10}$/, "*Phone Number must be 8 or 10 digits"),
   description_info: yup.string().required("*Enquiry is required"),
 });
 
