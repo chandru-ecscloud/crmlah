@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import axios from "axios";
@@ -8,6 +13,9 @@ import { toast } from "react-toastify";
 
 function MembersView() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId");
+
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -21,8 +29,9 @@ function MembersView() {
     };
     fetchData();
   }, []);
+
   const handelEdit = () => {
-    navigate(`/members/edit/${id}`);
+    navigate(`/members/edit/${id}?eventId=${eventId}`);
   };
 
   return (
@@ -43,7 +52,7 @@ function MembersView() {
                 >
                   <button
                     className="btn fs-4 border-white"
-                    onClick={() => navigate("/members")}
+                    onClick={() => navigate(`/members/${eventId}`)}
                   >
                     <IoArrowBack className="back_arrow" />
                   </button>

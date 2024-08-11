@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ const validationSchema = yup.object().shape({
   companyName: yup.string().required("*Company Name is Required"),
   firstName: yup.string().required("*First Name is Required"),
   lastName: yup.string().required("*Last Name is Required"),
-  status: yup.string().required("*Status is Required"),
+  eventMemberStatus: yup.string().required("*Status is Required"),
   businessEmail: yup
     .string()
     .email("Invalid email")
@@ -21,13 +21,15 @@ const validationSchema = yup.object().shape({
 function MembersEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const eventId = searchParams.get("eventId");
   const formik = useFormik({
     initialValues: {
       companyName: "",
       firstName: "",
       lastName: "",
       businessEmail: "",
-      status: "",
+      eventMemberStatus: "",
       phone: "",
       message: "",
     },
@@ -41,7 +43,7 @@ function MembersEdit() {
         businessEmail: data.businessEmail,
         phone: data.phone,
         message: data.message,
-        eventMemberStatus:data.status
+        eventMemberStatus:data.eventMemberStatus
         // eventManagementId:1
       };
       try {
@@ -56,7 +58,7 @@ function MembersEdit() {
         );
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/members");
+          navigate(`/members/${eventId}`);
         } else {
           toast.error(response.data.message);
         }
@@ -88,7 +90,7 @@ function MembersEdit() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={"/event"}>
+              <Link to={`/members/${eventId}`}>
                 <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
@@ -185,13 +187,14 @@ function MembersEdit() {
                 <select
                   type="text"
                   className={`form-size form-select  ${
-                    formik.touched.status && formik.errors.status
+                    formik.touched.eventMemberStatus &&
+                    formik.errors.eventMemberStatus
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("status")}
-                  name="status"
-                  id="status"
+                  {...formik.getFieldProps("eventMemberStatus")}
+                  name="eventMemberStatus"
+                  id="eventMemberStatus"
                 >
                   <option value=""></option>
                   <option value="NEW">New</option>
@@ -202,9 +205,12 @@ function MembersEdit() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.status && formik.errors.status && (
-                    <p className="text-danger">{formik.errors.status}</p>
-                  )}
+                  {formik.touched.eventMemberStatus &&
+                    formik.errors.eventMemberStatus && (
+                      <p className="text-danger">
+                        {formik.errors.eventMemberStatus}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>

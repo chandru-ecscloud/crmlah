@@ -4,28 +4,29 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { LinearProgress, ThemeProvider, createTheme } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../../Config/URL";
 import { toast } from "react-toastify";
 import { FaSortDown } from "react-icons/fa";
 
 const Members = () => {
+  const {id} = useParams()
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
-  console.log("data", data);
+  // console.log("data", data);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}getAllEventMembers`,
+        `${API_URL}getEventMemberEventManagementId/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`, 
+            //Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -93,7 +94,7 @@ const Members = () => {
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        navigate(`/members/view/${row.original.id}`);
+        navigate(`/members/view/${row.original.id}?eventId=${id}`);
       },
       style: { cursor: "pointer" },
     }),
@@ -154,13 +155,15 @@ const Members = () => {
           <div className="d-flex align-items-center justify-content-end">
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
-                <Link to="/members/add">
+                <Link to={`/members/add?eventId=${id}`}>
                   <button className={`btn btn-primary`}>Create Members</button>
                 </Link>
               </div>
+
               <div
-                className={`dropdown-center ${role === "CMP_USER" && "disabled"
-                  }`}
+                className={`dropdown-center ${
+                  role === "CMP_USER" && "disabled"
+                }`}
               >
                 <button
                   className="btn btn-danger dropdown-toggle"
@@ -190,6 +193,16 @@ const Members = () => {
                     </button>
                   </li>
                 </ul>
+              </div>
+              <div style={{ paddingLeft: "10px" }}>
+                <Link to={`/event/view/${id}`}>
+                  <button
+                    className={`btn btn-light `}
+                    style={{ border: "1px solid #000" }}
+                  >
+                    Back
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

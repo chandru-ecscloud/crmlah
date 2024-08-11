@@ -43,6 +43,7 @@ function EventEdit() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Event Data:", data);
+      data.eventLink = `https://crmlah.com/eventregister/${id}`;
       try {
         const response = await axios.put(`${API_URL}updateEventManagement/${id}`, data, {
           headers: {

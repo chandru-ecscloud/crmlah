@@ -77,7 +77,7 @@ const Event = () => {
         enableHiding: false,
         Cell: ({ row }) => {
           if (row.original.eventDate) {
-             return row.original.eventDate.substring(0, 10);
+             return row?.original?.eventDate?.substring(0, 10);
           } else {
             return "";
           }
@@ -125,11 +125,11 @@ const Event = () => {
     try {
       setLoading(true);
       const response = await axios(
-        `${API_URL}getAllEventManagement`,
+        `${API_URL}getAllEventManagementByCompanyId/${companyId}`,
         {
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`, 
+            //Authorization: `Bearer ${token}`,
           },
         }
       );

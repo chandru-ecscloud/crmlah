@@ -166,6 +166,7 @@
 }
 .large-number {
   font-size: 4rem; 
+  font-weight: 600;
 }
 .quote-container {
   /* background-color: #2E3271;  */

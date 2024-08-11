@@ -69,13 +69,13 @@ function Header() {
                   >
                     Contact
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     to="/eventregister"
                     activeClassName="active"
                     className="headers"
                   >
                     Event Register
-                  </NavLink>
+                  </NavLink> */}
 
                   {/* <NavDropdown
                     title="Dropdown"

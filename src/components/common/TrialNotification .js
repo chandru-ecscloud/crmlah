@@ -27,7 +27,7 @@ const TrialNotification = () => {
           }
         }
       } catch (error) {
-        toast.error("Error fetching trial data");
+        console.log("Error fetching trial data");
       }
     };
     handelTrailEnd();

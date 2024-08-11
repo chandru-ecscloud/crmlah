@@ -80,7 +80,7 @@ function AdminHeader({ handleLogout }) {
   const filteredMainMenuForOrganizer =
     role === "EVENT_ORGANIZER"
       ? mainMenu.filter(
-          (menuItem) => menuItem.label === "Home" || menuItem.label === "Event"
+          (menuItem) =>  menuItem.label === "Event"
         )
       : filteredMainMenu;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -17,6 +17,8 @@ const validationSchema = yup.object().shape({
 
 function MembersAdd() {
   const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const eventId = searchParams.get("eventId");
   const token = sessionStorage.getItem("token");
 
   const formik = useFormik({
@@ -52,7 +54,7 @@ function MembersAdd() {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          navigate("/members");
+          navigate(`/members/${eventId}`);
         } else {
           toast.error(response.data.message);
         }
@@ -74,7 +76,7 @@ function MembersAdd() {
               </h4>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3 d-flex justify-content-lg-end justify-content-md-end">
-              <Link to={"/members"}>
+              <Link to={`/members/${eventId}`}>
                 <button className="btn btn-danger">Cancel</button>
               </Link>
               &nbsp;
@@ -95,10 +97,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
+                  className={`form-size form-control  ${
+                    formik.touched.companyName && formik.errors.companyName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -119,10 +122,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.firstName && formik.errors.firstName
+                  className={`form-size form-control  ${
+                    formik.touched.firstName && formik.errors.firstName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("firstName")}
                   name="firstName"
                   id="firstName"
@@ -143,10 +147,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.lastName && formik.errors.lastName
+                  className={`form-size form-control  ${
+                    formik.touched.lastName && formik.errors.lastName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("lastName")}
                   name="lastName"
                   id="lastName"
@@ -167,10 +172,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <select
                   type="text"
-                  className={`form-size form-select  ${formik.touched.status && formik.errors.status
+                  className={`form-size form-select  ${
+                    formik.touched.status && formik.errors.status
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("status")}
                   name="status"
                   id="status"
@@ -196,10 +202,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("email")}
                   name="email"
                   id="email"
@@ -220,10 +227,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
+                  className={`form-size form-control  ${
+                    formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("phone")}
                   name="phone"
                   id="phone"
@@ -244,10 +252,11 @@ function MembersAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <textarea
                   type="text"
-                  className={`form-size form-control  ${formik.touched.message && formik.errors.message
+                  className={`form-size form-control  ${
+                    formik.touched.message && formik.errors.message
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("message")}
                   name="message"
                   id="message"

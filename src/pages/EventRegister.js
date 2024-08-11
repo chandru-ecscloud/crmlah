@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "../styles/user.css";
-import { useFormik } from 'formik';
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { OverlayTrigger, Tooltip, Modal, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import success from "../assets/success.mp4";
 import { RiDoubleQuotesL } from "react-icons/ri";
 import { API_URL } from "../../src/Config/URL";
@@ -19,15 +19,16 @@ const validationSchema = yup.object().shape({
     .string()
     .required("*Phone is required")
     .matches(/^[0-9]{10}$/, "*Phone Number must be 10 digits"),
-  email: yup.string().required("*Email is required"),
   description_info: yup.string().required("*Enquiry is required"),
 });
 
-
 const EventRegister = () => {
+  const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [show, setShow] = useState(false);
-  const token = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJDTVBfT1dORVIiXSwic3ViIjoiTUlUX1NwYWNlIiwiaWF0IjoxNzIzMjkyMzcxLCJleHAiOjE3MjMyOTU5NzF9.PxIofwfurcW2A8RSetFWiWhoK_K-ogS67JFfvVhDcMG_bs2Gq9laGlI3GSYGAc0yBTGr04Jqhqo-IVFY6HPgig";
+  const [data, setData] = useState({});
+  const token =
+    "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJDTVBfT1dORVIiXSwic3ViIjoiTUlUX1NwYWNlIiwiaWF0IjoxNzIzMjkyMzcxLCJleHAiOjE3MjMyOTU5NzF9.PxIofwfurcW2A8RSetFWiWhoK_K-ogS67JFfvVhDcMG_bs2Gq9laGlI3GSYGAc0yBTGr04Jqhqo-IVFY6HPgig";
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
@@ -39,36 +40,43 @@ const EventRegister = () => {
       firstName: "",
       lastName: "",
       phone: "",
-      email: "",
       description_info: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      console.log("Event Data:", data);
-      data.eventId = 1;
-      data.eventStatus = "NEW";
-      data.company_id = 22;
+      const payload = {
+        companyName: data.companyName,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        businessEmail: data.businessEmail,
+        phone: data.phone,
+        message: data.description_info,
+        eventMemberStatus: "NEW",
+        eventManagementId: id,
+      };
       try {
-        const response = await axios.post(`${API_URL}createEventManagement`, data, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.post(
+          `${API_URL}createEventMembers`,
+          payload,
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
-          navigate("/event");
+          setShow(true);
+          formik.resetForm();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
       }
-      setShow(true);
-    }
+    },
   });
+
   const calculateTimeLeft = () => {
-    const targetDate = new Date('2024-08-12T00:00:00'); // Set your target date and time
+    console.log("backend Date is ", data?.eventDate?.substring(0, 19));
+    const targetDate = new Date(data?.eventDate?.substring(0, 19)); // Set your target date and time
+    console.log("Target Date", targetDate); // Set your target date and time
+
     const now = new Date();
     const difference = targetDate - now;
 
@@ -95,51 +103,70 @@ const EventRegister = () => {
     }, 60000); // Update the timer every minute
 
     return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}getAllEventManagementById/${id}`
+        );
+        setData(response.data);
+      } catch (e) {
+        console.log("Error Fetching Data");
+      }
+    };
+
+    getData();
   }, []);
-
-
 
   return (
     <div className="container-fluid">
-      <div style={{ backgroundColor: '#e0f7fa' }} className="p-3">
+      <div style={{ backgroundColor: "#e0f7fa" }} className="p-3">
         <div className="heading-register text-center">
           <span className="register fw-bold fs-1">Registration Link:</span>
 
-          <span className="community">ISV Community Day Singapore</span>
+          <span className="community">{data.eventName}</span>
         </div>
-        <div className="d-flex justify-content-center align-items-center my-1">
+        {/* <div className="d-flex justify-content-center align-items-center my-1">
           <div className="p-3 bg-dark text-white rounded d-flex">
             <div className="text-center me-4">
-              <h2 className="m-0 large-number">{String(timeLeft.days).padStart(2, '0')}</h2>
+              <h2 className="m-0 large-number">
+                {String(timeLeft.days).padStart(2, "0")}
+              </h2>
               <small>Days</small>
             </div>
             <div className="text-center me-4">
-              <h2 className="m-0 large-number">{String(timeLeft.hours).padStart(2, '0')}</h2>
+              <h2 className="m-0 large-number">
+                {String(timeLeft.hours).padStart(2, "0")}
+              </h2>
               <small>Hours</small>
             </div>
             <div className="text-center">
-              <h2 className="m-0 large-number">{String(timeLeft.minutes).padStart(2, '0')}</h2>
+              <h2 className="m-0 large-number">
+                {String(timeLeft.minutes).padStart(2, "0")}
+              </h2>
               <small>Minutes</small>
             </div>
           </div>
-        </div>
+        </div> */}
 
+        <span className="time-in">
+          <strong>Date:</strong>
+          {"  "}
+          &nbsp;{new Date(data?.eventDate?.substring(0, 10)).toDateString()}
+        </span>
 
-        <span className="time-in"><strong>Date:</strong> 11th Aug 2024</span>
-
-        <p className=" text-center"><strong>Venue:</strong> AWS Singapore,23 Church Street, Level 8 Capital Square, Singapore 049481</p>
+        <p className=" text-center">
+          <strong>Venue:</strong> Peninsula Plaza, Singapore 179098
+        </p>
         <div className="text-start">
-          <h2 className="fw-bold " style={{ marginLeft: "23px" }}>Event Agenda</h2>
-          <ul className='agenda'>
-            <li className="my-1"><strong>09:00:</strong> Breakfast & Registration</li>
-            <li className="my-1"><strong>09:30:</strong> Opening Key Note & Welcome Address</li>
-            <li className="my-1"><strong>09:50:</strong> SaaS Innovations - Trends and Opportunities</li>
-            <li className="my-1"><strong>10:10:</strong> Hear from Our ISVs - AWS Journeys, Expert Tips & Tricks, and Interactive Q&A</li>
-            <li className="my-1"><strong>10:30:</strong> Watermelon Software - AI Driven Software Reliability</li>
-            <li className="my-1"><strong>10:45:</strong> DataStax - Building Agent Apps and GenAI Chat</li>
-            <li className="my-1"><strong>11:00:</strong> JustPerform - Achieving Streamlined Business Performance Management with an Intelligent Platform</li>
-            <li className="my-1"><strong>11:15:</strong> CyncLair - Elevating Your Cybersecurity Security Posture with OpenXDR</li>
-          </ul>
+          <h2 className="fw-bold " style={{ marginLeft: "23px" }}>
+            Event Agenda
+          </h2>
+          <p style={{ marginLeft: "23px", whiteSpace: "pre-wrap" }}>
+            {data.eventAgenda || "--"}
+          </p>{" "}
         </div>
       </div>
       <div className="row">
@@ -153,10 +180,11 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg  ${formik.touched.companyName && formik.errors.companyName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-control-lg  ${
+                    formik.touched.companyName && formik.errors.companyName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -167,21 +195,24 @@ const EventRegister = () => {
               </div>
               <div className="col-12 mb-3 text-start">
                 <label className="contactFields">
-                  Bussiness Email Address (Please provide an valid company domain)<span className="text-danger">*</span>
+                  Bussiness Email Address (Please provide an valid company
+                  domain)<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg  ${formik.touched.businessEmail && formik.errors.businessEmail
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-control-lg  ${
+                    formik.touched.businessEmail && formik.errors.businessEmail
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("businessEmail")}
                   name="businessEmail"
                   id="businessEmail"
                 />
-                {formik.touched.businessEmail && formik.errors.businessEmail && (
-                  <p className="text-danger">{formik.errors.businessEmail}</p>
-                )}
+                {formik.touched.businessEmail &&
+                  formik.errors.businessEmail && (
+                    <p className="text-danger">{formik.errors.businessEmail}</p>
+                  )}
               </div>
               <div className="col-12 mb-3 text-start">
                 <label className="contactFields">
@@ -189,10 +220,11 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg   ${formik.touched.firstName && formik.errors.firstName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-control-lg   ${
+                    formik.touched.firstName && formik.errors.firstName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("firstName")}
                   name="firstName"
                   id="firstName"
@@ -207,10 +239,11 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg   ${formik.touched.lastName && formik.errors.lastName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control form-control-lg   ${
+                    formik.touched.lastName && formik.errors.lastName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("lastName")}
                   name="lastName"
                   id="lastName"
@@ -226,10 +259,11 @@ const EventRegister = () => {
                 <input
                   type="tel"
                   name="phone"
-                  className={`form-size form-control form-control-lg  ${formik.touched.phone && formik.errors.phone
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control form-control-lg  ${
+                    formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("phone")}
                   id="phone"
                 />
@@ -237,24 +271,25 @@ const EventRegister = () => {
                   <p className="text-danger">{formik.errors.phone}</p>
                 )}
               </div>
-              <div className="col-12 mb-3 text-start">
+              {/* <div className="col-12 mb-3 text-start">
                 <label className="contactFields">
                   Email<span className="text-danger">*</span>
                 </label>
                 <input
                   type="email"
                   name="email"
-                  className={`form-size form-control form-control-lg  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control form-control-lg  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
                 {formik.touched.email && formik.errors.email && (
                   <p className="text-danger">{formik.errors.email}</p>
                 )}
-              </div>
+              </div> */}
 
               <div className="col-12 mb-4 text-start">
                 <label className="contactFields">
@@ -273,14 +308,13 @@ const EventRegister = () => {
                   )}
               </div>
               <div className="col-12 mb-3 d-flex justify-content-center ">
-                <button
-                  type="submit"
-                  className="btn donateBtn  "
-                >
-                  {loadIndicator && <span
-                    class="spinner-border spinner-border-sm me-2 "
-                    aria-hidden="true"
-                  ></span>}
+                <button type="submit" className="btn donateBtn  ">
+                  {loadIndicator && (
+                    <span
+                      class="spinner-border spinner-border-sm me-2 "
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   Submit
                 </button>
               </div>
@@ -294,16 +328,20 @@ const EventRegister = () => {
                   <div className="d-flex justify-content-center">
                     <video src={success} autoPlay loop muted className="w-50" />
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <p className="fw-bold ">Thank You!</p>
+                  <div className="text-center">
+                    <h3 className="fw-bold">Thank You!</h3>
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <p className="fw-bold">Your Link Is successfully Generated!</p>
+                  <div className="text-center">
+                    <p className="fw-bold">
+                      Your registration was successful! Our team will contact
+                      you soon.
+                    </p>
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <p className="fw-bold"> We look forward to seeing you at ISV Community Day Singapore.</p>
+                  <div className="text-center">
+                    <p className="fw-bold">
+                      We are excited to see you at {data.eventName}.
+                    </p>
                   </div>
-
                 </Modal.Body>
               </Modal>
               {/* <span className="d-flex justify-content-center col-12 ">
@@ -312,31 +350,21 @@ const EventRegister = () => {
             </div>
           </form>
         </div>
-        <div className="col-md-6 p-4">
-          <div className="quote-container">
-            <p className=" text-danger">
-              <RiDoubleQuotesL size={50} />
-            </p>
-            <h1 className="quote-text mb-4">
-              Let’s Make
-              it <br />
-              Happen Together!
-            </h1>
+        <div className="col-md-6 p-4 d-flex flex-column align-items-center justify-content-center">
+          <div className="">
+            <div className="quote-container">
+              <p className=" text-danger">
+                <RiDoubleQuotesL size={50} />
+              </p>
+              <h1 className="quote-text mb-4">
+                Let’s Make it <br />
+                Happen Together!
+              </h1>
+            </div>
+            <p className="my-2 text-center">{data.eventDescription || "--"}</p>
           </div>
-          <p className='my-2 text-center'>
-            Join us for an engaging day at the ISV Community
-            Day in Singapore, where independent software vendors (ISVs)
-            come together to explore the latest industry trends, share
-            insights, and collaborate on innovative solutions. This event
-            offers a unique opportunity to network with peers, learn from
-            experts, and discover new ways to drive success in the
-            software development landscape. Whether you're looking to
-            expand your knowledge, connect with potential partners, or
-            simply be inspired, ISV Community Day Singapore is the place to be.</p>
-
         </div>
       </div>
-
     </div>
   );
 };

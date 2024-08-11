@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 const validationSchema = yup.object().shape({
   username: yup.string().required("*UserName is required."),
   password: yup.string().required("*Enter the valid Password"),
-  });
+});
 
 function LogIn({ handleLogin }) {
   const navigate = useNavigate();
@@ -51,17 +51,24 @@ function LogIn({ handleLogin }) {
         // sessionStorage.setItem("role", "EVENT_ORGANIZER");
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.userId);
-        sessionStorage.setItem("appointmentRole",response.data.appointmentRole);
+        sessionStorage.setItem(
+          "appointmentRole",
+          response.data.appointmentRole
+        );
         handleLogin();
-        navigate("/dashboard");
+        if (response.data.role === "EVENT_ORGANIZER") {
+          navigate("/event");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      if(error?.response?.status === 404){
-        toast.warning("User not verified")
-      }else{
-        toast.warning("Invalid Username or Password")
+      if (error?.response?.status === 404) {
+        toast.warning("User not verified");
+      } else {
+        toast.warning("Invalid Username or Password");
       }
       // toast.error("Failed: " + error.message);
     }

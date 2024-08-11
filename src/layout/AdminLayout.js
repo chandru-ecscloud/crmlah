@@ -175,7 +175,7 @@ function AdminLayout({ handleLogout }) {
         <Route path="/event/view/:id" element={<EventView />} />
 
         {/* Members*/}
-        <Route path="/members" element={<Members />} />
+        <Route path="/members/:id" element={<Members />} />
         <Route path="/members/add" element={<MembersAdd />} />
         <Route path="/members/edit/:id" element={<MembersEdit />} />
         <Route path="/members/view/:id" element={<MembersView />} />

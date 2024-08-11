@@ -12,12 +12,12 @@ function EventView() {
 
   const { id } = useParams();
   const [eventData, setEventData] = useState({});
-  console.log("Deal Data:", eventData);
+  // console.log("Deal Data:", eventData);
   // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const [link, setLink] = useState("https://ecscloudinfotech.com/ecs/");
+  const [link, setLink] = useState("");
   const [copyButtonText, setCopyButtonText] = useState(<LuCopy />);
 
   const handleClose = () => setShow(false);
@@ -32,6 +32,7 @@ function EventView() {
         },
       });
       setEventData(response.data);
+      setLink(response.data.eventLink);
     } catch (error) {
       toast.error("Error fetching data:", error);
     }
@@ -81,10 +82,12 @@ function EventView() {
         </div>
 
         <div className="col-9 mt-1" id="buttons-container">
-          <button className="btn btn-primary" onClick={handleShow}>
-            Generate Link
-          </button>
-          <Link to="/members">
+          {eventData.eventLink && (
+            <button className="btn btn-primary" onClick={handleShow}>
+              Generate Link
+            </button>
+          )}
+          <Link to={`/members/${eventData.id}`}>
             <button className="btn btn-primary ms-3">Members</button>
           </Link>
           <button className="btn btn-warning ms-3" onClick={handleEdit}>
@@ -108,15 +111,21 @@ function EventView() {
             <div className="container-fluid row">
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark ">Company Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;{eventData.companyName || ""}</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{eventData.companyName || ""}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">First Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;{eventData.firstName || ""}</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{eventData.firstName || ""}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Last Name</label>
-                <span className="text-dark">&nbsp; : &nbsp;{eventData.lastName || ""}</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{eventData.lastName || ""}
+                </span>
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label"> Email</label>
@@ -126,7 +135,9 @@ function EventView() {
               </div>
               <div className="col-md-6 d-flex justify-content-center">
                 <label className="text-dark Label">Phone</label>
-                <span className="text-dark">&nbsp; : &nbsp;{eventData.phone || ""}</span>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{eventData.phone || ""}
+                </span>
               </div>
             </div>
           </div>
@@ -137,7 +148,9 @@ function EventView() {
         >
           {" "}
           <div className="my-2 container-fluid row">
-            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Enquiry</span>
+            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">
+              Enquiry
+            </span>
           </div>
           <div className="address-item ">
             <span className="text-dark"> {eventData.enquiry || ""}</span>
@@ -151,7 +164,9 @@ function EventView() {
             <span className="fs-6 fw-bold my-2 border-bottom">Agenda</span>
           </div>
           <div className="address-item">
-            <span className="text-dark"> {eventData.eventAgenda || ""}</span>
+            <span className="text-dark" style={{ whiteSpace: "pre-wrap" }}>
+              {eventData.eventAgenda || ""}
+            </span>
           </div>
         </div>
         <div
@@ -159,13 +174,17 @@ function EventView() {
           id="Details"
         >
           <div className="my-3 container-fluid row">
-            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">Description</span>
+            <span className="mt-3 mb-2 fs-6 fw-bold my-2 border-bottom">
+              Description
+            </span>
           </div>
           <div className="address-item ">
-            <span className="text-dark ms-2"> {eventData.eventDescription || ""}</span>
+            <span className="text-dark ms-2">
+              {" "}
+              {eventData.eventDescription || ""}
+            </span>
           </div>
         </div>
-
       </section>
 
       {/* Modal */}
