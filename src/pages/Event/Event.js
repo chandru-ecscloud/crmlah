@@ -9,11 +9,13 @@ import { toast } from "react-toastify";
 
 const Event = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [buttonLoader, setButtonLoader] = useState(false);
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
+  const userId = sessionStorage.getItem("userId");
 
   const columns = useMemo(
     () => [
@@ -77,12 +79,12 @@ const Event = () => {
         enableHiding: false,
         Cell: ({ row }) => {
           if (row.original.eventDate) {
-             return row?.original?.eventDate?.substring(0, 10);
+            return row?.original?.eventDate?.substring(0, 10);
           } else {
             return "";
           }
         },
-      },      
+      },
       {
         accessorKey: "enquiry",
         header: "Enquiry",
@@ -100,7 +102,7 @@ const Event = () => {
         header: "Created At",
         Cell: ({ row }) => {
           if (row.original.created_at) {
-             return row.original.created_at.substring(0, 10);
+            return row.original.created_at.substring(0, 10);
           } else {
             return "";
           }
@@ -111,7 +113,7 @@ const Event = () => {
         header: "Updated At",
         Cell: ({ row }) => {
           if (row.original.updatedAt) {
-             return row.original.updatedAt.substring(0, 10);
+            return row.original.updatedAt.substring(0, 10);
           } else {
             return "";
           }
@@ -124,16 +126,28 @@ const Event = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios(
-        `${API_URL}getAllEventManagementByCompanyId/${companyId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setData(response.data);
+      if (role === "EVENT_ORGANIZER") {
+        const response = await axios(
+          `${API_URL}getEventManagementByUserId/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setData(response.data);
+      } else {
+        const response = await axios(
+          `${API_URL}getAllEventManagementByCompanyId/${companyId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setData(response.data);
+      }
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -159,7 +173,7 @@ const Event = () => {
       );
       const allSuccessful = responses.every((response) => response.status === 201);
       if (allSuccessful) {
-        toast.success("Events deleted successfully");
+        toast.success("Event deleted successfully");
         navigate("/event");
         table.setRowSelection(false);
       } else {
@@ -170,7 +184,28 @@ const Event = () => {
     }
     fetchData();
   };
-  
+
+  const handleStatusUpdate = async (name, row) => {
+    setButtonLoader(true)
+    try {
+      const respones = await axios.put(`${API_URL}updateEventManagement/${row[0].original.id}`,
+        { eventStatus: name })
+      if (respones.status === 200) {
+        toast.success("Event Updated successfully");
+        navigate("/event");
+        fetchData();
+        table.setRowSelection(false);
+      } else {
+        toast.error("Some deletions failed");
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    } finally {
+      setButtonLoader(false)
+    }
+
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -217,44 +252,97 @@ const Event = () => {
         <>
           <div className="d-flex align-items-center justify-content-end">
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
+
               <div style={{ paddingRight: "10px" }}>
-                <Link to="/event/add">
-                  <button className={`btn btn-primary`}>Create Event</button>
-                </Link>
-              </div>
-              <div
-                className={`dropdown-center ${role === "CMP_USER" && "disabled"
-                  }`}
-              >
-                <button
-                  className="btn btn-danger dropdown-toggle"
-                  disabled={role === "CMP_USER"}
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Action <FaSortDown style={{ marginTop: "-6px" }} />
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
+                {role !== "EVENT_ORGANIZER" && (
+                  <Link to="/event/add">
                     <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !(
-                          table.getIsSomeRowsSelected() ||
-                          table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
+                      className="btn btn-primary"
+                      disabled={role === "EVENT_ORGANIZER"}
                     >
-                      Delete
+                      Create Event
                     </button>
-                  </li>
-                </ul>
+                  </Link>
+                )}
               </div>
+              <div style={{ paddingRight: "10px" }}
+                className={`dropdown-center ${role === "EVENT_ORGANIZER" ? "disabled" : ""}`}>
+                {role !== "EVENT_ORGANIZER" && (
+                  <>
+                    <button
+                      className="btn btn-primary dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      disabled={buttonLoader}
+                    >
+                      {buttonLoader && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Status <FaSortDown style={{ marginTop: "-6px" }} />
+                    </button>
+                    <ul className="dropdown-menu">
+                      {["INPROCESS", "NEW", "APPROVED", "CANCELLED", "RESCHEDULED"].map(status => (
+                        <li key={status}>
+                          <button
+                            className="btn"
+                            style={{ width: "100%", border: "none" }}
+                            disabled={
+                              !(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) ||
+                              table.getSelectedRowModel().rows.length !== 1
+                            }
+                            onClick={() => handleStatusUpdate(status, table.getSelectedRowModel().rows)}
+                          >
+                            {status.charAt(0) + status.slice(1).toLowerCase()}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </div>
+
+              <div
+                className={`dropdown-center ${role === "CMP_USER" && "disabled"}`}
+              >
+                {role !== "EVENT_ORGANIZER" && (
+                  <>
+                    <button
+                      className="btn btn-danger dropdown-toggle"
+                      disabled={role === "CMP_USER"}
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Action <FaSortDown style={{ marginTop: "-6px" }} />
+                    </button>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !(
+                              table.getIsSomeRowsSelected() ||
+                              table.getIsAllRowsSelected()
+                            ) || table.getSelectedRowModel().rows.length !== 1
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </>
+                )}
+              </div>
+
+
             </div>
           </div>
           <ThemeProvider theme={theme}>

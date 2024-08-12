@@ -160,7 +160,7 @@ const Members = () => {
                 </Link>
               </div>
 
-              <div
+              {/* <div
                 className={`dropdown-center ${
                   role === "CMP_USER" && "disabled"
                 }`}
@@ -193,7 +193,7 @@ const Members = () => {
                     </button>
                   </li>
                 </ul>
-              </div>
+              </div> */}
               <div style={{ paddingLeft: "10px" }}>
                 <Link to={`/event/view/${id}`}>
                   <button

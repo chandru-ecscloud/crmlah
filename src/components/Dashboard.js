@@ -19,19 +19,22 @@ function Dashboard() {
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
   const companyId = sessionStorage.getItem("companyId");
+  const role = sessionStorage.getItem("role");
 
   useEffect(() => {
     if (message) {
       toast.success(message);
     }
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${API_URL}crmDashBoardOverview/${companyId}`
-        );
-        setDashboardData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      if(role !== "EVENT_ORGANIZER"){
+        try {
+          const response = await axios.get(
+            `${API_URL}crmDashBoardOverview/${companyId}`
+          );
+          setDashboardData(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
       }
     };
 

@@ -19,6 +19,7 @@ const validationSchema = yup.object().shape({
 
 function EventAdd() {
   const owner = sessionStorage.getItem("user_name");
+  const [loading, setLoading] = useState(false);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
   const token = sessionStorage.getItem("token");
@@ -42,6 +43,7 @@ function EventAdd() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Event Data:", data);
+      setLoading(true);
       try {
         const response = await axios.post(`${API_URL}createEventManagement`, data, {
           headers: {
@@ -52,11 +54,14 @@ function EventAdd() {
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/event");
+          setLoading(false);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -77,7 +82,17 @@ function EventAdd() {
               </Link>
               &nbsp;
               <span>
-                <button className="btn btn-primary" type="submit">
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                   Save
                 </button>
               </span>
