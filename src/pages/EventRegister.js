@@ -125,10 +125,10 @@ const EventRegister = () => {
       <div style={{ backgroundColor: "#e0f7fa" }} className="p-3">
         <div className="heading-register text-center">
           <span className="register fw-bold fs-1">Registration Link:</span>
-
           <span className="community">{data.eventName}</span>
         </div>
-        {/* <div className="d-flex justify-content-center align-items-center my-1">
+        
+        <div className="d-flex justify-content-center align-items-center my-1">
           <div className="p-3 bg-dark text-white rounded d-flex">
             <div className="text-center me-4">
               <h2 className="m-0 large-number">
@@ -149,7 +149,7 @@ const EventRegister = () => {
               <small>Minutes</small>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <span className="time-in">
           <strong>Date:</strong>

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { FaSortDown } from "react-icons/fa";
 
 const Members = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ const Members = () => {
       const allSuccessful = responses.every((response) => response.status === 201);
       if (allSuccessful) {
         toast.success("Members deleted successfully");
-        navigate("/members");
+        // navigate("/members");
         table.setRowSelection(false);
       } else {
         toast.error("Some deletions failed");
@@ -160,10 +160,9 @@ const Members = () => {
                 </Link>
               </div>
 
-              {/* <div
-                className={`dropdown-center ${
-                  role === "CMP_USER" && "disabled"
-                }`}
+              <div
+                className={`dropdown-center ${role === "CMP_USER" && "disabled"
+                  }`}
               >
                 <button
                   className="btn btn-danger dropdown-toggle"
@@ -193,7 +192,7 @@ const Members = () => {
                     </button>
                   </li>
                 </ul>
-              </div> */}
+              </div>
               <div style={{ paddingLeft: "10px" }}>
                 <Link to={`/event/view/${id}`}>
                   <button

@@ -7,6 +7,7 @@ import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
+import QRCode from "qrcode.react";
 
 function EventView() {
 
@@ -195,25 +196,30 @@ function EventView() {
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body className="text-center">
-          <div className="d-flex justify-content-center mb-3">
+          <div className="d-flex justify-content-center">
             <video src={success} autoPlay loop muted className="w-50 rounded" />
           </div>
           <p className="fw-midium mb-3">Thank You!</p>
           <p className="fw-midium">
             Your Link Has Been Successfully Generated!
           </p>
-          <div className="d-flex gap-3 align-items-center justify-content-center mt-4">
-            <a
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-decoration-none"
-            >
-              <span className="link-text">{link}</span>
-            </a>
-            <button className="btn " onClick={handleCopy}>
-              {copyButtonText}
-            </button>
+          <div className="d-flex flex-column align-items-center mt-4">
+            {link && (
+              <QRCode value={link} size={120} /> // Generate QR Code
+            )}
+            <div className="d-flex gap-3 align-items-center justify-content-center mt-4">
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                <span className="link-text">{link}</span>
+              </a>
+              <button className="btn " onClick={handleCopy}>
+                {copyButtonText}
+              </button>
+            </div>
           </div>
         </Modal.Body>
       </Modal>
