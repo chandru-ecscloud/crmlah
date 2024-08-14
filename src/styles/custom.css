@@ -445,6 +445,7 @@ nav .nav-link Link {
 }
 
 @media (max-width: 500px) {
+
   .sm-device,
   .form-size {
     display: block !important;
@@ -453,7 +454,7 @@ nav .nav-link Link {
 }
 
 /* Dragable sales work */
-.row-container > * {
+.row-container>* {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -476,6 +477,7 @@ nav .nav-link Link {
   display: flex;
   font-weight: 700 !important;
 }
+
 .dragable-content-amount {
   font-family: "Source Sans 3", sans-serif;
   margin-bottom: 0px;
@@ -509,6 +511,7 @@ nav .nav-link Link {
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(1.2);
   }
@@ -546,6 +549,7 @@ nav .nav-link Link {
   color: black;
   border: none;
 }
+
 .fc .fc-button-primary:disabled {
   background-color: #ffffff;
   color: #e3165b !important;
@@ -553,21 +557,25 @@ nav .nav-link Link {
   text-transform: capitalize;
   border: none;
 }
+
 .fc .fc-button-primary:hover {
   background-color: #ffffff;
   color: #e3165b;
   border: none;
 }
+
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
   background-color: #ffffff;
   color: #e3165b;
   border: none;
 }
+
 .fc .fc-button-primary:disabled {
   background-color: #fafafa;
   color: black;
 }
+
 .fc .fc-button-primary:not(:disabled).fc-button-active:focus,
 .fc .fc-button-primary:not(:disabled):active:focus {
   box-shadow: none !important;
@@ -578,14 +586,17 @@ nav .nav-link Link {
   font-size: 14px;
   font-weight: 600;
 }
+
 .fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: 0;
   padding-top: 1em;
   background-color: #ffffff;
 }
+
 .fc .fc-button-primary:focus {
   box-shadow: rgba(250, 250, 250, 0.5) 0px 0px 0px 0.2rem !important;
 }
+
 .calendar tbody {
   background-color: #ffffff;
 }
@@ -593,21 +604,27 @@ nav .nav-link Link {
 .calendar thead {
   background-color: #ffffff;
 }
+
 .fc-direction-ltr .fc-timegrid-slot-label-frame {
   background-color: white;
 }
+
 .fc .fc-timegrid-axis-frame {
   background-color: white;
 }
+
 .fc .fc-timegrid-slot-label {
   background-color: white;
 }
+
 .modal-header {
   border-bottom: none;
 }
+
 .modal-footer {
   border-top: none;
 }
+
 .btn-close {
   --bs-btn-close-opacity: none;
 }
@@ -633,6 +650,7 @@ nav .nav-link Link {
 .fc-theme-standard .fc-popover {
   z-index: 1 !important;
 }
+
 .fc .fc-list-event-dot {
   border: calc(var(--fc-list-event-dot-width) / 2) solid #0077ff;
   border-radius: calc(var(--fc-list-event-dot-width) / 2);
@@ -736,9 +754,12 @@ nav .nav-link Link {
 
 .accordion-button {
   border: none;
-  background-color: transparent; /* Optional: To make the background transparent */
-  outline: none; /* Remove focus outline */
-  box-shadow: none; /* Remove box-shadow */
+  background-color: transparent;
+  /* Optional: To make the background transparent */
+  outline: none;
+  /* Remove focus outline */
+  box-shadow: none;
+  /* Remove box-shadow */
 }
 
 .accordion-button::after {
@@ -746,7 +767,8 @@ nav .nav-link Link {
 }
 
 .scrollable-modal-body {
-  max-height: 300px; /* Adjust as needed */
+  max-height: 300px;
+  /* Adjust as needed */
   overflow-y: auto;
 }
 
@@ -754,9 +776,11 @@ nav .nav-link Link {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #000; /* Adjust color as needed */
+  background-color: #000;
+  /* Adjust color as needed */
   margin: 0 auto;
-  margin-bottom: 10px; /* Space between dot and line */
+  margin-bottom: 10px;
+  /* Space between dot and line */
 }
 
 .dotted-line-container {
@@ -767,14 +791,18 @@ nav .nav-link Link {
 
 .dotted-line {
   flex-shrink: 0;
-  width: 100%; /* Full width of the container */
-  border-bottom: 1px dotted #000; /* Adjust the color as needed */
-  margin-bottom: 16px; /* Adjust the spacing as needed */
+  width: 100%;
+  /* Full width of the container */
+  border-bottom: 1px dotted #000;
+  /* Adjust the color as needed */
+  margin-bottom: 16px;
+  /* Adjust the spacing as needed */
 }
 
 .timeline {
   position: relative;
-  margin-left: 20px; /* Adjust spacing as needed */
+  margin-left: 20px;
+  /* Adjust spacing as needed */
 }
 
 .timeline::before {
@@ -782,9 +810,11 @@ nav .nav-link Link {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%; /* Adjust position as needed */
+  left: 50%;
+  /* Adjust position as needed */
   width: 2px;
-  background: #000; /* Adjust color as needed */
+  background: #000;
+  /* Adjust color as needed */
 }
 
 .viewBtn {
@@ -908,4 +938,36 @@ nav .nav-link Link {
 
 .preserve-whitespace {
   white-space: pre-wrap;
+}
+
+.qr-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  /* Change cursor to indicate clickable area */
+  width: fit-content;
+  /* Ensure container size fits QR code */
+}
+
+.qr-code {
+  display: block;
+}
+
+.download-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  /* Prevent download icon from blocking clicks */
+}
+
+.qr-container:hover .qr-code {
+  opacity: 0.2;
+}
+
+.qr-container:hover .download-icon {
+  opacity: 1;
 }

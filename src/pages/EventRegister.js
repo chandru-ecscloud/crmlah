@@ -72,12 +72,42 @@ const EventRegister = () => {
     },
   });
 
-  const calculateTimeLeft = () => {
-    console.log("backend Date is ", data?.eventDate?.substring(0, 19));
-    const targetDate = new Date(data?.eventDate?.substring(0, 19)); // Set your target date and time
-    console.log("Target Date", targetDate); // Set your target date and time
+  // const calculateTimeLeft = (eventDate) => {
+  //   if (!eventDate) return { days: 0, hours: 0, minutes: 0 };
+
+  //   const targetDate = new Date(eventDate.substring(0, 19));
+  //   const now = new Date();
+  //   const difference = targetDate - now;
+
+  //   let timeLeft = {};
+
+  //   if (difference > 0) {
+  //     timeLeft = {
+  //       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+  //       hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+  //       minutes: Math.floor((difference / 1000 / 60) % 60),
+  //     };
+  //   } else {
+  //     timeLeft = { days: 0, hours: 0, minutes: 0 };
+  //   }
+
+  //   return timeLeft;
+  // };
+
+  const calculateTimeLeft = (eventDate) => {
+    if (!eventDate) return { days: 0, hours: 0, minutes: 0 };
 
     const now = new Date();
+    let targetDate = new Date(eventDate.substring(0, 19));
+
+    // Set the target time to 9 AM
+    targetDate.setHours(9, 0, 0, 0);
+
+    // If the event date is before now, set the target time to 9 AM of the next day
+    if (now > targetDate) {
+      targetDate.setDate(targetDate.getDate() + 1);
+    }
+
     const difference = targetDate - now;
 
     let timeLeft = {};
@@ -99,11 +129,14 @@ const EventRegister = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      if (data?.eventDate) {
+        setTimeLeft(calculateTimeLeft(data?.eventDate));
+      }
     }, 60000); // Update the timer every minute
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [data?.eventDate]);
+
 
   useEffect(() => {
     const getData = async () => {
@@ -112,13 +145,16 @@ const EventRegister = () => {
           `${API_URL}getAllEventManagementById/${id}`
         );
         setData(response.data);
+        // Initialize timeLeft with fetched event date
+        setTimeLeft(calculateTimeLeft(response.data?.eventDate));
       } catch (e) {
         console.log("Error Fetching Data");
       }
     };
 
     getData();
-  }, []);
+  }, [id]);
+
 
   return (
     <div className="container-fluid">
@@ -127,7 +163,7 @@ const EventRegister = () => {
           <span className="register fw-bold fs-1">Registration Link:</span>
           <span className="community">{data.eventName}</span>
         </div>
-        
+
         <div className="d-flex justify-content-center align-items-center my-1">
           <div className="p-3 bg-dark text-white rounded d-flex">
             <div className="text-center me-4">
@@ -180,11 +216,10 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg  ${
-                    formik.touched.companyName && formik.errors.companyName
+                  className={`form-control form-control-lg  ${formik.touched.companyName && formik.errors.companyName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -200,11 +235,10 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg  ${
-                    formik.touched.businessEmail && formik.errors.businessEmail
+                  className={`form-control form-control-lg  ${formik.touched.businessEmail && formik.errors.businessEmail
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("businessEmail")}
                   name="businessEmail"
                   id="businessEmail"
@@ -220,11 +254,10 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg   ${
-                    formik.touched.firstName && formik.errors.firstName
+                  className={`form-control form-control-lg   ${formik.touched.firstName && formik.errors.firstName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("firstName")}
                   name="firstName"
                   id="firstName"
@@ -239,11 +272,10 @@ const EventRegister = () => {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-lg   ${
-                    formik.touched.lastName && formik.errors.lastName
+                  className={`form-control form-control-lg   ${formik.touched.lastName && formik.errors.lastName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("lastName")}
                   name="lastName"
                   id="lastName"
@@ -259,11 +291,10 @@ const EventRegister = () => {
                 <input
                   type="tel"
                   name="phone"
-                  className={`form-size form-control form-control-lg  ${
-                    formik.touched.phone && formik.errors.phone
+                  className={`form-size form-control form-control-lg  ${formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("phone")}
                   id="phone"
                 />

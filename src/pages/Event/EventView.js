@@ -8,6 +8,9 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
 import QRCode from "qrcode.react";
+import html2canvas from "html2canvas";
+import { MdDownload } from "react-icons/md";
+import "../../../src/styles/custom.css"
 
 function EventView() {
 
@@ -53,8 +56,36 @@ function EventView() {
 
     setTimeout(() => {
       setCopyButtonText(<LuCopy />);
-    }, 1000);
+    }, 2000);
   };
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const qrCodeElement = document.getElementById('qr-code');
+      if (!qrCodeElement) {
+      }
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [link]);
+
+  const downloadQRCode = () => {
+    const qrCodeElement = document.getElementById('qr-code');
+    if (!qrCodeElement) {
+      toast.error("QR Code element not found.");
+      console.log("1")
+      return;
+    }
+
+    html2canvas(qrCodeElement).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'qrcode.png';
+      link.click();
+    }).catch(error => {
+      toast.error("Error generating QR Code image:", error);
+    });
+  };;
+
   return (
     <>
       <section className="container-fluid row section1 m-0 p-0">
@@ -204,9 +235,20 @@ function EventView() {
             Your Link Has Been Successfully Generated!
           </p>
           <div className="d-flex flex-column align-items-center mt-4">
-            {link && (
-              <QRCode value={link} size={120} /> // Generate QR Code
+            {/* {link && (
+              <QRCode id="qr-code" value={link} size={120} />
             )}
+            <MdDownload className="mt-3" onClick={downloadQRCode} /> */}
+
+            <div>
+              <div className="qr-container" onClick={downloadQRCode}>
+                <QRCode className="qr-code" id="qr-code" value={link} size={120} />
+                <div className="download-icon">
+                  <MdDownload size={20} />
+                </div>
+              </div>
+            </div>
+
             <div className="d-flex gap-3 align-items-center justify-content-center mt-4">
               <a
                 href={link}
