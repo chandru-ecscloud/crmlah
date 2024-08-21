@@ -82,7 +82,7 @@ function CompanyShow() {
         </div>
 
         <div className="col-sm-6 mt-1" id="buttons-container">
-          <SendEmail />
+          <SendEmail toEmail={userData.email} />
 
           <button
             className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}

@@ -264,7 +264,7 @@ function AdminHeader({ handleLogout }) {
                 <Link to="/company">
                   <button className="btn" onClick={handleClose}>
                     <BsBuildingAdd className="mx-1" />
-                    &nbsp; Add Company
+                    &nbsp; Create Company
                   </button>
                 </Link>
               </div>

@@ -206,11 +206,10 @@ function CompanyCreate() {
                     <input
                       {...formik.getFieldProps("name")}
                       type="text"
-                      className={`form-size form-control ${
-                        formik.touched.name && formik.errors.name
+                      className={`form-size form-control ${formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       id="name"
                       name="name"
                     />
@@ -230,11 +229,10 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${
-                        formik.touched.userName && formik.errors.userName
+                      className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       {...formik.getFieldProps("userName")}
                       name="userName"
                       id="userName"
@@ -268,11 +266,10 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${
-                        formik.touched.companyName && formik.errors.companyName
+                      className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       {...formik.getFieldProps("companyName")}
                       name="companyName"
                       id="companyName"

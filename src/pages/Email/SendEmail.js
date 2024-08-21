@@ -23,6 +23,7 @@ function SendEmail({ toEmail }) {
   const userEmail = sessionStorage.getItem("email");
   const role = sessionStorage.getItem("role");
   const [loadIndicator, setLoadIndicator] = useState(false);
+  console.log("tomail",toEmail)
 
   const formik = useFormik({
     initialValues: {
