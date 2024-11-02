@@ -453,11 +453,21 @@ const Deals = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" onClick={handleExportData}>
+        <button className="btn text-secondary" 
+        // onClick={handleExportData}
+        onClick={() => {
+          const selectedRows = table.getSelectedRowModel().rows;
+          if (selectedRows.length === 1) {
+            handleExportRows(selectedRows);
+          } else{
+            handleExportData();
+          }
+        }}
+        >
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger
+        {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -470,18 +480,26 @@ const Deals = () => {
           >
             <RiFileExcel2Line size={23} />
           </button>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
 
         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          }
+          // onClick={() =>
+          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          // }
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRowsPDF(selectedRows);
+            } else{
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            }
+          }}
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger
+        {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -496,7 +514,7 @@ const Deals = () => {
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
       </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({
@@ -520,7 +538,7 @@ const Deals = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">Deals</span>
+              <span className="fs-4 fw-bold px-2">Deals ({data.length})</span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
@@ -572,33 +590,26 @@ const Deals = () => {
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        ) 
                       }
-                      onClick={() =>
-                        handleDealConvert(table.getSelectedRowModel().rows)
-                      }
+                      // onClick={() =>
+                      //   handleDealConvert(table.getSelectedRowModel().rows)
+                      // }
+                      onClick={() => {
+                        const selectedRows = table.getSelectedRowModel().rows;
+                        if (selectedRows.length === 1) {
+                          handleDealConvert(selectedRows);
+                        } else if (selectedRows.length > 1) {
+                          handleBulkDelete(selectedRows);
+                        }
+                      }}
                     >
                       Delete
                     </button>
                   </li>
                   <li>
-                    {/* <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !(
-                          table.getIsSomeRowsSelected() ||
-                          table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
-                    >
-                      Delete
-                    </button> */}
                   </li>
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -614,7 +625,7 @@ const Deals = () => {
                     >
                       Mass Delete
                     </button>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>

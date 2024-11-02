@@ -214,14 +214,24 @@ const Lead = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.company}_${timestamp}.csv`
+        : `Company_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
-
+  
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `Company_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
+  
 
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
@@ -342,7 +352,13 @@ const Lead = () => {
       },
     });
 
-    doc.save("ECS.pdf");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+    rows.length === 1
+      ? `${rows[0].original.company}_${timestamp}.pdf`
+      : `Company_List_${timestamp}.pdf`;
+
+    doc.save(filename);
   };
 
   const theme = createTheme({
@@ -453,11 +469,22 @@ const Lead = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" onClick={handleExportData}>
+        <button
+          className="btn text-secondary"
+          // onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
+            }
+          }}
+        >
           <RiFileExcel2Fill size={23} />
         </button>
 
-        <OverlayTrigger
+        {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -470,19 +497,27 @@ const Lead = () => {
           >
             <RiFileExcel2Line size={23} />
           </button>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
 
         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          }
+          // onClick={() =>
+          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          // }
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRowsPDF(selectedRows);
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+            }
+          }}
         >
           <MdPictureAsPdf size={23} />
         </button>
 
-        <OverlayTrigger
+        {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -497,7 +532,7 @@ const Lead = () => {
           >
             <MdOutlinePictureAsPdf size={23} />
           </button>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
       </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({
@@ -522,7 +557,7 @@ const Lead = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">Lead</span>
+              <span className="fs-4 fw-bold px-2">Lead ({data.length})</span>
             </div>
 
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
@@ -668,7 +703,8 @@ const Lead = () => {
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        )
+                        // || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
                         handleBulkConvert(table.getSelectedRowModel().rows)
@@ -677,7 +713,7 @@ const Lead = () => {
                       Convert
                     </button>
                   </li>
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -688,7 +724,7 @@ const Lead = () => {
                     >
                       Mass Convert
                     </button>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       className="btn"
@@ -697,7 +733,8 @@ const Lead = () => {
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        )
+                        // || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
@@ -706,7 +743,7 @@ const Lead = () => {
                       Delete
                     </button>
                   </li>
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -717,7 +754,7 @@ const Lead = () => {
                     >
                       Mass Delete
                     </button>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       className="btn"
