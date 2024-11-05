@@ -37,6 +37,7 @@ const Quotes = () => {
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
 
+
   const columns = useMemo(
     () => [
       {
@@ -188,20 +189,31 @@ const Quotes = () => {
     navigate("/quotes/create");
   };
 
-  const handleExportRows = (rows) => {
+   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    console.log("object",rowData)
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.quoteOwner}_${timestamp}.csv`
+        : `Company_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
-
+  
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `Company_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleAssignProducts = async (rows) => {
     setRowId(() => rows.map((row) => row.original.id));
   };
+
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
@@ -238,97 +250,101 @@ const Quotes = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Quantity",
-      "Price",
-      "Total Amount",
-      "Contact Name",
-      "Account Name",
-      "Adjustment",
-      "Created At",
-      "Updated At",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.quantity,
-        row.original.price,
-        row.original.totalAmount,
-        row.original.contactName,
-        row.original.accountName,
-        row.original.adjustment,
-        row.original.createdAt,
-        row.original.updatedAt,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Quantity",
+    //   "Price",
+    //   "Total Amount",
+    //   "Contact Name",
+    //   "Account Name",
+    //   "Adjustment",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.quantity,
+    //     row.original.price,
+    //     row.original.totalAmount,
+    //     row.original.contactName,
+    //     row.original.accountName,
+    //     row.original.adjustment,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders3 = [
-      "Valid Until",
-      "Shipping Street",
-      "Shipping City",
-      "Shipping State",
-      "Shipping Code",
-    ];
-    const tableData3 = rows.map((row) => {
-      return [
-        row.original.validUntil,
-        row.original.shippingStreet,
-        row.original.shippingCity,
-        row.original.shippingState,
-        row.original.shippingCode,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders4 = [
-      "Shipping Country",
-      "Billing Street",
-      "Billing City",
-      "Billing State",
-      "Billing Code",
-      "Billing Country",
-    ];
-    const tableData4 = rows.map((row) => {
-      return [
-        row.original.shippingCountry,
-        row.original.billingStreet,
-        row.original.billingCity,
-        row.original.billingState,
-        row.original.billingCode,
-        row.original.billingCountry,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders4],
-      body: tableData4,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders3 = [
+    //   "Valid Until",
+    //   "Shipping Street",
+    //   "Shipping City",
+    //   "Shipping State",
+    //   "Shipping Code",
+    // ];
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.validUntil,
+    //     row.original.shippingStreet,
+    //     row.original.shippingCity,
+    //     row.original.shippingState,
+    //     row.original.shippingCode,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+    // const tableHeaders4 = [
+    //   "Shipping Country",
+    //   "Billing Street",
+    //   "Billing City",
+    //   "Billing State",
+    //   "Billing Code",
+    //   "Billing Country",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.shippingCountry,
+    //     row.original.billingStreet,
+    //     row.original.billingCity,
+    //     row.original.billingState,
+    //     row.original.billingCode,
+    //     row.original.billingCountry,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    // console.log("tableData",tableData1)
-    // console.log("tableHeaders",tableHeaders1 )
-    doc.save("ECS.pdf");
+   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+    rows.length === 1
+      ? `${rows[0].original.quoteOwner}_${timestamp}.pdf`
+      : `Company_List_${timestamp}.pdf`;
+
+    doc.save(filename);
   };
 
   const theme = createTheme({
@@ -373,41 +389,6 @@ const Quotes = () => {
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original);
-    const keyMapping = {
-      product: "product",
-      quantity: "quantity",
-      price: "price",
-      discount: "discount",
-      totalAmount: "total_amount",
-      itemDescription: "item_description",
-      description: "description",
-      termsAndConditions: "terms_and_conditions",
-      tax: "tax",
-      adjustment: "adjustment",
-      grandTotal: "grand_total",
-      quoteOwner: "quote_owner",
-      subject: "subject",
-      quoteStage: "quote_stage",
-      dealName: "deal_name",
-      validUntil: "valid_until",
-      contactName: "contact_name",
-      accountName: "account_name",
-      billingStreet: "billing_street",
-      billingCity: "billing_city",
-      billingState: "billing_state",
-      billingCode: "billing_code",
-      billingCountry: "billing_country",
-      shippingStreet: "shipping_street",
-      shippingCity: "shipping_city",
-      shippingState: "shipping_state",
-      shippingCode: "shipping_code",
-      shippingCountry: "shipping_country",
-      createdAt: "created_at",
-      createdBy: "created_by",
-      updatedAt: "updated_at",
-      updatedBy: "updated_by",
-      companyId: "company_id",
-    };
 
     const transformedData = rowData.map((data) => {
       return data.id
@@ -493,49 +474,49 @@ const Quotes = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" onClick={handleExportData}>
-          <RiFileExcel2Fill size={23} />
-        </button>
+       
 
         <OverlayTrigger
           placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+          overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
         >
           <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          className="btn text-secondary"
+          // onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
             }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          >
-            <RiFileExcel2Line size={23} />
-          </button>
+          }}
+        >
+          <RiFileExcel2Fill size={23} />
+        </button>
         </OverlayTrigger>
 
-        <button
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
+        >
+         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          }
+          // onClick={() =>
+          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          // }
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRowsPDF(selectedRows);
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+            }
+          }}
         >
           <MdPictureAsPdf size={23} />
         </button>
-        <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
-        >
-          <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() =>
-              handleExportRowsPDF(table.getSelectedRowModel().rows)
-            }
-          >
-            <MdOutlinePictureAsPdf size={23} />
-          </button>
         </OverlayTrigger>
       </Box>
     ),
@@ -554,7 +535,7 @@ const Quotes = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">Quotes</span>
+              <span className="fs-4 fw-bold px-2">Quotes ({data.length})</span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
@@ -580,14 +561,15 @@ const Quotes = () => {
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <button
+                  <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
                       disabled={
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        )
+                        // || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
@@ -596,7 +578,7 @@ const Quotes = () => {
                       Delete
                     </button>
                   </li>
-                  <li>
+                  {/* <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -610,7 +592,7 @@ const Quotes = () => {
                     >
                       Mass Delete
                     </button>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>

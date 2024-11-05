@@ -44,7 +44,7 @@ const RadioFormSelector = () => {
           toast.error("Unsuccess");
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        toast.error(error.response.data?.message);
       }
       console.log("Api Data:", Email);
     },

@@ -107,37 +107,37 @@ function ProductsShow() {
           id="userDetails-container"
         >
           {/* {/ Details /} */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
+              <div className="row">
                 <label className="text-dark Label">Product Owner</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productOwner || "--"}
                 </span>
               </div>
-              <div className="address-item">
+              <div className="row">
                 <label className="text-dark Label">Product Category</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productCategory || "--"}
                 </span>
               </div>
-              <div className="address-item">
+              <div className="row">
                 <label className="text-dark Label">Product Code</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.productCode || "--"}
                 </span>
               </div>
-              <div className="address-item">
+              <div className="row">
                 <label className="text-dark Label">Unit Price</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.unitPrice || "--"}
                 </span>
               </div>
-              <div className="address-item">
+              <div className="row">
                 <label className="text-dark Label">Quantity in Stock</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{productData.quantityInStock || "--"}
@@ -146,12 +146,12 @@ function ProductsShow() {
             </div>
 
             <div className="container-fluid col-md-6"></div>
-          </div>
+          </div> */}
 
           {/* {/ Hide Details /} */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Hide Details</span>
+              <span className="fs-6 fw-bold my-3">Details</span>
             </div>
 
             <div className="py-3">
@@ -159,153 +159,141 @@ function ProductsShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Product Owner</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Product Owner</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{productData.productOwner || "--"}
                 </span>
               </div>
 
-              <div className="address-item">
-                <label className="text-dark Label">Product Active</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Product Active</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;
                   {productData.productActive ? "Active" : "Inactive"}
                 </span>
               </div>
 
-              <div className="address-item">
-                <label className="text-dark Label">Product Category</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.productCategory || "--"}
-                </span>
-              </div>
+              
 
-              <div className="address-item">
-                <label className="text-dark Label">Sales End Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.salesEndDate || "--"}
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Sales Start Date</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{productData.salesStartDate || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created At</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Created At</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{productData.createdAt ?productData.createdAt.split("T")[0]: "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Updated At</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Updated At</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{productData.updatedAt ?productData.updatedAt.split("T")[0]: "--"}
                 </span>
               </div>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Product Name</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Product Name</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{productData.productName || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Sales Start Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{productData.salesStartDate || "--"}
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Product Category</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{productData.productCategory || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created By</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Sales End Date</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{productData.salesEndDate || "--"}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Created By</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{productData.createdBy || "--"}
                 </span>
               </div>
             </div>
-
             {/* {/ Price  Information /} */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row">
-                <span className="my-3 fs-6 fw-bold col-10 my-3">
-                  Price Information
-                </span>
-              </div>
-
-              <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Unit Price</label>
-                  <span className="text-dark">
+            <div className="py-3">
+              <span className="fs-6 fw-bold"> Price Information</span>
+            </div>
+            <div className="container-fluid col-md-6">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Unit Price</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.unitPrice || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Taxable</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Taxable</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.taxable ? "Yes" : "No"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Tax</label>
-                  <span className="text-dark">
+                
+              </div>
+
+              <div className="container-fluid col-md-6">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Commission Rate</label>
+                  <span className="text-dark col-6">
+                    &nbsp; : &nbsp;{productData.commissionRate || "--"}
+                  </span>
+                </div>
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Tax</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.tax || "--"}
                   </span>
                 </div>
               </div>
-
-              <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Commission Rate</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{productData.commissionRate || "--"}
-                  </span>
-                </div>
-              </div>
+             {/* {/ Stock   Information /} */}
+              <div className="py-3">
+              <span className="fs-6 fw-bold"> Stock Information</span>
             </div>
-
-            {/* {/ Stock   Information /} */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row">
-                <span className="my-3 fs-6 fw-bold col-10 my-3">
-                  Stock Information
-                </span>
-              </div>
-
-              <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Usage Unit</label>
-                  <span className="text-dark">
+            <div className="container-fluid col-md-6">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Usage Unit</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.usageUnit || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Quantity in Stock</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Quantity in Stock</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.quantityInStock || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Handler</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Handler</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{productData.handler || "--"}
                   </span>
                 </div>
               </div>
+              <div className="container-fluid col-md-6"></div>
+              {/* {/ Description Information /} */}
+              <div className="py-3">
+              <span className="fs-6 fw-bold">Description Information</span>
             </div>
-
-            {/* {/ Description Information /} */}
-            <div className="container-fluid row" id="Details">
-              <div className="my-3 container-fluid row">
-                <span className="my-3 fs-6 fw-bold my-3">
-                  Description Information
-                </span>
-              </div>
-
-              <div className="address-item">
-                <label className="text-dark Label">Description</label>
-                <span className="text-dark">
+              <div className="container-fluid col-md-12 mb-4 mt-2">
+              <div className="row mb-3">
+                <label className="text-dark col-4 text-center">Description</label>
+                <span className="text-dark col-8">
                   &nbsp; : &nbsp;{productData.descriptionInfo || "--"}
                 </span>
               </div>
-            </div>
+              </div>
+
           </div>
 
           {/* Notes -- */}

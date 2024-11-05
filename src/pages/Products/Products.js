@@ -137,18 +137,28 @@ const Products = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.productName}_${timestamp}.csv`
+        : `Product_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Product_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handelNavigateClick = () => {
     navigate("/products/create");
   };
+
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
@@ -185,57 +195,62 @@ const Products = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Product Category",
-      "Sales Start Date",
-      "Sales End Date",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.productCategory,
-        row.original.salesStartDate,
-        row.original.salesEndDate,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Product Category",
+    //   "Sales Start Date",
+    //   "Sales End Date",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.productCategory,
+    //     row.original.salesStartDate,
+    //     row.original.salesEndDate,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders3 = [
-      "Support Start Date",
-      "Support End Date",
-      "Description",
-      "Created At",
-      "Updated At",
-    ];
-    const tableData3 = rows.map((row) => {
-      return [
-        row.original.createdAt,
-        row.original.updatedAt,
-        row.original.supportStartDate,
-        row.original.supportEndDate,
-        row.original.description_info,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders3 = [
+    //   "Support Start Date",
+    //   "Support End Date",
+    //   "Description",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //     row.original.supportStartDate,
+    //     row.original.supportEndDate,
+    //     row.original.description_info,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    doc.save("ECS.pdf");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.productName}_${timestamp}.pdf`
+        : `Product_List_${timestamp}.pdf`;
+    doc.save(filename);
   };
 
   const handleSendProductsToInvoice = async (rows) => {
@@ -356,48 +371,46 @@ const Products = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" onClick={handleExportData}>
-          <RiFileExcel2Fill size={23} />
-        </button>
-
         <OverlayTrigger
           placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+          overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
         >
           <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+            className="btn text-secondary"
+            // onClick={handleExportData}
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRows(selectedRows);
+              } else {
+                handleExportData();
+              }
+            }}
           >
-            <RiFileExcel2Line size={23} />
+            <RiFileExcel2Fill size={23} />
           </button>
         </OverlayTrigger>
 
-        <button
-          className="btn text-secondary"
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
-            handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          }
-        >
-          <MdPictureAsPdf size={23} />
-        </button>
         <OverlayTrigger
           placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+          overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
         >
           <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() =>
-              handleExportRowsPDF(table.getSelectedRowModel().rows)
-            }
+            className="btn text-secondary"
+            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            // onClick={() =>
+            //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            // }
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRowsPDF(selectedRows);
+              } else {
+                handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+              }
+            }}
           >
-            <MdOutlinePictureAsPdf size={23} />
+            <MdPictureAsPdf size={23} />
           </button>
         </OverlayTrigger>
       </Box>
@@ -417,7 +430,9 @@ const Products = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">Products</span>
+              <span className="fs-4 fw-bold px-2">
+                Products ({data.length})
+              </span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
@@ -450,28 +465,14 @@ const Products = () => {
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) || table.getSelectedRowModel().rows.length !== 1
+                        )
+                        // || table.getSelectedRowModel().rows.length !== 1
                       }
                       onClick={() =>
                         handleBulkDelete(table.getSelectedRowModel().rows)
                       }
                     >
                       Delete
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !table.getIsSomeRowsSelected() &&
-                        !table.getIsAllRowsSelected()
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
-                    >
-                      Mass Delete
                     </button>
                   </li>
                 </ul>

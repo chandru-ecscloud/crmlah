@@ -1037,8 +1037,8 @@ function QuotesCreate() {
                     List Price
                   </th>
                   <th scope="col">Amount</th>
-                  <th scope="col">Discount</th>
-                  <th scope="col">Tax</th>
+                  <th scope="col">Discount(%)</th>
+                  <th scope="col">Tax(%)</th>
                   <th scope="col">Total</th>
                 </tr>
               </thead>
@@ -1118,7 +1118,7 @@ function QuotesCreate() {
                       />
                     </td>
                     <td>
-                      <input
+                      <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 2);}}
                         type="text"
                         name={`quotesItemList[${index}].discount`}
                         {...formik.getFieldProps(
@@ -1132,7 +1132,7 @@ function QuotesCreate() {
                       />
                     </td>
                     <td>
-                      <input
+                      <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 2);}}
                         type="text"
                         name={`quotesItemList[${index}].tax`}
                         {...formik.getFieldProps(
@@ -1191,7 +1191,7 @@ function QuotesCreate() {
                 />
               </div>
               <div className="container-fluid py-2">
-                <label className="text-dark">Discount(%)</label>
+                <label className="text-dark">Discount</label>
                 <input
                   className="form-control p-1"
                   type="text"
@@ -1201,7 +1201,7 @@ function QuotesCreate() {
                 />
               </div>
               <div className="container-fluid py-2">
-                <label className="text-dark">Tax(%)</label>
+                <label className="text-dark">Tax</label>
                 <input
                   className="form-control p-1"
                   type="text"

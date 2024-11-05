@@ -20,21 +20,21 @@ const validationSchema = yup.object().shape({
   // support_start_date: yup.date().required("*Date is required"),
   // support_end_date: yup.date().required("*Date is required"),
   unit_price: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
+  .matches(/^\d+(\.\d+)?$/, "Must be a valid number")
   .required("*Unit price is required."),
   // commission_rate: yup.string()
   // .matches(/^\d+$/, "Must be only digits")
   // .required("*Commission rate is required."),
   tax: yup.string()
-  .matches(/^\d+$/, "Must be only digits")
+  .matches(/^\d+(\.\d+)?$/, "Must be a valid number")
   .required("*Tax is required."),
-  // usage_unit: yup.string().required("*Usage unit is required."),
-  // quantity_ordered: yup.string()
-  // .matches(/^\d+$/, "Must be only digits")
-  // .required("*Quantity ordered is required."),
-  // quantity_in_stock: yup.string()
-  // .matches(/^\d+$/, "Must be only digits")
-  // .required("*Quantity in stock is required."),
+  usage_unit: yup.string().matches(/^\d+$/, "Must be a digits").notRequired(),
+  quantity_ordered: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .notRequired(),
+  quantity_in_stock: yup.string()
+  .matches(/^\d+$/, "Must be only digits")
+  .notRequired(),
   // handler: yup.string().required("*Handler demand is required."),
   // description_info: yup.string().required("*Description is required"),
 });
@@ -475,7 +475,7 @@ function ProductCreate() {
 
         <div className="container-fluid my-5">
           <h4>
-            <b>Stock Information</b>
+            <b>Price Information</b>
           </h4>
         </div>
         <div className="container">
@@ -537,9 +537,9 @@ function ProductCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Tax</lable> 
+                <lable>Tax(%)</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
-                <input
+                <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 2);}}
                   type="text"
                   value={checked}
                   className={`form-size form-control  ${
@@ -585,7 +585,7 @@ function ProductCreate() {
 
         <div className="container-fluid my-5">
           <h4>
-            <b>Price Information</b>
+            <b>Stock Information</b>
           </h4>
         </div>
         <div className="container">

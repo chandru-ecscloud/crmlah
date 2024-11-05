@@ -161,7 +161,7 @@ function InvoicesCreate() {
             txnDiscount: values.txnDiscount,
             txnTax: values.txnTax,
           },
-          invoiceItemList: rows.map((item) => ({
+          transactionInvoiceModel: rows.map((item) => ({
             productName: item.ProductName,
             productId: item.selectedOption,
             quantity: item.quantity,

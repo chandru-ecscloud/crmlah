@@ -76,7 +76,7 @@ function QuotesShow() {
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(28);
-    doc.text("ESTIMATE", 155, 22);
+    doc.text("QUOTES", 155, 22);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
@@ -120,8 +120,8 @@ function QuotesShow() {
           "Quantity",
           "Price",
           "Amount",
-          "Discount",
-          "Tax",
+          "Discount(%)",
+          "Tax(%)",
           "Total",
         ],
       ],
@@ -155,7 +155,7 @@ function QuotesShow() {
           "",
           "",
           "",
-          "Discount(%)",
+          "Discount",
           `: ${quoteData.txnDiscount || "0"}`,
           "",
           "",
@@ -169,7 +169,7 @@ function QuotesShow() {
           "",
           "",
           "",
-          "Tax(%)",
+          "Tax",
           `: ${quoteData.txnTax || "0"}`,
           "",
           "",
@@ -303,15 +303,15 @@ function QuotesShow() {
           id="userDetails-container"
         >
           {/* Details */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Quote Owner</label>
-                <span className="text-dark">
+              <div className="row">
+                <label className="text-dark col-6 text-center">Quote Owner</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
@@ -322,7 +322,7 @@ function QuotesShow() {
                 </span>
               </div>
               <div className="address-item">
-                <label className="text-dark Label">Valid Until</label>
+                <label className="text-dark col-6">Valid Until</label>
                 <span className="text-dark">
                   &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
@@ -330,12 +330,12 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6"></div>
-          </div>
+          </div> */}
 
           {/* Hide Details */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Hide Details</span>
+              <span className="fs-6 fw-bold my-3">Details</span>
             </div>
 
             <div className="py-3">
@@ -343,40 +343,29 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Quotes Owner</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Quotes Owner</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Subject</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Subject</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.subject || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Quotes Stage</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{quoteData.quoteStage || ""}
-                </span>
-              </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created By</label>
-                <span className="text-dark">
+             
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Created By</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.createdBy || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created At</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;
-                  {quoteData.createdAt ? quoteData.createdAt.split("T")[0] : ""}
-                </span>
-              </div>
-              <div className="address-item">
-                <label className="text-dark Label">Updated At</label>
-                <span className="text-dark">
+              
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Updated At</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;
                   {quoteData.updatedAt ? quoteData.updatedAt.split("T")[0] : ""}
                 </span>
@@ -384,10 +373,23 @@ function QuotesShow() {
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Valied Until</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Valied Until</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.validUntil || ""}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Quotes Stage</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;{quoteData.quoteStage || ""}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Created At</label>
+                <span className="text-dark col-6">
+                  &nbsp; : &nbsp;
+                  {quoteData.createdAt ? quoteData.createdAt.split("T")[0] : ""}
                 </span>
               </div>
             </div>
@@ -403,66 +405,66 @@ function QuotesShow() {
               <div className="my-3"></div>
 
               <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Street</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Shipping Street</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingStreet || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping State</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Shipping State</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingState || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping City</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Shipping City</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCity || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Zip Code</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Shipping Zip Code</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCode || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Country</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Shipping Country</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCountry || "--"}
                   </span>
                 </div>
               </div>
 
               <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Street</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Billing Street</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingStreet || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing State</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Billing State</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingState || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing City</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Billing City</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCity || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Zip Code</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Billing Zip Code</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCode || "--"}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Country</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">Billing Country</label>
+                  <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCountry || "--"}
                   </span>
                 </div>
@@ -491,8 +493,8 @@ function QuotesShow() {
                             <th scope="col">Quantity</th>
                             <th scope="col">Price</th>
                             <th scope="col">Amount</th>
-                            <th scope="col">Discount</th>
-                            <th scope="col">Tax</th>
+                            <th scope="col">Discount(%)</th>
+                            <th scope="col">Tax(%)</th>
                             <th scope="col">Total</th>
                           </tr>
                         </thead>
@@ -524,27 +526,23 @@ function QuotesShow() {
                     <div className="container-fluid p-3 col-md-5 col-12 border rounded">
                       <div className="container-fluid py-2">
                         <div className="row">
-                          <div className="col-md-7 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
                             <label className="text-dark ">Sub Total(SGT)</label>
                           </div>
-                          <div className="col-md-1 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
-                            <span>:</span>
-                          </div>
-                          <div className="col-md-4 col-12">
-                            {" "}
-                            <span>{quoteData.subTotal || "0"}.00</span>
+                            <span>: {quoteData.subTotal || "0"}.00</span>
                           </div>
                         </div>
                       </div>
                       <div className="container-fluid py-2">
                         <div className="row">
-                          <div className="col-md-8 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
-                            <label className="text-dark ">Discount(%)</label>
+                            <label className="text-dark ">Discount</label>
                           </div>
-                          <div className="col-md-4 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
                             <span>: {quoteData.txnDiscount || "0"}.00</span>
                           </div>
@@ -552,11 +550,11 @@ function QuotesShow() {
                       </div>
                       <div className="container-fluid py-2">
                         <div className="row">
-                          <div className="col-md-8 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
-                            <label className="text-dark ">Tax(%)</label>
+                            <label className="text-dark ">Tax</label>
                           </div>
-                          <div className="col-md-4 col-12">
+                          <div className="col-md-6 col-12">
                             {" "}
                             <span>: {quoteData.txnTax || "0"}.00</span>
                           </div>
@@ -578,12 +576,12 @@ function QuotesShow() {
                       </div> */}
                       <div className="container-fluid py-2">
                         <div className="row">
-                          <div className="col-md-8 col-12">
+                          <div className="col-md-6 col-12">
                             <label className="text-dark ">
                               Grand Total(SGT)
                             </label>
                           </div>
-                          <div className="col-md-4 col-12">
+                          <div className="col-md-6 col-12">
                             <span>: {quoteData.grandTotal || "0"}.00</span>
                           </div>
                         </div>
@@ -601,25 +599,25 @@ function QuotesShow() {
                   justifyContent: "end",
                   alignItems: "flex-end",
                 }}
-              >
-                <div className="border-bottom mt-3 p-1">
-                  <label className="text-dark">Sub Total(Rs.)</label>
+              > mb-3
+                <div className= text-center"border-bottom mt-3 p-1">
+                  <label className="text-dark col-6">Sub Total(Rs.)</label>
                   <span>{quoteData.totalAmount || "--"}</span>
-                </div>
-                <div className="border-bottom mt-3 p-1">
-                  <label className="text-dark">Discount(Rs.)</label>
+                </div> mb-3
+                <div className="border text-center-bottom mt-3 p-1">
+                  <label className="text-dark col-6">Discount(Rs.)</label>
                   <span>{quoteData.discount || "--"}</span>
-                </div>
-                <div className="border-bottom mt-3 p-1">
-                  <label className="text-dark">Tax(Rs.)</label>
+                </div> mb-3
+                <div className="border text-center-bottom mt-3 p-1">
+                  <label className="text-dark col-6">Tax(Rs.)</label>
                   <span>{quoteData.tax || "--"}</span>
-                </div>
-                <div className="border-bottom mt-3 p-1">
-                  <label className="text-dark">Adjustment(Rs.)</label>
+                </div> mb-3
+                <div className="border text-center-bottom mt-3 p-1">
+                  <label className="text-dark col-6">Adjustment(Rs.)</label>
                   <span>{quoteData.adjustment || "--"}</span>
-                </div>
-                <div className="border-bottom mt-3 p-1">
-                  <label className="text-dark">GrandTotal(Rs.)</label>
+                </div> mb-3
+                <div className="border text-center-bottom mt-3 p-1">
+                  <label className="text-dark col-6">GrandTotal(Rs.)</label>
                   <span>{quoteData.grandTotal || "--"}</span>
                 </div>
               </div> */}
@@ -633,9 +631,9 @@ function QuotesShow() {
                 </span>
               </div>
 
-              <div className="address-item">
-                <label className="text-dark Label">Customer Notes</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-3 text-center">Customer Notes</label>
+                <span className="text-dark col-9">
                   &nbsp; : &nbsp;{quoteData.description || " "}
                 </span>
               </div>
