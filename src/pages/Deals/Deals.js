@@ -20,6 +20,7 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import InvoiceModel from "./InvoiceModel";
 import InvoiceMultipleModel from "./InvoiceMultipleModel";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -198,13 +199,22 @@ const Deals = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.dealName}_${timestamp}.csv`
+        : `Lead_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Deals_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handelNavigateClick = () => {
@@ -217,20 +227,21 @@ const Deals = () => {
 
     const tableHeaders1 = [
       "S.no",
-      "Deal Name",
-      "Account Name",
-      "Contact Name",
-      "Deal Owner",
-      "Amount",
+      "Lead Name",
+      "Company",
+      "Email-Address",
+      "Phone Number",
+      "Lead Owner",
     ];
+
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
+        row.original.first_name,
         row.original.dealName,
-        row.original.accountName,
-        row.original.contactName,
-        row.original.dealOwner,
-        row.original.amount,
+        row.original.email,
+        row.original.phone,
+        row.original.lead_owner,
       ];
     });
 
@@ -246,105 +257,95 @@ const Deals = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Closing Date",
-      "Lead Source",
-      "Stage",
-      "Probability",
-      "Campaign Source",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.closingDate,
-        row.original.leadSource,
-        row.original.stage,
-        row.original.probability,
-        row.original.campaignSource,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Lead Source",
+    //   "Lead Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.lead_source,
+    //     row.original.lead_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders3 = [
-      "Shipping Street",
-      "Shipping City",
-      "Shipping State",
-      "Shipping Code",
-      "Shipping Country",
-    ];
-    const tableData3 = rows.map((row) => {
-      return [
-        row.original.shippingStreet,
-        row.original.shippingCity,
-        row.original.shippingState,
-        row.original.shippingCode,
-        row.original.shippingCountry,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders4 = [
-      "Billing Street",
-      "Billing City",
-      "Billing State",
-      "Billing Code",
-      "Billing Country",
-    ];
-    const tableData4 = rows.map((row) => {
-      return [
-        row.original.billingStreet,
-        row.original.billingCity,
-        row.original.billingState,
-        row.original.billingCode,
-        row.original.billingCountry,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders4],
-      body: tableData4,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders5 = ["Description", "CreatedAt", "UpdatedAt"];
-    const tableData5 = rows.map((row) => {
-      return [
-        row.original.descriptionInfo,
-        row.original.createdAt,
-        row.original.updatedAt,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders5],
-      body: tableData5,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
 
-    doc.save("ECS.pdf");
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.dealName}_${timestamp}.pdf`
+        : `Deals_List_${timestamp}.pdf`;
+
+    doc.save(filename);
   };
 
   const theme = createTheme({
@@ -453,16 +454,17 @@ const Deals = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" 
-        // onClick={handleExportData}
-        onClick={() => {
-          const selectedRows = table.getSelectedRowModel().rows;
-          if (selectedRows.length === 1) {
-            handleExportRows(selectedRows);
-          } else{
-            handleExportData();
-          }
-        }}
+        <button
+          className="btn text-secondary"
+          // onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
+            }
+          }}
         >
           <RiFileExcel2Fill size={23} />
         </button>
@@ -492,8 +494,8 @@ const Deals = () => {
             const selectedRows = table.getSelectedRowModel().rows;
             if (selectedRows.length === 1) {
               handleExportRowsPDF(selectedRows);
-            } else{
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
             }
           }}
         >
@@ -583,32 +585,22 @@ const Deals = () => {
                     </button>
                   </li>
                   <li>
-                    <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
+                    <TableDeleteModel
+                      rows={table.getSelectedRowModel().rows}
+                      rowSelected={
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) 
+                        )
                       }
-                      // onClick={() =>
-                      //   handleDealConvert(table.getSelectedRowModel().rows)
-                      // }
-                      onClick={() => {
-                        const selectedRows = table.getSelectedRowModel().rows;
-                        if (selectedRows.length === 1) {
-                          handleDealConvert(selectedRows);
-                        } else if (selectedRows.length > 1) {
-                          handleBulkDelete(selectedRows);
-                        }
+                      handleBulkDelete={handleBulkDelete}
+                      onSuccess={() => {
+                        table.setRowSelection(false);
+                        fetchData();
                       }}
-                    >
-                      Delete
-                    </button>
+                    />
                   </li>
-                  <li>
-                  </li>
+                  <li></li>
                   {/* <li>
                     <button
                       className="btn"

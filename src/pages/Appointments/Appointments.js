@@ -20,6 +20,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import AppointmentsCreate from "./AppointmentsCreate";
 import WebSocketService from "../../Config/WebSocketService";
 import appoinmentCancelTemplete from "../Email/AppoinmentCancelTemplete";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
 const csvConfig = mkConfig({
   fieldSeparator: ",",
   decimalSeparator: ".",
@@ -243,13 +244,22 @@ const Appointments = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.appointmentFor}_${timestamp}.csv`
+        : `Lead_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Appointments_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -259,18 +269,21 @@ const Appointments = () => {
 
     const tableHeaders1 = [
       "S.no",
-      "Appointment For",
-      "Service Name",
-      "Duration",
-      "Appointment Name",
+      "Lead Name",
+      "Company",
+      "Email-Address",
+      "Phone Number",
+      "Lead Owner",
     ];
+
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.leadId,
-        row.original.serviceName,
-        row.original.duration,
-        row.original.appointmentName,
+        row.original.first_name,
+        row.original.appointmentFor,
+        row.original.email,
+        row.original.phone,
+        row.original.lead_owner,
       ];
     });
 
@@ -286,49 +299,95 @@ const Appointments = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Appointment Start Date",
-      "Location",
-      "Address",
-      "Member",
-      "Remainder",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.appointmentStartDate,
-        row.original.location,
-        row.original.street,
-        row.original.member,
-        row.original.reminder,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders3 = ["created_at", "Updated_at"];
-    const tableData3 = rows.map((row) => {
-      return [row.original.created_at, row.original.updated_at];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Lead Source",
+    //   "Lead Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.lead_source,
+    //     row.original.lead_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    console.log(tableData1);
-    doc.save("ECS.pdf");
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
+
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.appointmentFor}_${timestamp}.pdf`
+        : `Appointments_List_${timestamp}.pdf`;
+
+    doc.save(filename);
   };
 
   const theme = createTheme({
@@ -403,16 +462,17 @@ const Appointments = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" 
-        // onClick={handleExportData}
-        onClick={() => {
-          const selectedRows = table.getSelectedRowModel().rows;
-          if (selectedRows.length === 1) {
-            handleExportRows(selectedRows);
-          } else{
-            handleExportData();
-          }
-        }}
+        <button
+          className="btn text-secondary"
+          // onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
+            }
+          }}
         >
           <RiFileExcel2Fill size={23} />
         </button>
@@ -442,8 +502,8 @@ const Appointments = () => {
             const selectedRows = table.getSelectedRowModel().rows;
             if (selectedRows.length === 1) {
               handleExportRowsPDF(selectedRows);
-            } else{
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
             }
           }}
         >
@@ -482,7 +542,9 @@ const Appointments = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">Appointments ({data.length})</span>
+              <span className="fs-4 fw-bold px-2">
+                Appointments ({data.length})
+              </span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               <div style={{ paddingRight: "10px" }}>
@@ -504,21 +566,20 @@ const Appointments = () => {
                   {role !== "CMP_USER" ? (
                     <>
                       <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
+                        <TableDeleteModel
+                          rows={table.getSelectedRowModel().rows}
+                          rowSelected={
                             !(
                               table.getIsSomeRowsSelected() ||
                               table.getIsAllRowsSelected()
-                            ) || table.getSelectedRowModel().rows.length !== 1
+                            )
                           }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Delete
-                        </button>
+                          handleBulkDelete={handleBulkDelete}
+                          onSuccess={() => {
+                            table.setRowSelection(false);
+                            fetchData();
+                          }}
+                        />
                       </li>
                       {/* <li>
                   <button
