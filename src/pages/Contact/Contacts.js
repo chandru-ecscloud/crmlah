@@ -18,6 +18,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -194,14 +195,24 @@ const Contacts = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.firstName}_${timestamp}.csv`
+        : `Lead_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Contacts_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
+
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
@@ -210,19 +221,20 @@ const Contacts = () => {
     const tableHeaders1 = [
       "S.no",
       "Contact Name",
+      "Company",
       "Email-Address",
       "Phone Number",
       "Contact Owner",
-      "Last Name",
     ];
+
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
+        row.original.contactName,
         row.original.firstName,
         row.original.email,
         row.original.phone,
         row.original.contactOwner,
-        row.original.lastName,
       ];
     });
 
@@ -238,115 +250,95 @@ const Contacts = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Lead Source",
-      "Account Name",
-      "Vendor Name",
-      "Land Line",
-      "Skype Id",
-      "Twitter",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.leadSource,
-        row.original.accountName,
-        row.original.vendorName,
-        row.original.landLine,
-        row.original.skypeId,
-        row.original.twitter,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Lead Source",
+    //   "Lead Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.lead_source,
+    //     row.original.lead_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders3 = [
-      "Mailing Street",
-      "Mailing City",
-      "Mailing State",
-      "Mailing Zip",
-      "Mailing Country",
-    ];
-    const tableData3 = rows.map((row) => {
-      return [
-        row.original.mailingStreet,
-        row.original.mailingCity,
-        row.original.mailingState,
-        row.original.mailingZip,
-        row.original.mailingCountry,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders4 = [
-      "Other Street",
-      "Other City",
-      "other State",
-      "Other Zip",
-      "Other Country",
-    ];
-    const tableData4 = rows.map((row) => {
-      return [
-        row.original.otherStreet,
-        row.original.otherCity,
-        row.original.otherState,
-        row.original.otherZip,
-        row.original.otherCountry,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders4],
-      body: tableData4,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
-    const tableHeaders5 = [
-      "Description",
-      "Created At",
-      "Created By",
-      "Updated At",
-      "Updated By",
-    ];
-    const tableData5 = rows.map((row) => {
-      return [
-        row.original.descriptionInfo,
-        row.original.createdAt,
-        row.original.createdBy,
-        row.original.updatedAt,
-        row.original.updatedBy,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders5],
-      body: tableData5,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
 
-    doc.save("ECS.pdf");
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.firstName}_${timestamp}.pdf`
+        : `Contacts_List_${timestamp}.pdf`;
+
+    doc.save(filename);
   };
 
   const theme = createTheme({
@@ -483,20 +475,21 @@ const Contacts = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary"
-        //  onClick={handleExportData}
-        onClick={() => {
-          const selectedRows = table.getSelectedRowModel().rows;
-          if (selectedRows.length === 1) {
-            handleExportRows(selectedRows);
-          } else{
-            handleExportData();
-          }
-        }}
-         >
+        <button
+          className="btn text-secondary"
+          //  onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
+            }
+          }}
+        >
           <RiFileExcel2Fill size={23} />
         </button>
-{/* 
+        {/* 
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
@@ -522,11 +515,10 @@ const Contacts = () => {
             const selectedRows = table.getSelectedRowModel().rows;
             if (selectedRows.length === 1) {
               handleExportRowsPDF(selectedRows);
-            } else{
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
             }
           }}
-
         >
           <MdPictureAsPdf size={23} />
         </button>
@@ -607,30 +599,20 @@ const Contacts = () => {
                     </button>
                   </li> */}
                   <li>
-                    <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
+                    <TableDeleteModel
+                      rows={table.getSelectedRowModel().rows}
+                      rowSelected={
                         !(
                           table.getIsSomeRowsSelected() ||
                           table.getIsAllRowsSelected()
-                        ) 
-                        // || table.getSelectedRowModel().rows.length !== 1
+                        )
                       }
-                      // onClick={() =>
-                      //   handleLeadConvert(table.getSelectedRowModel().rows)
-                      // }
-                      onClick={() => {
-                        const selectedRows = table.getSelectedRowModel().rows;
-                        if (selectedRows.length === 1) {
-                          handleLeadConvert(selectedRows);
-                        } else if (selectedRows.length > 1) {
-                          handleBulkDelete(selectedRows);
-                        }
+                      handleBulkDelete={handleBulkDelete}
+                      onSuccess={() => {
+                        table.setRowSelection(false);
+                        fetchData();
                       }}
-                    >
-                      Delete
-                    </button>
+                    />
                   </li>
                   {/* <li>
                     <button

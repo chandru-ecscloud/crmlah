@@ -38,7 +38,6 @@ const Quotes = () => {
   const companyId = sessionStorage.getItem("companyId");
   const navigate = useNavigate();
 
-
   const columns = useMemo(
     () => [
       {
@@ -190,31 +189,26 @@ const Quotes = () => {
     navigate("/quotes/create");
   };
 
-   const handleExportRows = (rows) => {
+  const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    console.log("object",rowData)
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    console.log("object", rowData);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename =
       rows.length === 1
-        ? `${rows[0].original.quoteOwner}_${timestamp}.csv`
-        : `Company_List_${timestamp}.csv`;
+        ? `${rows[0].original.dealName}_${timestamp}.csv`
+        : `Quates_List_${timestamp}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(rowData);
     download(csvConfigWithFilename)(csv);
   };
-  
+
   const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `Company_List_${timestamp}.csv`;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Quates_List_${timestamp}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(data);
     download(csvConfigWithFilename)(csv);
   };
-
-  const handleAssignProducts = async (rows) => {
-    setRowId(() => rows.map((row) => row.original.id));
-  };
-
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
@@ -339,13 +333,16 @@ const Quotes = () => {
     //   },
     // });
 
-   const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
-    rows.length === 1
-      ? `${rows[0].original.quoteOwner}_${timestamp}.pdf`
-      : `Company_List_${timestamp}.pdf`;
+      rows.length === 1
+        ? `${rows[0].original.dealName}_${timestamp}.pdf`
+        : `Quotes_List_${timestamp}.pdf`;
 
     doc.save(filename);
+  };
+  const handleAssignProducts = async (rows) => {
+    setRowId(() => rows.map((row) => row.original.id));
   };
 
   const theme = createTheme({
@@ -392,7 +389,7 @@ const Quotes = () => {
     const rowData = rows.map((row) => row.original);
 
     const transformedData = rowData.map((data) => {
-      return data.id
+      return data.id;
       // Object.keys(data).reduce((acc, key) => {
       //   const newKey = keyMapping[key] || key;
       //   acc[newKey] = data[key];
@@ -475,49 +472,47 @@ const Quotes = () => {
           flexWrap: "wrap",
         }}
       >
-       
-
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
         >
           <button
-          className="btn text-secondary"
-          // onClick={handleExportData}
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRows(selectedRows);
-            } else {
-              handleExportData();
-            }
-          }}
-        >
-          <RiFileExcel2Fill size={23} />
-        </button>
+            className="btn text-secondary"
+            // onClick={handleExportData}
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRows(selectedRows);
+              } else {
+                handleExportData();
+              }
+            }}
+          >
+            <RiFileExcel2Fill size={23} />
+          </button>
         </OverlayTrigger>
 
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
         >
-         <button
-          className="btn text-secondary"
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          // onClick={() =>
-          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          // }
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRowsPDF(selectedRows);
-            } else {
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
-            }
-          }}
-        >
-          <MdPictureAsPdf size={23} />
-        </button>
+          <button
+            className="btn text-secondary"
+            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            // onClick={() =>
+            //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            // }
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRowsPDF(selectedRows);
+              } else {
+                handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+              }
+            }}
+          >
+            <MdPictureAsPdf size={23} />
+          </button>
         </OverlayTrigger>
       </Box>
     ),
@@ -561,13 +556,15 @@ const Quotes = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                <li>
+                  <li>
                     <TableDeleteModel
                       rows={table.getSelectedRowModel().rows}
-                      rowSelected={!(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      )}
+                      rowSelected={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        )
+                      }
                       handleBulkDelete={handleBulkDelete}
                       onSuccess={() => {
                         table.setRowSelection(false);

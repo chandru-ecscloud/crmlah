@@ -177,7 +177,7 @@ const AllClient = () => {
         row.original.companyName,
         row.original.email,
         row.original.phoneNumber,
-        row.original.lead_owner,
+        row.original.leadOwner,
       ];
     });
 
