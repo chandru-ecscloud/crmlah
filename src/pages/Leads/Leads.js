@@ -218,7 +218,7 @@ const Lead = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename =
       rows.length === 1
-        ? `${rows[0].original.company}_${timestamp}.csv`
+        ? `${rows[0].original.leadName}_${timestamp}.csv`
         : `Lead_List_${timestamp}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(rowData);
@@ -355,7 +355,7 @@ const Lead = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.company}_${timestamp}.pdf`
+        ? `${rows[0].original.leadName}_${timestamp}.pdf`
         : `Lead_List_${timestamp}.pdf`;
 
     doc.save(filename);
