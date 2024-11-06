@@ -1,11 +1,25 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { MaterialReactTable, useMaterialReactTable, } from "material-react-table";
-import { LinearProgress, ThemeProvider, createTheme } from "@mui/material";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import { Box, LinearProgress, ThemeProvider, createTheme } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaSortDown } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { MdPictureAsPdf } from "react-icons/md";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import autoTable from "jspdf-autotable";
+import { mkConfig, generateCsv, download } from "export-to-csv";
+import jsPDF from "jspdf";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
+const csvConfig = mkConfig({
+  fieldSeparator: ",",
+  decimalSeparator: ".",
+  useKeysAsHeaders: true,
+});
 
 const Event = () => {
   const { id } = useParams();
@@ -147,7 +161,6 @@ const Event = () => {
         );
         setData(response.data);
       }
-
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -171,7 +184,9 @@ const Event = () => {
           })
         )
       );
-      const allSuccessful = responses.every((response) => response.status === 201);
+      const allSuccessful = responses.every(
+        (response) => response.status === 201
+      );
       if (allSuccessful) {
         toast.success("Event deleted successfully");
         navigate("/event");
@@ -186,10 +201,12 @@ const Event = () => {
   };
 
   const handleStatusUpdate = async (name, row) => {
-    setButtonLoader(true)
+    setButtonLoader(true);
     try {
-      const respones = await axios.put(`${API_URL}updateEventManagement/${row[0].original.id}`,
-        { eventStatus: name })
+      const respones = await axios.put(
+        `${API_URL}updateEventManagement/${row[0].original.id}`,
+        { eventStatus: name }
+      );
       if (respones.status === 200) {
         toast.success("Event Updated successfully");
         navigate("/event");
@@ -201,14 +218,159 @@ const Event = () => {
     } catch (error) {
       toast.error("Failed: " + error.message);
     } finally {
-      setButtonLoader(false)
+      setButtonLoader(false);
     }
-
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleExportRows = (rows) => {
+    const rowData = rows.map((row) => row.original);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.eventName}_${timestamp}.csv`
+        : `Event_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
+  };
+
+  const handleExportData = () => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Event_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
+  };
+
+  const handleExportRowsPDF = (rows) => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Event", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Event Name",
+      "Name",
+      "Email-Address",
+      "Phone Number",
+    ];
+
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.eventName,
+        row.original.firstName,
+        row.original.businessEmail,
+        row.original.phone,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Event Source",
+    //   "Event Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.Event_source,
+    //     row.original.Event_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
+
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.eventName}_${timestamp}.pdf`
+        : `Event_List_${timestamp}.pdf`;
+
+    doc.save(filename);
+  };
 
   const theme = createTheme({
     components: {
@@ -230,12 +392,87 @@ const Event = () => {
       columnVisibility: {
         eventLink: false,
         eventDescription: false,
-        enquiry: false
+        enquiry: false,
       },
     },
     enableRowSelection: true,
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",
+
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
+        }}
+      >
+        <button
+          className="btn text-secondary"
+          // onClick={handleExportData}
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRows(selectedRows);
+            } else {
+              handleExportData();
+            }
+          }}
+        >
+          <RiFileExcel2Fill size={23} />
+        </button>
+
+        {/* <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          >
+            <RiFileExcel2Line size={23} />
+          </button>
+        </OverlayTrigger> */}
+
+        <button
+          className="btn text-secondary"
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          // onClick={() =>
+          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+          // }
+          onClick={() => {
+            const selectedRows = table.getSelectedRowModel().rows;
+            if (selectedRows.length === 1) {
+              handleExportRowsPDF(selectedRows);
+            } else {
+              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+            }
+          }}
+        >
+          <MdPictureAsPdf size={23} />
+        </button>
+        {/* <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+        >
+          <button
+            className="btn text-secondary border-0"
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() =>
+              handleExportRowsPDF(table.getSelectedRowModel().rows)
+            }
+          >
+            <MdOutlinePictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger> */}
+      </Box>
+    ),
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
@@ -252,7 +489,6 @@ const Event = () => {
         <>
           <div className="d-flex align-items-center justify-content-end">
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
-
               <div style={{ paddingRight: "10px" }}>
                 {role !== "EVENT_ORGANIZER" && (
                   <Link to="/event/add">
@@ -265,8 +501,12 @@ const Event = () => {
                   </Link>
                 )}
               </div>
-              <div style={{ paddingRight: "10px" }}
-                className={`dropdown-center ${role === "EVENT_ORGANIZER" ? "disabled" : ""}`}>
+              <div
+                style={{ paddingRight: "10px" }}
+                className={`dropdown-center ${
+                  role === "EVENT_ORGANIZER" ? "disabled" : ""
+                }`}
+              >
                 {role !== "EVENT_ORGANIZER" && (
                   <>
                     <button
@@ -285,16 +525,29 @@ const Event = () => {
                       Status <FaSortDown style={{ marginTop: "-6px" }} />
                     </button>
                     <ul className="dropdown-menu">
-                      {["INPROCESS", "NEW", "APPROVED", "CANCELLED", "RESCHEDULED"].map(status => (
+                      {[
+                        "INPROCESS",
+                        "NEW",
+                        "APPROVED",
+                        "CANCELLED",
+                        "RESCHEDULED",
+                      ].map((status) => (
                         <li key={status}>
                           <button
                             className="btn"
                             style={{ width: "100%", border: "none" }}
                             disabled={
-                              !(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) ||
-                              table.getSelectedRowModel().rows.length !== 1
+                              !(
+                                table.getIsSomeRowsSelected() ||
+                                table.getIsAllRowsSelected()
+                              ) || table.getSelectedRowModel().rows.length !== 1
                             }
-                            onClick={() => handleStatusUpdate(status, table.getSelectedRowModel().rows)}
+                            onClick={() =>
+                              handleStatusUpdate(
+                                status,
+                                table.getSelectedRowModel().rows
+                              )
+                            }
                           >
                             {status.charAt(0) + status.slice(1).toLowerCase()}
                           </button>
@@ -306,7 +559,9 @@ const Event = () => {
               </div>
 
               <div
-                className={`dropdown-center ${role === "CMP_USER" && "disabled"}`}
+                className={`dropdown-center ${
+                  role === "CMP_USER" && "disabled"
+                }`}
               >
                 {role !== "EVENT_ORGANIZER" && (
                   <>
@@ -321,28 +576,25 @@ const Event = () => {
                     </button>
                     <ul className="dropdown-menu">
                       <li>
-                        <button
-                          className="btn"
-                          style={{ width: "100%", border: "none" }}
-                          disabled={
+                        <TableDeleteModel
+                          rows={table.getSelectedRowModel().rows}
+                          rowSelected={
                             !(
                               table.getIsSomeRowsSelected() ||
                               table.getIsAllRowsSelected()
-                            ) || table.getSelectedRowModel().rows.length !== 1
+                            )
                           }
-                          onClick={() =>
-                            handleBulkDelete(table.getSelectedRowModel().rows)
-                          }
-                        >
-                          Delete
-                        </button>
+                          handleBulkDelete={handleBulkDelete}
+                          onSuccess={() => {
+                            table.setRowSelection(false);
+                            fetchData();
+                          }}
+                        />
                       </li>
                     </ul>
                   </>
                 )}
               </div>
-
-
             </div>
           </div>
           <ThemeProvider theme={theme}>

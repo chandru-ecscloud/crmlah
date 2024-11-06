@@ -11,7 +11,10 @@ const validationSchema = yup.object().shape({
   eventName: yup.string().required("*Event Name is Required"),
   firstName: yup.string().required("*First Name is Required"),
   lastName: yup.string().required("*Last Name is Required"),
-  businessEmail: yup.string().email("Invalid email").required("*Email is required"),
+  businessEmail: yup
+    .string()
+    .email("Invalid email")
+    .required("*Email is required"),
   eventAgenda: yup.string().required("*Agenda is Required"),
   phone: yup.string().required("*Phone is Required"),
   eventStatus: yup.string().required("*Event Status is Required"),
@@ -22,6 +25,7 @@ function EventAdd() {
   const [loading, setLoading] = useState(false);
   const role = sessionStorage.getItem("role");
   const companyId = sessionStorage.getItem("companyId");
+  const userId = sessionStorage.getItem("userId");
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -43,18 +47,39 @@ function EventAdd() {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Event Data:", data);
+      const payload = {
+        companyName: data.companyName,
+        eventName: data.eventName,
+        eventDate: data.eventDate,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        businessEmail: data.businessEmail,
+        phone: data.phone,
+        enquiry: data.enquiry,
+        eventAgenda: data.eventAgenda,
+        eventStatus: data.eventStatus,
+        eventLink: data.eventLink,
+        eventDescription: data.eventDescription,
+        owner: owner,
+        companyId: companyId,
+        userId: userId,
+      };
       setLoading(true);
+      console.log("Payload:", payload);
       try {
-        const response = await axios.post(`${API_URL}createEventManagement`, data, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.post(
+          `${API_URL}createEventManagement`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/event");
-          setLoading(false);
         } else {
           toast.error(response.data.message);
         }
@@ -107,10 +132,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.companyName && formik.errors.companyName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("companyName")}
                   name="companyName"
                   id="companyName"
@@ -131,10 +157,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.eventName && formik.errors.eventName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.eventName && formik.errors.eventName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("eventName")}
                   name="eventName"
                   id="eventName"
@@ -155,10 +182,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.firstName && formik.errors.firstName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.firstName && formik.errors.firstName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("firstName")}
                   name="firstName"
                   id="firstName"
@@ -179,10 +207,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.lastName && formik.errors.lastName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.lastName && formik.errors.lastName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("lastName")}
                   name="lastName"
                   id="lastName"
@@ -203,10 +232,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="date"
-                  className={`form-size form-control  ${formik.touched.eventDate && formik.errors.eventDate
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.eventDate && formik.errors.eventDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("eventDate")}
                   name="eventDate"
                   id="eventDate"
@@ -227,10 +257,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="email"
-                  className={`form-size form-control  ${formik.touched.businessEmail && formik.errors.businessEmail
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.businessEmail && formik.errors.businessEmail
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("businessEmail")}
                   name="businessEmail"
                   id="businessEmail"
@@ -239,9 +270,12 @@ function EventAdd() {
               <div className="row sm-device">
                 <div className="col-5"></div>
                 <div className="col-6 sm-device">
-                  {formik.touched.businessEmail && formik.errors.businessEmail && (
-                    <p className="text-danger">{formik.errors.businessEmail}</p>
-                  )}
+                  {formik.touched.businessEmail &&
+                    formik.errors.businessEmail && (
+                      <p className="text-danger">
+                        {formik.errors.businessEmail}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -251,10 +285,11 @@ function EventAdd() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("phone")}
                   name="phone"
                   id="phone"
@@ -309,10 +344,11 @@ function EventAdd() {
                 <div className="col-10">
                   <textarea
                     type="text"
-                    className={` form-control  ${formik.touched.eventAgenda && formik.errors.eventAgenda
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={` form-control  ${
+                      formik.touched.eventAgenda && formik.errors.eventAgenda
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("eventAgenda")}
                     name="eventAgenda"
                     id="eventAgenda"
@@ -326,17 +362,16 @@ function EventAdd() {
             <div className=" col-12 mb-3">
               <div className="row align-items-center">
                 <div className="col-2 text-end">
-                  <lable>
-                    Enquiry
-                  </lable>
+                  <lable>Enquiry</lable>
                 </div>
                 <div className="col-10">
                   <textarea
                     type="text"
-                    className={` form-control  ${formik.touched.enquiry && formik.errors.enquiry
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={` form-control  ${
+                      formik.touched.enquiry && formik.errors.enquiry
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("enquiry")}
                     name="enquiry"
                     id="enquiry"
@@ -356,11 +391,12 @@ function EventAdd() {
                 <div className="col-10">
                   <textarea
                     type="text"
-                    className={` form-control  ${formik.touched.eventDescription &&
+                    className={` form-control  ${
+                      formik.touched.eventDescription &&
                       formik.errors.eventDescription
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("eventDescription")}
                     name="eventDescription"
                     id="eventDescription"
@@ -377,7 +413,7 @@ function EventAdd() {
           </div>
         </div>
       </form>
-    </section >
+    </section>
   );
 }
 
