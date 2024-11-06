@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Tooltip, Zoom } from "@mui/material";
 import { toast } from "react-toastify";
+import { BiMailSend } from "react-icons/bi";
 // import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const role = sessionStorage.getItem("role");
@@ -97,7 +98,7 @@ function SendEmail({ toEmail }) {
         style={{ padding: "2px 8px" }}
         disabled={role === "CMP_USER"}
       >
-        <IoIosSend className="mb-1" />
+        <BiMailSend className="mb-1" />
       </Button>
       </Tooltip>
       <Offcanvas
@@ -107,7 +108,7 @@ function SendEmail({ toEmail }) {
         placement="end"
       >
         <Offcanvas.Header>
-          New Message &nbsp;&nbsp;&nbsp;&nbsp;{" "}
+          New Mail &nbsp;&nbsp;&nbsp;&nbsp;{" "}
           <button
             onClick={handleHide}
             className="btn border-dark fw-bold"

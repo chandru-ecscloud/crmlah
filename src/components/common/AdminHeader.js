@@ -43,6 +43,8 @@ const mainMenu = [
 function AdminHeader({ handleLogout }) {
   const expand = "lg";
   const [show, setShow] = useState(false);
+  const [dot, setDot] = useState(false);
+  const [plusOpen, setPlusOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -76,12 +78,9 @@ function AdminHeader({ handleLogout }) {
     (menuItem) => !(role === "CMP_USER" && menuItem.label === "PipeLine")
   );
 
-  // Add a condition for EVENT_ORGANIZER
   const filteredMainMenuForOrganizer =
     role === "EVENT_ORGANIZER"
-      ? mainMenu.filter(
-          (menuItem) =>  menuItem.label === "Event"
-        )
+      ? mainMenu.filter((menuItem) => menuItem.label === "Event")
       : filteredMainMenu;
 
   const renderContentBasedOnRole = (role) => {
@@ -99,10 +98,9 @@ function AdminHeader({ handleLogout }) {
       case "EVENT_ORGANIZER":
         return "Event Organizer";
       default:
-        return role.split("_")[1]; // return the part after the underscore
+        return role.split("_")[1];
     }
   };
-
   return (
     <>
       <Navbar expand={expand} className="adminNavbar">
@@ -129,16 +127,19 @@ function AdminHeader({ handleLogout }) {
 
               {/* <Tooltip TransitionComponent={Zoom} title="Other Modules"> */}
               {role !== "EVENT_ORGANIZER" && (
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
-                  }
-                >
+               <OverlayTrigger
+               placement="bottom"
+               overlay={
+                 dot ? <></> : <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
+               }
+             >
                   <NavDropdown
                     title={<AiOutlineEllipsis className="text-white " />}
                     className="navDropdown"
                     style={{ marginTop: "7px" }}
+                    onToggle={(isOpen) => {
+                      setDot(isOpen);
+                    }}
                   >
                     <span>
                       <input
@@ -168,13 +169,16 @@ function AdminHeader({ handleLogout }) {
                 <OverlayTrigger
                   placement="bottom"
                   overlay={
-                    <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
+                    plusOpen ? <></> : <Tooltip id="button-tooltip-2">Other Modules</Tooltip>
                   }
                 >
                   <NavDropdown
                     title={<FiPlus className="text-white fs-5 mt-2" />}
                     className="navDropdowns"
                     disabled={role === "CMP_USER"}
+                    onToggle={(isOpen) => {
+                      setPlusOpen(isOpen);
+                    }}
                   >
                     <NavDropdown.Item as={NavLink} to="/leads/create">
                       <IoMdAdd /> create Lead
@@ -207,18 +211,18 @@ function AdminHeader({ handleLogout }) {
                 </OverlayTrigger>
               )}
               {/* <Tooltip TransitionComponent={Zoom} title="Profile"> */}
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={<Tooltip id="button-tooltip-2">Profile</Tooltip>}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="button-tooltip-2">Profile</Tooltip>}
+              >
+                <Nav
+                  className="custom-nav-links"
+                  style={{ fontSize: "20px", paddingTop: "8px" }}
+                  onClick={handleShow}
                 >
-                  <Nav
-                    className="custom-nav-links"
-                    style={{ fontSize: "20px", paddingTop: "8px" }}
-                    onClick={handleShow}
-                  >
-                    <FaUserCircle style={{ cursor: "pointer" }} />
-                  </Nav>
-                </OverlayTrigger>
+                  <FaUserCircle style={{ cursor: "pointer" }} />
+                </Nav>
+              </OverlayTrigger>
             </Nav>
           </Navbar.Collapse>
         </Container>
