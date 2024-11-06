@@ -22,7 +22,6 @@ const csvConfig = mkConfig({
 
 const Company = () => {
   const [data, setData] = useState([]);
-  const [rowId, setRowId] = useState("");
   const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -79,11 +78,11 @@ const Company = () => {
             <span className="badge bg-warning  py-2">Pending</span>
           ),
       },
-      {
-        accessorKey: "role",
-        enableHiding: false,
-        header: "Role",
-      },
+      // {
+      //   accessorKey: "role",
+      //   enableHiding: false,
+      //   header: "Role",
+      // },
     ],
     []
   );
@@ -258,7 +257,10 @@ const Company = () => {
       {loading && <LinearProgress />}
       {!loading && (
         <>
-          <div className="d-flex align-items-center justify-content-end py-4 px-3">
+          <div className="d-flex align-items-center justify-content-between py-4 px-3">
+          <div className="text-start">
+              <span className="fs-4 fw-bold px-2">Company ({data.length})</span>
+            </div>
             <div style={{ paddingRight: "10px" }}>
               <button
                 className={`btn btn-primary ${role === "CMP_USER" && "disabled"

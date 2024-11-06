@@ -100,7 +100,7 @@ function CompanyShow() {
           id="userDetails-container"
         >
           {/* Details */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
@@ -136,80 +136,78 @@ function CompanyShow() {
             </div>
 
             <div className="container-fluid col-md-6"></div>
-          </div>
+          </div> */}
 
           {/* Hide Details */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3"> Hide Details</span>
+              <span className="fs-6 fw-bold my-3">Details</span>
             </div>
             <div className="py-3">
               <span className="fs-6 fw-bold"> Company Information</span>
             </div>
 
-            <div className="container-fluid col-md-12">
-              <div>
-                <label className="text-dark Label">User Name</label>
-                <span className="text-dark">
+            <div className="container-fluid col-md-6">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">User Name</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.userName || "--"}
                 </span>
               </div>
-
-              <div>
-                <label className="text-dark Label">Company Name</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Company Name
+                </label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.companyName || "--"}
                 </span>
               </div>
-
-              <div>
-                <label className="text-dark Label">Email</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Email</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.email || "--"}
                 </span>
               </div>
 
-              <div>
-                <label className="text-dark Label">Phone</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Phone</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;&nbsp;{userData.phone || "--"}
                 </span>
               </div>
-              <div className="container-fluid col-md-6"></div>
             </div>
-            <div className="container-fluid col-sm-12">
-              <div className="my-3 container-fluid row d-flex justify-content-between">
-                <span className="my-3 fs-6 fw-bold col-10 my-3">
-                  Address Information
-                </span>
-              </div>
-              <div>
-                <label className="text-dark Label">Address</label>
-                <span className="text-dark">
+            <div className="container-fluid col-md-6"></div>
+            <div className="py-3">
+              <span className="fs-6 fw-bold"> Address Information</span>
+            </div>
+            <div className="container-fluid col-md-6">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Address</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp; {userData.address || "--"}
                 </span>
               </div>
-              <div>
-                <label className="text-dark Label">City</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">City</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.city || "--"}
                 </span>
               </div>
-              <div>
-                <label className="text-dark Label">State</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">State</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.state || "--"}
                 </span>
               </div>
-              <div>
-                <label className="text-dark Label">Zip Code</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Zip Code</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.zipCode || "--"}
                 </span>
               </div>
-              <div>
-                <label className="text-dark Label">Country</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Country</label>
+                <span className="text-dark col-6">
                   &nbsp; : &nbsp;{userData.country || "--"}
                 </span>
               </div>

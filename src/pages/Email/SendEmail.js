@@ -5,10 +5,12 @@ import { IoMdSend, IoIosSend } from "react-icons/io";
 import { MdErrorOutline, MdDelete } from "react-icons/md";
 import user from "../../assets/user.png";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { Tooltip, Zoom } from "@mui/material";
+import { toast } from "react-toastify";
+// import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const role = sessionStorage.getItem("role");
 
@@ -88,6 +90,7 @@ function SendEmail({ toEmail }) {
 
   return (
     <div>
+      <Tooltip TransitionComponent={Zoom} title="Send Mail">
       <Button
         className="fs-4 btn bg-primary bg-gradient mx-2 text-white shadow-none rounded-5"
         onClick={handleShow}
@@ -96,6 +99,7 @@ function SendEmail({ toEmail }) {
       >
         <IoIosSend className="mb-1" />
       </Button>
+      </Tooltip>
       <Offcanvas
         show={show}
         onHide={handleHide}

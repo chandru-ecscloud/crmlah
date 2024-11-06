@@ -18,6 +18,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -341,8 +342,9 @@ const Products = () => {
       }
     } catch (error) {
       toast.error("Failed: " + error.message);
+    } finally {
+      fetchData();
     }
-    fetchData();
   };
 
   const table = useMaterialReactTable({
@@ -458,22 +460,18 @@ const Products = () => {
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !(
-                          table.getIsSomeRowsSelected() ||
-                          table.getIsAllRowsSelected()
-                        )
-                        // || table.getSelectedRowModel().rows.length !== 1
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
-                    >
-                      Delete
-                    </button>
+                    <TableDeleteModel
+                      rows={table.getSelectedRowModel().rows}
+                      rowSelected={!(
+                        table.getIsSomeRowsSelected() ||
+                        table.getIsAllRowsSelected()
+                      )}
+                      handleBulkDelete={handleBulkDelete}
+                      onSuccess={() => {
+                        table.setRowSelection(false);
+                        fetchData();
+                      }}
+                    />
                   </li>
                 </ul>
               </div>

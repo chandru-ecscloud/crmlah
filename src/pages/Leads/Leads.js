@@ -19,6 +19,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
 import SendCompanyProfile from "../Email/SendCompanyProfile";
+import TableDeleteModel from "../../components/common/TableDeleteModel";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -214,24 +215,23 @@ const Lead = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename =
       rows.length === 1
         ? `${rows[0].original.company}_${timestamp}.csv`
-        : `Company_List_${timestamp}.csv`;
+        : `Lead_List_${timestamp}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(rowData);
     download(csvConfigWithFilename)(csv);
   };
-  
+
   const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `Company_List_${timestamp}.csv`;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `Lead_List_${timestamp}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(data);
     download(csvConfigWithFilename)(csv);
   };
-  
 
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
@@ -270,93 +270,93 @@ const Lead = () => {
       },
     });
 
-    const tableHeaders2 = [
-      "Land Line",
-      "Lead Source",
-      "Lead Status",
-      "Street",
-      "City",
-    ];
-    const tableData2 = rows.map((row) => {
-      return [
-        row.original.land_line,
-        row.original.lead_source,
-        row.original.lead_status,
-        row.original.street,
-        row.original.city,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders2],
-      body: tableData2,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Lead Source",
+    //   "Lead Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.lead_source,
+    //     row.original.lead_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders3 = [
-      "Zip Code",
-      "State",
-      "Country",
-      "Created By",
-      "Updated By",
-    ];
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
 
-    const tableData3 = rows.map((row) => {
-      return [
-        row.original.zipCode,
-        row.original.state,
-        row.original.country,
-        row.original.created_by,
-        row.original.updatedBy,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders3],
-      body: tableData3,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
-    const tableHeaders4 = [
-      "Description",
-      "Skype ID",
-      "Twitter",
-      "Created At",
-      "Updated At",
-    ];
-    const tableData4 = rows.map((row) => {
-      return [
-        row.original.Description,
-        row.original.skype_id,
-        row.original.twitter,
-        row.original.createdAt,
-        row.original.updatedAt,
-      ];
-    });
-    autoTable(doc, {
-      head: [tableHeaders4],
-      body: tableData4,
-      styles: {
-        cellPadding: 1,
-        fontSize: 10,
-        cellWidth: "auto",
-        cellHeight: "auto",
-      },
-    });
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
-    rows.length === 1
-      ? `${rows[0].original.company}_${timestamp}.pdf`
-      : `Company_List_${timestamp}.pdf`;
+      rows.length === 1
+        ? `${rows[0].original.company}_${timestamp}.pdf`
+        : `Lead_List_${timestamp}.pdf`;
 
     doc.save(filename);
   };
@@ -469,21 +469,25 @@ const Lead = () => {
           flexWrap: "wrap",
         }}
       >
-        <button
-          className="btn text-secondary"
-          // onClick={handleExportData}
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRows(selectedRows);
-            } else {
-              handleExportData();
-            }
-          }}
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
         >
-          <RiFileExcel2Fill size={23} />
-        </button>
-
+          <button
+            className="btn text-secondary"
+            // onClick={handleExportData}
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRows(selectedRows);
+              } else {
+                handleExportData();
+              }
+            }}
+          >
+            <RiFileExcel2Fill size={23} />
+          </button>
+        </OverlayTrigger>
         {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
@@ -498,25 +502,28 @@ const Lead = () => {
             <RiFileExcel2Line size={23} />
           </button>
         </OverlayTrigger> */}
-
-        <button
-          className="btn text-secondary"
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          // onClick={() =>
-          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          // }
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRowsPDF(selectedRows);
-            } else {
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
-            }
-          }}
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
         >
-          <MdPictureAsPdf size={23} />
-        </button>
-
+          <button
+            className="btn text-secondary"
+            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            // onClick={() =>
+            //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            // }
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRowsPDF(selectedRows);
+              } else {
+                handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+              }
+            }}
+          >
+            <MdPictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger>
         {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
@@ -726,22 +733,18 @@ const Lead = () => {
                     </button>
                   </li> */}
                   <li>
-                    <button
-                      className="btn"
-                      style={{ width: "100%", border: "none" }}
-                      disabled={
-                        !(
-                          table.getIsSomeRowsSelected() ||
-                          table.getIsAllRowsSelected()
-                        )
-                        // || table.getSelectedRowModel().rows.length !== 1
-                      }
-                      onClick={() =>
-                        handleBulkDelete(table.getSelectedRowModel().rows)
-                      }
-                    >
-                      Delete
-                    </button>
+                    <TableDeleteModel
+                      rows={table.getSelectedRowModel().rows}
+                      rowSelected={!(
+                        table.getIsSomeRowsSelected() ||
+                        table.getIsAllRowsSelected()
+                      )}
+                      handleBulkDelete={handleBulkDelete}
+                      onSuccess={() => {
+                        table.setRowSelection(false);
+                        fetchData();
+                      }}
+                    />
                   </li>
                   {/* <li>
                     <button
