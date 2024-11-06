@@ -227,21 +227,21 @@ const Deals = () => {
 
     const tableHeaders1 = [
       "S.no",
-      "Lead Name",
+      "Deal Name",
       "Company",
       "Email-Address",
       "Phone Number",
-      "Lead Owner",
+      "Deal Owner",
     ];
 
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.first_name,
         row.original.dealName,
+        row.original.companyName,
         row.original.email,
         row.original.phone,
-        row.original.lead_owner,
+        row.original.dealOwner,
       ];
     });
 

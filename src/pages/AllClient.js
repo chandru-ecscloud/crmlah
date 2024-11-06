@@ -138,24 +138,154 @@ const AllClient = () => {
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.name}_${timestamp}.csv`
+        : `Lead_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(rowData);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
-  };
-
-  const handelNavigateClick = () => {
-    navigate("/products/create");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `AllClient_List_${timestamp}.csv`;
+    const csvConfigWithFilename = { ...csvConfig, filename };
+    const csv = generateCsv(csvConfigWithFilename)(data);
+    download(csvConfigWithFilename)(csv);
   };
 
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
-    doc.text("Product", 15, 15);
-    doc.save("ECS.pdf");
+    doc.text("AllClient", 15, 15);
+
+    const tableHeaders1 = [
+      "S.no",
+      "Lead Name",
+      "Company",
+      "Email-Address",
+      "Phone Number",
+      "AllClient Owner",
+    ];
+
+    const tableData1 = rows.map((row, i) => {
+      return [
+        i + 1,
+        row.original.name,
+        row.original.companyName,
+        row.original.email,
+        row.original.phoneNumber,
+        row.original.lead_owner,
+      ];
+    });
+
+    autoTable(doc, {
+      head: [tableHeaders1],
+      body: tableData1,
+      startY: 25,
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        cellWidth: "auto",
+        cellHeight: "auto",
+      },
+    });
+
+    // const tableHeaders2 = [
+    //   "Land Line",
+    //   "Lead Source",
+    //   "Lead Status",
+    //   "Street",
+    //   "City",
+    // ];
+    // const tableData2 = rows.map((row) => {
+    //   return [
+    //     row.original.land_line,
+    //     row.original.lead_source,
+    //     row.original.lead_status,
+    //     row.original.street,
+    //     row.original.city,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders2],
+    //   body: tableData2,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders3 = [
+    //   "Zip Code",
+    //   "State",
+    //   "Country",
+    //   "Created By",
+    //   "Updated By",
+    // ];
+
+    // const tableData3 = rows.map((row) => {
+    //   return [
+    //     row.original.zipCode,
+    //     row.original.state,
+    //     row.original.country,
+    //     row.original.created_by,
+    //     row.original.updatedBy,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders3],
+    //   body: tableData3,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    // const tableHeaders4 = [
+    //   "Description",
+    //   "Skype ID",
+    //   "Twitter",
+    //   "Created At",
+    //   "Updated At",
+    // ];
+    // const tableData4 = rows.map((row) => {
+    //   return [
+    //     row.original.Description,
+    //     row.original.skype_id,
+    //     row.original.twitter,
+    //     row.original.createdAt,
+    //     row.original.updatedAt,
+    //   ];
+    // });
+    // autoTable(doc, {
+    //   head: [tableHeaders4],
+    //   body: tableData4,
+    //   styles: {
+    //     cellPadding: 1,
+    //     fontSize: 10,
+    //     cellWidth: "auto",
+    //     cellHeight: "auto",
+    //   },
+    // });
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
+    const filename =
+      rows.length === 1
+        ? `${rows[0].original.name}_${timestamp}.pdf`
+        : `AllClient_List_${timestamp}.pdf`;
+
+    doc.save(filename);
+  };
+
+  const handelNavigateClick = () => {
+    navigate("/products/create");
   };
 
   const handleSendProductsToInvoice = async (rows) => {
@@ -275,9 +405,9 @@ const AllClient = () => {
           flexWrap: "wrap",
         }}
       >
-        <button className="btn text-secondary" onClick={handleExportData}>
+        {/* <button className="btn text-secondary" onClick={handleExportData}>
           <RiFileExcel2Fill size={23} />
-        </button>
+        </button> */}
 
         <OverlayTrigger
           placement="top"
@@ -294,7 +424,7 @@ const AllClient = () => {
           </button>
         </OverlayTrigger>
 
-        <button
+        {/* <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
@@ -302,7 +432,8 @@ const AllClient = () => {
           }
         >
           <MdPictureAsPdf size={23} />
-        </button>
+        </button> */}
+
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}

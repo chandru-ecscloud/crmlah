@@ -269,21 +269,21 @@ const Appointments = () => {
 
     const tableHeaders1 = [
       "S.no",
-      "Lead Name",
+      "Appointment Name",
       "Company",
       "Email-Address",
       "Phone Number",
-      "Lead Owner",
+      "Appointment Owner",
     ];
 
     const tableData1 = rows.map((row, i) => {
       return [
         i + 1,
-        row.original.first_name,
+        row.original.appointmentName,
         row.original.appointmentFor,
         row.original.email,
-        row.original.phone,
-        row.original.lead_owner,
+        row.original.phoneNumber,
+        row.original.appointmentName,
       ];
     });
 
