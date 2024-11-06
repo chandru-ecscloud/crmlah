@@ -168,7 +168,6 @@ function LeadsShow() {
 
       {/* Leads Information Section */}
       <section className="container-fluid row p-3 section2 m-0 p-0 d-flex justify-content-around align-items-center">
-        
         {/* center Content  */}
         <div
           className="container-fluid col-md-9 m-0"
@@ -247,39 +246,45 @@ function LeadsShow() {
 
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Leads Owner</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Leads Owner
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.lead_owner || "--"}
                 </span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Company</label>
-                <span className="col-6" >
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.company || "--"}
                 </span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Phone</label>
-                <span className="col-6" >
+                <span className="col-6">
                   &nbsp; : &nbsp; + {clientData.countryCode || ""}&nbsp;
                   {clientData.phone || "--"}
                 </span>
               </div>
               <div className="row mb-3">
-              <label className="text-dark col-6 text-center">Lead Source</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Lead Source
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.lead_source || ""}
                 </span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Skype Id</label>
-                <span className="col-6" >
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.skype_id || "--"}
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Created At</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Created At
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;
                   {clientData.created_at
                     ? clientData.created_at.split("T")[0]
@@ -287,8 +292,10 @@ function LeadsShow() {
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Updated At</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Updated At
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;
                   {clientData.updated_at
                     ? clientData.updated_at.split("T")[0]
@@ -300,42 +307,41 @@ function LeadsShow() {
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Lead Name</label>
-                <span className="col-6" >
-                  &nbsp; : &nbsp;{leadName || "--"}
-                </span>
+                <span className="col-6">&nbsp; : &nbsp;{leadName || "--"}</span>
               </div>
-              
-
-
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Email</label>
-                <span className="col-6" >
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.email || "--"}
                 </span>
               </div>
               <div className="row mb-3">
-              <label className="text-dark col-6 text-center">Land Line</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">Land Line</label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.land_line || ""}
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Lead Status</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Lead Status
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.lead_status || "--"}
                 </span>
               </div>
-              
+
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Twitter</label>
-                <span className="col-6" >
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.twitter || "--"}
                 </span>
               </div>
 
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Created By</label>
-                <span className="col-6" >
+                <label className="text-dark col-6 text-center">
+                  Created By
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{clientData.created_by || "--"}
                 </span>
               </div>
@@ -346,45 +352,38 @@ function LeadsShow() {
               <span className="fs-6 fw-bold"> Address Information</span>
             </div>
             <div className="container-fluid col-md-6">
-                <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">
-                    Street
-                  </label>
-                  <span className="col-6" >: &nbsp;{clientData.street || "--"}</span>
-                </div>
-                <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">
-                    State
-                  </label>
-                  <span className="col-6" >: &nbsp;{clientData.state || "--"}</span>
-                </div>
-                <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">
-                    Country
-                  </label>
-                  <span className="col-6" >
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Street</label>
+                <span className="col-6">
+                  : &nbsp;{clientData.street || "--"}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">State</label>
+                <span className="col-6">
+                  : &nbsp;{clientData.state || "--"}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Country</label>
+                <span className="col-6">
                   : &nbsp;{clientData.country || "--"}
-                  </span>
-                </div>
+                </span>
               </div>
+            </div>
 
-              <div className="container-fluid col-md-6">
-                <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">
-                    City
-                  </label>
-                  <span className="col-6" >: &nbsp;{clientData.city || "--"}</span>
-                </div>
-                <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">
-                    Zip Code
-                  </label>
-                  <span className="col-6" >
-                  : &nbsp;{clientData.zipCode || "--"}
-                  </span>
-                </div>
+            <div className="container-fluid col-md-6">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">City</label>
+                <span className="col-6">: &nbsp;{clientData.city || "--"}</span>
               </div>
-            
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Zip Code</label>
+                <span className="col-6">
+                  : &nbsp;{clientData.zipCode || "--"}
+                </span>
+              </div>
+            </div>
 
             {/* Appointment Modal  */}
             <div className="container-fluid row" id="Details">
@@ -486,9 +485,11 @@ function LeadsShow() {
               </div>
 
               <div className="row mb-3">
-                <label className="text-dark col-4 text-center">Description  &nbsp; : &nbsp;</label>
-                <span className="col-8" >
-                 {clientData.description_info || "--"}
+                <label className="text-dark col-4 text-center">
+                  Description &nbsp; : &nbsp;
+                </label>
+                <span className="col-8">
+                  {clientData.description_info || "--"}
                 </span>
               </div>
             </div>

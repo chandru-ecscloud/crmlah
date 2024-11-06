@@ -344,7 +344,9 @@ const AllClient = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <div className="text-start">
-              <span className="fs-4 fw-bold px-2">All Clients</span>
+              <span className="fs-4 fw-bold px-2">
+                All Clients ({data.length})
+              </span>
             </div>
             <div className="d-flex align-items-center justify-content-end py-4 px-3">
               {/* <div style={{ paddingRight: "10px" }}>

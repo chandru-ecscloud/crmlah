@@ -144,7 +144,7 @@ function DealsShow() {
           id="userDetails-container"
         >
           {/* Details */}
-          <div className="container-fluid row" id="Details">
+          {/* <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
               <span className="fs-6 fw-bold my-3"> Details</span>
             </div>
@@ -177,95 +177,120 @@ function DealsShow() {
             </div>
 
             <div className="container-fluid col-md-6"></div>
-          </div>
+          </div> */}
 
           {/* Hide Details */}
           <div className="container-fluid row" id="Details">
             <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Hide Details</span>
+              <span className="fs-6 fw-bold my-3">Details</span>
             </div>
-
             <div className="py-3">
               <span className="fs-6 fw-bold"> Deal Information</span>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Deals Owner</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.dealOwner || ""}
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Deals Owner
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{dealData.dealOwner || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Campaign Source</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.campaignSource || ""}
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Campaign Source
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{dealData.campaignSource || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created At</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Phone</label>
+                <span className="col-6">
+                  &nbsp; : &nbsp; + {dealData.countryCode || ""}&nbsp;
+                  {dealData.phone || "--"}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Created At
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{" "}
                   {dealData.createdAt ? dealData.createdAt.split("T")[0] : ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Updated At</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Updated At
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;
                   {dealData.updatedAt ? dealData.updatedAt.split("T")[0] : ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Closing Date</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.closingDate || ""}
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Closing Date
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;
+                  {dealData.closingDate || ""}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Probability
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{dealData.probability || "--"}
                 </span>
               </div>
             </div>
 
             <div className="container-fluid col-md-6">
-              <div className="address-item">
-                <label className="text-dark Label">Deal Name</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Deal Name</label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{dealData.dealName || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Phone Number</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Phone Number
+                </label>
+                <span className="col-6">
                   &nbsp; : &nbsp;+{dealData.countryCode || ""}{" "}
                   {dealData.phone || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Email</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Email</label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{dealData.email || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Amount</label>
-                <span className="text-dark">
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Amount</label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{dealData.amount || ""}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Stage</label>
-                <span className="text-dark">
+
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Stage</label>
+                <span className="col-6">
                   &nbsp; : &nbsp;{dealData.stage || "--"}
                 </span>
               </div>
-              <div className="address-item">
-                <label className="text-dark Label">Probability</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.probability || ""}
-                </span>
-              </div>
-              <div className="address-item">
-                <label className="text-dark Label">Created By</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.createdBy || ""}
+
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Created By
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{dealData.createdBy || "--"}
                 </span>
               </div>
             </div>
@@ -278,69 +303,91 @@ function DealsShow() {
                 </span>
               </div>
 
-              <div className="my-3"></div>
+              <div className="container-fluid col-md-6">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Shipping Street
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.shippingStreet || ""}
+                  </span>
+                </div>
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Shipping State
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;+{dealData.shippingState || ""}{" "}
+                    {dealData.phone || ""}
+                  </span>
+                </div>
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Shipping City
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.shippingCity || ""}
+                  </span>
+                </div>
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Shipping Code
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.shippingCode || ""}
+                  </span>
+                </div>
 
-              <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Street</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.shippingStreet || "--"}
-                  </span>
-                </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping State</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.shippingState || "--"}
-                  </span>
-                </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping City</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.shippingCity || "--"}
-                  </span>
-                </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Code</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.shippingCode || "--"}
-                  </span>
-                </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Shipping Country</label>
-                  <span className="text-dark">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Shipping Country
+                  </label>
+                  <span className="col-6">
                     &nbsp; : &nbsp;{dealData.shippingCountry || "--"}
                   </span>
                 </div>
               </div>
 
-              <div className="container col-md-6">
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Street</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.billingStreet || "--"}
+              <div className="container-fluid col-md-6">
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Billing Street
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.billingStreet || ""}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing State</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.billingState || "--"}
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Billing State
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;+{dealData.billingState || ""}{" "}
+                    {dealData.phone || ""}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing City</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.billingCity || "--"}
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Billing City
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.billingCity || ""}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Code</label>
-                  <span className="text-dark">
-                    &nbsp; : &nbsp;{dealData.billingCode || "--"}
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Billing Code
+                  </label>
+                  <span className="col-6">
+                    &nbsp; : &nbsp;{dealData.billingCode || ""}
                   </span>
                 </div>
-                <div className="address-item">
-                  <label className="text-dark Label">Billing Country</label>
-                  <span className="text-dark">
+
+                <div className="row mb-3">
+                  <label className="text-dark col-6 text-center">
+                    Billing Country
+                  </label>
+                  <span className="col-6">
                     &nbsp; : &nbsp;{dealData.billingCountry || "--"}
                   </span>
                 </div>
@@ -591,12 +638,15 @@ function DealsShow() {
                   Description Information
                 </span>
               </div>
-
-              <div className="address-item">
-                <label className="text-dark Label">Description</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{dealData.descriptionInfo || "--"}
-                </span>
+              <div className="container-fluid col-md-12">
+                <div className="row mb-3">
+                  <label className="text-dark col-3 text-center">
+                    Description
+                  </label>
+                  <span className="col-9">
+                    &nbsp; : &nbsp;{dealData.descriptionInfo || "--"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
