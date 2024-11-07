@@ -211,6 +211,18 @@ function CompanyShow() {
                   &nbsp; : &nbsp;{userData.country || "--"}
                 </span>
               </div>
+              <div>
+                <label className="text-dark Label">No.of.user accounts</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;&nbsp;{userData.licenseLimit || "--"}
+                </span>
+              </div>
+              <div>
+                <label className="text-dark Label">Registration Status</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;&nbsp;{userData.registrationStatus || "--"}
+                </span>
+              </div>
             </div>
 
             <div className="container-fluid col-md-6"></div>

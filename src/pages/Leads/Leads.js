@@ -150,10 +150,6 @@ const Lead = () => {
         header: "Created By",
       },
       {
-        accessorKey: "updatedBy",
-        header: "Updated By",
-      },
-      {
         accessorKey: "description_info",
         header: "Description",
       },
@@ -181,10 +177,20 @@ const Lead = () => {
           }
         },
       },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ row }) => {
+          if (row.original.updated_by) {
+            return row.original.updated_by;
+          } else {
+            return "";
+          }
+        },
+      },
     ],
     []
   );
-
   useEffect(() => {
     const subscription = WebSocketService.subscribeToLeadUpdates((data) => {
       console.log("subscription", data);
@@ -452,7 +458,7 @@ const Lead = () => {
         zipCode: false,
         state: false,
         created_by: false,
-        updatedBy: false,
+        updatedBy: true,
         skype_id: false,
         twitter: false,
       },

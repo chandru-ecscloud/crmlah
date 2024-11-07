@@ -22,7 +22,7 @@ function LeadsShow() {
   const navigate = useNavigate();
   // const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [leadName, setLeadName] = useState([]);
+  // const [leadName, setLeadName] = useState([]);
 
   // const handleClose = () => {
   //   setSelectedFiles([]);
@@ -54,12 +54,12 @@ function LeadsShow() {
           //Authorization: `Bearer ${token}`,
         },
       });
-      const { first_name, last_name } = response.data;
-      const concatenatedName = `${first_name || ""} ${last_name || ""}`.trim();
+      // const { first_name, last_name } = response.data;
+      // const concatenatedName = `${first_name || ""} ${last_name || ""}`.trim();
       setClientData(response.data);
-      setLeadName(concatenatedName);
+      // setLeadName(concatenatedName);
       console.log("Lead Show :", response.data);
-      console.log("setLeadName :", concatenatedName);
+      // console.log("setLeadName :", concatenatedName);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -306,12 +306,16 @@ function LeadsShow() {
 
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Lead Name</label>
-                <span className="col-6">&nbsp; : &nbsp;{leadName || "--"}</span>
+                <label className="text-dark col-6 text-center">First Name</label>
+                <span className="col-6">&nbsp; : &nbsp;{clientData.first_name || "--"}</span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">Last Name</label>
+                <span className="col-6">&nbsp; : &nbsp;{clientData.last_name || "--"}</span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Email</label>
-                <span className="col-6">
+                <span className="col-6 text-break">
                   &nbsp; : &nbsp;{clientData.email || "--"}
                 </span>
               </div>
@@ -343,6 +347,14 @@ function LeadsShow() {
                 </label>
                 <span className="col-6">
                   &nbsp; : &nbsp;{clientData.created_by || "--"}
+                </span>
+              </div>
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Updated By
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{clientData.updated_by || "--"}
                 </span>
               </div>
             </div>

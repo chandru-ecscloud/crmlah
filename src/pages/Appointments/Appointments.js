@@ -405,31 +405,39 @@ const Appointments = () => {
 
   const handleBulkDelete = async (rows) => {
     const data = rows.map((row) => row.original);
-    const rowId = data[0].id;
-    try {
-      const response = await axios.delete(
-        `${API_URL}cancelAppointment/${rowId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        navigate("/appointments");
-        table.setRowSelection(false);
-        appoinmentCancelTemplete(data[0], companyId);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
-    fetchData();
-  };
 
+    try {
+      for (const rowData of data) {
+        const rowId = rowData.id;
+
+        const response = await axios.delete(
+          `${API_URL}cancelAppointment/${rowId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          toast.success(`Appointment ${rowId} canceled successfully.`);
+          appoinmentCancelTemplete(rowData, companyId);
+        } else {
+          toast.error(
+            `Failed to cancel appointment ${rowId}: ${response.data.message}`
+          );
+        }
+      }
+
+      // Refresh data after deleting
+      fetchData();
+      table.setRowSelection(false);
+      navigate("/appointments");
+    } catch (error) {
+      toast.error("Failed to delete appointments: " + error.message);
+    }
+  };
   const table = useMaterialReactTable({
     columns,
     data,
@@ -582,25 +590,25 @@ const Appointments = () => {
                         />
                       </li>
                       {/* <li>
-                  <button
-                    className="btn"
-                    style={{ width: "100%", border: "none" }}
-                    disabled={
-                      !table.getIsSomeRowsSelected() &&
-                      !table.getIsAllRowsSelected()
-                    }
-                    onClick={() =>
-                      handleBulkDelete(table.getSelectedRowModel().rows)
-                    }
-                  >
-                    Mass Delete
-                  </button>
-                </li> */}
+                        <button
+                          className="btn"
+                          style={{ width: "100%", border: "none" }}
+                          disabled={
+                            !table.getIsSomeRowsSelected() &&
+                            !table.getIsAllRowsSelected()
+                          }
+                          onClick={() =>
+                            handleBulkDelete(table.getSelectedRowModel().rows)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </li> */}
                     </>
                   ) : (
                     // Render disabled buttons for CMP_USER
                     <>
-                      <li>
+                      {/* <li>
                         <button
                           className="btn"
                           style={{ width: "100%", border: "none" }}
@@ -608,7 +616,7 @@ const Appointments = () => {
                         >
                           Delete
                         </button>
-                      </li>
+                      </li> */}
                       {/* <li>
                   <button
                     className="btn"

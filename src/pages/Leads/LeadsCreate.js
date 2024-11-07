@@ -17,7 +17,8 @@ const validationSchema = yup.object().shape({
   zipCode: yup
     .number()
     .typeError("Zip code must be a number")
-    .integer("Zip code must be an integer"),
+    .integer("Zip code must be an integer")
+    .required("*ZipCode is required"),
   landLine: yup
     .number()
     .typeError("Land line must be a number")
@@ -445,20 +446,12 @@ function LeadsCreate() {
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end  sm-device">
                 <lable>Lead Source</lable> &nbsp;&nbsp;
-                <select
+                <input
                   type="text"
-                  className={`form-size form-select `}
+                  className={`form-size form-control `}
                   {...formik.getFieldProps("lead_source")}
                   id="lead_source"
-                >
-                  <option value=""></option>
-                  <option value="Whatsapp">Whatsapp</option>
-                  <option value="FaceBook">FaceBook</option>
-                  <option value="Twitter">Twitter</option>
-                  <option value="Instagram">Instagram</option>
-                  <option value="Website">Website</option>
-                  <option value="Others">Others</option>
-                </select>
+                />
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-3">

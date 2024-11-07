@@ -38,14 +38,17 @@ function AppointmentsCreate({ name, schedule, getData }) {
     additionalInformation: Yup.string().required("*Description is required"),
   });
   // console.log("object", schedule);
-  const currentData = new Date().toISOString().split("T")[0];
+  const tomorrowDate = new Date();
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const formattedTomorrowDate = tomorrowDate.toISOString().split("T")[0];
+  
 
   const formik = useFormik({
     initialValues: {
       // serviceId: "",
       email: "",
       // serviceName: "",
-      appointmentStartDate: currentData,
+      appointmentStartDate: formattedTomorrowDate,
       timeSlotId: "",
       // duration: "",
       appointmentName: "",
@@ -210,7 +213,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
 
   const openModal = () => {
     setShow(true);
-    formik.setFieldValue("appointmentStartDate", currentData);
+    formik.setFieldValue("appointmentStartDate", formattedTomorrowDate);
 
     // console.log("scheduleDataM", schedule);
 
@@ -232,7 +235,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
       formik.setValues(scheduleData);
     }
   };
-  
+
   const fetchServiceData = async () => {
     try {
       const response = await axios(`${API_URL}getAllIdAndServiceName`, {
@@ -271,7 +274,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
   useEffect(() => {
     fetchServiceData();
     fetchLeadData();
-    formik.setFieldValue("appointmentStartDate", currentData);
+    formik.setFieldValue("appointmentStartDate", formattedTomorrowDate);
 
     if (name === "Schedule") {
       formik.setFieldValue("phoneNumber", schedule.phone);
@@ -319,10 +322,14 @@ function AppointmentsCreate({ name, schedule, getData }) {
       <button
         className={`btn btn-primary ${role === "CMP_USER" && "disabled"}`}
         disabled={role === "CMP_USER"}
-        onClick={openModal}
+        onClick={() => {
+          openModal();
+          formik.resetForm();
+        }}
       >
         {name}
       </button>
+
       <Modal
         size="xl"
         show={show}
@@ -475,7 +482,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                         type="date"
                         name="appointmentStartDate"
                         id="appointmentStartDate"
-                        min={currentData}
+                        min={formattedTomorrowDate}
                         {...formik.getFieldProps("appointmentStartDate")}
                         className={`form-size form-control   ${
                           formik.touched.appointmentStartDate &&

@@ -475,20 +475,25 @@ const Contacts = () => {
           flexWrap: "wrap",
         }}
       >
-        <button
-          className="btn text-secondary"
-          //  onClick={handleExportData}
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRows(selectedRows);
-            } else {
-              handleExportData();
-            }
-          }}
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
         >
-          <RiFileExcel2Fill size={23} />
-        </button>
+          <button
+            className="btn text-secondary"
+            //  onClick={handleExportData}
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRows(selectedRows);
+              } else {
+                handleExportData();
+              }
+            }}
+          >
+            <RiFileExcel2Fill size={23} />
+          </button>
+        </OverlayTrigger>
         {/* 
         <OverlayTrigger
           placement="top"
@@ -504,24 +509,28 @@ const Contacts = () => {
             <RiFileExcel2Line size={23} />
           </button>
         </OverlayTrigger> */}
-
-        <button
-          className="btn text-secondary"
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          // onClick={() =>
-          //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-          // }
-          onClick={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRowsPDF(selectedRows);
-            } else {
-              handleExportRowsPDF(table.getPrePaginationRowModel().rows);
-            }
-          }}
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
         >
-          <MdPictureAsPdf size={23} />
-        </button>
+          <button
+            className="btn text-secondary"
+            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            // onClick={() =>
+            //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+            // }
+            onClick={() => {
+              const selectedRows = table.getSelectedRowModel().rows;
+              if (selectedRows.length === 1) {
+                handleExportRowsPDF(selectedRows);
+              } else {
+                handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+              }
+            }}
+          >
+            <MdPictureAsPdf size={23} />
+          </button>
+        </OverlayTrigger>
         {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}

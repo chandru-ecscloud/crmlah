@@ -11,40 +11,57 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   lead_source: yup.string().required("*Lead Source is required"),
-  amount: yup.number()
-    .typeError('Amount must be a number')
-    .integer('Amount must be an integer'),
-  land_line: yup.number()
-    .typeError('Land line must be a number')
-    .integer('Land line must be an integer'),
-  other_zip: yup.number()
-    .typeError('Zip code must be a number')
-    .integer('Zip code must be an integer'),
-  mailing_zip: yup.number()
-    .typeError('Zip code must be a number')
-    .integer('Zip code must be an integer'),
+  amount: yup
+    .number()
+    .typeError("Amount must be a number")
+    .integer("Amount must be an integer")
+    .positive("Amount must be a positive number"),
+  land_line: yup
+    .number()
+    .typeError("Land line must be a number")
+    .integer("Land line must be an integer"),
+  other_zip: yup
+    .number()
+    .typeError("Zip code must be a number")
+    .integer("Zip code must be an integer"),
+  mailing_zip: yup
+    .number()
+    .typeError("Zip code must be a number")
+    .integer("Zip code must be an integer"),
   first_name: yup.string().required("*First Name is required"),
   // last_name: yup.string().required("*Last Name is required"),
-  email: yup.string().required("*Email is required"),
+  email: yup
+    .string()
+    .email("Enter a valid email")
+    .required("*Email is required"),
+
   country_code: yup.string().required("*Country Code is required"),
-  phone: yup.string()
-    .required('Phone number is required')
-    .test('phone-length', function (value) {
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("phone-length", function (value) {
       const { country_code } = this.parent;
       if (value && /\s/.test(value)) {
-        return this.createError({ message: 'Phone number should not contain spaces' });
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
       }
-      if (country_code === '65') {
-        return value && value.length === 8 ? true : this.createError({ message: 'Phone number must be 8 digits only' });
+      if (country_code === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
       }
-      if (country_code === '91') {
-        return value && value.length === 10 ? true : this.createError({ message: 'Phone number must be 10 digits only' });
+      if (country_code === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
       }
       return true; // Default validation for other country codes
     }),
-  country_code: yup.string().required('Country code is required'),
+  country_code: yup.string().required("Country code is required"),
   company: yup.string().required("*Company Name is required"),
-
 });
 
 function ContactsLead() {
@@ -110,8 +127,6 @@ function ContactsLead() {
     },
   });
 
-
-
   useEffect(() => {
     const AccountList = async () => {
       try {
@@ -147,11 +162,11 @@ function ContactsLead() {
     if (!sameAsMailing) {
       formik.setValues({
         ...formik.values,
-        other_street: formik.values. mailing_street,
-        other_city: formik.values. mailing_city,
-        other_state: formik.values. mailing_state,
-        other_zip: formik.values. mailing_zip,
-        other_country: formik.values. mailing_country,
+        other_street: formik.values.mailing_street,
+        other_city: formik.values.mailing_city,
+        other_state: formik.values.mailing_state,
+        other_zip: formik.values.mailing_zip,
+        other_country: formik.values.mailing_country,
       });
     }
   };
@@ -241,10 +256,11 @@ function ContactsLead() {
                 <lable>Amount</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.amount && formik.errors.amount
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("amount")}
                   name="amount"
                   id="amount"
@@ -266,10 +282,11 @@ function ContactsLead() {
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.first_name && formik.errors.first_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.first_name && formik.errors.first_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("first_name")}
                   id="first_name"
                 />
@@ -290,10 +307,11 @@ function ContactsLead() {
                 &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.last_name && formik.errors.last_name
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.last_name && formik.errors.last_name
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("last_name")}
                   id="last_name"
                 />
@@ -314,10 +332,11 @@ function ContactsLead() {
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.lead_source && formik.errors.lead_source
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.lead_source && formik.errors.lead_source
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("lead_source")}
                   name="lead_source"
                   id="lead_source"
@@ -338,10 +357,11 @@ function ContactsLead() {
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("email")}
                   id="email"
                 />
@@ -365,27 +385,32 @@ function ContactsLead() {
                       {...formik.getFieldProps("country_code")}
                       id="country_code"
                       name="country_code"
-                      className={`form-size form-control  ${formik.touched.country_code && formik.errors.country_code
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-size form-control  ${
+                        formik.touched.country_code &&
+                        formik.errors.country_code
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         width: "80px",
                         borderTopRightRadius: "0px",
                         borderBottomRightRadius: "0px",
                       }}
                     >
-                      <option value="65" selected>+65</option>
+                      <option value="65" selected>
+                        +65
+                      </option>
                       <option value="91">+91</option>
                     </select>
                   </div>
                   <input
                     type="tel"
                     name="phone"
-                    className={`form-size form-control  ${formik.touched.phone && formik.errors.phone
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-size form-control  ${
+                      formik.touched.phone && formik.errors.phone
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("phone")}
                     id="phone"
                     aria-label="Text input with checkbox"
@@ -408,10 +433,11 @@ function ContactsLead() {
                 <span className="text-danger">*</span> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.company && formik.errors.company
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.company && formik.errors.company
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("company")}
                   id="company"
                 />
@@ -503,10 +529,11 @@ function ContactsLead() {
                 <lable>Land Line</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.land_line && formik.errors.land_line
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.land_line && formik.errors.land_line
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("land_line")}
                   name="land_line"
                   id="land_line"
@@ -617,18 +644,17 @@ function ContactsLead() {
             </div> */}
           </div>
         </div>
-        <div className="container-fluid my-5">
-
-
+        <div className="container-fluid">
           <h4>
             <b>Address Information</b>
           </h4>
-
-
         </div>
 
         <div className="col-lg-12 col-md-12 col-12 mb-3">
-          <div className="d-flex justify-content-center align-items-center mb-4 gap-2" style={{ marginLeft: "65rem" }}>
+          <div
+            className="d-flex align-items-center gap-3"
+            style={{ marginLeft: "60rem" }}
+          >
             <label htmlFor="sameAsMailing"> Same as Mailing Address</label>
             <input
               type="checkbox"
@@ -662,7 +688,11 @@ function ContactsLead() {
                   {...formik.getFieldProps("other_street")}
                   name="other_street"
                   id="other_street"
-                  value={sameAsMailing ? formik.values.mailing_street : formik.values.other_street}
+                  value={
+                    sameAsMailing
+                      ? formik.values.mailing_street
+                      : formik.values.other_street
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsMailing}
@@ -690,7 +720,11 @@ function ContactsLead() {
                   {...formik.getFieldProps("other_city")}
                   name="other_city"
                   id="other_city"
-                  value={sameAsMailing ? formik.values.mailing_city : formik.values.other_city}
+                  value={
+                    sameAsMailing
+                      ? formik.values.mailing_city
+                      : formik.values.other_city
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsMailing}
@@ -718,7 +752,11 @@ function ContactsLead() {
                   {...formik.getFieldProps("other_state")}
                   name="other_state"
                   id="other_state"
-                  value={sameAsMailing ? formik.values.mailing_state : formik.values.other_state}
+                  value={
+                    sameAsMailing
+                      ? formik.values.mailing_state
+                      : formik.values.other_state
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsMailing}
@@ -730,10 +768,11 @@ function ContactsLead() {
                 <lable>Mailing Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.mailing_zip && formik.errors.mailing_zip
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.mailing_zip && formik.errors.mailing_zip
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("mailing_zip")}
                   name="mailing_zip"
                   id="mailing_zip"
@@ -753,14 +792,19 @@ function ContactsLead() {
                 <lable>Other Zip Code</lable> &nbsp;&nbsp;
                 <input
                   type="text"
-                  className={`form-size form-control  ${formik.touched.other_zip && formik.errors.other_zip
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-size form-control  ${
+                    formik.touched.other_zip && formik.errors.other_zip
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("other_zip")}
                   name="other_zip"
                   id="other_zip"
-                  value={sameAsMailing ? formik.values.mailing_zip : formik.values.other_zip}
+                  value={
+                    sameAsMailing
+                      ? formik.values.mailing_zip
+                      : formik.values.other_zip
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsMailing}
@@ -796,7 +840,11 @@ function ContactsLead() {
                   {...formik.getFieldProps("other_country")}
                   name="other_country"
                   id="other_country"
-                  value={sameAsMailing ? formik.values.mailing_country : formik.values.other_country}
+                  value={
+                    sameAsMailing
+                      ? formik.values.mailing_country
+                      : formik.values.other_country
+                  }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   disabled={sameAsMailing}
@@ -805,7 +853,6 @@ function ContactsLead() {
             </div>
           </div>
         </div>
-
 
         <div className="container-fluid my-5">
           <h4>
