@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -12,6 +12,7 @@ import Appointment from "../Appointments/AppointmentsCreate";
 import Activity from "./Activity";
 import Delete from "../../components/common/DeleteModel";
 import QuotesModel from "./QuotesModel";
+import AppointmentsEdit from "../Appointments/AppointmentsEdit";
 
 function AccountsShow() {
   const { id } = useParams();
@@ -21,6 +22,7 @@ function AccountsShow() {
   // const [selectedFile, setSelectedFile] = useState(null);
   // const [showModal, setShowModal] = useState(false);
   const [accountData, setAccountData] = useState({});
+  const [appointments, setAppointments] = useState([]);
   console.log(accountData);
 
   const navigate = useNavigate();
@@ -46,6 +48,7 @@ function AccountsShow() {
         },
       });
       setAccountData(response.data);
+      setAppointments(response.data.appointmentModels);
       console.log(accountData.quotes);
       // console.log("Account Show :",response.data.quotes.productsWithQuote      );
       setTotal(response.data.quotes ? response.data.quotes.length : 0);
@@ -344,58 +347,64 @@ function AccountsShow() {
                       </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {accountData.appointmentModels?.length > 0 ? (
-                      accountData.appointmentModels.map(
-                        (appointment, index) => (
-                          <tr key={index}>
-                            <th scope="row">{index + 1}</th>
-                            <td>{appointment.appointmentName}</td>
-                            <td>{appointment.appointmentStartDate}</td>
-                            <td>{appointment.appointmentStartTime}</td>
-                            <td>{appointment.appointmentOwner}</td>
-                            <td>
-                              {appointment.appointmentMode === "ONLINE" ? (
-                                <span className="badge text-bg-success">
-                                  Online
-                                </span>
-                              ) : (
-                                <span className="badge text-bg-danger">
-                                  Offline
-                                </span>
-                              )}
-                            </td>
-                            <td>
-                              {appointment.appointmentstatus === "CONFIRMED" ? (
-                                <span className="badge text-bg-warning">
-                                  CONFIRMED
-                                </span>
-                              ) : appointment.appointmentstatus ===
-                                "COMPLETED" ? (
-                                <span className="badge text-bg-successr">
-                                  COMPLETED
-                                </span>
-                              ) : appointment.appointmentstatus ===
-                                "CANCELLED" ? (
-                                <span className="badge text-bg-danger">
-                                  CANCELLED
-                                </span>
-                              ) : appointment.appointmentstatus ===
-                                "RESCHEDULED" ? (
-                                <span className="badge text-bg-info">
-                                  RESCHEDULED
-                                </span>
-                              ) : (
-                                <span className="badge text-bg-primary">
-                                  PENDING
-                                </span>
-                              )}
-                            </td>
-                          </tr>
-                        )
-                      )
+                      accountData.appointmentModels.map((appointment, index) => (
+                        <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{appointment.appointmentName}</td>
+                          <td>{appointment.appointmentStartDate}</td>
+                          <td>{appointment.appointmentStartTime}</td>
+                          <td>{appointment.appointmentOwner}</td>
+                          <td>
+                            {appointment.appointmentMode === "ONLINE" ? (
+                              <span className="badge text-bg-success">
+                                Online
+                              </span>
+                            ) : (
+                              <span className="badge text-bg-danger">
+                                Offline
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {appointment.appointmentstatus === "CONFIRMED" ? (
+                              <span className="badge text-bg-warning">
+                                CONFIRMED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "COMPLETED" ? (
+                              <span className="badge text-bg-success">
+                                COMPLETED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "CANCELLED" ? (
+                              <span className="badge text-bg-danger">
+                                CANCELLED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "RESCHEDULED" ? (
+                              <span className="badge text-bg-success">
+                                RESCHEDULED
+                              </span>
+                            ) : (
+                              <span className="badge text-bg-primary">
+                                PENDING
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <AppointmentsEdit
+                              id={appointment.id}
+                              name="Edit"
+                              getData={userData}
+                            />
+                          </td>
+                        </tr>
+                      ))
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">

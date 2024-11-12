@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 import { Link, useNavigate } from "react-router-dom";
 // import { BsThreeDots } from "react-icons/bs";
 // import USER from "../../assets/user.png";
@@ -12,6 +12,8 @@ import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import SendEmailFollowUp from "../Email/SendEmailFollowUp";
+import { FaEdit } from "react-icons/fa";
+import AppointmentsEdit from "../Appointments/AppointmentsEdit";
 
 function LeadsShow() {
   const { id } = useParams();
@@ -19,6 +21,8 @@ function LeadsShow() {
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
   const [clientData, setClientData] = useState({});
+  const [appointments, setAppointments] = useState([]);
+  console.log("appointData,", appointments);
   const navigate = useNavigate();
   // const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -57,6 +61,7 @@ function LeadsShow() {
       // const { first_name, last_name } = response.data;
       // const concatenatedName = `${first_name || ""} ${last_name || ""}`.trim();
       setClientData(response.data);
+      setAppointments(response.data.appointmentModels || []);
       // setLeadName(concatenatedName);
       console.log("Lead Show :", response.data);
       // console.log("setLeadName :", concatenatedName);
@@ -306,12 +311,18 @@ function LeadsShow() {
 
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">First Name</label>
-                <span className="col-6">&nbsp; : &nbsp;{clientData.first_name || "--"}</span>
+                <label className="text-dark col-6 text-center">
+                  First Name
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{clientData.first_name || "--"}
+                </span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Last Name</label>
-                <span className="col-6">&nbsp; : &nbsp;{clientData.last_name || "--"}</span>
+                <span className="col-6">
+                  &nbsp; : &nbsp;{clientData.last_name || "--"}
+                </span>
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Email</label>
@@ -425,6 +436,7 @@ function LeadsShow() {
                       </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -472,6 +484,13 @@ function LeadsShow() {
                                 PENDING
                               </span>
                             )}
+                          </td>
+                          <td>
+                            <AppointmentsEdit
+                              id={appointment.id}
+                              name="Edit"
+                              getData={userData}
+                            />
                           </td>
                         </tr>
                       ))

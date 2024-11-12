@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   additionalInformation: Yup.string().required("*Description is required"),
 });
 
-function AppointmentsCreate({ name, id, getData }) {
+function AppointmentsEdit({ name, id, getData }) {
   const [lgShow, setLgShow] = useState(false);
   const [serviceData, setServiceData] = useState([]);
   const [leadData, setleadData] = useState([]);
@@ -104,6 +104,7 @@ function AppointmentsCreate({ name, id, getData }) {
         }
       );
       if (response.status === 200) {
+        handleClose();
         getData();
         toast.success(response.data.message);
         handleClose();
@@ -271,7 +272,7 @@ function AppointmentsCreate({ name, id, getData }) {
   return (
     <>
       <button
-        className={`btn btn-warning ${role === "CMP_USER" && "disabled"}`}
+        className={`btn btn-sm btn-warning ${role === "CMP_USER" && "disabled"}`}
         disabled={role === "CMP_USER"}
         onClick={() => setLgShow(true)}
       >
@@ -303,7 +304,7 @@ function AppointmentsCreate({ name, id, getData }) {
                     </span>
                     &nbsp;
                     <span>
-                      <button className="btn btn-primary" type="submit">
+                      <button className="btn btn-primary" type="submit" onClick={formik.handleSubmit}>
                         Update
                       </button>
                     </span>
@@ -854,4 +855,4 @@ function AppointmentsCreate({ name, id, getData }) {
   );
 }
 
-export default AppointmentsCreate;
+export default AppointmentsEdit;

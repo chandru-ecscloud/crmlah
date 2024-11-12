@@ -180,17 +180,6 @@ function DealsEdit() {
         });
         const getData = response.data;
         console.log(getData);
-        const validstring = getData.closingDate;
-        const validUntilDate = new Date(validstring);
-        console.log(validUntilDate);
-        const closingDate = `${validUntilDate.getFullYear()}-${(
-          validUntilDate.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, "0")}-${validUntilDate
-            .getDate()
-            .toString()
-            .padStart(2, "0")}`;
 
         const payload = {
           deal_owner: getData.dealOwner,
@@ -200,7 +189,7 @@ function DealsEdit() {
           deal_name: getData.dealName,
           contact_name: getData.contactName,
           account_name: getData.accountName,
-          closing_date: closingDate,
+          closing_date: getData?.closingDate.slice(0,10),
           stage: getData.stage,
           company: getData.companyName,
           country_code: getData.countryCode || "65",

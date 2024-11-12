@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { IoArrowBack } from "react-icons/io5";
 import Appointment from "../Appointments/AppointmentsCreate";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import AppointmentsEdit from "../Appointments/AppointmentsEdit";
 
 function ContactShow() {
   const { id } = useParams();
   const [contactData, setContactData] = useState({});
+  const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
   // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -36,6 +38,7 @@ function ContactShow() {
         },
       });
       setContactData(response.data);
+      setAppointments(response.data.appointmentModels);
       console.log("Contact Show :", contactData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -99,63 +102,8 @@ function ContactShow() {
           className="container-fluid col-md-9 m-0"
           id="userDetails-container"
         >
-          {/* Details */}
-          <div className="container-fluid row" id="Details">
-            <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3"> Details</span>
-            </div>
-
-            <div className="container-fluid col-md-12">
-              <div className="address-item">
-                <label className="text-dark Label">Contact Owner</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.contactOwner || ""}
-                </span>
-              </div>
-
-              <div className="address-item">
-                <label className="text-dark Label">Email</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.email || ""}
-                </span>
-              </div>
-
-              <div className="address-item">
-                <label className="text-dark Label">Phone</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;+{contactData.countryCode || ""}&nbsp;
-                  {contactData.phone || ""}
-                </span>
-              </div>
-              <div className="address-item">
-                <label className="text-dark Label">Company Name</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.companyName || ""}
-                </span>
-              </div>
-              <div className="address-item">
-                <label className="text-dark Label">Amount</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.amount || ""}
-                </span>
-              </div>
-
-              <div className="address-item">
-                <label className="text-dark Label">Country</label>
-                <span className="text-dark">
-                  &nbsp; : &nbsp;{contactData.mailingCountry || ""}
-                </span>
-              </div>
-            </div>
-
-            <div className="container-fluid col-md-6"></div>
-          </div>
-
           {/* Hide Details */}
           <div className="container-fluid row" id="Details">
-            <div className="border-bottom py-3">
-              <span className="fs-6 fw-bold my-3">Hide Details</span>
-            </div>
 
             <div className="py-3">
               <span className="fs-6 fw-bold"> Contact Information</span>
@@ -211,6 +159,25 @@ function ContactShow() {
                 </span>
               </div>
 
+              <div className="address-item">
+                <label className="text-dark Label">Company Name</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.companyName || ""}
+                </span>
+              </div>
+              <div className="address-item">
+                <label className="text-dark Label">Amount</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.amount || ""}
+                </span>
+              </div>
+
+              <div className="address-item">
+                <label className="text-dark Label">Country</label>
+                <span className="text-dark">
+                  &nbsp; : &nbsp;{contactData.mailingCountry || ""}
+                </span>
+              </div>
               <div className="address-item">
                 <label className="text-dark Label">Created By</label>
                 <span className="text-dark">
@@ -320,13 +287,24 @@ function ContactShow() {
                 <table className="table">
                   <thead class="table-light">
                     <tr>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>S No</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment name</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Date</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Start Time</th>
-                      <th scope="col" style={{whiteSpace: "nowrap"}}>Appointment Owner</th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        S No
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment name
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Date
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Start Time
+                      </th>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        Appointment Owner
+                      </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -340,29 +318,56 @@ function ContactShow() {
                           <td>{appointment.appointmentOwner}</td>
                           <td>
                             {appointment.appointmentMode === "ONLINE" ? (
-                              <span className="badge text-bg-success">Online</span>
+                              <span className="badge text-bg-success">
+                                Online
+                              </span>
                             ) : (
-                              <span className="badge text-bg-danger">Offline</span>
+                              <span className="badge text-bg-danger">
+                                Offline
+                              </span>
                             )}
                           </td>
                           <td>
-                          {appointment.appointmentstatus === "CONFIRMED" ? (
-                              <span className="badge bg-warning">CONFIRMED</span>
-                            ) : appointment.appointmentstatus === "COMPLETED" ?  (
-                              <span className="badge bg-successr">COMPLETED</span>
-                            ) : appointment.appointmentstatus === "CANCELLED" ? (
-                              <span className="badge bg-danger py-2">CANCELLED</span>
-                            ) : appointment.appointmentstatus === "RESCHEDULED" ? (
-                              <span className="badge bg-info py-2">RESCHEDULED</span>
+                            {appointment.appointmentstatus === "CONFIRMED" ? (
+                              <span className="badge text-bg-warning">
+                                CONFIRMED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "COMPLETED" ? (
+                              <span className="badge text-bg-success">
+                                COMPLETED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "CANCELLED" ? (
+                              <span className="badge text-bg-danger">
+                                CANCELLED
+                              </span>
+                            ) : appointment.appointmentstatus ===
+                              "RESCHEDULED" ? (
+                              <span className="badge text-bg-success">
+                                RESCHEDULED
+                              </span>
                             ) : (
-                              <span className="badge bg-primary py-2">PENDING</span>
+                              <span className="badge text-bg-primary">
+                                PENDING
+                              </span>
                             )}
+                          </td>
+                          <td>
+                            <AppointmentsEdit
+                              id={appointment.id}
+                              name="Edit"
+                              getData={userData}
+                            />
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7" className="text-center"> No Appointment</td>
+                        <td colSpan="7" className="text-center">
+                          {" "}
+                          No Appointment
+                        </td>
                       </tr>
                     )}
                   </tbody>

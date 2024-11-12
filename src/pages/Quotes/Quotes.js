@@ -189,26 +189,38 @@ const Quotes = () => {
     navigate("/quotes/create");
   };
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    console.log("object", rowData);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "Deal Name": row.dealName,
+      "Subject": row.subject,
+      "Quote Stage": row.quoteStage,
+      "Product": row.product,
+      "Quote Owner": row.quoteOwner,
+    }));
+  const handleExportRows = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
+
+    const timestamp = new Date().toISOString().slice(0, 10);
     const filename =
-      rows.length === 1
-        ? `${rows[0].original.dealName}_${timestamp}.csv`
-        : `Quates_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(rowData);
-    download(csvConfigWithFilename)(csv);
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.dealName}_${timestamp}.csv`
+        : `Quotes_list_${timestamp}.csv`;
+
+    const csvContent = [
+      Object.keys(dataToExport[0]).join(","), // CSV headers
+      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
-  const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `Quates_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(data);
-    download(csvConfigWithFilename)(csv);
-  };
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
@@ -336,8 +348,8 @@ const Quotes = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.dealName}_${timestamp}.pdf`
-        : `Quotes_List_${timestamp}.pdf`;
+        ? `${rows[0].original.dealName}_${timestamp?.slice(0, 10)}.pdf`
+        : `Quotes_List_${timestamp?.slice(0, 10)}.pdf`;
 
     doc.save(filename);
   };
@@ -481,11 +493,7 @@ const Quotes = () => {
             // onClick={handleExportData}
             onClick={() => {
               const selectedRows = table.getSelectedRowModel().rows;
-              if (selectedRows.length === 1) {
-                handleExportRows(selectedRows);
-              } else {
-                handleExportData();
-              }
+              handleExportRows(selectedRows);
             }}
           >
             <RiFileExcel2Fill size={23} />

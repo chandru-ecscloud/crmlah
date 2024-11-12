@@ -971,3 +971,11 @@ nav .nav-link Link {
 .qr-container:hover .download-icon {
   opacity: 1;
 }
+.dropdown-menu li:hover {
+  background-color: #f0f0f0; 
+}
+.dropdown-menu li button:hover,
+.dropdown-menu li button:active {
+  background-color: transparent; 
+  color: inherit;
+}

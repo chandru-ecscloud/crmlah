@@ -78,7 +78,7 @@ function CompanyCreate() {
     onSubmit: async (data) => {
       // console.log("Company Datas:", data);
       data.jwtRole = "CMP_OWNER";
-      data.role = "CMP_OWNER";
+      data.role = "CRM_SUPERADMIN";
       data.registrationStatus = "PENDING";
       try {
         const response = await axios.post(`${API_URL}newUserRegister`, data, {

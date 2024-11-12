@@ -136,24 +136,36 @@ const Products = () => {
     fetchData();
   }, []);
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename =
-      rows.length === 1
-        ? `${rows[0].original.productName}_${timestamp}.csv`
-        : `Product_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(rowData);
-    download(csvConfigWithFilename)(csv);
-  };
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "Product Name": row.productName,
+      "Product Code": row.productCode,
+      "Vendor Name": row.vendorName,
+      "Product Active": row.productActive,
+      "Product Owner": row.productOwner,
+    }));
+  const handleExportRows = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
 
-  const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `Product_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(data);
-    download(csvConfigWithFilename)(csv);
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const filename =
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.productName}_${timestamp}.csv`
+        : `Product_list_${timestamp}.csv`;
+
+    const csvContent = [
+      Object.keys(dataToExport[0]).join(","), // CSV headers
+      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
   const handelNavigateClick = () => {
@@ -249,8 +261,8 @@ const Products = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.productName}_${timestamp}.pdf`
-        : `Product_List_${timestamp}.pdf`;
+        ? `${rows[0].original.productName}_${timestamp?.slice(0, 10)}.pdf`
+        : `Product_List_${timestamp?.slice(0, 10)}.pdf`;
     doc.save(filename);
   };
 
@@ -382,11 +394,7 @@ const Products = () => {
             // onClick={handleExportData}
             onClick={() => {
               const selectedRows = table.getSelectedRowModel().rows;
-              if (selectedRows.length === 1) {
-                handleExportRows(selectedRows);
-              } else {
-                handleExportData();
-              }
+              handleExportRows(selectedRows);
             }}
           >
             <RiFileExcel2Fill size={23} />
@@ -462,10 +470,12 @@ const Products = () => {
                   <li>
                     <TableDeleteModel
                       rows={table.getSelectedRowModel().rows}
-                      rowSelected={!(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      )}
+                      rowSelected={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        )
+                      }
                       handleBulkDelete={handleBulkDelete}
                       onSuccess={() => {
                         table.setRowSelection(false);

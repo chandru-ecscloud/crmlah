@@ -5,7 +5,7 @@ import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
 import "./styles/custom.css";
 import "./styles/dummy.css";
-import "./styles/Ragul.css";
+import "./styles/admin.css";
 import "./styles/user.css";
 
 function App() {

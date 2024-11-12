@@ -193,24 +193,36 @@ const Contacts = () => {
     fetchData();
   }, []);
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename =
-      rows.length === 1
-        ? `${rows[0].original.firstName}_${timestamp}.csv`
-        : `Lead_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(rowData);
-    download(csvConfigWithFilename)(csv);
-  };
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "Contact Name": row.contactName,
+      "Contact Owner": row.contactOwner,
+      "Email-Address": row.email,
+      "Phone Number": row.phone,
+      "Company": row.companyName,
+    }));
+  const handleExportRows = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
 
-  const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `Contacts_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(data);
-    download(csvConfigWithFilename)(csv);
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const filename =
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.contactName}_${timestamp}.csv`
+        : `Contact_list_${timestamp}.csv`;
+
+    const csvContent = [
+      Object.keys(dataToExport[0]).join(","), // CSV headers
+      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -335,8 +347,8 @@ const Contacts = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.firstName}_${timestamp}.pdf`
-        : `Contacts_List_${timestamp}.pdf`;
+        ? `${rows[0].original.firstName}_${timestamp?.slice(0,10)}.pdf`
+        : `Contacts_List_${timestamp?.slice(0,10)}.pdf`;
 
     doc.save(filename);
   };
@@ -379,30 +391,30 @@ const Contacts = () => {
     }
   };
 
-  // const handleAccountConvert = async (rows) => {
-  //   const id = rows.map((row) => row.original.id);
+  const handleAccountConvert = async (rows) => {
+    const id = rows.map((row) => row.original.id);
 
-  //   try {
-  //     const response = await axios.post(
-  //       `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message);
-  //       navigate("/contacts");
-  //       fetchData();
-  //       table.setRowSelection(false);
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error Submiting Data");
-  //   }
-  // };
+    try {
+      const response = await axios.post(
+        `${API_URL}contactToAccountConvert/${id}?ownerName=${owner}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/contacts");
+        fetchData();
+        table.setRowSelection(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Submiting Data");
+    }
+  };
 
   const handleBulkDelete = async (rows) => {
     const rowData = rows.map((row) => row.original.id);
@@ -484,11 +496,7 @@ const Contacts = () => {
             //  onClick={handleExportData}
             onClick={() => {
               const selectedRows = table.getSelectedRowModel().rows;
-              if (selectedRows.length === 1) {
-                handleExportRows(selectedRows);
-              } else {
-                handleExportData();
-              }
+              handleExportRows(selectedRows);
             }}
           >
             <RiFileExcel2Fill size={23} />
@@ -590,7 +598,7 @@ const Contacts = () => {
                   Action <FaSortDown style={{ marginTop: "-6px" }} />
                 </button>
                 <ul class="dropdown-menu">
-                  {/* <li>
+                  <li>
                     <button
                       className="btn"
                       style={{ width: "100%", border: "none" }}
@@ -604,9 +612,9 @@ const Contacts = () => {
                         handleAccountConvert(table.getSelectedRowModel().rows)
                       }
                     >
-                      Convert Account
+                      Convert
                     </button>
-                  </li> */}
+                  </li>
                   <li>
                     <TableDeleteModel
                       rows={table.getSelectedRowModel().rows}

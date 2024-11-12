@@ -41,7 +41,6 @@ function AppointmentsCreate({ name, schedule, getData }) {
   const tomorrowDate = new Date();
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const formattedTomorrowDate = tomorrowDate.toISOString().split("T")[0];
-  
 
   const formik = useFormik({
     initialValues: {
@@ -103,10 +102,19 @@ function AppointmentsCreate({ name, schedule, getData }) {
       data.reminder = 2;
       data.appointmentRoleType = appointmentRole;
       data.userId = userId;
+      data.email = schedule.email;
       // data.phoneNumber = data.phoneNumber;
       data.companyName = "ECS";
 
-      // console.log("Add appointment", data);
+      if (schedule.model === "Contacts") {
+        data.contactId = schedule.id;
+      } else if (schedule.model === "Accounts") {
+        data.accountId = schedule.id;
+      } else if (schedule.model === "Deals") {
+        data.dealId = schedule.id;
+      } else if (schedule.model === "Leads") {
+        data.leadId = schedule.id;
+      }
       try {
         const response = await axios.post(`${API_URL}book-appointment`, data, {
           headers: {
@@ -215,7 +223,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     setShow(true);
     formik.setFieldValue("appointmentStartDate", formattedTomorrowDate);
 
-    // console.log("scheduleDataM", schedule);
+    console.log("scheduleDataM", schedule);
 
     if (name === "Schedule") {
       let scheduleData = {

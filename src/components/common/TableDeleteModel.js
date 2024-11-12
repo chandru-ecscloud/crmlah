@@ -15,11 +15,9 @@ const TableDeleteModel = ({ rows, onSuccess, handleBulkDelete,rowSelected }) => 
 
   const handleDelete = async () => {
     try {
-      // Trigger the delete API for multiple rows
       await handleBulkDelete(rows);
       onSuccess();
       handleClose();
-      toast.success("Items deleted successfully.");
     } catch (error) {
       toast.error("Error deleting data: " + error.message);
     }

@@ -29,7 +29,6 @@ const csvConfig = mkConfig({
 
 const Lead = () => {
   const [data, setData] = useState([]);
-  // console.log(data);
   const [loading, setLoading] = useState(true);
   const role = sessionStorage.getItem("role");
   const Id = sessionStorage.getItem("Id");
@@ -219,24 +218,36 @@ const Lead = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename =
-      rows.length === 1
-        ? `${rows[0].original.first_name}_${timestamp}.csv`
-        : `Lead_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(rowData);
-    download(csvConfigWithFilename)(csv);
-  };
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "Lead Name": row.first_name,
+      "Company": row.company,
+      "Email-Address": row.email,
+      "Phone Number": row.phone,
+      "Lead Owner": row.lead_owner,
+    }));
+  const handleExportData = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
 
-  const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `Lead_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(data);
-    download(csvConfigWithFilename)(csv);
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const filename =
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.company}_${timestamp}.csv`
+        : `company_list_${timestamp}.csv`;
+
+    const csvContent = [
+      Object.keys(dataToExport[0]).join(","), // CSV headers
+      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -361,8 +372,8 @@ const Lead = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.first_name}_${timestamp}.pdf`
-        : `Lead_List_${timestamp}.pdf`;
+        ? `${rows[0].original.first_name}_${timestamp?.slice(0, 10)}.pdf`
+        : `Lead_List_${timestamp?.slice(0, 10)}.pdf`;
 
     doc.save(filename);
   };
@@ -481,14 +492,9 @@ const Lead = () => {
         >
           <button
             className="btn text-secondary"
-            // onClick={handleExportData}
             onClick={() => {
               const selectedRows = table.getSelectedRowModel().rows;
-              if (selectedRows.length === 1) {
-                handleExportRows(selectedRows);
-              } else {
-                handleExportData();
-              }
+              handleExportData(selectedRows);
             }}
           >
             <RiFileExcel2Fill size={23} />
@@ -741,10 +747,12 @@ const Lead = () => {
                   <li>
                     <TableDeleteModel
                       rows={table.getSelectedRowModel().rows}
-                      rowSelected={!(
-                        table.getIsSomeRowsSelected() ||
-                        table.getIsAllRowsSelected()
-                      )}
+                      rowSelected={
+                        !(
+                          table.getIsSomeRowsSelected() ||
+                          table.getIsAllRowsSelected()
+                        )
+                      }
                       handleBulkDelete={handleBulkDelete}
                       onSuccess={() => {
                         table.setRowSelection(false);

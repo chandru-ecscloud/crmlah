@@ -225,25 +225,36 @@ const Event = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "Event Name": row.eventName,
+      "First Name": row.firstName,
+      "Email-Address": row.businessEmail,
+      "Phone Number": row.phone,
+      "Company Name": row.companyName,
+    }));
+  const handleExportRows = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().slice(0, 10);
     const filename =
-      rows.length === 1
-        ? `${rows[0].original.eventName}_${timestamp}.csv`
-        : `Event_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(rowData);
-    download(csvConfigWithFilename)(csv);
-  };
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.eventName}_${timestamp}.csv`
+        : `Event_list_${timestamp}.csv`;
 
-  const handleExportData = () => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `Event_List_${timestamp}.csv`;
-    const csvConfigWithFilename = { ...csvConfig, filename };
-    const csv = generateCsv(csvConfigWithFilename)(data);
-    download(csvConfigWithFilename)(csv);
+    const csvContent = [
+      Object.keys(dataToExport[0]).join(","), // CSV headers
+      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -366,8 +377,8 @@ const Event = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.eventName}_${timestamp}.pdf`
-        : `Event_List_${timestamp}.pdf`;
+        ? `${rows[0].original.eventName}_${timestamp?.slice(0, 10)}.pdf`
+        : `Event_List_${timestamp?.slice(0, 10)}.pdf`;
 
     doc.save(filename);
   };
@@ -413,11 +424,7 @@ const Event = () => {
           // onClick={handleExportData}
           onClick={() => {
             const selectedRows = table.getSelectedRowModel().rows;
-            if (selectedRows.length === 1) {
-              handleExportRows(selectedRows);
-            } else {
-              handleExportData();
-            }
+            handleExportRows(selectedRows);
           }}
         >
           <RiFileExcel2Fill size={23} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,12 +11,14 @@ import Appointment from "../Appointments/AppointmentsCreate";
 import SendInvoice from "../Email/SendInvoice";
 import Delete from "../../components/common/DeleteModel";
 import InvoiceModel from "./InvoiceModel";
+import AppointmentsEdit from "../Appointments/AppointmentsEdit";
 
 function DealsShow() {
   const { id } = useParams();
   const [dealData, setdealData] = useState({});
 
   const [invoiceData, setInvoiceData] = useState({});
+  const [appointments, setAppointments] = useState([]);
   console.log("Deal Data:", dealData);
   // const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
@@ -60,6 +62,7 @@ function DealsShow() {
       }, {});
       setdealData(transformedData);
       setInvoiceData(response.data);
+      setAppointments(response.data.appointmentModels);
       console.log("Account Show :", dealData);
     } catch (error) {
       toast.error("Error fetching data:", error);
@@ -267,7 +270,7 @@ function DealsShow() {
               </div>
               <div className="row mb-3">
                 <label className="text-dark col-6 text-center">Email</label>
-                <span className="col-6">
+                <span className="col-6 text-break">
                   &nbsp; : &nbsp;{dealData.email || ""}
                 </span>
               </div>
@@ -422,6 +425,7 @@ function DealsShow() {
                       </th>
                       <th scope="col">Mode</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -451,7 +455,7 @@ function DealsShow() {
                               </span>
                             ) : appointment.appointmentstatus ===
                               "COMPLETED" ? (
-                              <span className="badge text-bg-successr">
+                              <span className="badge text-bg-success">
                                 COMPLETED
                               </span>
                             ) : appointment.appointmentstatus ===
@@ -461,7 +465,7 @@ function DealsShow() {
                               </span>
                             ) : appointment.appointmentstatus ===
                               "RESCHEDULED" ? (
-                              <span className="badge text-bg-info">
+                              <span className="badge text-bg-success">
                                 RESCHEDULED
                               </span>
                             ) : (
@@ -469,6 +473,13 @@ function DealsShow() {
                                 PENDING
                               </span>
                             )}
+                          </td>
+                          <td>
+                            <AppointmentsEdit
+                              id={appointment.id}
+                              name="Edit"
+                              getData={userData}
+                            />
                           </td>
                         </tr>
                       ))

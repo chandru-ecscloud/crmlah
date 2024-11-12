@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 import { Link, useNavigate } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import USER from "../../assets/user.png";

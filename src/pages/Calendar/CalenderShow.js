@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/Ragul.css";
+import "../../styles/admin.css";
 // import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";

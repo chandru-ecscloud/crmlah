@@ -90,7 +90,7 @@ const appoinmentCreateTemplete = async (
                 <tr>
                   <td class="title">
                     <img
-                      src="${companyData.companyLogo || ""}"
+                      src="${`https://ecsaio.com/assets/images/header/logo.webp` || ""}"
                       style="width: 75%; max-width: 180px"
                       alt="Logo"
                     />
@@ -112,7 +112,7 @@ const appoinmentCreateTemplete = async (
         </table>
         <div class="invoice">
           <h1 style="color: black;">Hi, ${data.appointmentFor || ""}</h1>
-          <p style="margin: 2rem 0 0;">You've scheduled an appointment with ${
+          <p style="margin: 2rem 0 0;">You've scheduled an appointment ${
             companyData.companyOwnerName || ""
           } for ${data.appointmentName || ""} on 
             ${data.appointmentStartDate || ""} at ${

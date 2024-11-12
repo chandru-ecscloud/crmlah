@@ -141,8 +141,8 @@ const AllClient = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename =
       rows.length === 1
-        ? `${rows[0].original.name}_${timestamp}.csv`
-        : `Lead_List_${timestamp}.csv`;
+        ? `${rows[0].original.name}_${timestamp?.slice(0,10)}.csv`
+        : `Lead_List_${timestamp?.slice(0,10)}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(rowData);
     download(csvConfigWithFilename)(csv);
@@ -150,7 +150,7 @@ const AllClient = () => {
 
   const handleExportData = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `AllClient_List_${timestamp}.csv`;
+    const filename = `AllClient_List_${timestamp?.slice(0,10)}.csv`;
     const csvConfigWithFilename = { ...csvConfig, filename };
     const csv = generateCsv(csvConfigWithFilename)(data);
     download(csvConfigWithFilename)(csv);
@@ -278,8 +278,8 @@ const AllClient = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.name}_${timestamp}.pdf`
-        : `AllClient_List_${timestamp}.pdf`;
+        ? `${rows[0].original.name}_${timestamp?.slice(0,10)}.pdf`
+        : `AllClient_List_${timestamp?.slice(0,10)}.pdf`;
 
     doc.save(filename);
   };
