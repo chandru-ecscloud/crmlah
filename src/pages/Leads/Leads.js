@@ -20,6 +20,7 @@ import WebSocketService from "../../Config/WebSocketService";
 import "../../styles/custom.css";
 import SendCompanyProfile from "../Email/SendCompanyProfile";
 import TableDeleteModel from "../../components/common/TableDeleteModel";
+import * as XLSX from "xlsx";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -222,32 +223,43 @@ const Lead = () => {
     data.map((row, index) => ({
       "S.no": index + 1,
       "Lead Name": row.first_name,
-      "Company": row.company,
+      Company: row.company,
       "Email-Address": row.email,
       "Phone Number": row.phone,
       "Lead Owner": row.lead_owner,
     }));
+
   const handleExportData = (selectedRows = []) => {
     const dataToExport = selectedRows.length
       ? filterFields(selectedRows.map((row) => row.original))
       : filterFields(data);
+    const totalRow = {
+      "S.no": "",
+      "Lead Name": "",
+      Company: "Total Records",
+      "Email-Address": data.length,
+      "Phone Number": "",
+      "Lead Owner": "",
+    };
+    dataToExport.push(totalRow);
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+    const uniformWidth = 25;
+    ws["!cols"] = Array(
+      dataToExport[0] ? Object.keys(dataToExport[0]).length : 0
+    ).fill({ wch: uniformWidth });
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Leads");
 
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename =
       selectedRows.length === 1
-        ? `${selectedRows[0].original.company}_${timestamp}.csv`
-        : `company_list_${timestamp}.csv`;
+        ? `company_list_${timestamp}.xlsx`
+        : `${selectedRows[0].original.company}_${timestamp}.xlsx`;
 
-    const csvContent = [
-      Object.keys(dataToExport[0]).join(","), // CSV headers
-      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+    XLSX.writeFile(wb, filename);
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -274,6 +286,9 @@ const Lead = () => {
         row.original.lead_owner,
       ];
     });
+    if (rows.length > 1) {
+      tableData1.push(["", "", "Total Records", rows.length, "", ""]);
+    }
 
     autoTable(doc, {
       head: [tableHeaders1],
@@ -486,21 +501,25 @@ const Lead = () => {
           flexWrap: "wrap",
         }}
       >
-        <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
-        >
-          <button
-            className="btn text-secondary"
-            onClick={() => {
-              const selectedRows = table.getSelectedRowModel().rows;
-              handleExportData(selectedRows);
-            }}
-          >
-            <RiFileExcel2Fill size={23} />
-          </button>
-        </OverlayTrigger>
-        {/* <OverlayTrigger
+        {table.getPrePaginationRowModel().rows.length !== 0 && (
+          <>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="selected-row-tooltip">Download CSV</Tooltip>
+              }
+            >
+              <button
+                className="btn text-secondary"
+                onClick={() => {
+                  const selectedRows = table.getSelectedRowModel().rows;
+                  handleExportData(selectedRows);
+                }}
+              >
+                <RiFileExcel2Fill size={23} />
+              </button>
+            </OverlayTrigger>
+            {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -514,29 +533,31 @@ const Lead = () => {
             <RiFileExcel2Line size={23} />
           </button>
         </OverlayTrigger> */}
-        <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
-        >
-          <button
-            className="btn text-secondary"
-            disabled={table.getPrePaginationRowModel().rows.length === 0}
-            // onClick={() =>
-            //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
-            // }
-            onClick={() => {
-              const selectedRows = table.getSelectedRowModel().rows;
-              if (selectedRows.length === 1) {
-                handleExportRowsPDF(selectedRows);
-              } else {
-                handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="selected-row-tooltip">Download PDF</Tooltip>
               }
-            }}
-          >
-            <MdPictureAsPdf size={23} />
-          </button>
-        </OverlayTrigger>
-        {/* <OverlayTrigger
+            >
+              <button
+                className="btn text-secondary"
+                disabled={table.getPrePaginationRowModel().rows.length === 0}
+                // onClick={() =>
+                //   handleExportRowsPDF(table.getPrePaginationRowModel().rows)
+                // }
+                onClick={() => {
+                  const selectedRows = table.getSelectedRowModel().rows;
+                  if (selectedRows.length === 1) {
+                    handleExportRowsPDF(selectedRows);
+                  } else {
+                    handleExportRowsPDF(table.getPrePaginationRowModel().rows);
+                  }
+                }}
+              >
+                <MdPictureAsPdf size={23} />
+              </button>
+            </OverlayTrigger>
+            {/* <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
         >
@@ -552,6 +573,8 @@ const Lead = () => {
             <MdOutlinePictureAsPdf size={23} />
           </button>
         </OverlayTrigger> */}
+          </>
+        )}
       </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({

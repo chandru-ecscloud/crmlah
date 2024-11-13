@@ -7,6 +7,7 @@ import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   company: yup.string().required("*Company is required"),
@@ -125,6 +126,7 @@ function LeadsCreate() {
   useEffect(() => {
     formik.setFieldValue("lead_status", "");
   }, []);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

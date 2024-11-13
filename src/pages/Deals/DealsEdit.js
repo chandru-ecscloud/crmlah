@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   // amount: yup.string()
@@ -221,6 +222,7 @@ function DealsEdit() {
     DealList();
     ContactList();
   }, [id]);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

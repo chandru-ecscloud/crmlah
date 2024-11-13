@@ -6,6 +6,7 @@ import { API_URL } from "../../Config/URL";
 import { useFormik } from "formik";
 import { FaTrash } from "react-icons/fa";
 import { validationSchema } from "./QuotesEdit";
+import UseScrollToError from "../UseScrollToError";
 
 export function QuotesEdit() {
   const { id } = useParams();
@@ -417,6 +418,7 @@ export function QuotesEdit() {
     ContactList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

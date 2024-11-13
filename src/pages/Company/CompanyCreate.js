@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../../styles/dummy.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string().required("*User Name is required"),
@@ -146,6 +147,7 @@ function CompanyCreate() {
   //     reader.readAsDataURL(file);
   //   }
   // };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

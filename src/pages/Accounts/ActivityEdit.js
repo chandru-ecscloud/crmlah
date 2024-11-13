@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { MdEdit } from "react-icons/md";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object({
   clientData: Yup.array().of(
@@ -150,6 +151,7 @@ const ActivityEdit = ({ id, fetchData, accountId }) => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  UseScrollToError(formik)
 
   return (
     <>

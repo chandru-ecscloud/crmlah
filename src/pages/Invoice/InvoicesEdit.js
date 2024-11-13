@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object({
   invoiceOwner: yup.string().required("*Select The Invoice Owner"),
@@ -32,6 +33,7 @@ const validationSchema = yup.object({
   ),
 });
 function InvoicesEdit() {
+  UseScrollToError(formik)
   const { id } = useParams();
   const [rows, setRows] = useState([{}]);
   console.log("row", rows);

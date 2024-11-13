@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   company: yup.string().required("*Company is required"),
@@ -149,6 +150,8 @@ function LeadsEdit() {
       reader.readAsDataURL(file);
     }
   };
+  UseScrollToError(formik)
+
 
   return (
     <section className="createLead">

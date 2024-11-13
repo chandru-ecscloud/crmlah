@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import appoinmentRescheduleTemplete from "../Email/AppoinmentRescheduleTemplete";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   // leadId: Yup.string().required("*Appointment is required"),
@@ -232,6 +233,8 @@ function AppointmentsEdit({ name, id, getData }) {
       console.error("Error fetching data:", error);
     }
   };
+  // UseScrollToError(formik)
+
 
   useEffect(() => {
     fetchServiceData();

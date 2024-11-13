@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, LinearProgress, ThemeProvider, createTheme } from "@mui/material";
+import { Box, LinearProgress, ThemeProvider, Tooltip, createTheme } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
@@ -15,6 +15,7 @@ import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import jsPDF from "jspdf";
 import TableDeleteModel from "../../components/common/TableDeleteModel";
+import { OverlayTrigger } from "react-bootstrap";
 const csvConfig = mkConfig({
   fieldSeparator: ",",
   decimalSeparator: ".",
@@ -279,6 +280,9 @@ const Event = () => {
         row.original.phone,
       ];
     });
+    if (rows.length > 1) {
+      tableData1.push(["", "", "Total Records", rows.length, "", ""]);
+    }
 
     autoTable(doc, {
       head: [tableHeaders1],
@@ -412,16 +416,22 @@ const Event = () => {
 
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
-        sx={{
-          display: "flex",
-          gap: "16px",
-          padding: "8px",
-          flexWrap: "wrap",
-        }}
+      sx={{
+        display: "flex",
+        gap: "16px",
+        padding: "8px",
+        flexWrap: "wrap",
+      }}
+    >
+        {table.getPrePaginationRowModel().rows.length !== 0 && (
+    <>
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
       >
         <button
           className="btn text-secondary"
-          // onClick={handleExportData}
+          //  onClick={handleExportData}
           onClick={() => {
             const selectedRows = table.getSelectedRowModel().rows;
             handleExportRows(selectedRows);
@@ -429,22 +439,26 @@ const Event = () => {
         >
           <RiFileExcel2Fill size={23} />
         </button>
-
-        {/* <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      </OverlayTrigger>
+      {/* 
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      >
+        <button
+          className="btn text-secondary border-0"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
         >
-          <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          >
-            <RiFileExcel2Line size={23} />
-          </button>
-        </OverlayTrigger> */}
-
+          <RiFileExcel2Line size={23} />
+        </button>
+      </OverlayTrigger> */}
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
+      >
         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
@@ -462,23 +476,26 @@ const Event = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        {/* <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      </OverlayTrigger>
+      {/* <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      >
+        <button
+          className="btn text-secondary border-0"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() =>
+            handleExportRowsPDF(table.getSelectedRowModel().rows)
+          }
         >
-          <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() =>
-              handleExportRowsPDF(table.getSelectedRowModel().rows)
-            }
-          >
-            <MdOutlinePictureAsPdf size={23} />
-          </button>
-        </OverlayTrigger> */}
-      </Box>
+          <MdOutlinePictureAsPdf size={23} />
+        </button>
+      </OverlayTrigger> */}
+      </>
+)}
+    </Box>
     ),
 
     muiTableBodyRowProps: ({ row }) => ({

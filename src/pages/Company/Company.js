@@ -13,6 +13,7 @@ import autoTable from "jspdf-autotable";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { MdPictureAsPdf } from "react-icons/md";
 import { Tooltip, Zoom } from "@mui/material";
+import * as XLSX from "xlsx";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -104,31 +105,62 @@ const Company = () => {
     }
   };
 
-  const download = (csvConfig, filename = "export.csv") => (csv) => {
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", filename);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
+  const download =
+    (csvConfig, filename = "export.csv") =>
+    (csv) => {
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    };
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const companyName = rowData[0]?.companyName || "default"; // Use first index or a default name
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig, `${companyName}.csv`)(csv);
-  };
+  const filterFields = (data) =>
+    data.map((row, index) => ({
+      "S.no": index + 1,
+      "User Name": row.userName,
+      "Company Name": row.companyName,
+      "Email-Address": row.email,
+      "Phone Number": row.phone,
+      Status: row.registrationStatus,
+      Roll: row.role,
+    }));
+  const handleExportRows = (selectedRows = []) => {
+    const dataToExport = selectedRows.length
+      ? filterFields(selectedRows.map((row) => row.original))
+      : filterFields(data);
 
+    const totalRow = {
+      "S.no": "",
+      "User Name": "",
+      "Company Name": "",
+      "Email-Address": "Total Records",
+      "Phone Number": dataToExport.length,
+      Status: "",
+      Roll: "",
+    };
+    dataToExport.push(totalRow);
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const uniformWidth = 20;
+    ws["!cols"] = Array(Object.keys(dataToExport[0]).length).fill({
+      wch: uniformWidth,
+    });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Company");
 
-  const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig, "Company_list.csv")(csv);
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const filename =
+      selectedRows.length === 1
+        ? `${selectedRows[0].original.companyName}_${timestamp}.xlsx`
+        : `Company_list_${timestamp}.xlsx`;
+
+    XLSX.writeFile(wb, filename);
   };
 
   // Export Rows PDF
@@ -157,6 +189,9 @@ const Company = () => {
         row.original.role,
       ];
     });
+    if (rows.length > 1) {
+      tableData1.push(["", "", "Total Records", rows.length, "", ""]);
+    }
 
     autoTable(doc, {
       head: [tableHeaders1],
@@ -169,7 +204,10 @@ const Company = () => {
         cellHeight: "auto",
       },
     });
-    const filename = rows.length > 0 ? `${rows[0].original.companyName}.pdf` : "Company_list.pdf";
+    const filename =
+      rows.length > 0
+        ? `${rows[0].original.companyName}.pdf`
+        : "Company_list.pdf";
     doc.save(filename);
   };
 
@@ -193,8 +231,7 @@ const Company = () => {
   const table = useMaterialReactTable({
     columns,
     data,
-    initialState: {
-    },
+    initialState: {},
     enableRowSelection: true,
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",
@@ -212,12 +249,8 @@ const Company = () => {
             className="btn text-secondary"
             onClick={() => {
               if (table.getIsSomeRowsSelected()) {
-                // Export only the selected rows
                 const rowsToExport = table.getSelectedRowModel().rows;
                 handleExportRows(rowsToExport);
-              } else {
-                // Export all rows
-                handleExportData();
               }
             }}
           >
@@ -258,13 +291,14 @@ const Company = () => {
       {!loading && (
         <>
           <div className="d-flex align-items-center justify-content-between py-4 px-3">
-          <div className="text-start">
+            <div className="text-start">
               <span className="fs-4 fw-bold px-2">Company ({data.length})</span>
             </div>
             <div style={{ paddingRight: "10px" }}>
               <button
-                className={`btn btn-primary ${role === "CMP_USER" && "disabled"
-                  }`}
+                className={`btn btn-primary ${
+                  role === "CMP_USER" && "disabled"
+                }`}
                 disabled={role === "CMP_USER" || role === "CMP_ADMIN"}
                 onClick={handelNavigateClick}
               >

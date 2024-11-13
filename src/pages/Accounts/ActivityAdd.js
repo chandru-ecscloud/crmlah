@@ -8,6 +8,7 @@ import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object({
   clientData: Yup.array().of(
@@ -153,6 +154,7 @@ const ActivityAdd = ({ id, fetchData }) => {
     formik.setFieldValue("date", currentData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  UseScrollToError(formik)
 
   return (
     <>

@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object({
   invoiceOwner: yup.string().required("*Select The Invoice Owner"),
@@ -128,6 +129,8 @@ function InvoicesCreate() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Invoice Create:", values);
+      // const formattedInvoiceDate = new Date(values.invoiceDate).toISOString();
+      // const formattedDueDate = new Date(values.dueDate).toISOString();
       try {
         const payload = {
           transactionInvoice: {
@@ -140,7 +143,7 @@ function InvoicesCreate() {
             termsAndConditions: values.termsAndConditions,
             invoiceDate: values.invoiceDate,
             status: values.status,
-            dueDate: values.dueDate,
+            dueDate:values.dueDate,
             salesCommission: values.salesCommission,
             dealName: values.dealName,
             accountName: values.accountName,
@@ -206,6 +209,7 @@ function InvoicesCreate() {
   //     reader.readAsDataURL(file);
   //   }
   // };
+  UseScrollToError(formik)
 
   const AccountList = async () => {
     try {

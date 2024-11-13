@@ -201,6 +201,9 @@ function AdminHeader({ handleLogout }) {
                     <NavDropdown.Item as={NavLink} to="/invoices/create">
                       <IoMdAdd /> create invoice
                     </NavDropdown.Item>
+                    <NavDropdown.Item as={NavLink} to="/user/proposal/create">
+                      <IoMdAdd /> create proposal
+                    </NavDropdown.Item>
                     {/* <NavDropdown.Item as={NavLink} to="/company/companycreate">
                     <IoMdAdd /> create company
                   </NavDropdown.Item>

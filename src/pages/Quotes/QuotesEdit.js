@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
 // import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   quoteOwner: yup.string().required("*Quote owner is required"),
@@ -446,6 +447,7 @@ function QuotesEdit() {
     ContactList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

@@ -6,6 +6,7 @@ import { MdEdit } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_URL } from "../../Config/URL";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   // leadId: Yup.string().required("*Appointment for is required"),
@@ -167,6 +168,7 @@ function CalenderEdit({ id, setShowViewModal, getData }) {
       console.error("Error fetching data:", error);
     }
   };
+  UseScrollToError(formik)
 
   useEffect(() => {
     fetchData();

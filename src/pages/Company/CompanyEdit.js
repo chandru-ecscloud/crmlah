@@ -10,6 +10,7 @@ import "../../styles/dummy.css";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*User Name is required"),
@@ -65,10 +66,12 @@ function CompanyEdit() {
       zipCode: "",
       country: "",
       licenseLimit: "",
+      // appointmentRoleType:"OWNER"
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Company Edit Data:", data);
+      data.appointmentRoleType = "OWNER"
       try {
         // Make both API calls simultaneously
         const [userResponse, companyResponse] = await Promise.all([
@@ -137,6 +140,7 @@ function CompanyEdit() {
   //     reader.readAsDataURL(file);
   //   }
   // };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">
@@ -179,7 +183,7 @@ function CompanyEdit() {
               &nbsp;
               <span>
                 <button className="btn btn-primary" type="submit">
-                  Save
+                  Update
                 </button>
               </span>
             </div>

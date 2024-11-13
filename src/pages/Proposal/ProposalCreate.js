@@ -8,6 +8,7 @@ import * as yup from "yup";
 // import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 function ProposalCreate() {
   // const owner = sessionStorage.getItem("user_name");
@@ -117,6 +118,7 @@ function ProposalCreate() {
       formik.setFieldValue("files", files);
     }
   };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

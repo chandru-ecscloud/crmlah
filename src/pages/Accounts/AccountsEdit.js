@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("*First Name is required"),
@@ -197,6 +198,7 @@ function AccountsEdit() {
     AccountList();
     userData();
   }, [id]);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

@@ -7,6 +7,7 @@ import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   product_owner: yup.string().required("*Product Owner is required."),
@@ -200,6 +201,7 @@ function ProductsEdit() {
       reader.readAsDataURL(file);
     }
   };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { FaTrash } from "react-icons/fa";
 // import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   quoteOwner: yup.string().required("*Quote owner is required"),
@@ -403,6 +404,7 @@ function QuotesCreate() {
     DealList();
     ContactList();
   }, []);
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

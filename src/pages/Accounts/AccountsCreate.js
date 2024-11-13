@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 // import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("*First Name is required"),
@@ -117,6 +118,7 @@ function AccountsCreate() {
   //     reader.readAsDataURL(file);
   //   }
   // };
+  UseScrollToError(formik)
 
   const AccountList = async () => {
     try {
@@ -155,7 +157,7 @@ function AccountsCreate() {
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>
-        <div className="container-fluid">
+        <div className="container-fluid ">
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12">
               <h4>

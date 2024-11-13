@@ -21,6 +21,8 @@ import AppointmentsCreate from "./AppointmentsCreate";
 import WebSocketService from "../../Config/WebSocketService";
 import appoinmentCancelTemplete from "../Email/AppoinmentCancelTemplete";
 import TableDeleteModel from "../../components/common/TableDeleteModel";
+import * as XLSX from "xlsx";
+
 const csvConfig = mkConfig({
   fieldSeparator: ",",
   decimalSeparator: ".",
@@ -256,28 +258,39 @@ const Appointments = () => {
       "Phone Number": row.phoneNumber,
       "Appointment Mode": row.appointmentMode,
     }));
+  
   const handleExportRows = (selectedRows = []) => {
     const dataToExport = selectedRows.length
       ? filterFields(selectedRows.map((row) => row.original))
       : filterFields(data);
-
+  
+    if (!selectedRows.length) {
+      dataToExport.push({
+        "S.no": "",
+        "Appointment Name": "",
+        "Appointment For": "",
+        "Email-Address": "Total Records",
+        "Phone Number": dataToExport.length,
+        "Appointment Mode": "",
+      });
+    }
+  
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const uniformWidth = 20;
+    ws["!cols"] = Array(Object.keys(dataToExport[0]).length).fill({ wch: uniformWidth });
+  
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Appointments");
+  
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename =
       selectedRows.length === 1
-        ? `${selectedRows[0].original.appointmentName}_${timestamp}.csv`
-        : `Appointment_list_${timestamp}.csv`;
-
-    const csvContent = [
-      Object.keys(dataToExport[0]).join(","), // CSV headers
-      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+        ? `${selectedRows[0].original.appointmentName}_${timestamp}.xlsx`
+        : `Appointment_list_${timestamp}.xlsx`;
+  
+    XLSX.writeFile(wb, filename);
   };
+  
 
   const handleExportRowsPDF = (rows) => {
     const doc = new jsPDF();
@@ -303,6 +316,9 @@ const Appointments = () => {
         row.original.appointmentName,
       ];
     });
+    if (rows.length > 1) {
+      tableData1.push(["", "", "Total Records", rows.length, "", ""]);
+    }
 
     autoTable(doc, {
       head: [tableHeaders1],
@@ -480,16 +496,22 @@ const Appointments = () => {
     positionToolbarAlertBanner: "bottom",
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
-        sx={{
-          display: "flex",
-          gap: "16px",
-          padding: "8px",
-          flexWrap: "wrap",
-        }}
+      sx={{
+        display: "flex",
+        gap: "16px",
+        padding: "8px",
+        flexWrap: "wrap",
+      }}
+    >
+        {table.getPrePaginationRowModel().rows.length !== 0 && (
+    <>
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
       >
         <button
           className="btn text-secondary"
-          // onClick={handleExportData}
+          //  onClick={handleExportData}
           onClick={() => {
             const selectedRows = table.getSelectedRowModel().rows;
             handleExportRows(selectedRows);
@@ -497,22 +519,26 @@ const Appointments = () => {
         >
           <RiFileExcel2Fill size={23} />
         </button>
-
-        {/* <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      </OverlayTrigger>
+      {/* 
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      >
+        <button
+          className="btn text-secondary border-0"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
         >
-          <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-          >
-            <RiFileExcel2Line size={23} />
-          </button>
-        </OverlayTrigger> */}
-
+          <RiFileExcel2Line size={23} />
+        </button>
+      </OverlayTrigger> */}
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Download PDF</Tooltip>}
+      >
         <button
           className="btn text-secondary"
           disabled={table.getPrePaginationRowModel().rows.length === 0}
@@ -530,23 +556,26 @@ const Appointments = () => {
         >
           <MdPictureAsPdf size={23} />
         </button>
-        {/* <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      </OverlayTrigger>
+      {/* <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="selected-row-tooltip">Selected Row</Tooltip>}
+      >
+        <button
+          className="btn text-secondary border-0"
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          onClick={() =>
+            handleExportRowsPDF(table.getSelectedRowModel().rows)
+          }
         >
-          <button
-            className="btn text-secondary border-0"
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() =>
-              handleExportRowsPDF(table.getSelectedRowModel().rows)
-            }
-          >
-            <MdOutlinePictureAsPdf size={23} />
-          </button>
-        </OverlayTrigger> */}
-      </Box>
+          <MdOutlinePictureAsPdf size={23} />
+        </button>
+      </OverlayTrigger> */}
+      </>
+)}
+    </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {

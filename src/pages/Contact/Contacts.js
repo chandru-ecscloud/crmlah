@@ -19,6 +19,7 @@ import { MdPictureAsPdf, MdOutlinePictureAsPdf } from "react-icons/md";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import TableDeleteModel from "../../components/common/TableDeleteModel";
+import * as XLSX from "xlsx";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -200,29 +201,36 @@ const Contacts = () => {
       "Contact Owner": row.contactOwner,
       "Email-Address": row.email,
       "Phone Number": row.phone,
-      "Company": row.companyName,
+      Company: row.companyName,
     }));
+
   const handleExportRows = (selectedRows = []) => {
     const dataToExport = selectedRows.length
       ? filterFields(selectedRows.map((row) => row.original))
       : filterFields(data);
+    const totalRow = {
+      "S.no": "",
+      "Contact Name": "",
+      "Contact Owner": "Total Records",
+      "Email-Address": dataToExport.length,
+      "Phone Number": "",
+      Company: "",
+    };
+    dataToExport.push(totalRow);
 
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const uniformWidth = 25;
+    ws["!cols"] = Array(Object.keys(dataToExport[0]).length).fill({
+      wch: uniformWidth,
+    });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Contacts");
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename =
       selectedRows.length === 1
-        ? `${selectedRows[0].original.contactName}_${timestamp}.csv`
-        : `Contact_list_${timestamp}.csv`;
-
-    const csvContent = [
-      Object.keys(dataToExport[0]).join(","), // CSV headers
-      ...dataToExport.map((row) => Object.values(row).join(",")), // CSV rows
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+        ? `${selectedRows[0].original.contactName}_${timestamp}.xlsx`
+        : `Contact_list_${timestamp}.xlsx`;
+    XLSX.writeFile(wb, filename);
   };
 
   const handleExportRowsPDF = (rows) => {
@@ -249,6 +257,9 @@ const Contacts = () => {
         row.original.contactOwner,
       ];
     });
+    if (rows.length > 1) {
+      tableData1.push(["", "", "Total Records", rows.length, "", ""]);
+    }
 
     autoTable(doc, {
       head: [tableHeaders1],
@@ -347,8 +358,8 @@ const Contacts = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp
     const filename =
       rows.length === 1
-        ? `${rows[0].original.firstName}_${timestamp?.slice(0,10)}.pdf`
-        : `Contacts_List_${timestamp?.slice(0,10)}.pdf`;
+        ? `${rows[0].original.firstName}_${timestamp?.slice(0, 10)}.pdf`
+        : `Contacts_List_${timestamp?.slice(0, 10)}.pdf`;
 
     doc.save(filename);
   };
@@ -487,6 +498,8 @@ const Contacts = () => {
           flexWrap: "wrap",
         }}
       >
+          {table.getPrePaginationRowModel().rows.length !== 0 && (
+      <>
         <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="selected-row-tooltip">Download CSV</Tooltip>}
@@ -555,6 +568,8 @@ const Contacts = () => {
             <MdOutlinePictureAsPdf size={23} />
           </button>
         </OverlayTrigger> */}
+        </>
+  )}
       </Box>
     ),
     muiTableBodyRowProps: ({ row }) => ({

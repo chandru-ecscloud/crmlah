@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import appoinmentCreateTemplete from "../Email/AppoinmentCreateTemplete";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = Yup.object().shape({
   // serviceId: Yup.string().required("*Service is required"),
@@ -341,6 +342,7 @@ function CalenderAdd({ name, showModal, getData, setShowModal, eventData }) {
     fetchServiceData();
     fetchLeadData();
   }, []);
+  UseScrollToError(formik)
 
   return (
     <Modal

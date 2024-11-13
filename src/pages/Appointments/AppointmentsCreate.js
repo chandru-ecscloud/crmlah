@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import appoinmentCreateTemplete from "../Email/AppoinmentCreateTemplete";
+import UseScrollToError from "../UseScrollToError";
 
 function AppointmentsCreate({ name, schedule, getData }) {
   const [show, setShow] = useState(false);
@@ -324,6 +325,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
     setShow(false);
     formik.resetForm();
   };
+  UseScrollToError(formik);
 
   return (
     <>

@@ -8,6 +8,7 @@ import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   lead_source: yup.string().required("*Lead Source is required"),
@@ -205,6 +206,7 @@ function ContactEdit() {
       });
     }
   };
+  UseScrollToError(formik)
 
 
   return (

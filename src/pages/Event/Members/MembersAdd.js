@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API_URL } from "../../../Config/URL";
+import UseScrollToError from "../../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   companyName: yup.string().required("*Company Name is Required"),
@@ -64,6 +65,7 @@ function MembersAdd() {
       }
     },
   });
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

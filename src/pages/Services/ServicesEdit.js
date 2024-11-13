@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   serviceName: yup.string().required("*Service name is required"),
@@ -109,6 +110,7 @@ function ServicesEdit() {
   //     [e.target.name]: e.target.value,
   //   });
   // };
+  UseScrollToError(formik)
 
   return (
     // <section className="updateService">

@@ -8,6 +8,7 @@ import * as yup from "yup";
 // import { FaCamera } from "react-icons/fa6";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 function ProposalEdit() {
   const { id } = useParams();
@@ -140,6 +141,7 @@ function ProposalEdit() {
       formik.setFieldValue("files", files);
     }
   };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">

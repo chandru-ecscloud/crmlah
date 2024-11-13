@@ -7,6 +7,7 @@ import { API_URL } from "../../Config/URL";
 import * as yup from "yup";
 import "../../styles/dummy.css";
 import { useFormik } from "formik";
+import UseScrollToError from "../UseScrollToError";
 
 const validationSchema = yup.object().shape({
   // product_owner: yup.string().required("*Product Owner is required."),
@@ -109,6 +110,7 @@ function ProductCreate() {
       reader.readAsDataURL(file);
     }
   };
+  UseScrollToError(formik)
 
   return (
     <section className="createLead">
@@ -508,7 +510,7 @@ function ProductCreate() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Commission Rate</lable> &nbsp;&nbsp;
+                <lable>Commission Rate(%)</lable> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
