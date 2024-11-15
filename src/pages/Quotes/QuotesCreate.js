@@ -406,6 +406,32 @@ function QuotesCreate() {
   }, []);
   UseScrollToError(formik)
 
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}getAllCompanyRegisterById/${companyId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        formik.setFieldValue("shippingState",response.data.companyState);
+        formik.setFieldValue("shippingStreet",response.data.companyStreet);
+        formik.setFieldValue("shippingCity",response.data.companyCity);
+        formik.setFieldValue("shippingCode",response.data.companyZipCode);
+        formik.setFieldValue("shippingCountry",response.data.companyCountry);
+        console.log("userData", response.data);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
+
+    userData();
+  }, []);
+
   return (
     <section className="createLead">
       <form onSubmit={formik.handleSubmit}>

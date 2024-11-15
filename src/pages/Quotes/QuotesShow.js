@@ -6,15 +6,18 @@ import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { FaFilePdf } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
-import CompanyLogo from "../../assets/CMPLogoNew.png";
+// import CompanyLogo from "../../assets/CMPLogoNew.png";
 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function QuotesShow() {
   const { id } = useParams();
+  const companyId = sessionStorage.getItem("companyId");
   const [quoteData, setQuoteData] = useState({});
+  const [companyData, setCompanyData] = useState({});
   console.log("Quote Item list", quoteData);
   const [total, setTotal] = useState(0);
   const role = sessionStorage.getItem("role");
@@ -29,7 +32,6 @@ function QuotesShow() {
             //Authorization: `Bearer ${token}`,
           },
         });
-
         const transformedData = Object.keys(response.data).reduce(
           (acc, key) => {
             let value = response.data[key];
@@ -66,13 +68,28 @@ function QuotesShow() {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    const userData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}getAllCompanyRegisterById/${companyId}`
+        );
+        setCompanyData(response.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    userData();
+  }, [companyId]);
+
   const handleEdit = () => {
     navigate(`/quotes/edit/${id}`);
   };
 
   const generatePDF = (action = "download") => {
     const doc = new jsPDF();
-    doc.addImage(CompanyLogo, "Logo", 13, 15, 52, 10); // x, y, width, height
+    doc.addImage(companyData.companyLogo, "Logo", 17,5,40,22); // x, y, width, height
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(28);
@@ -84,10 +101,11 @@ function QuotesShow() {
 
     doc.setFont("helvetica", "small");
     doc.setFontSize(10);
-    doc.text("The Alexcier", 13, 35);
-    doc.text("237 Alexandra Road #04-10", 13, 40);
-    doc.text("Singapore 159929", 13, 45);
-    doc.text("Singapore", 13, 50);
+    doc.text(`${companyData.companyStreet}`, 13, 35);
+    doc.text(`${companyData.companyCity}`, 13, 40);
+    doc.text(`${companyData.companyZipCode}`, 13, 45);
+    doc.text(`${companyData.companyState}`, 13, 50);
+    doc.text(`${companyData.companyCountry}`, 13, 55);
 
     doc.text("Subject :", 13, 65);
     doc.text(`${quoteData.subject}`, 13, 70);
@@ -215,7 +233,10 @@ function QuotesShow() {
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    const termsText = doc.splitTextToSize(`${quoteData.termsAndConditions}`,180); // 180 is the width
+    const termsText = doc.splitTextToSize(
+      `${quoteData.termsAndConditions}`,
+      180
+    ); // 180 is the width
     doc.text(termsText, 13, nextY + 6);
 
     // Save the PDF
@@ -344,7 +365,9 @@ function QuotesShow() {
 
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Quotes Owner</label>
+                <label className="text-dark col-6 text-center">
+                  Quotes Owner
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.quoteOwner || ""}
                 </span>
@@ -355,16 +378,20 @@ function QuotesShow() {
                   &nbsp; : &nbsp;{quoteData.subject || ""}
                 </span>
               </div>
-             
+
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Created By</label>
+                <label className="text-dark col-6 text-center">
+                  Created By
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.createdBy || ""}
                 </span>
               </div>
-              
+
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Updated At</label>
+                <label className="text-dark col-6 text-center">
+                  Updated At
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;
                   {quoteData.updatedAt ? quoteData.updatedAt.split("T")[0] : ""}
@@ -374,19 +401,25 @@ function QuotesShow() {
 
             <div className="container-fluid col-md-6">
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Valied Until</label>
+                <label className="text-dark col-6 text-center">
+                  Valied Until
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.validUntil || ""}
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Quotes Stage</label>
+                <label className="text-dark col-6 text-center">
+                  Quotes Stage
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;{quoteData.quoteStage || ""}
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Created At</label>
+                <label className="text-dark col-6 text-center">
+                  Created At
+                </label>
                 <span className="text-dark col-6">
                   &nbsp; : &nbsp;
                   {quoteData.createdAt ? quoteData.createdAt.split("T")[0] : ""}
@@ -406,31 +439,41 @@ function QuotesShow() {
 
               <div className="container col-md-6">
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Shipping Street</label>
+                  <label className="text-dark col-6 text-center">
+                    Shipping Street
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingStreet || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Shipping State</label>
+                  <label className="text-dark col-6 text-center">
+                    Shipping State
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingState || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Shipping City</label>
+                  <label className="text-dark col-6 text-center">
+                    Shipping City
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCity || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Shipping Zip Code</label>
+                  <label className="text-dark col-6 text-center">
+                    Shipping Zip Code
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCode || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Shipping Country</label>
+                  <label className="text-dark col-6 text-center">
+                    Shipping Country
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.shippingCountry || "--"}
                   </span>
@@ -439,31 +482,41 @@ function QuotesShow() {
 
               <div className="container col-md-6">
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Billing Street</label>
+                  <label className="text-dark col-6 text-center">
+                    Billing Street
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingStreet || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Billing State</label>
+                  <label className="text-dark col-6 text-center">
+                    Billing State
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingState || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Billing City</label>
+                  <label className="text-dark col-6 text-center">
+                    Billing City
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCity || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Billing Zip Code</label>
+                  <label className="text-dark col-6 text-center">
+                    Billing Zip Code
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCode || "--"}
                   </span>
                 </div>
                 <div className="row mb-3">
-                  <label className="text-dark col-6 text-center">Billing Country</label>
+                  <label className="text-dark col-6 text-center">
+                    Billing Country
+                  </label>
                   <span className="text-dark col-6">
                     &nbsp; : &nbsp;{quoteData.billingCountry || "--"}
                   </span>
@@ -626,13 +679,13 @@ function QuotesShow() {
             {/* Customer Notes */}
             <div className="container-fluid row" id="Details">
               <div className="my-3 container-fluid row">
-                <span className="my-3 fs-6 fw-bold my-3">
-                Customer Notes
-                </span>
+                <span className="my-3 fs-6 fw-bold my-3">Customer Notes</span>
               </div>
 
               <div className="row mb-3">
-                <label className="text-dark col-3 text-center">Customer Notes</label>
+                <label className="text-dark col-3 text-center">
+                  Customer Notes
+                </label>
                 <span className="text-dark col-9">
                   &nbsp; : &nbsp;{quoteData.description || " "}
                 </span>

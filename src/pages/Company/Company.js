@@ -15,12 +15,6 @@ import { MdPictureAsPdf } from "react-icons/md";
 import { Tooltip, Zoom } from "@mui/material";
 import * as XLSX from "xlsx";
 
-const csvConfig = mkConfig({
-  fieldSeparator: ",",
-  decimalSeparator: ".",
-  useKeysAsHeaders: true,
-});
-
 const Company = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,22 +98,6 @@ const Company = () => {
       setLoading(false);
     }
   };
-
-  const download =
-    (csvConfig, filename = "export.csv") =>
-    (csv) => {
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", filename);
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    };
 
   const filterFields = (data) =>
     data.map((row, index) => ({
@@ -244,21 +222,19 @@ const Company = () => {
           flexWrap: "wrap",
         }}
       >
-        <Tooltip TransitionComponent={Zoom} title="CSV">
+        <Tooltip TransitionComponent={Zoom} title="Download CSV">
           <button
             className="btn text-secondary"
             onClick={() => {
-              if (table.getIsSomeRowsSelected()) {
-                const rowsToExport = table.getSelectedRowModel().rows;
-                handleExportRows(rowsToExport);
-              }
+              const rowsToExport = table.getSelectedRowModel().rows;
+              handleExportRows(rowsToExport);
             }}
           >
             <RiFileExcel2Fill size={23} />
           </button>
         </Tooltip>
 
-        <Tooltip TransitionComponent={Zoom} title="PDF">
+        <Tooltip TransitionComponent={Zoom} title="Download PDF">
           <button
             className="btn text-secondary"
             onClick={() => {

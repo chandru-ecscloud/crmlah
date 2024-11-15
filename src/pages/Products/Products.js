@@ -190,7 +190,7 @@ const Products = () => {
       "S.no",
       "Product Name",
       "Product Code",
-      "Vendor Name",
+      "Created At",
       "Product Owner",
       "Product Active",
     ];
@@ -199,7 +199,7 @@ const Products = () => {
         i + 1,
         row.original.productName,
         row.original.productCode,
-        row.original.vendorName,
+        row.original.createdAt?.slice(0,10),
         row.original.productOwner,
         row.original.productActive,
       ];
