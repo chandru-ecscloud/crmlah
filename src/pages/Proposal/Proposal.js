@@ -118,6 +118,21 @@ const Proposal = () => {
     enableRowSelection: true,
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",
+    // localization: {
+    //   toggleAllRowsSelected: "Select all",
+    //   toggleDensity: "Row density",
+    //   toggleFullScreen: "Full screen",
+    //   toggleGlobalFilter: "Search",
+    //   toggleFilters: "Filters",
+    //   toggleVisibility: "Column Settings",
+    // },
+    localization: {
+      toggleSelectAll: "Select all",
+      toggleDensity: "Row density",
+      toggleFullScreen: "Full screen",
+      toggleSelectRow: "select row",
+      toggleVisibility: "Column Settings",
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{ display: "flex", gap: "16px", padding: "8px", flexWrap: "wrap" }}

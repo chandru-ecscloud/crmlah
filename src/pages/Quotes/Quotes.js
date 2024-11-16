@@ -487,7 +487,15 @@ const Quotes = () => {
     enableRowSelection: true,
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",
+    localization: {
+      toggleSelectAll: "Select all",
+      toggleDensity: "Row density",
+      toggleFullScreen: "Full screen",
+      toggleSelectRow: "select row",
+      toggleVisibility: "Column Settings",
+    },
     renderTopToolbarCustomActions: ({ table }) => (
+      
       <Box
         sx={{
           display: "flex",
@@ -496,6 +504,7 @@ const Quotes = () => {
           flexWrap: "wrap",
         }}
       >
+
         {table.getPrePaginationRowModel().rows.length !== 0 && (
           <>
             <OverlayTrigger

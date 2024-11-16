@@ -690,6 +690,14 @@ function QuotesShow() {
                   &nbsp; : &nbsp;{quoteData.description || " "}
                 </span>
               </div>
+              <div className="row mb-3">
+                <label className="text-dark col-3 text-center">
+                  Terms&Conditions
+                </label>
+                <span className="text-dark col-9">
+                  &nbsp; : &nbsp;{quoteData.termsAndConditions || " "}
+                </span>
+              </div>
             </div>
           </div>
 

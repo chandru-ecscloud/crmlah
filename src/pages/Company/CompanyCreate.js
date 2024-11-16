@@ -24,9 +24,10 @@ const validationSchema = Yup.object().shape({
     .required("*Enter the valid password")
     .min(4, "*min length of 4 chars")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/,
+      "password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (including .)"
     ),
+
   // .max(10, "*Enter upto 15 chars only"),
   cpassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
@@ -147,7 +148,7 @@ function CompanyCreate() {
   //     reader.readAsDataURL(file);
   //   }
   // };
-  UseScrollToError(formik)
+  UseScrollToError(formik);
 
   return (
     <section className="createLead">
@@ -208,10 +209,11 @@ function CompanyCreate() {
                     <input
                       {...formik.getFieldProps("name")}
                       type="text"
-                      className={`form-size form-control ${formik.touched.name && formik.errors.name
+                      className={`form-size form-control ${
+                        formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       id="name"
                       name="name"
                     />
@@ -231,10 +233,11 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${formik.touched.userName && formik.errors.userName
+                      className={`form-size form-control  ${
+                        formik.touched.userName && formik.errors.userName
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("userName")}
                       name="userName"
                       id="userName"
@@ -268,10 +271,11 @@ function CompanyCreate() {
                     <span className="text-danger">*</span> &nbsp;&nbsp;
                     <input
                       type="text"
-                      className={`form-size form-control  ${formik.touched.companyName && formik.errors.companyName
+                      className={`form-size form-control  ${
+                        formik.touched.companyName && formik.errors.companyName
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("companyName")}
                       name="companyName"
                       id="companyName"

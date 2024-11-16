@@ -163,9 +163,9 @@ function CompanyShow() {
                 </span>
               </div>
               <div className="row mb-3">
-                <label className="text-dark col-6 text-center">Email</label>
-                <span className="text-dark col-6">
-                  &nbsp; : &nbsp;{userData.email || "--"}
+                <label className="text-dark col-5 text-center">Email</label>
+                <span className="text-dark col-7 text-end ">
+                 : {userData.email || "--"}
                 </span>
               </div>
 

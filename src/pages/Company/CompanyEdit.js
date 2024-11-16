@@ -55,7 +55,7 @@ function CompanyEdit() {
       companyId: id,
       name: "",
       companyName: "",
-      countryCode: "",
+      countryCode: "65",
       phone: "",
       email: "",
       registrationStatus: "",

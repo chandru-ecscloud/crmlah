@@ -54,35 +54,43 @@ function QuotesCreate() {
 
   const navigate = useNavigate();
 
-  const addRow = () => {
-    const updatedRows = [...rows, {}];
+  const addRowAfter = (index) => {
+    const newRow = {
+      productId: "",
+      quantity: "",
+      listPrice: "",
+      amount: "",
+      discount: "",
+      tax: "",
+      total: "",
+    };
+
+    const updatedRows = [
+      ...rows.slice(0, index + 1),
+      newRow,
+      ...rows.slice(index + 1),
+    ];
     setRows(updatedRows);
 
     const updatedQuotesItemList = [
-      ...formik.values.quotesItemList,
-      {
-        productId: "",
-        quantity: "",
-        listPrice: "",
-        amount: "",
-        discount: "",
-        tax: "",
-        total: "",
-      },
+      ...formik.values.quotesItemList.slice(0, index + 1),
+      newRow,
+      ...formik.values.quotesItemList.slice(index + 1),
     ];
     formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
 
-  const deleteRow = () => {
+  const deleteRow = (index) => {
     if (rows.length === 1) {
-      // Prevent deleting the last row
       return;
     }
 
-    const updatedRows = rows.slice(0, -1);
+    const updatedRows = rows.filter((_, i) => i !== index);
     setRows(updatedRows);
 
-    const updatedQuotesItemList = formik.values.quotesItemList.slice(0, -1);
+    const updatedQuotesItemList = formik.values.quotesItemList.filter(
+      (_, i) => i !== index
+    );
     formik.setFieldValue("quotesItemList", updatedQuotesItemList);
   };
 
@@ -193,7 +201,6 @@ function QuotesCreate() {
       }
     },
   });
-
 
   // const handleImageUpload = (event) => {
   //   const file = event.target.files[0];
@@ -404,7 +411,7 @@ function QuotesCreate() {
     DealList();
     ContactList();
   }, []);
-  UseScrollToError(formik)
+  UseScrollToError(formik);
 
   useEffect(() => {
     const userData = async () => {
@@ -418,11 +425,11 @@ function QuotesCreate() {
             },
           }
         );
-        formik.setFieldValue("shippingState",response.data.companyState);
-        formik.setFieldValue("shippingStreet",response.data.companyStreet);
-        formik.setFieldValue("shippingCity",response.data.companyCity);
-        formik.setFieldValue("shippingCode",response.data.companyZipCode);
-        formik.setFieldValue("shippingCountry",response.data.companyCountry);
+        formik.setFieldValue("shippingState", response.data.companyState);
+        formik.setFieldValue("shippingStreet", response.data.companyStreet);
+        formik.setFieldValue("shippingCity", response.data.companyCity);
+        formik.setFieldValue("shippingCode", response.data.companyZipCode);
+        formik.setFieldValue("shippingCountry", response.data.companyCountry);
         console.log("userData", response.data);
       } catch (error) {
         toast.error("Error fetching data:", error);
@@ -1052,155 +1059,167 @@ function QuotesCreate() {
           </h4>
         </div>
         <div className="container">
-          <div className="table-responsive">
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                    Product Name
-                  </th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                    List Price
-                  </th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Discount(%)</th>
-                  <th scope="col">Tax(%)</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody className="table-secondary">
-                {rows.map((row, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>
-                      <select
-                        className={`form-select ${
-                          formik.touched.quotesItemList?.[index]?.productName &&
-                          formik.errors.quotesItemList?.[index]?.productName
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        name={`quotesItemList[${index}].productName`}
-                        value={row.productName}
-                        onChange={(e) => {
-                          formik.setFieldValue(
-                            `quotesItemList[${index}].productName`,
-                            e.target.value
-                          );
-                          handleSelectChange(index, e.target.value);
-                        }}
-                        onBlur={formik.handleBlur}
-                      >
-                        <option value=""></option>
-                        {productOptions.map((option) => (
+          <div className="container">
+            <div className="table-responsive">
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                      Product Name
+                    </th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                      List Price
+                    </th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Discount(%)</th>
+                    <th scope="col">Tax(%)</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Actions</th> {/* Add Actions Column */}
+                  </tr>
+                </thead>
+                <tbody className="table-secondary">
+                  {rows.map((row, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>
+                        <select
+                          className={`form-select ${
+                            formik.touched.quotesItemList?.[index]
+                              ?.productId &&
+                            formik.errors.quotesItemList?.[index]?.productId
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          name={`quotesItemList[${index}].productId`}
+                          value={row.productId}
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              `quotesItemList[${index}].productId`,
+                              e.target.value
+                            );
+                            handleSelectChange(index, e.target.value);
+                          }}
+                          onBlur={formik.handleBlur}
+                        >
+                          <option value=""></option>
+                          {productOptions.map((option) => (
                           <option key={option.id} value={option.id}>
                             {option.productName}
                           </option>
                         ))}
-                      </select>
-                      {formik.touched.quotesItemList?.[index]?.productName &&
-                      formik.errors.quotesItemList?.[index]?.productName ? (
-                        <div className="text-danger fs-6">
-                          {formik.errors.quotesItemList[index].productName}
-                        </div>
-                      ) : null}
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name={`quotesItemList[${index}].quantity`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].quantity`
+                        </select>
+                        {formik.touched.quotesItemList?.[index]?.productId &&
+                        formik.errors.quotesItemList?.[index]?.productId ? (
+                          <div className="text-danger fs-6">
+                            {formik.errors.quotesItemList[index].productId}
+                          </div>
+                        ) : null}
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].quantity`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].quantity`
+                          )}
+                          value={row.quantity}
+                          className="form-control"
+                          onChange={(e) =>
+                            handleQuantityChange(index, e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].listPrice`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].listPrice`
+                          )}
+                          value={row.listPrice}
+                          className="form-control"
+                          id={`listPrice_${index}`}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].amount`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].amount`
+                          )}
+                          value={row.amount}
+                          className="form-control"
+                          id={`amount_${index}`}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].discount`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].discount`
+                          )}
+                          value={row.discount}
+                          className="form-control"
+                          onChange={(e) =>
+                            handleDiscountChange(index, e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].tax`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].tax`
+                          )}
+                          value={row.tax}
+                          className="form-control"
+                          onChange={(e) =>
+                            handleTaxChange(index, e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name={`quotesItemList[${index}].total`}
+                          {...formik.getFieldProps(
+                            `quotesItemList[${index}].total`
+                          )}
+                          value={row.total ? row.total.toFixed(2) : 0}
+                          className="form-control"
+                          id={`total_${index}`}
+                          readOnly
+                        />
+                      </td>
+                      <td className="d-flex">
+                        <button
+                          type="button"
+                          className="btn btn-primary  mx-1"
+                          onClick={() => addRowAfter(index)}
+                        >
+                          Add
+                        </button>
+                        {rows.length > 1 && (
+                          <button
+                            type="button"
+                            className="btn btn-danger  mx-1"
+                            onClick={() => deleteRow(index)}
+                          >
+                            Delete
+                          </button>
                         )}
-                        value={row.quantity}
-                        className="form-control"
-                        onChange={(e) =>
-                          handleQuantityChange(index, e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name={`quotesItemList[${index}].listPrice`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].listPrice`
-                        )}
-                        value={row.listPrice}
-                        className="form-control"
-                        id={`listPrice_${index}`}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name={`quotesItemList[${index}].amount`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].amount`
-                        )}
-                        value={row.amount}
-                        className="form-control"
-                        id={`amount_${index}`}
-                      />
-                    </td>
-                    <td>
-                      <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 2);}}
-                        type="text"
-                        name={`quotesItemList[${index}].discount`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].discount`
-                        )}
-                        value={row.discount}
-                        className="form-control"
-                        onChange={(e) =>
-                          handleDiscountChange(index, e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 2);}}
-                        type="text"
-                        name={`quotesItemList[${index}].tax`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].tax`
-                        )}
-                        value={row.tax}
-                        className="form-control"
-                        onChange={(e) => handleTaxChange(index, e.target.value)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name={`quotesItemList[${index}].total`}
-                        {...formik.getFieldProps(
-                          `quotesItemList[${index}].total`
-                        )}
-                        value={row.total ? row.total.toFixed(2) : 0}
-                        className="form-control"
-                        id={`total_${index}`}
-                        readOnly
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <button type="button" className="btn btn-primary" onClick={addRow}>
-            Add Row
-          </button>
-          {rows.length > 1 && (
-            <button
-              type="button"
-              className="btn btn-outline-danger mx-3"
-              onClick={deleteRow}
-            >
-              <FaTrash />
-            </button>
-          )}
         </div>
 
         {/* Quotes Items Counts */}
