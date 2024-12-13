@@ -10,7 +10,10 @@ import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("*UserName is required."),
-  password: yup.string().required("*Enter the valid Password"),
+  password: yup
+    .string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
 });
 
 function LogIn({ handleLogin }) {

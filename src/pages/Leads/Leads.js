@@ -226,7 +226,7 @@ const Lead = () => {
       Company: row.company,
       "Email-Address": row.email,
       "Phone Number": row.phone,
-      "Lead Owner": row.lead_owner,
+      "Lead Description": row.description_info,
     }));
 
   const handleExportData = (selectedRows = []) => {
@@ -239,7 +239,7 @@ const Lead = () => {
       Company: "Total Records",
       "Email-Address": data.length,
       "Phone Number": "",
-      "Lead Owner": "",
+      "Lead Description": "",
     };
     dataToExport.push(totalRow);
 
@@ -273,7 +273,7 @@ const Lead = () => {
       "Company",
       "Email-Address",
       "Phone Number",
-      "Lead Owner",
+      "Lead Description",
     ];
 
     const tableData1 = rows.map((row, i) => {
@@ -283,7 +283,7 @@ const Lead = () => {
         row.original.company,
         row.original.email,
         row.original.phone,
-        row.original.lead_owner,
+        row.original.description_info,
       ];
     });
     if (rows.length > 1) {
@@ -513,7 +513,11 @@ const Lead = () => {
                 className="btn text-secondary"
                 onClick={() => {
                   const selectedRows = table.getSelectedRowModel().rows;
-                  handleExportData(selectedRows);
+                  if (selectedRows.length === 1) {
+                    handleExportData(selectedRows);
+                  } else {
+                    handleExportData(table.getPrePaginationRowModel().rows);
+                  }
                 }}
               >
                 <RiFileExcel2Fill size={23} />
