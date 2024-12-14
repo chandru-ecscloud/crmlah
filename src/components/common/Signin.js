@@ -23,7 +23,10 @@ const validationSchema = yup.object().shape({
     .required("*Enter the Email"),
 
   // role: yup.string().required("*Select the Role"),
-  password: yup.string().required("*Enter the valid Password"),
+  password: yup
+    .string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
   // .min(4, "*min length of 4 chars")
   // .matches(
   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,

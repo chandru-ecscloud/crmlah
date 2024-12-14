@@ -219,6 +219,21 @@ const Lead = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; 
+
+    const date = new Date(dateString);
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-GB", options); 
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12 || 12; 
+
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+    return `${formattedDate} at ${formattedTime}`;
+  };
+
   const filterFields = (data) =>
     data.map((row, index) => ({
       "S.no": index + 1,
@@ -227,6 +242,7 @@ const Lead = () => {
       "Email-Address": row.email,
       "Phone Number": row.phone,
       "Lead Description": row.description_info,
+      "Created At": formatDate(row.created_at), 
     }));
 
   const handleExportData = (selectedRows = []) => {
@@ -240,6 +256,7 @@ const Lead = () => {
       "Email-Address": data.length,
       "Phone Number": "",
       "Lead Description": "",
+      "Created At": "",
     };
     dataToExport.push(totalRow);
 
