@@ -605,7 +605,7 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Commission Rate</lable> &nbsp;&nbsp;
+                <lable>Commission Rate(%)</lable> &nbsp;&nbsp;
                 <input
                   type="text"
                   className={`form-size form-control  ${
@@ -634,7 +634,7 @@ function ProductsEdit() {
 
             <div className="col-lg-6 col-md-6 col-12 mb-3">
               <div className="d-flex align-items-center justify-content-end sm-device">
-                <lable>Tax</lable> 
+                <lable>Tax(%)</lable> 
                 <span className="text-danger">*</span>&nbsp;&nbsp;
                 <input
                   type="text"

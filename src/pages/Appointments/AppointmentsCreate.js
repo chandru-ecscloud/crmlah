@@ -395,7 +395,7 @@ function AppointmentsCreate({ name, schedule, getData }) {
                     {name === "Schedule" ? (
                       <>
                         <div className="d-flex align-items-center justify-content-end sm-device">
-                          <lable>Appointment</lable>{" "}
+                          <lable>Appointment For</lable>{" "}
                           <span className=" text-danger">*</span>
                           <input
                             type="text"

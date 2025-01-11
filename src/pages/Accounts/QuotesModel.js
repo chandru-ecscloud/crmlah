@@ -189,6 +189,7 @@ const QuotesModel = ({ path, userData }) => {
                     className="btn btn-primary"
                     type="button"
                     onClick={() => handleSendAccountToQuote(selectedRows)}
+                    disabled={selectedRows.length === 0} 
                   >
                     Assign
                   </button>

@@ -149,6 +149,7 @@ const InvoiceModel = ({ path , getData}) => {
                   className="btn btn-primary "
                   type="button"
                   onClick={() => handleDealsAssignToInvoice(selectedRows)}
+                  disabled={selectedRows.length === 0} 
                 >
                   Assign
                 </button>
