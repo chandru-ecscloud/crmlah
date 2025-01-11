@@ -235,13 +235,22 @@ const Lead = () => {
   };
 
   const parseDescription = (description) => {
-    const parts = description?.split("^").map((part) => part.trim());
+    if (!description || !description.includes("^")) {
+      return {
+        Location: "",
+        Course: "",
+        "Year of Passing": "",
+        "About Candidate": description,
+      };
+    }
+  
+    const parts = description.split("^").map((part) => part.trim());
     const extractValue = (label) =>
       parts
         ?.find((part) => part.startsWith(label))
         ?.split(":")[1]
         ?.trim() || "";
-
+  
     return {
       Location: extractValue("Location"),
       Course: extractValue("Course"),
@@ -249,6 +258,7 @@ const Lead = () => {
       "About Candidate": extractValue("About Candidate"),
     };
   };
+  
 
   const filterFields = (data) =>
     data.map((row, index) => {
