@@ -243,14 +243,14 @@ const Lead = () => {
         "About Candidate": description,
       };
     }
-  
+
     const parts = description.split("^").map((part) => part.trim());
     const extractValue = (label) =>
       parts
         ?.find((part) => part.startsWith(label))
         ?.split(":")[1]
         ?.trim() || "";
-  
+
     return {
       Location: extractValue("Location"),
       Course: extractValue("Course"),
@@ -258,10 +258,21 @@ const Lead = () => {
       "About Candidate": extractValue("About Candidate"),
     };
   };
-  
 
   const filterFields = (data) =>
     data.map((row, index) => {
+      if (row.companyId === 43 || row.companyId === 53) {
+        return {
+          "S.no": index + 1,
+          "Lead Name": row.first_name,
+          Company: row.company,
+          "Email-Address": row.email,
+          "Phone Number": row.phone,
+          "Lead Description": row.description_info,
+          "Created At": formatDate(row.created_at),
+        };
+      }
+
       const {
         Location,
         Course,
@@ -286,6 +297,10 @@ const Lead = () => {
   const removeDuplicates = (data, key) => {
     const seen = new Set();
     return data.filter((item) => {
+      if (item.companyId === 43 || item.companyId === 53) {
+        return true;
+      }
+
       const value = item[key];
       if (seen.has(value)) {
         return false;
