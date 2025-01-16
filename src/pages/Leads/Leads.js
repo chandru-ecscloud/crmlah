@@ -357,6 +357,7 @@ const Lead = () => {
         Course: "",
         "Year of Passing": "",
         "About Candidate": description,
+        "selected Course": "",
       };
     }
 
@@ -370,6 +371,7 @@ const Lead = () => {
     return {
       Location: extractValue("Location"),
       Course: extractValue("Course"),
+      "selected Course": extractValue("selected Course"),
       "Year of Passing": extractValue("Year of Passing"),
       "About Candidate": extractValue("About Candidate"),
     };
@@ -384,6 +386,7 @@ const Lead = () => {
           Course,
           "Year of Passing": YearOfPassing,
           "About Candidate": AboutCandidate,
+         "selected Course": selectedCourse,
         } = parseDescription(row.description_info);
 
         return {
@@ -396,6 +399,7 @@ const Lead = () => {
           Course,
           "Year of Passing": YearOfPassing,
           "About Candidate": AboutCandidate,
+         "Selected Course": selectedCourse,
           "Created At": formatDate(row.created_at),
         };
       });
