@@ -234,6 +234,122 @@ const Lead = () => {
     return `${formattedDate} at ${formattedTime}`;
   };
 
+  // const parseDescription = (description) => {
+  //   if (!description || !description.includes("^")) {
+  //     return {
+  //       Location: "",
+  //       Course: "",
+  //       "Year of Passing": "",
+  //       "About Candidate": description,
+  //     };
+  //   }
+
+  //   const parts = description.split("^").map((part) => part.trim());
+  //   const extractValue = (label) =>
+  //     parts
+  //       ?.find((part) => part.startsWith(label))
+  //       ?.split(":")[1]
+  //       ?.trim() || "";
+
+  //   return {
+  //     Location: extractValue("Location"),
+  //     Course: extractValue("Course"),
+  //     "Year of Passing": extractValue("Year of Passing"),
+  //     "About Candidate": extractValue("About Candidate"),
+  //   };
+  // };
+
+  // const filterFields = (data) =>
+  //   data.map((row, index) => {
+  //     // if ( row.companyId === 53) {
+  //     //   return {
+  //     //     "S.no": index + 1,
+  //     //     "Lead Name": row.first_name,
+  //     //     Company: row.company,
+  //     //     "Email-Address": row.email,
+  //     //     "Phone Number": row.phone,
+  //     //     "Lead Description": row.description_info,
+  //     //     "Created At": formatDate(row.created_at),
+  //     //   };
+  //     // }
+
+  //     const {
+  //       Location,
+  //       Course,
+  //       "Year of Passing": YearOfPassing,
+  //       "About Candidate": AboutCandidate,
+  //     } = parseDescription(row.description_info);
+
+  //     return {
+  //       "S.no": index + 1,
+  //       "Lead Name": row.first_name,
+  //       Company: row.company,
+  //       "Email-Address": row.email,
+  //       "Phone Number": row.phone,
+  //       Location,
+  //       Course,
+  //       "Year of Passing": YearOfPassing,
+  //       "About Candidate": AboutCandidate,
+  //       "Created At": formatDate(row.created_at),
+  //     };
+  //   });
+
+  // const removeDuplicates = (data, key) => {
+  //   const seen = new Set();
+  //   return data.filter((item) => {
+  //     // if (item.companyId === 43 || item.companyId === 53) {
+  //     //   return true;
+  //     // }
+
+  //     const value = item[key];
+  //     if (seen.has(value)) {
+  //       return false;
+  //     }
+  //     seen.add(value);
+  //     return true;
+  //   });
+  // };
+
+  // const handleExportData = (selectedRows = []) => {
+  //   const rawData = selectedRows.length
+  //     ? selectedRows.map((row) => row.original)
+  //     : data;
+  //   const uniqueData = removeDuplicates(rawData, "phone");
+  //   const dataToExport = filterFields(uniqueData);
+
+  //   const totalRow = {
+  //     "S.no": "",
+  //     "Lead Name": "",
+  //     Company: "Total Records",
+  //     "Email-Address": dataToExport.length,
+  //     "Phone Number": "",
+  //     Location: "",
+  //     Course: "",
+  //     "Year of Passing": "",
+  //     "About Candidate": "",
+  //     "Created At": "",
+  //   };
+  //   dataToExport.push(totalRow);
+
+  //   const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+  //   const uniformWidth = 25;
+  //   ws["!cols"] = Array(
+  //     dataToExport[0] ? Object.keys(dataToExport[0]).length : 0
+  //   ).fill({ wch: uniformWidth });
+
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Leads");
+
+  //   const timestamp = new Date().toISOString().slice(0, 10);
+  //   const filename =
+  //     selectedRows.length === 1
+  //       ? `${selectedRows[0].original.company}_${timestamp}.xlsx`
+  //       : `company_list_${timestamp}.xlsx`;
+
+  //   XLSX.writeFile(wb, filename);
+  // };
+
   const parseDescription = (description) => {
     if (!description || !description.includes("^")) {
       return {
@@ -259,74 +375,79 @@ const Lead = () => {
     };
   };
 
+  const filterFieldsForSpecificCompanyIds = (data) =>
+    data
+      .filter((row) => row.companyId === 43 || row.companyId === 53)
+      .map((row, index) => {
+        const {
+          Location,
+          Course,
+          "Year of Passing": YearOfPassing,
+          "About Candidate": AboutCandidate,
+        } = parseDescription(row.description_info);
+
+        return {
+          "S.no": index + 1,
+          "Lead Name": row.first_name,
+          Company: row.company,
+          "Email-Address": row.email,
+          "Phone Number": row.phone,
+          Location,
+          Course,
+          "Year of Passing": YearOfPassing,
+          "About Candidate": AboutCandidate,
+          "Created At": formatDate(row.created_at),
+        };
+      });
+
   const filterFields = (data) =>
-    data.map((row, index) => {
-      // if ( row.companyId === 53) {
-      //   return {
-      //     "S.no": index + 1,
-      //     "Lead Name": row.first_name,
-      //     Company: row.company,
-      //     "Email-Address": row.email,
-      //     "Phone Number": row.phone,
-      //     "Lead Description": row.description_info,
-      //     "Created At": formatDate(row.created_at),
-      //   };
-      // }
+    data
+      .filter((row) => row.companyId !== 43 && row.companyId !== 53)
+      .map((row, index) => {
+        return {
+          "S.no": index + 1,
+          "Lead Name": row.first_name,
+          Company: row.company,
+          "Email-Address": row.email,
+          "Phone Number": row.phone,
+          "Lead description": row.description_info,
 
-      const {
-        Location,
-        Course,
-        "Year of Passing": YearOfPassing,
-        "About Candidate": AboutCandidate,
-      } = parseDescription(row.description_info);
+          "Created At": formatDate(row.created_at),
+        };
+      });
 
-      return {
-        "S.no": index + 1,
-        "Lead Name": row.first_name,
-        Company: row.company,
-        "Email-Address": row.email,
-        "Phone Number": row.phone,
-        Location,
-        Course,
-        "Year of Passing": YearOfPassing,
-        "About Candidate": AboutCandidate,
-        "Created At": formatDate(row.created_at),
-      };
-    });
-
-  const removeDuplicates = (data, key) => {
+  const removeDuplicatesForSpecificCompanyIds = (data, key) => {
     const seen = new Set();
-    return data.filter((item) => {
-      // if (item.companyId === 43 || item.companyId === 53) {
-      //   return true;
-      // }
-
-      const value = item[key];
-      if (seen.has(value)) {
-        return false;
-      }
-      seen.add(value);
-      return true;
-    });
+    return data
+      .filter((item) => item.companyId === 43 || item.companyId === 53)
+      .filter((item) => {
+        const value = item[key];
+        if (seen.has(value)) {
+          return false;
+        }
+        seen.add(value);
+        return true;
+      });
   };
 
   const handleExportData = (selectedRows = []) => {
     const rawData = selectedRows.length
       ? selectedRows.map((row) => row.original)
       : data;
-    const uniqueData = removeDuplicates(rawData, "phone");
-    const dataToExport = filterFields(uniqueData);
+    const uniqueDataForSpecificCompanyIds =
+      removeDuplicatesForSpecificCompanyIds(rawData, "phone");
 
+    const dataForSpecificCompanyIds = filterFieldsForSpecificCompanyIds(
+      uniqueDataForSpecificCompanyIds
+    );
+    const otherData = filterFields(rawData);
+    const dataToExport = [...dataForSpecificCompanyIds, ...otherData];
     const totalRow = {
       "S.no": "",
       "Lead Name": "",
       Company: "Total Records",
       "Email-Address": dataToExport.length,
       "Phone Number": "",
-      Location: "",
-      Course: "",
-      "Year of Passing": "",
-      "About Candidate": "",
       "Created At": "",
     };
     dataToExport.push(totalRow);
