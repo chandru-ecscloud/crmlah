@@ -7,6 +7,7 @@ import "./styles/custom.css";
 import "./styles/dummy.css";
 import "./styles/admin.css";
 import "./styles/user.css";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -71,7 +72,9 @@ function App() {
       ) : isAdmin ? (
         <AdminLayout handleLogout={handleLogout} />
       ) : (
-        <UserLayout handleLogin={handleLogin} />
+        <BrowserRouter>
+          <UserLayout handleLogin={handleLogin} />
+        </BrowserRouter>
       )}
     </div>
   );
