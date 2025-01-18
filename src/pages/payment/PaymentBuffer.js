@@ -6,31 +6,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const PaymentBuffer = () => {
   const location = useLocation();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
 
   const OrderId = queryParams.get("OrderId");
-  console.log(OrderId);
-
+  if (!OrderId) {
+    navigate("/");
+  }
+  
   useEffect(() => {
-    // const websocketService = new WebSocketService();
-
     const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
       console.log("subscription", data);
       const matchedOrder = data.find((item) => item.orderId === OrderId);
 
       if (matchedOrder) {
-        console.log("Payment Successful for:", matchedOrder);
-        navigate("/payment-success");
+        navigate(`/payment-success?OrderId=${OrderId}`);
       } else {
         console.log("Payment Failed");
-        navigate("/payment-failed");
+        navigate(`/payment-failed?OrderId=${OrderId}`);
       }
     });
 
     // return subscription;
   }, []);
-
 
   return (
     <div className="container py-2">

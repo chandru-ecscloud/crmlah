@@ -29,10 +29,7 @@ function UserLayout({ handleLogin }) {
   const isHomeOrAbout =
     location.pathname === "/payment" ||
     location.pathname === "/payment-success" ||
-    location.pathname === "/payment-failed" ||
-    location.pathname === "/about" ||
-    location.pathname === "/error";
-
+    location.pathname === "/payment-failed";
   return (
     <>
       <ToastContainer position="top-center" />

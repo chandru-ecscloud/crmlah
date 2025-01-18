@@ -1,6 +1,15 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import Failed from '../../assets/failed.png';
 
 const PaymentFailed = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+  
+    const OrderId = queryParams.get("OrderId");
+    if (!OrderId) {
+      navigate("/");
+    }
   return (
     <div className="container py-2">
       <div className="row justify-content-center"
