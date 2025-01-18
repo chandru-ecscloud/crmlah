@@ -13,11 +13,22 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Config/URL";
 import { toast } from "react-toastify";
+import WebSocketService from "../../Config/WebSocketService";
 
 function Home({ handleLogin }) {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
+      console.log("subscription", data);
+      if (data === true) {
+        console.log("Transactionan Data", data);
+        console("Payment Websocket working");
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const verifyUser = async () => {

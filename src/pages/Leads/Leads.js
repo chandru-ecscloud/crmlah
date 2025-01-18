@@ -386,7 +386,7 @@ const Lead = () => {
           Course,
           "Year of Passing": YearOfPassing,
           "About Candidate": AboutCandidate,
-         "selected Course": selectedCourse,
+          "selected Course": selectedCourse,
         } = parseDescription(row.description_info);
 
         return {
@@ -399,7 +399,7 @@ const Lead = () => {
           Course,
           "Year of Passing": YearOfPassing,
           "About Candidate": AboutCandidate,
-         "Selected Course": selectedCourse,
+          "Selected Course": selectedCourse,
           "Created At": formatDate(row.created_at),
         };
       });

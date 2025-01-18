@@ -46,6 +46,18 @@ class WebSocketService {
     });
   }
 
+  subscribeToPaymentUpdates(callback) {
+    if (!this.connected) {
+      console.error("STOMP connection not established");
+      return;
+    }
+    this.stompClient.subscribe("/topic/payment", (response) => {
+      console.log("Received appointment update");
+      console.log(response);
+      callback(JSON.parse(response.body));
+    });
+  }
+
   newData(message) {
     if (!this.connected) {
       console.error("STOMP connection not established");
