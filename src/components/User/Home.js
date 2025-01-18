@@ -21,13 +21,21 @@ function Home({ handleLogin }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    WebSocketService.connect();
+
     const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
-      console.log("subscription", data);
+      console.log("Subscription data:", data);
       if (data === true) {
-        console.log("Transactionan Data", data);
-        console("Payment Websocket working");
+        console.log("Transaction Data", data);
+        console.log("Payment WebSocket working");
       }
     });
+    console.log("Function Works data:");
+
+    return () => {
+      // Clean up if needed, e.g., unsubscribe logic
+      console.log("Cleanup on component unmount");
+    };
   }, []);
 
   useEffect(() => {
