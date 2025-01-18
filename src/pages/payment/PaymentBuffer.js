@@ -10,14 +10,18 @@ const PaymentBuffer = () => {
   const queryParams = new URLSearchParams(location.search);
 
   const OrderId = queryParams.get("OrderId");
-  if (!OrderId) {
-    navigate("/");
-  }
-  
+
+  useEffect(() => {
+    if (!OrderId) {
+      console.error("OrderId is missing in the URL");
+      navigate("/");
+    }
+  }, [OrderId, navigate]);
+
   useEffect(() => {
     const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
-      console.log("subscription", data);
-      const matchedOrder = data.find((item) => item.orderId === OrderId);
+      console.log("subscription Data", data.data);
+      const matchedOrder = data.data.find((item) => item.orderId === OrderId);
 
       if (matchedOrder) {
         navigate(`/payment-success?OrderId=${OrderId}`);
