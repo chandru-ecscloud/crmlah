@@ -21,24 +21,6 @@ function Home({ handleLogin }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    WebSocketService.connect();
-
-    const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
-      console.log("Subscription data:", data);
-      if (data === true) {
-        console.log("Transaction Data", data);
-        console.log("Payment WebSocket working");
-      }
-    });
-    console.log("Function Works data:");
-
-    return () => {
-      // Clean up if needed, e.g., unsubscribe logic
-      console.log("Cleanup on component unmount");
-    };
-  }, []);
-
-  useEffect(() => {
     const verifyUser = async () => {
       try {
         if (userId) {
@@ -51,10 +33,7 @@ function Home({ handleLogin }) {
             sessionStorage.setItem("role", response.data.role);
             sessionStorage.setItem("token", response.data.token);
             sessionStorage.setItem("userId", response.data.userId);
-            sessionStorage.setItem(
-              "appointmentRole",
-              response.data.appointmentRole
-            );
+            sessionStorage.setItem("appointmentRole",response.data.appointmentRole);
             handleLogin(); // Make sure handleLogin is defined somewhere in your component
             navigate(`/dashboard?message=${response.data.message}`);
             toast.success(response.data.message);

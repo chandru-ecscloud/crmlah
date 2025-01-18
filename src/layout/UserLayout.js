@@ -19,12 +19,17 @@ import Page404 from "../components/common/404";
 import { FaWhatsapp } from "react-icons/fa";
 import PrivacyAndPolicy from "../pages/PrivacyAndPolicy";
 import EventRegister from "../pages/EventRegister";
+import PaymentBuffer from "../pages/payment/PaymentBuffer";
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
+import PaymentFailed from "../pages/payment/PaymentFailed";
 
 function UserLayout({ handleLogin }) {
   const location = useLocation();
 
   const isHomeOrAbout =
     location.pathname === "/payment" ||
+    location.pathname === "/payment-success" ||
+    location.pathname === "/payment-failed" ||
     location.pathname === "/about" ||
     location.pathname === "/error";
 
@@ -35,6 +40,9 @@ function UserLayout({ handleLogin }) {
       {!isHomeOrAbout && <Header />}
 
       <Routes>
+        <Route path="/payment" element={<PaymentBuffer />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-failed" element={<PaymentFailed />} />
         <Route path="/about" element={<About />} />
         <Route path="/feature" element={<Feature />} />
         <Route path="/contact" element={<Contact />} />

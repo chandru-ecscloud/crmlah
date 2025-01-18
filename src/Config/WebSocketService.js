@@ -11,51 +11,113 @@ class WebSocketService {
     this.connect(() => {
       this.connected = true;
     });
+    this.pendingSubscriptions = []; // Queue for pending subscriptions
   }
 
+  // connect(callback) {
+  //   this.stompClient.connect({}, () => {
+  //     console.log("Connected to WebSocket");
+  //     if (callback) {
+  //       callback();
+  //     }
+  //   });
+  // }
+
   connect(callback) {
-    this.stompClient.connect({}, () => {
-      console.log("Connected to WebSocket");
+    if (this.connected) {
+      console.warn("Connection already active; skipping reactivation.");
       if (callback) {
         callback();
       }
+      return;
+    }
+  
+    this.stompClient.connect({}, () => {
+      console.log("Connected to WebSocket");
+      this.connected = true; // Update connection state
+      if (callback) {
+        callback();
+      }
+  
+      // Process any queued subscriptions
+      while (this.pendingSubscriptions.length > 0) {
+        const subscriptionCallback = this.pendingSubscriptions.shift();
+        subscriptionCallback();
+      }
     });
+  }
+  
+  // subscribeToLeadUpdates(callback) {
+  //   if (!this.connected) {
+  //     console.error("STOMP connection not established");
+  //     return;
+  //   }
+  //   this.stompClient.subscribe("/topic/leadGeneration", (response) => {
+  //     console.log("Received lead update");
+  //     console.log(response);
+  //     callback(JSON.parse(response.body));
+  //   });
+  // }
+
+  // subscribeToAppointmentUpdates(callback) {
+  //   if (!this.connected) {
+  //     console.error("STOMP connection not established");
+  //     return;
+  //   }
+  //   this.stompClient.subscribe("/topic/appointmentBooking", (response) => {
+  //     console.log("Received appointment update");
+  //     console.log(response);
+  //     callback(JSON.parse(response.body));
+  //   });
+  // }
+
+  subscribeToPaymentUpdates(callback) {
+    const subscribeCallback = () => {
+      this.stompClient.subscribe("/topic/payment", (response) => {
+        console.log("Received payment data");
+        callback(JSON.parse(response.body));
+      });
+    };
+
+    if (this.connected) {
+      subscribeCallback();
+    } else {
+      console.warn("STOMP connection not established; queuing subscription.");
+      this.pendingSubscriptions.push(subscribeCallback);
+      this.connect(); // Ensure the WebSocket connection is initiated
+    }
   }
 
   subscribeToLeadUpdates(callback) {
-    if (!this.connected) {
-      console.error("STOMP connection not established");
-      return;
+    const subscribeCallback = () => {
+      this.stompClient.subscribe("/topic/leadGeneration", (response) => {
+        console.log("Received payment data");
+        callback(JSON.parse(response.body));
+      });
+    };
+    if (this.connected) {
+      subscribeCallback();
+    } else {
+      console.warn("STOMP connection not established; queuing subscription. ");
+      this.pendingSubscriptions.push(subscribeCallback);
+      this.connect(); // Ensure the WebSocket connection is initiated
     }
-    this.stompClient.subscribe("/topic/leadGeneration", (response) => {
-      console.log("Received lead update");
-      console.log(response);
-      callback(JSON.parse(response.body));
-    });
   }
 
   subscribeToAppointmentUpdates(callback) {
-    if (!this.connected) {
-      console.error("STOMP connection not established");
-      return;
+    const subscribeCallback = () => {
+      this.stompClient.subscribe("/topic/appointmentBooking", (response) => {
+        console.log("Received payment data");
+        callback(JSON.parse(response.body));
+      });
+    };
+    if (this.connected) {
+      subscribeCallback();
+    } else {
+      console.warn("STOMP connection not established; queuing subscription.");
+      this.pendingSubscriptions.push(subscribeCallback);
+      this.connect(); // Ensure the WebSocket connection is initiated
     }
-    this.stompClient.subscribe("/topic/appointmentBooking", (response) => {
-      console.log("Received appointment update");
-      console.log(response);
-      callback(JSON.parse(response.body));
-    });
-  }
-
-  subscribeToPaymentUpdates(callback) {
-    if (!this.connected) {
-      console.error("STOMP connection not established");
-      return;
-    }
-    this.stompClient.subscribe("/topic/payment", (response) => {
-      console.log("Received appointment update");
-      console.log(response);
-      callback(JSON.parse(response.body));
-    });
   }
 
   newData(message) {
