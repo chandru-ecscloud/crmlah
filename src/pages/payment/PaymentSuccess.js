@@ -5,6 +5,7 @@ import "jspdf-autotable";
 import Success from "../../assets/success.png";
 import html2canvas from "html2canvas";
 import Companylogo from "../../assets/ECS_logo.png";
+import { toast } from "react-toastify";
 
 const PaymentSuccess = () => {
   const location = useLocation();
@@ -203,11 +204,15 @@ const PaymentSuccess = () => {
 </html>
   `;
 
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = mailContent;
-    document.body.appendChild(tempDiv);
+  try {
+    const tempElem = document.createElement("div");
+    tempElem.innerHTML = mailContent;
 
-    const canvas = await html2canvas(tempDiv);
+    document.body.appendChild(tempElem);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const canvas = await html2canvas(tempElem);
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF();
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -215,8 +220,13 @@ const PaymentSuccess = () => {
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save(`${data?.orderId}.pdf`);
 
-    document.body.removeChild(tempDiv);
+    document.body.removeChild(tempElem);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    toast.error("Error generating PDF");
+  }
   };
+
   return (
     <div className="container py-2">
       <div
