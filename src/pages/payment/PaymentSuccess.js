@@ -141,16 +141,16 @@ const PaymentSuccess = () => {
                                                     <td style="padding-block: 12px;"></td>
                                                     <td style="padding-block: 12px; text-align: end;">
                                                         <p style="color: #1A1C21;">${
-                                                          data?.TransactionData[0]?.additionalInfo.additional_info6
+                                                          data?.TransactionData[0]?.additionalInfo.additional_info7
                                                             ?.split(":")[1]
                                                             .trim() || "--"
                                                         }</p>
                                                     </td>
                                                     <td style="padding-block: 12px; text-align: end;">
                                                         <p style="color: #1A1C21;">${
-                                                          data?.TransactionData[0]?.additionalInfo.additional_info6
-                                                            ?.split(":")[1]
-                                                            .trim() || "--"
+                                                          data
+                                                            ?.TransactionData[0]
+                                                            ?.amount
                                                         }</p>
                                                     </td>
                                                 </tr>
@@ -180,7 +180,7 @@ const PaymentSuccess = () => {
         </table>
         <div style="margin-top: 3rem;">
             <div style="color: #5E6470;">
-                <div>Transaction Desc : ${
+                <div>Transaction Status : ${
                   data?.TransactionData[0]?.transactionErrorDesc
                 }</div>
                 <div>Transaction Method : ${
@@ -194,7 +194,7 @@ const PaymentSuccess = () => {
                     <b>Cloud ECS Infotech Pvt Ltd,</b>
                     766, Sakthi Tower Ln, Anna Salai, Thousand Lights, Chennai-02.<br />
                     Any questions, contact customer service at 
-                    <a href="mailto:ecsaio.in" style="color: #000;">ecsaio.in</a>
+                    <a href="mailto:info@ecsaio.in" style="color: #000;">info@ecsaio.in</a>
                 </p>
             </td>
         </tr>
@@ -204,27 +204,27 @@ const PaymentSuccess = () => {
 </html>
   `;
 
-  try {
-    const tempElem = document.createElement("div");
-    tempElem.innerHTML = mailContent;
+    try {
+      const tempElem = document.createElement("div");
+      tempElem.innerHTML = mailContent;
 
-    document.body.appendChild(tempElem);
+      document.body.appendChild(tempElem);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const canvas = await html2canvas(tempElem);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF();
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`${data?.orderId}.pdf`);
+      const canvas = await html2canvas(tempElem);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${data?.orderId}.pdf`);
 
-    document.body.removeChild(tempElem);
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    toast.error("Error generating PDF");
-  }
+      document.body.removeChild(tempElem);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+    }
   };
 
   return (
