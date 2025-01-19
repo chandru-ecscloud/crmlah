@@ -20,7 +20,10 @@ const PaymentSuccess = () => {
   const data = orderDataString
     ? JSON.parse(decodeURIComponent(orderDataString))
     : null;
-
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
   console.log("datas", data);
   const generatePDF = async () => {
     const mailContent = `
@@ -257,13 +260,13 @@ const PaymentSuccess = () => {
               Your payment has been successfully
               <br /> processed!
             </p>
-            <a
+            <span
               className="mt-3 mb-0"
               style={{ fontWeight: "500", cursor: "pointer", color: "#28A745" }}
               onClick={generatePDF}
             >
               Download Invoice
-            </a>
+            </span>
             <p className="mt-3 mb-0 fw-bold">Note:</p>
             <p className="success-note">
               You’ll receive an email with the transaction details.
