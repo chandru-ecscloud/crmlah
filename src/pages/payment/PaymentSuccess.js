@@ -47,7 +47,7 @@ const PaymentSuccess = () => {
     </style>
 </head>
 
-<body style="visibility: hidden;">
+<body >
     <div
         style="max-height: auto; margin: auto;padding: 16px;font-size: 16px;line-height: 24px;font-family: 'Inter', sans-serif;color: #555;">
         <table style="font-size: 16px; line-height: 20px; margin-top: 3rem;">
@@ -140,17 +140,16 @@ const PaymentSuccess = () => {
                                                     <td style="padding-block: 12px;"></td>
                                                     <td style="padding-block: 12px; text-align: end;">
                                                         <p style="color: #1A1C21;">${
-                                                          data
-                                                            ?.TransactionData[0]
-                                                            ?.gst || "--"
+                                                          data?.TransactionData[0]?.additionalInfo.additional_info6
+                                                            ?.split(":")[1]
+                                                            .trim() || "--"
                                                         }</p>
                                                     </td>
                                                     <td style="padding-block: 12px; text-align: end;">
                                                         <p style="color: #1A1C21;">${
-                                                          data
-                                                            ?.TransactionData[0]
-                                                            ?.chargeAmount ||
-                                                          "--"
+                                                          data?.TransactionData[0]?.additionalInfo.additional_info6
+                                                            ?.split(":")[1]
+                                                            .trim() || "--"
                                                         }</p>
                                                     </td>
                                                 </tr>
@@ -255,9 +254,7 @@ const PaymentSuccess = () => {
             >
               Download Invoice
             </a>
-            <p className="mt-3 mb-0 fw-bold">
-              Note:
-            </p>
+            <p className="mt-3 mb-0 fw-bold">Note:</p>
             <p className="success-note">
               You’ll receive an email with the transaction details.
               <br />
