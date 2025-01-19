@@ -79,13 +79,13 @@ const PaymentBuffer = () => {
         console.log("Payment Failed");
         navigate(`/payment-failed?OrderId=${OrderId}&info=${orderDataString}`);
       } else {
-        navigate(`/network-error?OrderId=${OrderId}&info=${orderDataString}`);
+        navigate(`/network-error`);
       }
     });
   
     timeoutId = setTimeout(() => {
       // console.error("WebSocket did not respond within 20 seconds.");
-      navigate(`/network-error?OrderId=${OrderId}`);
+      navigate(`/network-error`);
     }, 20000); // 20 seconds
   
     return () => {

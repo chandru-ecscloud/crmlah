@@ -3,14 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PaymentWarrning from "../../assets/payment_warrning.png";
 
 const NetworkError = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const queryParams = new URLSearchParams(location.search);
-  
-    const OrderId = queryParams.get("OrderId");
-    if (!OrderId) {
-      navigate("/");
-    }
+    
   return (
     <div className="container py-2">
       <div className="row justify-content-center"
