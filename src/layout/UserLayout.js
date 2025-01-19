@@ -22,6 +22,7 @@ import EventRegister from "../pages/EventRegister";
 import PaymentBuffer from "../pages/payment/PaymentBuffer";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import PaymentFailed from "../pages/payment/PaymentFailed";
+import NetworkError from "../pages/payment/NetworkError";
 
 function UserLayout({ handleLogin }) {
   const location = useLocation();
@@ -29,7 +30,8 @@ function UserLayout({ handleLogin }) {
   const isHomeOrAbout =
     location.pathname === "/payment" ||
     location.pathname === "/payment-success" ||
-    location.pathname === "/payment-failed";
+    location.pathname === "/payment-failed"||
+    location.pathname === "/network-error";
   return (
     <>
       <ToastContainer position="top-center" />
@@ -40,6 +42,7 @@ function UserLayout({ handleLogin }) {
         <Route path="/payment" element={<PaymentBuffer />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-failed" element={<PaymentFailed />} />
+        <Route path="/network-error" element={<NetworkError />} />
         <Route path="/about" element={<About />} />
         <Route path="/feature" element={<Feature />} />
         <Route path="/contact" element={<Contact />} />

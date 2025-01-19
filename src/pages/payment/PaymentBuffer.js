@@ -8,7 +8,44 @@ const PaymentBuffer = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-
+  // const transactionDetails = [
+  //   {
+  //     orderId: "ORD-20250119-061101-46CA3725",
+  //     TransactionData: [
+  //       {
+  //         mercId: "BDUAT2K386",
+  //         transactionDate: "2025-01-19T11:44:26+05:30",
+  //         surcharge: "0.00",
+  //         paymentMethodType: "netbanking",
+  //         amount: "118000.00",
+  //         ru: "https://crmlah.com/payment?OrderId=ORD-20250119-061101-46CA3725",
+  //         orderId: "ORD-20250119-061101-46CA3725",
+  //         transactionErrorType: "success",
+  //         discount: "0.00",
+  //         bankRefNo: "BILLDESK12",
+  //         transactionId: "U1232RN00043GV",
+  //         transactionProcessType: "nb",
+  //         bankId: "123",
+  //         itemCode: "DIRECT",
+  //         transactionErrorCode: "TRS0000",
+  //         currency: "356",
+  //         authStatus: "0300",
+  //         transactionErrorDesc: "Transaction Successful",
+  //         objectId: "transaction",
+  //         chargeAmount: "118000.00",
+  //         additionalInfo: {
+  //           additional_info1: "UserName : prem",
+  //           additional_info2: "UserEmail : premvp24@gmail.com",
+  //           additional_info3: "UserPhoneNumber : 9790415128",
+  //           additional_info4: "Course : Front End Development",
+  //           additional_info5: "City : chennai",
+  //         },
+  //       },
+  //     ],
+  //   },
+  // ];
+  // const matchedOrder = transactionDetails.find((item) => item.orderId === "ORD-20250119-061101-46CA3725");
+  // const orderDataStrings = encodeURIComponent(JSON.stringify(matchedOrder));
   const OrderId = queryParams.get("OrderId");
 
   useEffect(() => {
@@ -19,20 +56,44 @@ const PaymentBuffer = () => {
   }, [OrderId, navigate]);
 
   useEffect(() => {
+    let timeoutId;
+  
     const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
+      clearTimeout(timeoutId);
+  
       console.log("subscription Data", data.data);
       const matchedOrder = data.data.find((item) => item.orderId === OrderId);
-
-      if (matchedOrder) {
-        navigate(`/payment-success?OrderId=${OrderId}`);
-      } else {
+      const orderDataString = encodeURIComponent(JSON.stringify(matchedOrder));
+  
+      if (
+        matchedOrder &&
+        matchedOrder.TransactionData[0].transactionErrorType === "success"
+      ) {
+        navigate(
+          `/payment-success?OrderId=${OrderId}&info=${orderDataString}`
+        );
+      } else if (
+        matchedOrder &&
+        matchedOrder.TransactionData[0].transactionErrorType !== "success"
+      ) {
         console.log("Payment Failed");
-        navigate(`/payment-failed?OrderId=${OrderId}`);
+        navigate(`/payment-failed?OrderId=${OrderId}&info=${orderDataString}`);
+      } else {
+        navigate(`/network-error?OrderId=${OrderId}&info=${orderDataString}`);
       }
     });
-
-    // return subscription;
-  }, []);
+  
+    timeoutId = setTimeout(() => {
+      // console.error("WebSocket did not respond within 20 seconds.");
+      navigate(`/network-error?OrderId=${OrderId}`);
+    }, 20000); // 20 seconds
+  
+    return () => {
+      subscription?.unsubscribe?.(); 
+      clearTimeout(timeoutId);
+    };
+  }, [OrderId]);
+  
 
   return (
     <div className="container py-2">
@@ -77,11 +138,11 @@ const PaymentBuffer = () => {
               Processing
             </span>
 
-            <p className="mt-3 h5" style={{ marginBottom: "6rem" }}>
+            <p className="mt-3 h5 fw-semibold" style={{ marginBottom: "6rem" }}>
               Please hold on while we securely process
               <br /> your transaction.
             </p>
-            <p className="mt-3 mb-0" style={{ fontWeight: "500" }}>
+            <p className="mt-3 mb-0 fw-bold" >
               Note:
             </p>
             <p className="success-note">
@@ -89,6 +150,10 @@ const PaymentBuffer = () => {
               <br />
               Please do not refresh or close this page.
             </p>
+
+            {/* <button className="btn" onClick={()=>( navigate(
+          `/payment-success?OrderId=ORD-20250119-061101-46CA3725&info=${orderDataStrings}`
+        ))}>button</button> */}
           </div>
         </div>
       </div>
