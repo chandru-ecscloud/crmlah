@@ -28,6 +28,12 @@ const NetworkError = () => {
             <p className="mt-3 mb-0 fw-bold">Error:</p>
             <p className="success-note">We couldn't get a response from the bank server. <br />Reach out to our support team at <br/> info@ecsaio.com or 
             +91 9361365818 for help.</p>
+            <a
+              href="https://ecsaio.in/students_internship/contact"
+              className="text-muted"
+            >
+              Contact Us
+            </a>
           </div>
         </div>
       </div>

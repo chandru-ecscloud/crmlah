@@ -5,6 +5,9 @@ import "jspdf-autotable";
 import Success from "../../assets/success.png";
 import html2canvas from "html2canvas";
 import Companylogo from "../../assets/ECS_logo.png";
+import rightCircle from "../../assets/pdf_circle.png";
+// import rightCircle from "../../assets/pdf_circle.png";
+import bottomCircle from "../../assets/bottom_pdf_circle_.png";
 import { toast } from "react-toastify";
 
 const PaymentSuccess = () => {
@@ -44,7 +47,7 @@ const PaymentSuccess = () => {
     });
   };
   return (
-    <div className="container py-2">
+    <div className="container py-2 position-relative">
       <div
         className="row justify-content-center"
         style={{ marginTop: "4.5rem" }}
@@ -82,339 +85,368 @@ const PaymentSuccess = () => {
             </span>
             <p className="mt-3 mb-0 fw-bold">Note:</p>
             <p className="success-note">
-              You’ll receive an email with the transaction details.
-              <br />
               Please do not refresh or close this page.
             </p>
+            <a href="https://ecsaio.in/" className="text-muted">
+              Back to Home
+            </a>
           </div>
         </div>
       </div>
+
+      {/* pdf */}
       <div
+        className="container"
         ref={contentRef}
         style={{
-          padding: "60px 50px",
+          backgroundColor: "#ffffff",
+          padding: "22px",
+          width: "80%",
+          height:"auto",
+          // visibility: "hidden",
           position: "absolute",
-          top: "-9999px",
+          top: "-9999px",       
           left: "-9999px",
         }}
       >
         <div
-          className="container"
+          className=""
           style={{
             maxHeight: "auto",
+            backgroundColor: "#ffffff",
+            backgroundImage: `url(${rightCircle}),url(${bottomCircle})`,
+            backgroundSize: "350px 263px,432px 221px",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right top ,left bottom",
+            border: "1px solid #afd0fe",
+            position: "relative",
             margin: "auto",
-            padding: "16px",
+            padding: "32px",
             fontSize: "16px",
             lineHeight: "24px",
             fontFamily: "'Inter', sans-serif",
             color: "#555",
           }}
         >
+          <div className="row mt-4">
+            <div className="col-6 d-flex justify-content-start align-items-center">
+              <h1 className="fw-bold text-dark">INVOICE</h1>
+            </div>
+            <div className="col-6 d-flex justify-content-end align-items-center">
+              <div className="text-end">
+                <img
+                  src={Companylogo}
+                  alt="Company Logo"
+                  className="img-fluid w-50"
+                  style={{
+                    marginBottom: "10px",
+                  }}
+                />
+                <p className="text-dark" style={{ fontSize: "14px" }}>
+                  766,Sakthi Tower Ln, Anna Salai,
+                  <br /> Thousand Lights, Chennai - 02
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="row " style={{margin:"7.5rem 0 0 0"}}>
+            <div className="col-7" style={{ borderLeft: "3px solid #3284fd" }}>
+              <div className="row" style={{ color: "#5E6470" }}>
+                <div className="col-3">
+                  <p className="mb-2 text-dark fw-semibold">Client</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-2  text-dark fw-semibold">
+                    : &nbsp;
+                    {data?.TransactionData[0]?.additionalInfo?.additional_info1
+                      ?.split(":")[1]
+                      .trim()}
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-3">
+                  <p className="mb-2">Adress</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-2">
+                    : &nbsp;
+                    {data?.TransactionData[0]?.additionalInfo?.additional_info5
+                      ?.split(":")[1]
+                      .trim()}
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-3">
+                  <p className="mb-2">Contact</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-2">
+                    : &nbsp;
+                    {data?.TransactionData[0]?.additionalInfo?.additional_info3
+                      ?.split(":")[1]
+                      .trim()}
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-3">
+                  <p className="mb-0">Email</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-0">
+                    : &nbsp;
+                    {data?.TransactionData[0]?.additionalInfo?.additional_info2
+                      ?.split(":")[1]
+                      .trim()}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-5">
+              <div
+                className="row"
+                style={{ color: "#5E6470", borderLeft: "3px solid #3284fd" }}
+              >
+                <div className="col-4">
+                  <p className="mb-2 text-dark fw-semibold">Invoice No</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-2  text-dark fw-semibold">
+                    :&nbsp;0709/123
+                    {/* {data?.TransactionData[0]?.additionalInfo?.additional_info1
+                      ?.split(":")[1]
+                      .trim()} */}
+                  </p>
+                </div>
+              </div>
+              <div className="row" style={{ borderLeft: "3px solid #3284fd" }}>
+                <div className="col-4">
+                  <p className="mb-2">Date</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-2">
+                    :&nbsp;
+                    {new Date(
+                      data?.TransactionData[0]?.transactionDate
+                    ).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+              <div className="row" style={{ borderLeft: "3px solid #3284fd" }}>
+                <div className="col-4">
+                  <p className="mb-0">Time</p>
+                </div>
+                <div className="col-auto">
+                  <p className="mb-0">
+                    :&nbsp;
+                    {new Date(
+                      data?.TransactionData[0]?.transactionDate
+                    ).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
           <table
-            style={{ fontSize: "16px", lineHeight: "20px", marginTop: "3rem" }}
+            style={{
+              padding: "20px 16px",
+              width: "100%",
+              borderRadius: "12px",
+              fontSize: "16px",
+              tableLayout: "fixed",
+              marginTop: "5rem",
+            }}
           >
-            <thead>
-              <tr>
-                <td style={{ padding: "0 16px 18px 16px" }}>
-                  <img
-                    src={Companylogo}
-                    alt="Company Logo"
-                    style={{
-                      width: "100px",
-                      height: "auto",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <p>info@ecsaio.in</p>
-                  <p>+91 9361365818</p>
-                </td>
-              </tr>
-            </thead>
             <tbody>
               <tr>
-                <td>
+                <td colSpan="3">
+                  <div className="mb-4 px-1" style={{ marginTop: "5rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        color: "#5E6470",
+                      }}
+                    >
+                      <div>
+                        Order ID &nbsp;: {data?.TransactionData[0]?.orderId}
+                      </div>
+                      <div>
+                        Transaction ID &nbsp;:{" "}
+                        {data?.TransactionData[0]?.transactionId}
+                      </div>
+                    </div>
+                  </div>
                   <table
                     style={{
-                      padding: "20px 16px",
                       width: "100%",
-                      borderRadius: "12px",
-                      fontSize: "16px",
-                      tableLayout: "fixed",
-                      marginTop: "3rem",
+                      borderSpacing: 0,
                     }}
                   >
+                    <thead>
+                      <tr
+                        style={{ textTransform: "uppercase" }}
+                        className="my-2"
+                      >
+                        <td
+                          className="py-3 ps-2"
+                          style={{
+                            borderBlock: "1px solid #D7DAE0",
+                          }}
+                        >
+                          Course Detail
+                        </td>
+                        <td
+                          style={{
+                            padding: "8px 0",
+                            borderBlock: "1px solid #D7DAE0",
+                            width: "300px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Course Fee
+                        </td>
+                        <td
+                          style={{
+                            padding: "8px 0",
+                            borderBlock: "1px solid #D7DAE0",
+                            textAlign: "center",
+                            width: "100px",
+                          }}
+                        >
+                          GST
+                        </td>
+                        <td
+                          className="pe-2"
+                          style={{
+                            padding: "8px 0",
+                            borderBlock: "1px solid #D7DAE0",
+                            textAlign: "end",
+                            width: "120px",
+                          }}
+                        >
+                          Amount
+                        </td>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr>
                         <td
+                          className="ps-2"
                           style={{
-                            verticalAlign: "top",
-                            width: "40%",
-                            paddingRight: "20px",
-                            paddingBottom: "35px",
+                            paddingBlock: "20px",
+                            borderBlock: "1px solid #D7DAE0",
                           }}
                         >
-                          <p style={{ fontWeight: 700 }}>To</p>
-                          <div className="row" style={{ color: "#5E6470" }}>
-                            <div className="col-3">
-                              <p className="">Name</p>
-                            </div>
-                            <div className="col-auto">
-                              <p className="">
-                                : &nbsp;
-                                {data?.TransactionData[0]?.additionalInfo?.additional_info1
-                                  ?.split(":")[1]
-                                  .trim()}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="row" style={{ color: "#5E6470" }}>
-                            <div className="col-3">
-                              <p className=""> Mobile No</p>
-                            </div>
-                            <div className="col-auto">
-                              <p className="">
-                                : &nbsp;
-                                {data?.TransactionData[0]?.additionalInfo?.additional_info3
-                                  ?.split(":")[1]
-                                  .trim()}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="row" style={{ color: "#5E6470" }}>
-                            <div className="col-3">
-                              <p className="">Email</p>
-                            </div>
-                            <div className="col-auto">
-                              <p className="">
-                                : &nbsp;
-                                {data?.TransactionData[0]?.additionalInfo?.additional_info2
-                                  ?.split(":")[1]
-                                  .trim()}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="row" style={{ color: "#5E6470" }}>
-                            <div className="col-3">
-                              <p className="">City</p>
-                            </div>
-                            <div className="col-auto">
-                              <p className="">
-                                : &nbsp;
-                                {data?.TransactionData[0]?.additionalInfo?.additional_info5
-                                  ?.split(":")[1]
-                                  .trim()}
-                              </p>
-                            </div>
-                          </div>
+                          <p
+                            style={{ color: "#1A1C21" }}
+                            className="mb-0 text-dark"
+                          >
+                            {data?.TransactionData[0]?.additionalInfo?.additional_info4
+                              ?.split(":")[1]
+                              .trim()}
+                          </p>
                         </td>
                         <td
                           style={{
-                            verticalAlign: "top",
-                            width: "25%",
-                            paddingRight: "20px",
-                            paddingBottom: "35px",
+                            paddingBlock: "12px",
+                            textAlign: "center",
+                            borderBlock: "1px solid #D7DAE0",
                           }}
                         >
-                          <p style={{ fontWeight: 700, color: "#1A1C21" }}></p>
-                          <p style={{ color: "#5E6470" }}></p>
+                          <p style={{ color: "#1A1C21" }} className="mb-0">
+                            {/* {data?.TransactionData[0]?.additionalInfo
+                                      ?.additional_info6
+                                      ? new Intl.NumberFormat("en-IN", {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2,
+                                        }).format(
+                                          Number(
+                                            data?.TransactionData[0]?.additionalInfo?.additional_info6
+                                              ?.split(":")[1]
+                                              ?.trim()
+                                          ) || 0
+                                        )
+                                      : "0.00"} */}
+
+                            {new Intl.NumberFormat("en-IN").format(
+                              Number(
+                                data?.TransactionData[0]?.additionalInfo?.additional_info6
+                                  ?.split(":")[1]
+                                  ?.trim()
+                              ) || 0
+                            )}
+                          </p>
                         </td>
                         <td
                           style={{
-                            verticalAlign: "top",
-                            width: "30%",
-                            paddingRight: "20px",
-                            paddingBottom: "35px",
+                            paddingBlock: "12px",
+                            textAlign: "center",
+                            borderBlock: "1px solid #D7DAE0",
                           }}
                         >
-                          <div
-                            className="row justify-content-end"
-                            style={{ color: "#5E6470" }}
-                          >
-                            <div className="col-auto">
-                              <p className="">Date</p>
-                            </div>
-                            <div className="col-4">
-                              <p className="">
-                                :&nbsp;
-                                {new Date(
-                                  data?.TransactionData[0]?.transactionDate
-                                ).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                          <div
-                            className="row justify-content-end"
-                            style={{ color: "#5E6470" }}
-                          >
-                            <div className="col-auto">
-                              <p className="">Time</p>
-                            </div>
-                            <div className="col-4">
-                              <p className="">
-                                :&nbsp;
-                                {new Date(
-                                  data?.TransactionData[0]?.transactionDate
-                                ).toLocaleTimeString()}
-                              </p>
-                            </div>
-                          </div>
+                          <p style={{ color: "#1A1C21" }} className="mb-0">
+                            {new Intl.NumberFormat("en-IN").format(
+                              Number(
+                                data?.TransactionData[0]?.additionalInfo?.additional_info7
+                                  ?.split(":")[1]
+                                  ?.trim()
+                              ) || 0
+                            )}
+                          </p>
+                        </td>
+                        <td
+                          className="pe-2"
+                          style={{
+                            paddingBlock: "12px",
+                            textAlign: "end",
+                            borderBlock: "1px solid #D7DAE0",
+                          }}
+                        >
+                          <p style={{ color: "#1A1C21" }} className="mb-0">
+                            {/* {new Intl.NumberFormat("en-IN", {
+                                      minimumFractionDigits: 2,
+                                      maximumFractionDigits: 2,
+                                    }).format(
+                                      data?.TransactionData[0]?.amount || 0
+                                    )} */}
+                            {new Intl.NumberFormat("en-IN").format(
+                              data?.TransactionData[0]?.amount
+                            )}
+                          </p>
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan="3">
-                          <div
-                            className="mb-4 px-1"
-                            style={{ marginTop: "5rem" }}
+                        <td style={{ paddingBlock: "12px" }}></td>
+                        <td style={{ paddingBlock: "12px" }}></td>
+                        <td
+                          style={{
+                            textAlign: "center",
+                          }}
+                        >
+                          <p
+                            style={{ marginTop: "1rem" }}
+                            className="fw-semibold text-primary"
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                color: "#5E6470",
-                              }}
-                            >
-                              <div>
-                                Order ID &nbsp;: {data?.TransactionData[0]?.orderId}
-                              </div>
-                              <div>
-                                Transaction ID &nbsp;:{" "}
-                                {data?.TransactionData[0]?.transactionId}
-                              </div>
-                            </div>
-                          </div>
-                          <table
-                            style={{
-                              width: "100%",
-                              borderSpacing: 0,
-                            }}
+                            Total
+                          </p>
+                        </td>
+                        <td
+                          className="pe-2"
+                          style={{
+                            textAlign: "end",
+                          }}
+                        >
+                          <p
+                            style={{ marginTop: "1rem" }}
+                            className="fw-semibold text-dark"
                           >
-                            <thead>
-                              <tr
-                                style={{ textTransform: "uppercase" }}
-                                className="my-2"
-                              >
-                                <td
-                                  className="py-4 ps-2"
-                                  style={{
-                                    borderBlock: "1px solid #D7DAE0",
-                                  }}
-                                >
-                                  Course Detail
-                                </td>
-                                <td
-                                  style={{
-                                    padding: "8px 0",
-                                    borderBlock: "1px solid #D7DAE0",
-                                    width: "300px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  Course Fee
-                                </td>
-                                <td
-                                  style={{
-                                    padding: "8px 0",
-                                    borderBlock: "1px solid #D7DAE0",
-                                    textAlign: "center",
-                                    width: "100px",
-                                  }}
-                                >
-                                  GST
-                                </td>
-                                <td
-                                  className="pe-2"
-                                  style={{
-                                    padding: "8px 0",
-                                    borderBlock: "1px solid #D7DAE0",
-                                    textAlign: "end",
-                                    width: "120px",
-                                  }}
-                                >
-                                  Amount
-                                </td>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td
-                                  className="ps-2"
-                                  style={{ paddingBlock: "25px" }}
-                                >
-                                  <p style={{ color: "#1A1C21" }}>
-                                    {data?.TransactionData[0]?.additionalInfo?.additional_info4
-                                      ?.split(":")[1]
-                                      .trim()}
-                                  </p>
-                                </td>
-                                <td
-                                  style={{
-                                    paddingBlock: "12px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <p style={{ color: "#1A1C21" }}>
-                                    {data?.TransactionData[0]?.additionalInfo?.additional_info6
-                                      ?.split(":")[1]
-                                      .trim() || "--"}
-                                  </p>
-                                </td>
-                                <td
-                                  style={{
-                                    paddingBlock: "12px",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <p style={{ color: "#1A1C21" }}>
-                                    {data?.TransactionData[0]?.additionalInfo?.additional_info7
-                                      ?.split(":")[1]
-                                      .trim() || "--"}
-                                  </p>
-                                </td>
-                                <td
-                                  className="pe-2"
-                                  style={{
-                                    paddingBlock: "12px",
-                                    textAlign: "end",
-                                  }}
-                                >
-                                  <p style={{ color: "#1A1C21" }}>
-                                    {data?.TransactionData[0]?.amount}
-                                  </p>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style={{ paddingBlock: "12px" }}></td>
-                                <td style={{ paddingBlock: "12px" }}></td>
-                                <td
-                                  style={{
-                                    textAlign: "end",
-                                    borderBlock: "1px solid #D7DAE0",
-                                  }}
-                                >
-                                  <p
-                                    style={{ marginTop: "1rem" }}
-                                    className="fw-semibold"
-                                  >
-                                    Total
-                                  </p>
-                                </td>
-                                <td
-                                  className="pe-2"
-                                  style={{
-                                    textAlign: "end",
-                                    borderBlock: "1px solid #D7DAE0",
-                                  }}
-                                >
-                                  <p
-                                    style={{ marginTop: "1rem" }}
-                                    className="fw-semibold text-dark"
-                                  >
-                                    {data?.TransactionData[0]?.amount}
-                                  </p>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                            {new Intl.NumberFormat("en-IN").format(
+                              data?.TransactionData[0]?.amount
+                            )}
+                          </p>
                         </td>
                       </tr>
                     </tbody>
@@ -423,50 +455,72 @@ const PaymentSuccess = () => {
               </tr>
             </tbody>
           </table>
-          <div style={{ marginTop: "3rem" }}>
-            <div className="row" style={{ color: "#5E6470" }}>
-              <div className="col-6">
+          <div style={{ marginTop: "8rem" }}>
+            <div className="row m-0" style={{ color: "#5E6470" }}>
+              <div
+                className="col-6"
+                style={{ borderLeft: "3px solid #3284fd" }}
+              >
                 <div className="row mb-2" style={{ color: "#5E6470" }}>
-                  <div className="col-4">
-                    <p className="">Transaction Status</p>
+                  <div className="col-5">
+                    <p className="mb-1 text-dark fw-semibold">
+                      Transaction Status
+                    </p>
                   </div>
                   <div className="col-6">
-                    <p className="">
+                    <p className="mb-1 text-dark fw-semibold">
                       : &nbsp;{data?.TransactionData[0]?.transactionErrorDesc}
                     </p>
                   </div>
                 </div>
                 <div className="row" style={{ color: "#5E6470" }}>
-                  <div className="col-4">
-                    <p className="">Transaction Method</p>
+                  <div className="col-5">
+                    <p className="mb-0">Transaction Method</p>
                   </div>
                   <div className="col-6">
-                    <p className="">
-                      : &nbsp;{data?.TransactionData[0]?.paymentMethodType?.toUpperCase()}
+                    <p className="mb-0">
+                      : &nbsp;
+                      {data?.TransactionData[0]?.paymentMethodType?.toUpperCase()}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div style={{ marginTop: "3rem" }}>
-            <p
-              style={{
-                fontSize: "12px",
-                color: "#5E6470",
-                textAlign: "start",
-                paddingTop: "25px",
-                marginTop: "3rem",
-              }}
-            >
-              <b>Cloud ECS Infotech Pvt Ltd,</b> 766, Sakthi Tower Ln, Anna
-              Salai, Thousand Lights, Chennai-02.
-              <br />
-              Any questions, contact customer service at{" "}
-              <a href="mailto:info@ecsaio.in" style={{ color: "#000" }}>
-                info@ecsaio.in
-              </a>
-            </p>
+          <div style={{ marginTop: "13rem" }}>
+            <div className="row m-0" style={{ color: "#5E6470" }}>
+              <div className="col-6">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "#5E6470",
+                    textAlign: "start",
+                    paddingTop: "25px",
+                    marginTop: "3rem",
+                  }}
+                >
+                  <p>Thank you for choosing us.</p>
+                  <b>Cloud ECS Infotech Pvt Ltd.,</b>
+                  <br />
+                  <span>
+                    Contact :&nbsp;
+                    <a href="tel:9361365818" style={{ color: "#5E6470" }}>
+                      +91 9361365818
+                    </a>
+                  </span>
+                  <span className="ms-2">
+                    {" "}
+                    Email :&nbsp;
+                    <a
+                      href="mailto:info@ecsaio.in"
+                      style={{ color: "#5E6470" }}
+                    >
+                      info@ecsaio.in
+                    </a>
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
