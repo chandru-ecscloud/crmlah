@@ -87,7 +87,7 @@ const PaymentSuccess = () => {
             <p className="success-note">
               Please do not refresh or close this page.
             </p>
-            <a href="https://ecsaio.in/" className="text-muted">
+            <a href="https://ecsaio.in/internship" className="text-muted">
               Back to Home
             </a>
           </div>
@@ -101,9 +101,8 @@ const PaymentSuccess = () => {
         style={{
           backgroundColor: "#ffffff",
           padding: "22px",
-          width: "80%",
+          width: "794px",
           height:"auto",
-          // visibility: "hidden",
           position: "absolute",
           top: "-9999px",       
           left: "-9999px",
@@ -115,7 +114,7 @@ const PaymentSuccess = () => {
             maxHeight: "auto",
             backgroundColor: "#ffffff",
             backgroundImage: `url(${rightCircle}),url(${bottomCircle})`,
-            backgroundSize: "350px 263px,432px 221px",
+            backgroundSize: "311px 203px, 370px 206px",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right top ,left bottom",
             border: "1px solid #afd0fe",
@@ -128,7 +127,7 @@ const PaymentSuccess = () => {
             color: "#555",
           }}
         >
-          <div className="row mt-4">
+          <div className="row mt-2">
             <div className="col-6 d-flex justify-content-start align-items-center">
               <h1 className="fw-bold text-dark">INVOICE</h1>
             </div>
@@ -149,7 +148,7 @@ const PaymentSuccess = () => {
               </div>
             </div>
           </div>
-          <div className="row " style={{margin:"7.5rem 0 0 0"}}>
+          <div className="row " style={{margin:"5rem 0 0 0"}}>
             <div className="col-7" style={{ borderLeft: "3px solid #3284fd" }}>
               <div className="row" style={{ color: "#5E6470" }}>
                 <div className="col-3">
@@ -256,13 +255,13 @@ const PaymentSuccess = () => {
               borderRadius: "12px",
               fontSize: "16px",
               tableLayout: "fixed",
-              marginTop: "5rem",
+              marginTop: "2rem",
             }}
           >
             <tbody>
               <tr>
                 <td colSpan="3">
-                  <div className="mb-4 px-1" style={{ marginTop: "5rem" }}>
+                  <div className="mb-4 px-1" style={{ marginTop: "4rem" }}>
                     <div
                       style={{
                         display: "flex",
@@ -302,7 +301,7 @@ const PaymentSuccess = () => {
                           style={{
                             padding: "8px 0",
                             borderBlock: "1px solid #D7DAE0",
-                            width: "300px",
+                            width: "180px",
                             textAlign: "center",
                           }}
                         >
@@ -455,29 +454,29 @@ const PaymentSuccess = () => {
               </tr>
             </tbody>
           </table>
-          <div style={{ marginTop: "8rem" }}>
+          <div style={{ marginTop: "3rem" }}>
             <div className="row m-0" style={{ color: "#5E6470" }}>
               <div
-                className="col-6"
+                className="col-12"
                 style={{ borderLeft: "3px solid #3284fd" }}
               >
                 <div className="row mb-2" style={{ color: "#5E6470" }}>
-                  <div className="col-5">
+                  <div className="col-4">
                     <p className="mb-1 text-dark fw-semibold">
                       Transaction Status
                     </p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-auto">
                     <p className="mb-1 text-dark fw-semibold">
                       : &nbsp;{data?.TransactionData[0]?.transactionErrorDesc}
                     </p>
                   </div>
                 </div>
                 <div className="row" style={{ color: "#5E6470" }}>
-                  <div className="col-5">
+                  <div className="col-4">
                     <p className="mb-0">Transaction Method</p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-auto">
                     <p className="mb-0">
                       : &nbsp;
                       {data?.TransactionData[0]?.paymentMethodType?.toUpperCase()}
@@ -487,10 +486,10 @@ const PaymentSuccess = () => {
               </div>
             </div>
           </div>
-          <div style={{ marginTop: "13rem" }}>
+          <div style={{ marginTop: "3.5rem" }}>
             <div className="row m-0" style={{ color: "#5E6470" }}>
               <div className="col-6">
-                <p
+                <p className="mb-0"
                   style={{
                     fontSize: "14px",
                     color: "#5E6470",
