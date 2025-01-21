@@ -43,6 +43,7 @@ const PaymentSuccess = () => {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      
       pdf.save(`${data?.orderId}.pdf`);
     });
   };
@@ -114,7 +115,7 @@ const PaymentSuccess = () => {
             maxHeight: "auto",
             backgroundColor: "#ffffff",
             backgroundImage: `url(${rightCircle}),url(${bottomCircle})`,
-            backgroundSize: "311px 203px, 370px 206px",
+            backgroundSize: "311px 203px, 401px 213px",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right top ,left bottom",
             border: "1px solid #afd0fe",
@@ -165,7 +166,7 @@ const PaymentSuccess = () => {
               </div>
               <div className="row">
                 <div className="col-3">
-                  <p className="mb-2">Adress</p>
+                  <p className="mb-2">Address</p>
                 </div>
                 <div className="col-auto">
                   <p className="mb-2">
@@ -204,7 +205,7 @@ const PaymentSuccess = () => {
               </div>
             </div>
             <div className="col-5">
-              <div
+              {/* <div
                 className="row"
                 style={{ color: "#5E6470", borderLeft: "3px solid #3284fd" }}
               >
@@ -214,12 +215,12 @@ const PaymentSuccess = () => {
                 <div className="col-auto">
                   <p className="mb-2  text-dark fw-semibold">
                     :&nbsp;0709/123
-                    {/* {data?.TransactionData[0]?.additionalInfo?.additional_info1
-                      ?.split(":")[1]
-                      .trim()} */}
+                    // {data?.TransactionData[0]?.additionalInfo?.additional_info1
+                    //   ?.split(":")[1]
+                    //   .trim()} 
                   </p>
                 </div>
-              </div>
+              </div> */}
               <div className="row" style={{ borderLeft: "3px solid #3284fd" }}>
                 <div className="col-4">
                   <p className="mb-2">Date</p>
@@ -292,7 +293,7 @@ const PaymentSuccess = () => {
                         <td
                           className="py-3 ps-2"
                           style={{
-                            borderBlock: "1px solid #D7DAE0",
+                            borderTop: "2px solid #D7DAE0",
                           }}
                         >
                           Course Detail
@@ -300,7 +301,7 @@ const PaymentSuccess = () => {
                         <td
                           style={{
                             padding: "8px 0",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderTop: "2px solid #D7DAE0",
                             width: "180px",
                             textAlign: "center",
                           }}
@@ -310,7 +311,7 @@ const PaymentSuccess = () => {
                         <td
                           style={{
                             padding: "8px 0",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderTop: "2px solid #D7DAE0",
                             textAlign: "center",
                             width: "100px",
                           }}
@@ -321,7 +322,7 @@ const PaymentSuccess = () => {
                           className="pe-2"
                           style={{
                             padding: "8px 0",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderTop: "2px solid #D7DAE0",
                             textAlign: "end",
                             width: "120px",
                           }}
@@ -336,7 +337,7 @@ const PaymentSuccess = () => {
                           className="ps-2"
                           style={{
                             paddingBlock: "20px",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderBlock: "2px solid #D7DAE0",
                           }}
                         >
                           <p
@@ -352,7 +353,7 @@ const PaymentSuccess = () => {
                           style={{
                             paddingBlock: "12px",
                             textAlign: "center",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderBlock: "2px solid #D7DAE0",
                           }}
                         >
                           <p style={{ color: "#1A1C21" }} className="mb-0">
@@ -383,7 +384,7 @@ const PaymentSuccess = () => {
                           style={{
                             paddingBlock: "12px",
                             textAlign: "center",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderBlock: "2px solid #D7DAE0",
                           }}
                         >
                           <p style={{ color: "#1A1C21" }} className="mb-0">
@@ -401,7 +402,7 @@ const PaymentSuccess = () => {
                           style={{
                             paddingBlock: "12px",
                             textAlign: "end",
-                            borderBlock: "1px solid #D7DAE0",
+                            borderBlock: "2px solid #D7DAE0",
                           }}
                         >
                           <p style={{ color: "#1A1C21" }} className="mb-0">
@@ -486,9 +487,9 @@ const PaymentSuccess = () => {
               </div>
             </div>
           </div>
-          <div style={{ marginTop: "3.5rem" }}>
+          <div style={{ marginTop: "5rem" }}>
             <div className="row m-0" style={{ color: "#5E6470" }}>
-              <div className="col-6">
+              <div className="col-9">
                 <p className="mb-0"
                   style={{
                     fontSize: "14px",
@@ -503,16 +504,16 @@ const PaymentSuccess = () => {
                   <br />
                   <span>
                     Contact :&nbsp;
-                    <a href="tel:9361365818" style={{ color: "#5E6470" }}>
+                    <a href="tel:9361365818" style={{ color: "#5E6470",textDecoration:"none" }}>
                       +91 9361365818
                     </a>
                   </span>
                   <span className="ms-2">
                     {" "}
                     Email :&nbsp;
-                    <a
+                    <a 
                       href="mailto:info@ecsaio.in"
-                      style={{ color: "#5E6470" }}
+                      style={{ color: "#5E6470",textDecoration:"none" }}
                     >
                       info@ecsaio.in
                     </a>
