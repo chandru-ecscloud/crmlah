@@ -368,7 +368,6 @@ const Lead = () => {
         ?.split(":")[1]
         ?.trim() || "";
 
-        console.log("object",parts);
     return {
       Location: extractValue("Location"),
       Course: extractValue("Course"),
