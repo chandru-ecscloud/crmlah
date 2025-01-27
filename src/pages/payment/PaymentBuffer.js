@@ -57,21 +57,19 @@ const PaymentBuffer = () => {
 
   useEffect(() => {
     let timeoutId;
-  
+
     const subscription = WebSocketService.subscribeToPaymentUpdates((data) => {
       clearTimeout(timeoutId);
-  
+
       console.log("subscription Data", data.data);
       const matchedOrder = data.data.find((item) => item.orderId === OrderId);
       const orderDataString = encodeURIComponent(JSON.stringify(matchedOrder));
-  
+
       if (
         matchedOrder &&
         matchedOrder.TransactionData[0].transactionErrorType === "success"
       ) {
-        navigate(
-          `/payment-success?OrderId=${OrderId}&info=${orderDataString}`
-        );
+        navigate(`/payment-success?OrderId=${OrderId}&info=${orderDataString}`);
       } else if (
         matchedOrder &&
         matchedOrder.TransactionData[0].transactionErrorType !== "success"
@@ -82,18 +80,17 @@ const PaymentBuffer = () => {
         navigate(`/network-error`);
       }
     });
-  
+
     timeoutId = setTimeout(() => {
       // console.error("WebSocket did not respond within 20 seconds.");
       navigate(`/network-error`);
-    }, 20000); // 20 seconds
-  
+    }, 300000);
+
     return () => {
-      subscription?.unsubscribe?.(); 
+      subscription?.unsubscribe?.();
       clearTimeout(timeoutId);
     };
   }, [OrderId]);
-  
 
   return (
     <div className="container py-2">
@@ -138,17 +135,15 @@ const PaymentBuffer = () => {
               Processing
             </span>
 
+            <p className="mt-3 h5 fw-semibold" style={{ marginBottom: "2rem" }}>
+            We are securely processing your payment..
+            </p>
             <p className="mt-3 h5 fw-semibold" style={{ marginBottom: "6rem" }}>
-              Please hold on while we securely process
-              <br /> your transaction.
+            This may take a few moments.
             </p>
-            <p className="mt-3 mb-0 fw-bold" >
-              Note:
-            </p>
-            <p className="success-note">
-              This may take a few moments.
-              <br />
-              Please do not refresh or close this page.
+            <p className="mt-3 mb-0 fw-bold success-note">Note:</p>
+            <p className="">
+            Please don't refresh, go back or close this page.
             </p>
 
             {/* <button className="btn" onClick={()=>( navigate(

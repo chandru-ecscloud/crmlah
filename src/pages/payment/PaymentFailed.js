@@ -41,11 +41,13 @@ const PaymentFailed = () => {
               Payment Failed
             </span>
             <p className="mt-3 h5 fw-semibold" style={{ marginBottom: "6rem" }}>
-              Your payment could not be made.
+            The payment process did not succeed for some reason.
             </p>
-            <p className="mt-3 mb-0 fw-bold">Error:</p>
-            <p className="success-note">
-              Bank Servers did not respond. Please Try Again.
+            <p className="mt-3 mb-0 success-note">Error:</p>
+            <p className="">
+              {orderData.TransactionData[0].transactionErrorDes || "Bank Servers did not respond"}. Please Try Again.<br />
+              Reach out to our support team at <br/> info@ecsaio.com or 
+            +91 9361365818 for help.
             </p>
             <a
               href="https://ecsaio.in/students_internship/contact"

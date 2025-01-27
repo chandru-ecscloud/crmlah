@@ -84,13 +84,15 @@ const PaymentSuccess = () => {
             >
               Download Invoice
             </span>
-            <p className="mt-3 mb-0 fw-bold">Note:</p>
+            {/* <p className="mt-3 mb-0 fw-bold">Note:</p>
             <p className="success-note">
               Please do not refresh or close this page.
-            </p>
+            </p> */}
+            <p className="mt-4">
             <a href="https://ecsaio.in/internship" className="text-muted">
               Back to Home
             </a>
+            </p>
           </div>
         </div>
       </div>
