@@ -45,7 +45,7 @@ const PaymentFailed = () => {
             </p>
             <p className="mt-3 mb-0 success-note">Error:</p>
             <p className="">
-              {orderData.TransactionData[0].transactionErrorDes || "Bank Servers did not respond"}. Please Try Again.<br />
+              {orderData.TransactionData[0].transactionErrorDesc || "Bank Servers did not respond"}. Please Try Again.<br />
               Reach out to our support team at <br/> info@ecsaio.com or 
             +91 9361365818 for help.
             </p>
