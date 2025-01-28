@@ -240,12 +240,12 @@ const PaymentFailed = () => {
           If you have any doubts, please feel free to contact
         </p>
         <p style="margin-top: 2rem; margin-bottom: 10px">For Help :</p>
-        <p style="margin: 5px 0">Name : Yalini</p>
-        <p style="margin: 5px 0">Contact Number : 8438670535</p>
-        <p style="margin: 5px 0">Email : yalini@ecscloudinfotech.com</p>
-        <p style="margin: 1rem 0 5px 0">Name : Manoj</p>
-        <p style="margin: 5px 0">Contact Number : 9361365818</p>
-        <p style="margin: 5px 0 1rem 0">Email : manoj@ecscloudinfotech.com</p>
+        <p style="margin: 5px 0">Yalini</p>
+        <p style="margin: 5px 0">8438670535</p>
+        <p style="margin: 5px 0">yalini@ecscloudinfotech.com</p>
+        <p style="margin: 1rem 0 5px 0">Manoj</p>
+        <p style="margin: 5px 0">9361365818</p>
+        <p style="margin: 5px 0 1rem 0">manoj@ecscloudinfotech.com</p>
       </div>
       <div class="footer" style="padding: 15px 25px; text-align: center">
         <table
