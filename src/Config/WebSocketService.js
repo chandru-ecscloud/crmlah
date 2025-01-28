@@ -33,7 +33,7 @@ class WebSocketService {
     }
   
     this.stompClient.connect({}, () => {
-      console.log("Connected to WebSocket");
+      // console.log("Connected to WebSocket");
       this.connected = true; // Update connection state
       if (callback) {
         callback();
