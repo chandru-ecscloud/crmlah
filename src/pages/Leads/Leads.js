@@ -379,7 +379,7 @@ const Lead = () => {
 
   const filterFieldsForSpecificCompanyIds = (data) =>
     data
-      .filter((row) => row.companyId === 43 || row.companyId === 53)
+      .filter((row) => row.companyId === 43 || row.companyId === 53 || row.companyId === 54)
       .map((row, index) => {
         const {
           Location,
@@ -406,7 +406,7 @@ const Lead = () => {
 
   const filterFields = (data) =>
     data
-      .filter((row) => row.companyId !== 43 && row.companyId !== 53)
+      .filter((row) => row.companyId !== 43 && row.companyId !== 53 && row.companyId !== 54)
       .map((row, index) => {
         return {
           "S.no": index + 1,
@@ -423,7 +423,7 @@ const Lead = () => {
   const removeDuplicatesForSpecificCompanyIds = (data, key) => {
     const seen = new Set();
     return data
-      .filter((item) => item.companyId === 43 || item.companyId === 53)
+      .filter((item) => item.companyId === 43 || item.companyId === 53 || item.companyId === 54)
       .filter((item) => {
         const value = item[key];
         if (seen.has(value)) {

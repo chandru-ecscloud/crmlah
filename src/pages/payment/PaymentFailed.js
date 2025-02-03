@@ -17,7 +17,7 @@ const PaymentFailed = () => {
   const orderData = orderDataString
     ? JSON.parse(decodeURIComponent(orderDataString))
     : null;
-  console.log("orderData", orderData);
+  // console.log("orderData", orderData);
   const sendMailWithAttachment = async () => {
     const payload = new FormData();
     payload.append("from", "info@ecsaio.com");
