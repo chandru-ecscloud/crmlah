@@ -12,7 +12,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Appointment from "../Appointments/AppointmentsCreate";
 import SendEmailFollowUp from "../Email/SendEmailFollowUp";
-import { FaEdit } from "react-icons/fa";
+import { FaDownload, FaEdit } from "react-icons/fa";
 import AppointmentsEdit from "../Appointments/AppointmentsEdit";
 
 function LeadsShow() {
@@ -22,6 +22,7 @@ function LeadsShow() {
   const role = sessionStorage.getItem("role");
   const [clientData, setClientData] = useState({});
   const [appointments, setAppointments] = useState([]);
+  const [attachmentName, setAttachmentName] = useState("");
   console.log("appointData,", appointments);
   const navigate = useNavigate();
   // const [show, setShow] = useState(false);
@@ -91,6 +92,38 @@ function LeadsShow() {
   //   const files = event.target.files;
   //   setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
   // };
+
+  useEffect(() => {
+    if (clientData.attachmentUrl) {
+      const rawName = clientData.attachmentUrl.split("/").pop();
+      const decodedName = decodeURIComponent(rawName); // decode URL encoding
+      const cleanedName =
+        decodedName.indexOf("_") !== -1
+          ? decodedName.substring(decodedName.indexOf("_") + 1)
+          : decodedName;
+      setAttachmentName(cleanedName);
+    }
+  }, [clientData.attachmentUrl]);
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(clientData.attachmentUrl, {
+        mode: "cors",
+      });
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = attachmentName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
+
 
   return (
     <div>
@@ -307,6 +340,37 @@ function LeadsShow() {
                     : "--"}
                 </span>
               </div>
+              {clientData.companyId === 59 && (
+              <div className="row mb-3">
+                <label className="text-dark col-6 text-center">
+                  Attachment
+                </label>
+                <span className="col-6">
+                  &nbsp; : &nbsp;
+                  {clientData.attachmentUrl ? (
+                    <span>
+                      <a
+                        href={clientData.attachmentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-decoration-none me-2"
+                      >
+                        {/* {attachmentName} */}
+                      </a>
+                      <button
+                        onClick={handleDownload}
+                        className="badge bg-primary text-white border-0"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <FaDownload className="me-1" /> Download
+                      </button>
+                    </span>
+                  ) : (
+                    "--"
+                  )}
+                </span>
+              </div>
+              )}
             </div>
 
             <div className="container-fluid col-md-6">
